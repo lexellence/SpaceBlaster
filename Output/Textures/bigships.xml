@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with TexturePacker https://www.codeandweb.com/texturepacker -->
+<!-- $TexturePacker:SmartUpdate:db896a8e98b31ee83baa337e397d0247:7c7e29ec55a80f45f1c108bd558f0753:ce1cdb54ee555d000485ccb7b20851ba$ -->
+<!--Format:
+n  => name of the sprite
+x  => sprite x pos in texture
+y  => sprite y pos in texture
+w  => sprite width (may be trimmed)
+h  => sprite height (may be trimmed)
+pX => x pos of the pivot point (relative to sprite width)
+pY => y pos of the pivot point (relative to sprite height)
+oX => sprite's x-corner offset (only available if trimmed)
+oY => sprite's y-corner offset (only available if trimmed)
+oW => sprite's original width (only available if trimmed)
+oH => sprite's original height (only available if trimmed)
+r => 'y' only set if sprite is rotated
+with polygon mode enabled:
+vertices   => points in sprite coordinate system (x0,y0,x1,y1,x2,y2, ...)
+verticesUV => points in sheet coordinate system (x0,y0,x1,y1,x2,y2, ...)
+triangles  => sprite triangulation, 3 vertex indices per triangle
+-->
+<TextureAtlas imagePath="bigships.png" width="1187" height="1863">
+    <sprite n="ship001.png" x="684" y="980" w="109" h="88" pX="0.5" pY="0.5" r="y"/>
+    <sprite n="ship002.png" x="1" y="1165" w="28" h="58" pX="0.5" pY="0.5"/>
+    <sprite n="ship003.png" x="1" y="672" w="681" h="491" pX="0.5" pY="0.5" r="y"/>
+    <sprite n="ship004.png" x="811" y="1" w="373" h="425" pX="0.5" pY="0.5"/>
+    <sprite n="ship005.png" x="1" y="1236" w="138" h="517" pX="0.5" pY="0.5" oX="7" oY="0" oW="145" oH="517"/>
+    <sprite n="ship006.png" x="717" y="1531" w="376" h="275" pX="0.5" pY="0.5"/>
+    <sprite n="ship007.png" x="218" y="1653" w="389" h="209" pX="0.5" pY="0.5"/>
+    <sprite n="ship008.png" x="811" y="428" w="361" h="335" pX="0.5" pY="0.5"/>
+    <sprite n="ship009.png" x="794" y="1236" w="382" h="293" pX="0.5" pY="0.5"/>
+    <sprite n="ship010.png" x="532" y="1236" w="183" h="413" pX="0.5" pY="0.5" r="y"/>
+    <sprite n="ship011.png" x="141" y="1236" w="389" h="415" pX="0.5" pY="0.5"/>
+    <sprite n="ship012.png" x="798" y="765" w="383" h="469" pX="0.5" pY="0.5"/>
+    <sprite n="ship013.png" x="1" y="1" w="808" h="669" pX="0.5" pY="0.5" r="y"/>
+    <sprite n="ship112blue.png" x="684" y="1070" w="99" h="75" pX="0.5" pY="0.5" r="y"/>
+    <sprite n="ship112green.png" x="684" y="1147" w="99" h="75" pX="0.5" pY="0.5" r="y"/>
+    <sprite n="ship112orange.png" x="1" y="1755" w="75" h="99" pX="0.5" pY="0.5"/>
+    <sprite n="ship112red.png" x="78" y="1755" w="75" h="99" pX="0.5" pY="0.5"/>
+    <sprite n="ship113blue.png" x="684" y="672" w="112" h="75" pX="0.5" pY="0.5" r="y"/>
+    <sprite n="ship113green.png" x="684" y="749" w="112" h="75" pX="0.5" pY="0.5" r="y"/>
+    <sprite n="ship113orange.png" x="684" y="826" w="112" h="75" pX="0.5" pY="0.5" r="y"/>
+    <sprite n="ship113red.png" x="684" y="903" w="112" h="75" pX="0.5" pY="0.5" r="y"/>
+    <sprite n="ship114blue.png" x="141" y="1653" w="75" h="98" pX="0.5" pY="0.5"/>
+    <sprite n="ship114green.png" x="717" y="1224" w="75" h="98" pX="0.5" pY="0.5"/>
+    <sprite n="ship114orange.png" x="717" y="1324" w="75" h="98" pX="0.5" pY="0.5"/>
+    <sprite n="ship114red.png" x="717" y="1424" w="75" h="98" pX="0.5" pY="0.5"/>
+    <sprite n="ship115blue.png" x="1095" y="1531" w="91" h="91" pX="0.5" pY="0.5"/>
+    <sprite n="ship115green.png" x="1095" y="1624" w="91" h="91" pX="0.5" pY="0.5"/>
+    <sprite n="ship115orange.png" x="1095" y="1717" w="91" h="91" pX="0.5" pY="0.5"/>
+    <sprite n="ship115red.png" x="609" y="1651" w="91" h="91" pX="0.5" pY="0.5"/>
+</TextureAtlas>

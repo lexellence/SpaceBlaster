@@ -1,0 +1,464 @@
+/**************************************************************************************\
+** File: World.cpp
+** Project:
+** Author: David Leksen
+** Date:
+**
+** Main source code file for the World class
+**
+\**************************************************************************************/
+#include "pch.h"
+#include "World.h"
+#include "ParticleSystem.h"
+#include "Exceptions.h"
+#include "WorldDef.h"
+
+namespace Space
+{
+	World::~World()
+	{
+		d2LogDebug << "World used " << m_highestActiveEntityCount << " / " << WORLD_MAX_ENTITIES << " entities";
+		if(m_b2WorldPtr)
+		{
+			delete m_b2WorldPtr;
+			m_b2WorldPtr = nullptr;
+		}
+	}
+	void World::Init(const d2d::Rect& rect)
+	{
+		m_settings.LoadFrom("Data\\world.hjson");
+
+		// Destroy any existing Box2D physics world
+		m_timestepAccumulator = 0.0f;
+		if(m_b2WorldPtr)
+		{
+			delete m_b2WorldPtr;
+			m_b2WorldPtr = nullptr;
+		}
+		while(!m_destroyBuffer.empty())
+			m_destroyBuffer.pop();
+		
+		// Clear components and flags
+		for(unsigned i = 0; i < WORLD_MAX_ENTITIES; ++i)
+			m_componentBits[i] = COMPONENT_NONE;
+		for(unsigned i = 0; i < WORLD_MAX_ENTITIES; ++i)
+			m_flagBits[i] = FLAG_NONE;
+
+		// Create new Box2D physics world
+		m_b2WorldPtr = new b2World{ b2Vec2_zero };
+		m_b2WorldPtr->SetAutoClearForces(false);
+		m_b2WorldPtr->SetContactListener(this);
+		m_b2WorldPtr->SetContactFilter(this);
+
+		// World settings/attributes
+		m_worldRect = rect;
+		m_worldDimensions = rect.GetDimensions();
+		m_worldCenter = rect.GetCenter();
+
+		m_particleSystem.Init();
+
+		// Load shape file
+		m_shapeFactory.LoadFrom(m_settings.shapeFilePath);
+	}
+	void World::SetDestructionListener(DestroyListener* listenerPtr)
+	{
+		m_destructionListenerPtr = listenerPtr;
+	}
+	void World::SetWrapListener(WrapListener* listenerPtr)
+	{
+		m_wrappedEntityListenerPtr = listenerPtr;
+	}
+	void World::SetProjectileLauncherCallback(ProjectileLauncherCallback* callbackPtr)
+	{
+		m_projectileLauncherCallbackPtr = callbackPtr;
+	}
+	void World::SetMorphListener(MorphListener* listenerPtr)
+	{
+		m_morphListenerPtr = listenerPtr;
+	}
+	//+------------------------\----------------------------------
+	//|	  Creating Entities    |
+	//\------------------------/----------------------------------
+	unsigned World::NewEntityID(const b2Vec2& size, int drawLayer, bool activate)
+	{
+		for(unsigned entityID = 0; entityID < WORLD_MAX_ENTITIES; ++entityID)
+			if(m_componentBits[entityID] == COMPONENT_NONE && m_flagBits[entityID] == FLAG_NONE)
+			{
+				m_sizeComponents[entityID] = size;
+				m_boundingRadiusComponents[entityID] = size.Length() * 0.5f;
+			
+				if(activate)
+					Activate(entityID);
+
+				m_drawLayerComponents[entityID] = drawLayer;
+				return entityID;
+			}
+		throw GameException{ "World ran out of entities" };
+	}
+	void World::SetFlags(unsigned entityID, FlagBits flagBits, bool enable)
+	{
+		SDL_assert(entityID < WORLD_MAX_ENTITIES);
+		if(enable)
+			m_flagBits[entityID] |= flagBits;
+		else
+			m_flagBits[entityID] &= ~flagBits;
+	}
+	void World::RemoveComponents(unsigned entityID, ComponentBits componentBits)
+	{
+		SDL_assert(entityID < WORLD_MAX_ENTITIES);
+		m_componentBits[entityID] &= ~componentBits;
+	}
+	//+------------------------\----------------------------------
+	//|	  Physics Components   |
+	//\------------------------/----------------------------------
+	bool World::GetRandomPositionAwayFromExistingEntities(float newBoundingRadius,
+		float minGap, unsigned maxAttempts, b2Vec2& positionOut) const
+	{
+		b2Vec2 position;
+		bool acceptablePositionFound{ false };
+		unsigned attempts{ 0 };
+		do
+		{
+			position = d2d::RandomVec2InRect(m_worldRect);
+			unsigned id;
+			float boundingRadiiGap;
+			if(!GetClosestPhysicalEntity(position, newBoundingRadius, id, boundingRadiiGap))
+				acceptablePositionFound = true;
+			else if(boundingRadiiGap >= minGap)
+				acceptablePositionFound = true;
+		} while(!acceptablePositionFound && ++attempts < maxAttempts);
+
+		if(acceptablePositionFound)
+			positionOut = position;
+
+		return acceptablePositionFound;
+	}
+	void World::AddPhysicsComponent(unsigned entityID, b2BodyType type, 
+		const b2Vec2& position, float angle, const b2Vec2& velocity, float angularVelocity,
+		bool fixedRotation, bool continuousCollisionDetection)
+	{
+		SDL_assert(entityID < WORLD_MAX_ENTITIES);
+		m_componentBits[entityID] |= COMPONENT_PHYSICS;
+
+		// Create main body
+		b2BodyDef bodyDef;
+		bodyDef.type = type;
+		bodyDef.active = IsActive(entityID);
+		bodyDef.position = position;
+		bodyDef.angle = angle;
+		bodyDef.linearVelocity = velocity;
+		bodyDef.angularVelocity = angularVelocity;
+		bodyDef.fixedRotation = fixedRotation;
+		bodyDef.bullet = continuousCollisionDetection;
+		m_physicsComponents[entityID].mainBody.b2BodyPtr = m_b2WorldPtr->CreateBody(&bodyDef);
+
+		// Set body
+		m_physicsComponents[entityID].mainBody.entityID = entityID;
+		m_physicsComponents[entityID].mainBody.isClone = false;
+		m_physicsComponents[entityID].mainBody.b2BodyPtr->SetUserData(&m_physicsComponents[entityID].mainBody);
+		
+		// Create clones
+		CloneSectionList cloneLocationList{ GetCloneSectionList(*m_physicsComponents[entityID].mainBody.b2BodyPtr) };
+		unsigned i{ 0 };
+		for(CloneBody& cloneBody : m_physicsComponents[entityID].cloneBodyList)
+		{
+			// Set clone body
+			cloneBody.entityID = entityID;
+			cloneBody.isClone = true;
+			cloneBody.cloneIndex = i;
+			cloneBody.section = cloneLocationList.at(i);
+
+			// Create clone body
+			bodyDef.position = position + GetCloneOffset(cloneLocationList.at(i));
+			cloneBody.b2BodyPtr = m_b2WorldPtr->CreateBody(&bodyDef);
+			cloneBody.b2BodyPtr->SetUserData(&cloneBody);
+
+			// Traverse clone location list at the same time
+			++i;
+		}
+		m_physicsWrapDatas[entityID].crossedLeftBound = false;
+		m_physicsWrapDatas[entityID].crossedRightBound = false;
+		m_physicsWrapDatas[entityID].crossedLowerBound = false;
+		m_physicsWrapDatas[entityID].crossedUpperBound = false;
+		m_physicsWrapDatas[entityID].requiresManualWrapping = false;
+		m_physicsComponents[entityID].disableCollisions = false;
+
+		// LoadXML saved states
+		m_lastTransforms[entityID] = m_physicsComponents[entityID].mainBody.b2BodyPtr->GetTransform();
+		m_smoothedTransforms[entityID] = m_lastTransforms[entityID];
+		m_lastLinearVelocities[entityID] = m_physicsComponents[entityID].mainBody.b2BodyPtr->GetLinearVelocity();
+	}
+	void World::AddCircleShape(unsigned entityID, const d2d::Material& material, const d2d::Filter& filter,
+		float sizeRelativeToWidth, const b2Vec2& position, bool isSensor)
+	{
+		SDL_assert(entityID < WORLD_MAX_ENTITIES);
+		if(HasPhysics(entityID) && HasSize2D(entityID))
+		{
+			// Add to main body
+			float size{ sizeRelativeToWidth * m_sizeComponents[entityID].x };
+			m_shapeFactory.AddCircleShape(*m_physicsComponents[entityID].mainBody.b2BodyPtr, size,
+				material, filter, isSensor, position);
+
+			// Add to clones
+			for(unsigned i = 0; i < WORLD_NUM_CLONES; ++i)
+				m_shapeFactory.AddCircleShape(*m_physicsComponents[entityID].cloneBodyList[i].b2BodyPtr, size,
+					material, filter, isSensor, position);
+		}
+	}
+	void World::AddRectShape(unsigned entityID, const d2d::Material& material, const d2d::Filter& filter,
+		const b2Vec2& relativeSize, bool isSensor, const b2Vec2& position, float angle)
+	{
+		SDL_assert(entityID < WORLD_MAX_ENTITIES);
+		if(HasPhysics(entityID) && HasSize2D(entityID))
+		{
+			// Add to main body
+			b2Vec2 size{ m_sizeComponents[entityID].x * relativeSize.x, m_sizeComponents[entityID].y * relativeSize.y };
+			m_shapeFactory.AddRectShape(*m_physicsComponents[entityID].mainBody.b2BodyPtr, size,
+				material, filter, isSensor, position, angle);
+
+			// Add to clones
+			for(unsigned i = 0; i < WORLD_NUM_CLONES; ++i)
+				m_shapeFactory.AddRectShape(*m_physicsComponents[entityID].cloneBodyList[i].b2BodyPtr, size,
+					material, filter, isSensor, position, angle);
+		}
+	}
+	void World::AddShapes(unsigned entityID, const std::string& model, 
+		const d2d::Material& material, const d2d::Filter& filter, bool isSensor,
+		const b2Vec2& position, float angle)
+	{
+		SDL_assert(entityID < WORLD_MAX_ENTITIES);
+		if(HasPhysics(entityID) && HasSize2D(entityID))
+		{
+			// Add to main body
+			m_shapeFactory.AddShapes(*m_physicsComponents[entityID].mainBody.b2BodyPtr, m_sizeComponents[entityID], model,
+				material, filter, isSensor, position, angle);
+
+			// Add to clones
+			for(unsigned i = 0; i < WORLD_NUM_CLONES; ++i)
+				m_shapeFactory.AddShapes(*m_physicsComponents[entityID].cloneBodyList[i].b2BodyPtr, m_sizeComponents[entityID], model,
+					material, filter, isSensor, position, angle);
+		}
+	}
+	//+------------------------\----------------------------------
+	//|	  Visual Components    |
+	//\------------------------/----------------------------------
+	void World::AddDrawRadarComponent(unsigned entityID, const DrawRadarComponent& radarComponent)
+	{
+		SDL_assert(entityID < WORLD_MAX_ENTITIES);
+		m_componentBits[entityID] |= COMPONENT_DRAW_ON_RADAR;
+		m_drawRadarComponents[entityID] = radarComponent;
+	}
+	void World::AddDrawFixturesComponent(unsigned entityID, const DrawFixturesComponent& fixturesComponent)
+	{
+		SDL_assert(entityID < WORLD_MAX_ENTITIES);
+		m_componentBits[entityID] |= COMPONENT_DRAW_FIXTURES;
+		m_drawFixtureComponents[entityID] = fixturesComponent;
+	}
+	void World::AddDrawAnimationComponent(unsigned entityID, const AnimationDef* const animationDefPtr)
+	{
+		SDL_assert(entityID < WORLD_MAX_ENTITIES);
+		m_componentBits[entityID] |= COMPONENT_DRAW_ANIMATION;
+		m_drawAnimationComponents[entityID].Init(animationDefPtr);
+	}	
+	//+--------------------------------\--------------------------------------
+	//|   LoadXML   | (private)
+	//\--------------------------------/--------------------------------------
+	void DrawAnimationComponent::Init(const AnimationDef* const animationDefPtr)
+	{
+		if(!animationDefPtr)
+		{
+			type = AnimationType::NOT_ANIMATED;
+			numFrames = 0;
+			return;
+		}
+		SDL_assert(animationDefPtr->numFrames <= WORLD_MAX_ANIMATION_FRAMES);
+		type = animationDefPtr->type;
+		numFrames = animationDefPtr->numFrames;
+		currentFrameIndex = animationDefPtr->initialFrameIndex;
+		movingForward = animationDefPtr->initiallyMovingForward;
+		for(unsigned i = 0; i < animationDefPtr->numFrames; ++i)
+		{
+			frames[i].frameTime = animationDefPtr->frameDefs[i].frameTime;
+			frames[i].frameTimeAccumulator = 0.0f;
+			frames[i].texture = animationDefPtr->frameDefs[i].texture;
+		}
+	}
+	void World::SetDrawLayer(unsigned entityID, int layer)
+	{
+		SDL_assert(entityID < WORLD_MAX_ENTITIES);
+		d2d::Clamp(layer, m_settings.drawLayerRange);
+		m_drawLayerComponents[entityID] = layer;
+	}
+	//+--------------------\--------------------------------------
+	//|	  Life and Death   |
+	//\--------------------/--------------------------------------
+	void World::AddHealthComponent(unsigned entityID, float maxHP)
+	{
+		SDL_assert(entityID < WORLD_MAX_ENTITIES);
+		m_componentBits[entityID] |= COMPONENT_HEALTH;
+		m_healthComponents[entityID].hpMax = maxHP;
+		m_healthComponents[entityID].hp = maxHP;
+		m_healthComponents[entityID].deathDamage = 0.0f;
+	}
+	void World::AddParentComponent(unsigned entityID, unsigned parentID)
+	{
+		SDL_assert(entityID < WORLD_MAX_ENTITIES);
+		m_componentBits[entityID] |= COMPONENT_PARENT;
+		m_parentComponents[entityID] = parentID;
+	}
+	void World::AddParticleExplosionOnDeathComponent(unsigned entityID, float relativeSize, 
+		unsigned numParticles, const d2d::Range<float>& speedRange, float damageBasedSpeedIncreaseFactor, 
+		const d2d::Range<int>& sizeIndexRange, const d2d::ColorRange& colorRange,
+		float lifetime, float fadeIn, float fadeOut)
+	{
+		SDL_assert(entityID < WORLD_MAX_ENTITIES);
+		m_componentBits[entityID] |= COMPONENT_PARTICLE_EXPLOSION;
+		m_particleExplosionComponents[entityID].relativeSize = relativeSize;
+		m_particleExplosionComponents[entityID].numParticles = numParticles;
+		m_particleExplosionComponents[entityID].speedRange = speedRange;
+		m_particleExplosionComponents[entityID].damageBasedSpeedIncreaseFactor = damageBasedSpeedIncreaseFactor;
+		m_particleExplosionComponents[entityID].sizeIndexRange = sizeIndexRange;
+		m_particleExplosionComponents[entityID].colorRange = colorRange;
+		m_particleExplosionComponents[entityID].lifetime = lifetime;
+		m_particleExplosionComponents[entityID].fadeIn = fadeIn;
+		m_particleExplosionComponents[entityID].fadeOut = fadeOut;
+	}
+	void World::AddDestructionDelayComponent(unsigned entityID, float delay)
+	{
+		SDL_assert(entityID < WORLD_MAX_ENTITIES);
+		m_componentBits[entityID] |= COMPONENT_DESTRUCTION_DELAY;
+		m_destructionDelayComponents[entityID] = std::max(delay, 0.0f);
+	}
+	void World::AddDestructionDelayOnContactComponent(unsigned entityID, float delay)
+	{
+		SDL_assert(entityID < WORLD_MAX_ENTITIES);
+		m_componentBits[entityID] |= COMPONENT_DESTRUCTION_DELAY_ON_CONTACT;
+		m_destructionDelayOnContactComponents[entityID] = std::max(delay, 0.0f);
+	}
+	void World::AddDestructionChanceOnContactComponent(unsigned entityID, float destructionChance)
+	{
+		SDL_assert(entityID < WORLD_MAX_ENTITIES);
+		m_componentBits[entityID] |= COMPONENT_DESTRUCTION_CHANCE_ON_CONTACT;
+		m_destructionChanceOnContactComponents[entityID] = std::clamp(destructionChance, 0.0f, 1.0f);
+	}
+	void World::AddMorphIntoEntityID(unsigned entityID, unsigned newEntityID)
+	{
+		SDL_assert(entityID < WORLD_MAX_ENTITIES);
+		SDL_assert(newEntityID < WORLD_MAX_ENTITIES);
+		m_componentBits[entityID] |= COMPONENT_MORPH_INTO_ENTITY_ID;
+		m_morphIntoEntityIDs[entityID] = newEntityID;
+	}
+	//+---------------------------\-------------------------------
+	//|	  Projectile Launchers    |
+	//\---------------------------/-------------------------------
+	void World::AddProjectileLauncherComponent(unsigned entityID, unsigned numSlots, bool secondaryLaunchers)
+	{
+		SDL_assert(entityID < WORLD_MAX_ENTITIES);
+		SDL_assert(numSlots <= WORLD_MAX_PROJECTILE_LAUNCHER_SLOTS);
+		m_componentBits[entityID] |= (secondaryLaunchers ? COMPONENT_SECONDARY_PROJECTILE_LAUNCHER : COMPONENT_PRIMARY_PROJECTILE_LAUNCHER);
+
+		ProjectileLauncherComponent* launcherComponentPtr{
+			secondaryLaunchers ? &m_secondaryProjectileLauncherComponents[entityID] : &m_primaryProjectileLauncherComponents[entityID] };
+
+		launcherComponentPtr->factor = 0.0f;
+		launcherComponentPtr->numSlots = numSlots;
+		for(unsigned i = 0; i < WORLD_MAX_PROJECTILE_LAUNCHER_SLOTS; ++i)
+			launcherComponentPtr->projectileLaunchers[i].enabled = false;
+	}
+	void World::AddProjectileLauncher(unsigned entityID, unsigned slot, const ProjectileDef& projectileDef,
+		const b2Vec2& localRelativePosition, float impulse, float interval, bool temporarilyDisabled, bool secondaryLaunchers)
+	{
+		SDL_assert(entityID < WORLD_MAX_ENTITIES);
+		if(IsValidProjectileLauncherSlot(entityID, slot, secondaryLaunchers))
+		{
+			ProjectileLauncherComponent* launcherComponentPtr{
+				secondaryLaunchers ? &m_secondaryProjectileLauncherComponents[entityID] : &m_primaryProjectileLauncherComponents[entityID] };
+			launcherComponentPtr->projectileLaunchers[slot].enabled = true;
+			launcherComponentPtr->projectileLaunchers[slot].temporarilyDisabled = temporarilyDisabled;
+			launcherComponentPtr->projectileLaunchers[slot].projectileDef = projectileDef;
+			launcherComponentPtr->projectileLaunchers[slot].localRelativePosition = localRelativePosition;
+			launcherComponentPtr->projectileLaunchers[slot].impulse = impulse;
+			launcherComponentPtr->projectileLaunchers[slot].interval = interval;
+			launcherComponentPtr->projectileLaunchers[slot].intervalAccumulator = interval;
+		}
+	}
+	void World::RemoveProjectileLauncher(unsigned entityID, unsigned slot, bool secondaryLaunchers)
+	{
+		SDL_assert(entityID < WORLD_MAX_ENTITIES);
+		if(IsValidProjectileLauncherSlot(entityID, slot, secondaryLaunchers))
+		{
+			ProjectileLauncherComponent* launcherComponentPtr{ 
+				secondaryLaunchers ? &m_secondaryProjectileLauncherComponents[entityID] : &m_primaryProjectileLauncherComponents[entityID] };
+			launcherComponentPtr->projectileLaunchers[slot].enabled = false;
+		}
+	}
+	bool World::IsValidProjectileLauncherSlot(unsigned entityID, unsigned slot, bool secondaryLaunchers) const
+	{
+		SDL_assert(entityID < WORLD_MAX_ENTITIES);
+		const ProjectileLauncherComponent* launcherComponentPtr{
+			secondaryLaunchers ? &m_secondaryProjectileLauncherComponents[entityID] : &m_primaryProjectileLauncherComponents[entityID] };
+		ComponentBits component{ secondaryLaunchers ? COMPONENT_SECONDARY_PROJECTILE_LAUNCHER : COMPONENT_PRIMARY_PROJECTILE_LAUNCHER };
+		return HasComponents(entityID, component) && slot < launcherComponentPtr->numSlots;
+	}
+
+	//+----------------------\------------------------------------
+	//|	   Getting around	 |
+	//\----------------------/------------------------------------
+	void World::AddThrusterComponent(unsigned entityID, unsigned numSlots, float initialFactor)
+	{
+		SDL_assert(entityID < WORLD_MAX_ENTITIES);
+		SDL_assert(numSlots <= WORLD_MAX_THRUSTER_SLOTS);
+		m_componentBits[entityID] |= COMPONENT_THRUSTER;
+
+		ThrusterComponent& thrusterComponent{ m_thrusterComponents[entityID] };
+		thrusterComponent.factor = initialFactor;
+		thrusterComponent.numSlots = numSlots;
+		for(unsigned i = 0; i < WORLD_MAX_THRUSTER_SLOTS; ++i)
+			thrusterComponent.thrusters[i].enabled = false;
+	}
+	void World::AddThruster(unsigned entityID, unsigned slot, const AnimationDef* const animationDefPtr,
+		float acceleration, const b2Vec2& localRelativePosition)
+	{
+		SDL_assert(entityID < WORLD_MAX_ENTITIES);
+		SDL_assert(IsValidThrusterSlot(entityID, slot));
+		m_thrusterComponents[entityID].thrusters[slot].enabled = true;
+		m_thrusterComponents[entityID].thrusters[slot].temporarilyDisabled = false;
+		m_thrusterComponents[entityID].thrusters[slot].drawAnimationComponent.Init(animationDefPtr);
+		m_thrusterComponents[entityID].thrusters[slot].acceleration = acceleration;
+		m_thrusterComponents[entityID].thrusters[slot].localRelativePosition = localRelativePosition;
+	}
+	void World::RemoveThruster(unsigned entityID, unsigned slot)
+	{
+		SDL_assert(entityID < WORLD_MAX_ENTITIES);
+		SDL_assert(IsValidThrusterSlot(entityID, slot));
+		m_primaryProjectileLauncherComponents[entityID].projectileLaunchers[slot].enabled = false;
+	}
+	bool World::IsValidThrusterSlot(unsigned entityID, unsigned slot) const
+	{
+		SDL_assert(entityID < WORLD_MAX_ENTITIES);
+		return (HasComponents(entityID, COMPONENT_THRUSTER) &&
+			slot < m_thrusterComponents[entityID].numSlots);
+	}
+	void World::AddSetThrustFactorAfterDelayComponent(unsigned entityID, float thrustFactor, float delay)
+	{
+		SDL_assert(entityID < WORLD_MAX_ENTITIES);
+		m_componentBits[entityID] |= COMPONENT_SET_THRUST_AFTER_DELAY;
+		m_setThrustFactorAfterDelayComponents[entityID].factor = thrustFactor;
+		m_setThrustFactorAfterDelayComponents[entityID].delay = delay;
+	}
+	void World::AddRotatorComponent(unsigned entityID, float rotationSpeed)
+	{
+		SDL_assert(entityID < WORLD_MAX_ENTITIES);
+		m_componentBits[entityID] |= COMPONENT_ROTATOR;
+		m_rotatorComponents[entityID].factor = 0.0f;
+		m_rotatorComponents[entityID].lastFactor = 0.0f;
+		m_rotatorComponents[entityID].rotationSpeed = rotationSpeed;
+	}
+	void World::AddBrakeComponent(unsigned entityID, float deceleration)
+	{
+		SDL_assert(entityID < WORLD_MAX_ENTITIES);
+		m_componentBits[entityID] |= COMPONENT_BRAKE;
+		m_brakeComponents[entityID].factor = 0.0f;
+		m_brakeComponents[entityID].deceleration = deceleration;
+	}
+}

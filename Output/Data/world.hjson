@@ -1,0 +1,26 @@
+{
+  shapeFilePath: "Shapes\\sprites-d2d.xml"
+  drawFixturesLineWidth: 1.5
+  debugDrawFixtures: false
+  drawLayerRange: [ -3, 3 ]
+  stepsPerSecond: 120
+  maxUpdateTime: 1.0
+  velocityIterationsPerStep: 5
+  positionIterationsPerStep: 2
+  damageToImpulseRatio: 1.0
+  minTotalCollisionDamage: 0.1
+  damageLogging: false
+  addImpulsesForDamages: false
+  healthMeter: 
+  {
+    gap: 0.16
+    widthPerPoint: 0.04
+    height: 0.3
+    damagedThreshold: 0.6667
+    badlyDamagedThreshold: 0.3333
+    backgroundColor:	  [ 0.6, 0.6, 0.6, 0.3 ]
+    hardlyDamagedColor: [   0,   1,   0,   1 ]
+    damagedColor:		    [   1, 0.55,  0,   1 ]
+    badlyDamagedColor:  [ 0.55,  0,   0,   1 ]
+  }
+}

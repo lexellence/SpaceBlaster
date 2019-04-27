@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with TexturePacker https://www.codeandweb.com/texturepacker -->
+<!-- $TexturePacker:SmartUpdate:1767c9724e4934b93c1480b7dcc11843:bca37b7b8184c02181ed64a9a7b1b64c:842466d0e1291ba8b7838daa1673b9fd$ -->
+<!--Format:
+n  => name of the sprite
+x  => sprite x pos in texture
+y  => sprite y pos in texture
+w  => sprite width (may be trimmed)
+h  => sprite height (may be trimmed)
+pX => x pos of the pivot point (relative to sprite width)
+pY => y pos of the pivot point (relative to sprite height)
+oX => sprite's x-corner offset (only available if trimmed)
+oY => sprite's y-corner offset (only available if trimmed)
+oW => sprite's original width (only available if trimmed)
+oH => sprite's original height (only available if trimmed)
+r => 'y' only set if sprite is rotated
+with polygon mode enabled:
+vertices   => points in sprite coordinate system (x0,y0,x1,y1,x2,y2, ...)
+verticesUV => points in sheet coordinate system (x0,y0,x1,y1,x2,y2, ...)
+triangles  => sprite triangulation, 3 vertex indices per triangle
+-->
+<TextureAtlas imagePath="tinyships.png" width="1071" height="64">
+    <sprite n="tinyship001.png" x="696" y="38" w="27" h="24" pX="0.5" pY="0.5"/>
+    <sprite n="tinyship002.png" x="920" y="32" w="21" h="29" pX="0.5" pY="0.5" r="y"/>
+    <sprite n="tinyship003.png" x="388" y="43" w="27" h="20" pX="0.5" pY="0.5"/>
+    <sprite n="tinyship004.png" x="193" y="46" w="21" h="17" pX="0.5" pY="0.5"/>
+    <sprite n="tinyship005.png" x="587" y="41" w="19" h="22" pX="0.5" pY="0.5" r="y"/>
+    <sprite n="tinyship006.png" x="955" y="1" w="23" h="26" pX="0.5" pY="0.5" r="y"/>
+    <sprite n="tinyship007.png" x="1051" y="1" w="19" h="23" pX="0.5" pY="0.5" r="y"/>
+    <sprite n="tinyship008closed.png" x="287" y="46" w="25" h="16" pX="0.5" pY="0.5"/>
+    <sprite n="tinyship008half.png" x="417" y="43" w="25" h="20" pX="0.5" pY="0.5"/>
+    <sprite n="tinyship008open.png" x="670" y="38" w="24" h="25" pX="0.5" pY="0.5" r="y"/>
+    <sprite n="tinyship009closed.png" x="314" y="46" w="23" h="15" pX="0.5" pY="0.5"/>
+    <sprite n="tinyship009half.png" x="1036" y="26" w="23" h="19" pX="0.5" pY="0.5"/>
+    <sprite n="tinyship009open.png" x="1005" y="1" w="23" h="23" pX="0.5" pY="0.5"/>
+    <sprite n="tinyship010.png" x="969" y="29" w="19" h="26" pX="0.5" pY="0.5" r="y"/>
+    <sprite n="tinyship011.png" x="564" y="41" w="21" h="22" pX="0.5" pY="0.5"/>
+    <sprite n="tinyship012.png" x="365" y="45" w="21" h="15" pX="0.5" pY="0.5" r="y"/>
+    <sprite n="tinyship013.png" x="1013" y="26" w="21" h="23" pX="0.5" pY="0.5"/>
+    <sprite n="tinyship014.png" x="1030" y="1" w="19" h="23" pX="0.5" pY="0.5"/>
+    <sprite n="tinyship015gray.png" x="608" y="39" w="29" h="24" pX="0.5" pY="0.5" r="y"/>
+    <sprite n="tinyship015green.png" x="639" y="39" w="29" h="24" pX="0.5" pY="0.5" r="y"/>
+    <sprite n="tinyship016.png" x="901" y="1" w="26" h="29" pX="0.5" pY="0.5" oX="2" oY="0" oW="28" oH="29"/>
+    <sprite n="tinyship016thrust.png" x="758" y="35" w="29" h="28" pX="0.5" pY="0.5" r="y"/>
+    <sprite n="tinyship017.png" x="1036" y="47" w="14" h="15" pX="0.5" pY="0.5"/>
+    <sprite n="tinyship018closed.png" x="990" y="27" w="21" h="24" pX="0.5" pY="0.5" oX="0" oY="3" oW="24" oH="27" r="y"/>
+    <sprite n="tinyship018half.png" x="980" y="1" w="23" h="24" pX="0.5" pY="0.5" oX="0" oY="2" oW="24" oH="27" r="y"/>
+    <sprite n="tinyship018open.png" x="929" y="1" w="24" h="27" pX="0.5" pY="0.5"/>
+    <sprite n="tinyship019.png" x="152" y="50" w="17" h="11" pX="0.5" pY="0.5" r="y"/>
+    <sprite n="tinyship020.png" x="179" y="1" w="43" h="43" pX="0.5" pY="0.5"/>
+    <sprite n="tinyship021.png" x="27" y="1" w="55" h="58" pX="0.5" pY="0.5" r="y"/>
+    <sprite n="tinyship022.png" x="445" y="1" w="36" h="39" pX="0.5" pY="0.5"/>
+    <sprite n="tinyship023.png" x="115" y="1" w="39" h="47" pX="0.5" pY="0.5" r="y"/>
+    <sprite n="tinyship024blue.png" x="224" y="1" w="34" h="43" pX="0.5" pY="0.5" r="y"/>
+    <sprite n="tinyship024brown.png" x="260" y="1" w="34" h="43" pX="0.5" pY="0.5" r="y"/>
+    <sprite n="tinyship024purple.png" x="296" y="1" w="34" h="43" pX="0.5" pY="0.5" r="y"/>
+    <sprite n="tinyship025blue.png" x="864" y="33" w="26" h="30" pX="0.5" pY="0.5" r="y"/>
+    <sprite n="tinyship025brown.png" x="873" y="1" w="26" h="30" pX="0.5" pY="0.5" r="y"/>
+    <sprite n="tinyship025purple.png" x="892" y="33" w="26" h="30" pX="0.5" pY="0.5" r="y"/>
+    <sprite n="tinyship026blue.png" x="789" y="35" w="23" h="28" pX="0.5" pY="0.5"/>
+    <sprite n="tinyship026brown.png" x="814" y="35" w="23" h="28" pX="0.5" pY="0.5"/>
+    <sprite n="tinyship026purple.png" x="839" y="35" w="23" h="28" pX="0.5" pY="0.5"/>
+    <sprite n="tinyship027.png" x="746" y="1" w="31" h="32" pX="0.5" pY="0.5" oX="0" oY="0" oW="32" oH="32"/>
+    <sprite n="tinyship028.png" x="779" y="1" w="31" h="32" pX="0.5" pY="0.5" oX="0" oY="0" oW="32" oH="32"/>
+    <sprite n="tinyship029.png" x="812" y="1" w="30" h="32" pX="0.5" pY="0.5" oX="0" oY="1" oW="32" oH="32" r="y"/>
+    <sprite n="tinyship030.png" x="725" y="35" w="31" h="28" pX="0.5" pY="0.5" oX="0" oY="2" oW="32" oH="32"/>
+    <sprite n="tinyship031.png" x="486" y="42" w="39" h="21" pX="0.5" pY="0.5"/>
+    <sprite n="tinyship032.png" x="444" y="43" w="40" h="19" pX="0.5" pY="0.5"/>
+    <sprite n="tinyship033.png" x="84" y="1" w="29" h="57" pX="0.5" pY="0.5" r="y"/>
+    <sprite n="tinyship034.png" x="115" y="50" w="18" h="13" pX="0.5" pY="0.5"/>
+    <sprite n="tinyship035.png" x="171" y="50" w="20" h="10" pX="0.5" pY="0.5"/>
+    <sprite n="tinyship036.png" x="339" y="45" w="24" h="18" pX="0.5" pY="0.5"/>
+    <sprite n="tinyship037.png" x="332" y="1" w="35" h="42" pX="0.5" pY="0.5"/>
+    <sprite n="tinyship038.png" x="410" y="1" w="33" h="40" pX="0.5" pY="0.5" r="y"/>
+    <sprite n="tinyship039.png" x="369" y="1" w="39" h="40" pX="0.5" pY="0.5" r="y"/>
+    <sprite n="tinyship040green.png" x="588" y="1" w="31" h="36" pX="0.5" pY="0.5"/>
+    <sprite n="tinyship040red.png" x="621" y="1" w="31" h="36" pX="0.5" pY="0.5"/>
+    <sprite n="tinyship041.png" x="550" y="1" w="36" h="38" pX="0.5" pY="0.5"/>
+    <sprite n="tinyship042gray.png" x="527" y="42" w="35" h="21" pX="0.5" pY="0.5" r="y"/>
+    <sprite n="tinyship042white.png" x="689" y="1" w="21" h="35" pX="0.5" pY="0.5"/>
+    <sprite n="tinyship043.png" x="712" y="1" w="32" h="32" pX="0.5" pY="0.5"/>
+    <sprite n="tinyship044.png" x="517" y="1" w="31" h="39" pX="0.5" pY="0.5"/>
+    <sprite n="tinyship045.png" x="483" y="1" w="32" h="39" pX="0.5" pY="0.5"/>
+    <sprite n="tinyship046.png" x="943" y="30" w="24" h="27" pX="0.5" pY="0.5"/>
+    <sprite n="tinyship047.png" x="844" y="1" w="27" h="30" pX="0.5" pY="0.5" r="y"/>
+    <sprite n="tinyship048.png" x="654" y="1" w="33" h="35" pX="0.5" pY="0.5"/>
+    <sprite n="tinyship049.png" x="1" y="1" w="24" h="62" pX="0.5" pY="0.5" r="y"/>
+    <sprite n="tinyship050.png" x="156" y="1" w="21" h="47" pX="0.5" pY="0.5" r="y"/>
+    <sprite n="tinyship051.png" x="135" y="50" w="15" h="13" pX="0.5" pY="0.5" r="y"/>
+    <sprite n="tinyship052.png" x="271" y="46" w="14" h="17" pX="0.5" pY="0.5" oX="3" oY="0" oW="17" oH="17"/>
+    <sprite n="tinyship052thrust.png" x="216" y="46" w="17" h="17" pX="0.5" pY="0.5"/>
+    <sprite n="tinyship053.png" x="254" y="46" w="15" h="17" pX="0.5" pY="0.5" oX="2" oY="0" oW="17" oH="17"/>
+    <sprite n="tinyship053thrust.png" x="235" y="46" w="17" h="17" pX="0.5" pY="0.5"/>
+</TextureAtlas>

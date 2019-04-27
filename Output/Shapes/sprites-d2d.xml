@@ -1,0 +1,3681 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bodydef>
+	<bodies>
+		<body name="thruster1" width="21.000" height="9.000">
+			<fixtureGroups>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="9.500" y="2.500"/>
+							<point x="7.500" y="3.500"/>
+							<point x="-2.500" y="3.500"/>
+							<point x="-9.500" y="0.500"/>
+							<point x="-9.500" y="-0.500"/>
+							<point x="-2.500" y="-3.500"/>
+							<point x="7.500" y="-3.500"/>
+							<point x="9.500" y="-2.500"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+			</fixtureGroups>
+		</body>
+		<body name="ship002" width="28.000" height="58.000">
+			<fixtureGroups>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="7.000" y="28.000"/>
+							<point x="3.000" y="28.000"/>
+							<point x="3.000" y="11.000"/>
+							<point x="12.000" y="14.000"/>
+							<point x="12.000" y="17.000"/>
+							<point x="10.000" y="23.000"/>
+						</polygon>
+            <polygon>
+							<point x="7.000" y="-28.000"/>
+							<point x="11.000" y="-20.000"/>
+							<point x="11.000" y="-14.000"/>
+							<point x="3.000" y="-11.000"/>
+							<point x="3.000" y="-28.000"/>
+						</polygon>
+            <polygon>
+							<point x="11.000" y="-14.000"/>
+							<point x="13.000" y="-12.000"/>
+							<point x="13.000" y="12.000"/>
+							<point x="12.000" y="14.000"/>
+							<point x="3.000" y="11.000"/>
+							<point x="-2.000" y="2.000"/>
+							<point x="-2.000" y="-2.000"/>
+							<point x="3.000" y="-11.000"/>
+						</polygon>
+            <polygon>
+							<point x="-13.000" y="8.000"/>
+							<point x="-13.000" y="4.000"/>
+							<point x="-12.000" y="3.000"/>
+							<point x="-2.000" y="2.000"/>
+							<point x="3.000" y="11.000"/>
+							<point x="-12.000" y="9.000"/>
+						</polygon>
+            <polygon>
+							<point x="-13.000" y="-8.000"/>
+							<point x="-12.000" y="-9.000"/>
+							<point x="3.000" y="-11.000"/>
+							<point x="-2.000" y="-2.000"/>
+							<point x="-12.000" y="-3.000"/>
+							<point x="-13.000" y="-4.000"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+			</fixtureGroups>
+		</body>
+		<body name="tinyship001" width="27.000" height="24.000">
+			<fixtureGroups>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="12.500" y="0.000"/>
+							<point x="-0.500" y="11.000"/>
+							<point x="-10.500" y="10.000"/>
+							<point x="-12.500" y="0.000"/>
+							<point x="-10.500" y="-10.000"/>
+							<point x="-0.500" y="-11.000"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+			</fixtureGroups>
+		</body>
+		<body name="tinyship002" width="29.000" height="21.000">
+			<fixtureGroups>
+				<fixtureGroup type="CIRCLE">
+          <circle r="9.000" x="-4.500" y="0.000"/>
+				</fixtureGroup>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="3.500" y="7.500"/>
+							<point x="3.500" y="-7.500"/>
+							<point x="13.500" y="-1.500"/>
+							<point x="13.500" y="1.500"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+			</fixtureGroups>
+		</body>
+		<body name="tinyship003" width="27.000" height="20.000">
+			<fixtureGroups>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="13.500" y="0.000"/>
+							<point x="-6.500" y="9.000"/>
+							<point x="-12.500" y="3.000"/>
+							<point x="-12.500" y="-3.000"/>
+							<point x="-6.500" y="-9.000"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+			</fixtureGroups>
+		</body>
+		<body name="tinyship004" width="21.000" height="17.000">
+			<fixtureGroups>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="4.500" y="0.500"/>
+							<point x="1.500" y="4.500"/>
+							<point x="-5.500" y="7.500"/>
+							<point x="-9.500" y="3.500"/>
+							<point x="-9.500" y="-3.500"/>
+							<point x="-5.500" y="-7.500"/>
+							<point x="1.500" y="-4.500"/>
+						</polygon>
+            <polygon>
+							<point x="9.500" y="4.500"/>
+							<point x="9.500" y="7.500"/>
+							<point x="-5.500" y="7.500"/>
+							<point x="1.500" y="4.500"/>
+						</polygon>
+            <polygon>
+							<point x="9.500" y="-4.500"/>
+							<point x="1.500" y="-4.500"/>
+							<point x="-5.500" y="-7.500"/>
+							<point x="9.500" y="-7.500"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+			</fixtureGroups>
+		</body>
+		<body name="tinyship005" width="22.000" height="19.000">
+			<fixtureGroups>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="9.000" y="-0.500"/>
+							<point x="1.000" y="4.500"/>
+							<point x="-8.000" y="3.500"/>
+							<point x="-10.000" y="2.500"/>
+							<point x="-10.000" y="-3.500"/>
+							<point x="-8.000" y="-4.500"/>
+							<point x="1.000" y="-4.500"/>
+						</polygon>
+            <polygon>
+							<point x="-8.000" y="8.500"/>
+							<point x="-8.000" y="3.500"/>
+							<point x="1.000" y="4.500"/>
+							<point x="-4.000" y="8.500"/>
+						</polygon>
+            <polygon>
+							<point x="-8.000" y="-8.500"/>
+							<point x="-3.000" y="-8.500"/>
+							<point x="1.000" y="-4.500"/>
+							<point x="-8.000" y="-4.500"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+			</fixtureGroups>
+		</body>
+		<body name="tinyship007" width="23.000" height="19.000">
+			<fixtureGroups>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="-10.500" y="-3.500"/>
+							<point x="-5.500" y="-5.500"/>
+							<point x="7.500" y="-8.500"/>
+							<point x="9.500" y="-6.500"/>
+							<point x="10.500" y="0.500"/>
+							<point x="7.500" y="8.500"/>
+							<point x="-5.500" y="5.500"/>
+							<point x="-10.500" y="3.500"/>
+						</polygon>
+            <polygon>
+							<point x="-2.500" y="8.500"/>
+							<point x="-5.500" y="5.500"/>
+							<point x="7.500" y="8.500"/>
+						</polygon>
+            <polygon>
+							<point x="-2.500" y="-8.500"/>
+							<point x="7.500" y="-8.500"/>
+							<point x="-5.500" y="-5.500"/>
+						</polygon>
+            <polygon>
+							<point x="9.500" y="6.500"/>
+							<point x="7.500" y="8.500"/>
+							<point x="10.500" y="0.500"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+			</fixtureGroups>
+		</body>
+		<body name="tinyship008closed" width="25.000" height="16.000">
+			<fixtureGroups>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="11.500" y="0.000"/>
+							<point x="7.500" y="5.000"/>
+							<point x="3.500" y="7.000"/>
+							<point x="3.500" y="-7.000"/>
+							<point x="7.500" y="-5.000"/>
+						</polygon>
+            <polygon>
+							<point x="-11.500" y="3.000"/>
+							<point x="-11.500" y="-3.000"/>
+							<point x="-6.500" y="-7.000"/>
+							<point x="3.500" y="-7.000"/>
+							<point x="3.500" y="7.000"/>
+							<point x="-6.500" y="7.000"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+			</fixtureGroups>
+		</body>
+		<body name="tinyship008half" width="25.000" height="20.000">
+			<fixtureGroups>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="-11.500" y="5.000"/>
+							<point x="-11.500" y="-5.000"/>
+							<point x="-6.500" y="-9.000"/>
+							<point x="3.500" y="-9.000"/>
+							<point x="11.500" y="-3.000"/>
+							<point x="11.500" y="3.000"/>
+							<point x="3.500" y="9.000"/>
+							<point x="-6.500" y="9.000"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+			</fixtureGroups>
+		</body>
+		<body name="tinyship008open" width="25.000" height="24.000">
+			<fixtureGroups>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="-11.500" y="-3.000"/>
+							<point x="-11.500" y="-7.000"/>
+							<point x="-6.500" y="-11.000"/>
+							<point x="3.500" y="-11.000"/>
+							<point x="11.500" y="-5.000"/>
+							<point x="11.500" y="-3.000"/>
+						</polygon>
+            <polygon>
+							<point x="-11.500" y="3.000"/>
+							<point x="11.500" y="3.000"/>
+							<point x="11.500" y="5.000"/>
+							<point x="3.500" y="11.000"/>
+							<point x="-6.500" y="11.000"/>
+							<point x="-11.500" y="7.000"/>
+						</polygon>
+            <polygon>
+							<point x="4.500" y="3.000"/>
+							<point x="-7.500" y="3.000"/>
+							<point x="-7.500" y="-3.000"/>
+							<point x="4.500" y="-3.000"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+			</fixtureGroups>
+		</body>
+		<body name="tinyship009closed" width="23.000" height="15.000">
+			<fixtureGroups>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="10.500" y="1.500"/>
+							<point x="7.500" y="4.500"/>
+							<point x="1.500" y="6.500"/>
+							<point x="-7.500" y="6.500"/>
+							<point x="-7.500" y="-6.500"/>
+							<point x="1.500" y="-6.500"/>
+							<point x="7.500" y="-4.500"/>
+							<point x="10.500" y="-1.500"/>
+						</polygon>
+            <polygon>
+							<point x="-7.500" y="6.500"/>
+							<point x="-10.500" y="2.500"/>
+							<point x="-10.500" y="-2.500"/>
+							<point x="-7.500" y="-6.500"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+			</fixtureGroups>
+		</body>
+		<body name="tinyship009half" width="23.000" height="19.000">
+			<fixtureGroups>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="-10.500" y="-2.500"/>
+							<point x="-7.500" y="-5.500"/>
+							<point x="-0.500" y="-8.500"/>
+							<point x="1.500" y="-6.500"/>
+							<point x="1.500" y="6.500"/>
+							<point x="-0.500" y="8.500"/>
+							<point x="-7.500" y="5.500"/>
+							<point x="-10.500" y="2.500"/>
+						</polygon>
+            <polygon>
+							<point x="10.500" y="1.500"/>
+							<point x="7.500" y="4.500"/>
+							<point x="1.500" y="6.500"/>
+							<point x="1.500" y="-6.500"/>
+							<point x="7.500" y="-4.500"/>
+							<point x="10.500" y="-1.500"/>
+						</polygon>
+            <polygon>
+							<point x="-7.500" y="7.500"/>
+							<point x="-7.500" y="5.500"/>
+							<point x="-0.500" y="8.500"/>
+						</polygon>
+            <polygon>
+							<point x="-7.500" y="-7.500"/>
+							<point x="-0.500" y="-8.500"/>
+							<point x="-7.500" y="-5.500"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+			</fixtureGroups>
+		</body>
+		<body name="tinyship009open" width="23.000" height="23.000">
+			<fixtureGroups>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="0.500" y="-10.500"/>
+							<point x="1.500" y="-6.500"/>
+							<point x="-10.500" y="2.500"/>
+							<point x="-7.500" y="-5.500"/>
+							<point x="-4.500" y="-10.500"/>
+						</polygon>
+            <polygon>
+							<point x="0.500" y="10.500"/>
+							<point x="-4.500" y="10.500"/>
+							<point x="-7.500" y="8.500"/>
+							<point x="-7.500" y="5.500"/>
+							<point x="2.500" y="6.500"/>
+						</polygon>
+            <polygon>
+							<point x="-7.500" y="-8.500"/>
+							<point x="-4.500" y="-10.500"/>
+							<point x="-7.500" y="-5.500"/>
+						</polygon>
+            <polygon>
+							<point x="-10.500" y="-2.500"/>
+							<point x="-7.500" y="-5.500"/>
+							<point x="-10.500" y="2.500"/>
+						</polygon>
+            <polygon>
+							<point x="10.500" y="1.500"/>
+							<point x="7.500" y="4.500"/>
+							<point x="2.500" y="6.500"/>
+							<point x="-7.500" y="5.500"/>
+							<point x="-10.500" y="2.500"/>
+							<point x="1.500" y="-6.500"/>
+							<point x="7.500" y="-4.500"/>
+							<point x="10.500" y="-1.500"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+			</fixtureGroups>
+		</body>
+		<body name="tinyship010" width="26.000" height="19.000">
+			<fixtureGroups>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="-8.000" y="3.500"/>
+							<point x="-8.000" y="-3.500"/>
+							<point x="-2.000" y="-8.500"/>
+							<point x="12.000" y="-2.500"/>
+							<point x="12.000" y="2.500"/>
+							<point x="-2.000" y="8.500"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+			</fixtureGroups>
+		</body>
+		<body name="tinyship011" width="21.000" height="22.000">
+			<fixtureGroups>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="-4.500" y="10.000"/>
+							<point x="-9.500" y="4.000"/>
+							<point x="-9.500" y="-4.000"/>
+							<point x="-4.500" y="-10.000"/>
+							<point x="6.500" y="-10.000"/>
+							<point x="9.500" y="-7.000"/>
+							<point x="9.500" y="7.000"/>
+							<point x="6.500" y="10.000"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+			</fixtureGroups>
+		</body>
+		<body name="tinyship012" width="15.000" height="21.000">
+			<fixtureGroups>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="-5.500" y="-5.500"/>
+							<point x="-1.500" y="-9.500"/>
+							<point x="6.500" y="-1.500"/>
+							<point x="6.500" y="1.500"/>
+							<point x="1.500" y="9.500"/>
+							<point x="-1.500" y="9.500"/>
+							<point x="-5.500" y="5.500"/>
+							<point x="-6.500" y="0.500"/>
+						</polygon>
+            <polygon>
+							<point x="1.500" y="-9.500"/>
+							<point x="6.500" y="-1.500"/>
+							<point x="-1.500" y="-9.500"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+			</fixtureGroups>
+		</body>
+		<body name="tinyship013" width="21.000" height="23.000">
+			<fixtureGroups>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="-9.500" y="-4.500"/>
+							<point x="-3.500" y="-10.500"/>
+							<point x="7.500" y="-9.500"/>
+							<point x="9.500" y="-6.500"/>
+							<point x="9.500" y="6.500"/>
+							<point x="7.500" y="9.500"/>
+							<point x="-4.500" y="10.500"/>
+							<point x="-9.500" y="4.500"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+			</fixtureGroups>
+		</body>
+		<body name="tinyship014" width="19.000" height="23.000">
+			<fixtureGroups>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="-4.500" y="10.500"/>
+							<point x="-8.500" y="5.500"/>
+							<point x="-8.500" y="-5.500"/>
+							<point x="-4.500" y="-10.500"/>
+							<point x="8.500" y="-5.500"/>
+							<point x="8.500" y="5.500"/>
+							<point x="4.500" y="10.500"/>
+						</polygon>
+            <polygon>
+							<point x="4.500" y="-10.500"/>
+							<point x="8.500" y="-5.500"/>
+							<point x="-4.500" y="-10.500"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+			</fixtureGroups>
+		</body>
+		<body name="tinyship015gray" width="24.000" height="29.000">
+			<fixtureGroups>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="11.000" y="5.500"/>
+							<point x="7.000" y="11.500"/>
+							<point x="3.000" y="13.500"/>
+							<point x="-7.000" y="-11.500"/>
+							<point x="-3.000" y="-13.500"/>
+							<point x="3.000" y="-13.500"/>
+							<point x="7.000" y="-11.500"/>
+							<point x="11.000" y="-5.500"/>
+						</polygon>
+            <polygon>
+							<point x="-11.000" y="-5.500"/>
+							<point x="-7.000" y="-11.500"/>
+							<point x="3.000" y="13.500"/>
+							<point x="-3.000" y="13.500"/>
+							<point x="-7.000" y="11.500"/>
+							<point x="-11.000" y="5.500"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+			</fixtureGroups>
+		</body>
+		<body name="tinyship015green" width="24.000" height="29.000">
+			<fixtureGroups>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="-3.000" y="13.500"/>
+							<point x="-10.000" y="7.500"/>
+							<point x="-11.000" y="4.500"/>
+							<point x="-10.000" y="-7.500"/>
+							<point x="11.000" y="-4.500"/>
+							<point x="11.000" y="3.500"/>
+							<point x="10.000" y="7.500"/>
+							<point x="5.000" y="12.500"/>
+						</polygon>
+            <polygon>
+							<point x="-3.000" y="-13.500"/>
+							<point x="5.000" y="-12.500"/>
+							<point x="10.000" y="-7.500"/>
+							<point x="11.000" y="-4.500"/>
+							<point x="-10.000" y="-7.500"/>
+						</polygon>
+            <polygon>
+							<point x="-11.000" y="-4.500"/>
+							<point x="-10.000" y="-7.500"/>
+							<point x="-11.000" y="4.500"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+			</fixtureGroups>
+		</body>
+		<body name="tinyship016" width="28.000" height="29.000">
+			<fixtureGroups>
+				<fixtureGroup type="CIRCLE">
+          <circle r="13.000" x="0.700" y="-0.000"/>
+				</fixtureGroup>
+			</fixtureGroups>
+		</body>
+		<body name="tinyship017" width="14.000" height="15.000">
+			<fixtureGroups>
+				<fixtureGroup type="CIRCLE">
+          <circle r="6.000" x="0.400" y="0.000"/>
+				</fixtureGroup>
+			</fixtureGroups>
+		</body>
+		<body name="tinyship018closed" width="24.000" height="27.000">
+			<fixtureGroups>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="-10.000" y="9.500"/>
+							<point x="-10.000" y="-9.500"/>
+							<point x="11.000" y="-9.500"/>
+							<point x="11.000" y="9.500"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+			</fixtureGroups>
+		</body>
+		<body name="tinyship018half" width="24.000" height="27.000">
+			<fixtureGroups>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="-10.000" y="10.500"/>
+							<point x="-10.000" y="-10.500"/>
+							<point x="11.000" y="-10.500"/>
+							<point x="11.000" y="10.500"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+			</fixtureGroups>
+		</body>
+		<body name="tinyship018open" width="24.000" height="27.000">
+			<fixtureGroups>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="-10.000" y="12.500"/>
+							<point x="-10.000" y="-12.500"/>
+							<point x="11.000" y="-12.500"/>
+							<point x="11.000" y="12.500"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+			</fixtureGroups>
+		</body>
+		<body name="tinyship019" width="11.000" height="17.000">
+			<fixtureGroups>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="4.500" y="4.500"/>
+							<point x="-3.500" y="8.500"/>
+							<point x="-5.500" y="4.500"/>
+							<point x="-5.500" y="-4.500"/>
+							<point x="-3.500" y="-8.500"/>
+							<point x="4.500" y="-4.500"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+			</fixtureGroups>
+		</body>
+		<body name="tinyship020" width="43.000" height="43.000">
+			<fixtureGroups>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="-11.500" y="21.500"/>
+							<point x="-14.500" y="11.500"/>
+							<point x="6.500" y="-3.500"/>
+							<point x="6.500" y="3.500"/>
+						</polygon>
+            <polygon>
+							<point x="-11.500" y="-21.500"/>
+							<point x="6.500" y="-3.500"/>
+							<point x="-14.500" y="-11.500"/>
+						</polygon>
+            <polygon>
+							<point x="-20.500" y="-7.500"/>
+							<point x="-14.500" y="-11.500"/>
+							<point x="6.500" y="-3.500"/>
+							<point x="-14.500" y="11.500"/>
+							<point x="-20.500" y="7.500"/>
+						</polygon>
+            <polygon>
+							<point x="6.500" y="3.500"/>
+							<point x="6.500" y="-3.500"/>
+							<point x="21.500" y="-0.500"/>
+							<point x="21.500" y="0.500"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+			</fixtureGroups>
+		</body>
+		<body name="tinyship021" width="58.000" height="55.000">
+			<fixtureGroups>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="29.000" y="0.500"/>
+							<point x="24.000" y="2.500"/>
+							<point x="-20.000" y="5.500"/>
+							<point x="-20.000" y="-5.500"/>
+							<point x="24.000" y="-2.500"/>
+						</polygon>
+            <polygon>
+							<point x="-29.000" y="-4.500"/>
+							<point x="-20.000" y="-5.500"/>
+							<point x="-20.000" y="5.500"/>
+							<point x="-29.000" y="4.500"/>
+						</polygon>
+            <polygon>
+							<point x="-29.000" y="25.500"/>
+							<point x="-20.000" y="15.500"/>
+							<point x="10.000" y="3.500"/>
+							<point x="-9.000" y="23.500"/>
+							<point x="-23.000" y="27.500"/>
+						</polygon>
+            <polygon>
+							<point x="-29.000" y="-25.500"/>
+							<point x="-23.000" y="-27.500"/>
+							<point x="-9.000" y="-23.500"/>
+							<point x="10.000" y="-3.500"/>
+							<point x="-20.000" y="-15.500"/>
+						</polygon>
+            <polygon>
+							<point x="-20.000" y="-15.500"/>
+							<point x="10.000" y="-3.500"/>
+							<point x="-20.000" y="-5.500"/>
+						</polygon>
+            <polygon>
+							<point x="-20.000" y="15.500"/>
+							<point x="-20.000" y="5.500"/>
+							<point x="10.000" y="3.500"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+			</fixtureGroups>
+		</body>
+		<body name="tinyship022" width="36.000" height="39.000">
+			<fixtureGroups>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="-12.000" y="19.500"/>
+							<point x="-12.000" y="-10.500"/>
+							<point x="12.000" y="-15.500"/>
+							<point x="15.000" y="-12.500"/>
+							<point x="17.000" y="0.500"/>
+							<point x="12.000" y="15.500"/>
+							<point x="-1.000" y="19.500"/>
+						</polygon>
+            <polygon>
+							<point x="-12.000" y="-19.500"/>
+							<point x="-1.000" y="-19.500"/>
+							<point x="12.000" y="-15.500"/>
+							<point x="-12.000" y="-10.500"/>
+						</polygon>
+            <polygon>
+							<point x="-17.000" y="-7.500"/>
+							<point x="-12.000" y="-10.500"/>
+							<point x="-12.000" y="10.500"/>
+							<point x="-17.000" y="7.500"/>
+							<point x="-18.000" y="-0.500"/>
+						</polygon>
+            <polygon>
+							<point x="15.000" y="12.500"/>
+							<point x="12.000" y="15.500"/>
+							<point x="17.000" y="0.500"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+			</fixtureGroups>
+		</body>
+		<body name="tinyship023" width="47.000" height="39.000">
+			<fixtureGroups>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="-19.500" y="19.500"/>
+							<point x="-17.500" y="10.500"/>
+							<point x="10.500" y="-13.500"/>
+							<point x="11.500" y="-7.500"/>
+							<point x="11.500" y="7.500"/>
+							<point x="10.500" y="13.500"/>
+							<point x="-6.500" y="19.500"/>
+						</polygon>
+            <polygon>
+							<point x="-19.500" y="-19.500"/>
+							<point x="-6.500" y="-19.500"/>
+							<point x="10.500" y="-13.500"/>
+							<point x="-17.500" y="-10.500"/>
+						</polygon>
+            <polygon>
+							<point x="17.500" y="7.500"/>
+							<point x="11.500" y="7.500"/>
+							<point x="11.500" y="-7.500"/>
+							<point x="17.500" y="-7.500"/>
+							<point x="20.500" y="-2.500"/>
+							<point x="20.500" y="2.500"/>
+						</polygon>
+            <polygon>
+							<point x="22.500" y="1.500"/>
+							<point x="20.500" y="2.500"/>
+							<point x="20.500" y="-2.500"/>
+							<point x="22.500" y="-1.500"/>
+						</polygon>
+            <polygon>
+							<point x="-22.500" y="-7.500"/>
+							<point x="-17.500" y="-10.500"/>
+							<point x="10.500" y="-13.500"/>
+							<point x="-17.500" y="10.500"/>
+							<point x="-22.500" y="7.500"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+			</fixtureGroups>
+		</body>
+		<body name="tinyship024" width="43.000" height="34.000">
+			<fixtureGroups>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="21.500" y="0.000"/>
+							<point x="10.500" y="16.000"/>
+							<point x="-12.500" y="16.000"/>
+							<point x="-20.500" y="3.000"/>
+							<point x="-20.500" y="-3.000"/>
+							<point x="-12.500" y="-16.000"/>
+							<point x="10.500" y="-16.000"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+			</fixtureGroups>
+		</body>
+		<body name="tinyship025" width="30.000" height="26.000">
+			<fixtureGroups>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="14.000" y="7.000"/>
+							<point x="-3.000" y="13.000"/>
+							<point x="-14.000" y="10.000"/>
+							<point x="-14.000" y="-10.000"/>
+							<point x="-3.000" y="-13.000"/>
+							<point x="14.000" y="-7.000"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+			</fixtureGroups>
+		</body>
+		<body name="tinyship026" width="23.000" height="28.000">
+			<fixtureGroups>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="-11.500" y="12.000"/>
+							<point x="-9.500" y="0.000"/>
+							<point x="-3.500" y="-12.000"/>
+							<point x="8.500" y="-7.000"/>
+							<point x="11.500" y="0.000"/>
+							<point x="8.500" y="7.000"/>
+							<point x="-3.500" y="12.000"/>
+						</polygon>
+            <polygon>
+							<point x="-11.500" y="-12.000"/>
+							<point x="-3.500" y="-12.000"/>
+							<point x="-9.500" y="0.000"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+			</fixtureGroups>
+		</body>
+		<body name="tinyship027" width="32.000" height="32.000">
+			<fixtureGroups>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="-16.000" y="0.000"/>
+							<point x="-7.000" y="-7.000"/>
+							<point x="-7.000" y="7.000"/>
+						</polygon>
+            <polygon>
+							<point x="-11.000" y="12.000"/>
+							<point x="-7.000" y="7.000"/>
+							<point x="2.000" y="15.000"/>
+							<point x="-5.000" y="15.000"/>
+						</polygon>
+            <polygon>
+							<point x="-11.000" y="-12.000"/>
+							<point x="-5.000" y="-15.000"/>
+							<point x="2.000" y="-15.000"/>
+							<point x="-7.000" y="-7.000"/>
+						</polygon>
+            <polygon>
+							<point x="14.000" y="0.000"/>
+							<point x="9.000" y="6.000"/>
+							<point x="9.000" y="-6.000"/>
+						</polygon>
+            <polygon>
+							<point x="-7.000" y="-7.000"/>
+							<point x="2.000" y="-15.000"/>
+							<point x="7.000" y="-13.000"/>
+							<point x="9.000" y="-6.000"/>
+							<point x="9.000" y="6.000"/>
+							<point x="7.000" y="13.000"/>
+							<point x="2.000" y="15.000"/>
+							<point x="-7.000" y="7.000"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+			</fixtureGroups>
+		</body>
+		<body name="tinyship028" width="32.000" height="32.000">
+			<fixtureGroups>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="-15.000" y="14.000"/>
+							<point x="-15.000" y="-14.000"/>
+							<point x="-3.000" y="-15.000"/>
+							<point x="8.000" y="-11.000"/>
+							<point x="14.000" y="-3.000"/>
+							<point x="14.000" y="3.000"/>
+							<point x="8.000" y="11.000"/>
+							<point x="-3.000" y="15.000"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+			</fixtureGroups>
+		</body>
+		<body name="tinyship029" width="32.000" height="32.000">
+			<fixtureGroups>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="-15.000" y="6.000"/>
+							<point x="-13.000" y="0.000"/>
+							<point x="7.000" y="9.000"/>
+							<point x="-3.000" y="14.000"/>
+							<point x="-10.000" y="13.000"/>
+						</polygon>
+            <polygon>
+							<point x="-15.000" y="-6.000"/>
+							<point x="-10.000" y="-13.000"/>
+							<point x="-3.000" y="-14.000"/>
+							<point x="7.000" y="-9.000"/>
+							<point x="15.000" y="-2.000"/>
+							<point x="15.000" y="2.000"/>
+							<point x="7.000" y="9.000"/>
+							<point x="-13.000" y="0.000"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+			</fixtureGroups>
+		</body>
+		<body name="tinyship030" width="32.000" height="32.000">
+			<fixtureGroups>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="6.000" y="12.000"/>
+							<point x="-9.000" y="13.000"/>
+							<point x="-15.000" y="9.000"/>
+							<point x="14.000" y="-1.000"/>
+							<point x="14.000" y="1.000"/>
+						</polygon>
+            <polygon>
+							<point x="6.000" y="-12.000"/>
+							<point x="14.000" y="-1.000"/>
+							<point x="-15.000" y="9.000"/>
+							<point x="-15.000" y="-9.000"/>
+							<point x="-9.000" y="-13.000"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+			</fixtureGroups>
+		</body>
+		<body name="tinyship031" width="39.000" height="21.000">
+			<fixtureGroups>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="-18.500" y="4.500"/>
+							<point x="-18.500" y="-4.500"/>
+							<point x="-8.500" y="-9.500"/>
+							<point x="-2.500" y="-9.500"/>
+							<point x="18.500" y="-0.500"/>
+							<point x="18.500" y="0.500"/>
+							<point x="-2.500" y="9.500"/>
+							<point x="-8.500" y="9.500"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+			</fixtureGroups>
+		</body>
+		<body name="tinyship032" width="40.000" height="19.000">
+			<fixtureGroups>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="-19.000" y="2.500"/>
+							<point x="-19.000" y="-1.500"/>
+							<point x="-8.000" y="-9.500"/>
+							<point x="-3.000" y="-9.500"/>
+							<point x="19.000" y="-1.500"/>
+							<point x="19.000" y="-0.500"/>
+							<point x="-3.000" y="8.500"/>
+							<point x="-9.000" y="8.500"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+			</fixtureGroups>
+		</body>
+		<body name="tinyship033" width="57.000" height="29.000">
+			<fixtureGroups>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="-24.500" y="14.500"/>
+							<point x="-24.500" y="-5.500"/>
+							<point x="5.500" y="-8.500"/>
+							<point x="5.500" y="8.500"/>
+							<point x="-10.500" y="14.500"/>
+						</polygon>
+            <polygon>
+							<point x="-24.500" y="-14.500"/>
+							<point x="-10.500" y="-14.500"/>
+							<point x="5.500" y="-8.500"/>
+							<point x="-24.500" y="-5.500"/>
+						</polygon>
+            <polygon>
+							<point x="-28.500" y="-3.500"/>
+							<point x="-24.500" y="-5.500"/>
+							<point x="-24.500" y="5.500"/>
+							<point x="-28.500" y="3.500"/>
+						</polygon>
+            <polygon>
+							<point x="5.500" y="8.500"/>
+							<point x="5.500" y="-8.500"/>
+							<point x="22.500" y="-5.500"/>
+							<point x="28.500" y="-1.500"/>
+							<point x="28.500" y="1.500"/>
+							<point x="22.500" y="5.500"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+			</fixtureGroups>
+		</body>
+		<body name="tinyship034" width="18.000" height="13.000">
+			<fixtureGroups>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="-9.000" y="4.500"/>
+							<point x="-9.000" y="-4.500"/>
+							<point x="-6.000" y="-6.500"/>
+							<point x="0.000" y="-6.500"/>
+							<point x="9.000" y="-1.500"/>
+							<point x="9.000" y="1.500"/>
+							<point x="0.000" y="6.500"/>
+							<point x="-6.000" y="6.500"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+			</fixtureGroups>
+		</body>
+		<body name="tinyship035" width="20.000" height="10.000">
+			<fixtureGroups>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="10.000" y="0.000"/>
+							<point x="9.000" y="2.000"/>
+							<point x="-7.000" y="5.000"/>
+							<point x="-7.000" y="-5.000"/>
+							<point x="8.000" y="-2.000"/>
+						</polygon>
+            <polygon>
+							<point x="-10.000" y="0.000"/>
+							<point x="-7.000" y="-5.000"/>
+							<point x="-7.000" y="5.000"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+			</fixtureGroups>
+		</body>
+		<body name="tinyship036" width="24.000" height="18.000">
+			<fixtureGroups>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="-9.000" y="8.000"/>
+							<point x="-11.000" y="3.000"/>
+							<point x="-11.000" y="-3.000"/>
+							<point x="3.000" y="-3.000"/>
+							<point x="3.000" y="3.000"/>
+							<point x="-1.000" y="8.000"/>
+						</polygon>
+            <polygon>
+							<point x="-9.000" y="-8.000"/>
+							<point x="-1.000" y="-8.000"/>
+							<point x="3.000" y="-3.000"/>
+							<point x="-11.000" y="-3.000"/>
+						</polygon>
+            <polygon>
+							<point x="3.000" y="3.000"/>
+							<point x="3.000" y="-3.000"/>
+							<point x="10.000" y="-3.000"/>
+							<point x="11.000" y="0.000"/>
+							<point x="10.000" y="3.000"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+			</fixtureGroups>
+		</body>
+		<body name="tinyship037" width="35.000" height="42.000">
+			<fixtureGroups>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="-12.500" y="20.000"/>
+							<point x="-12.500" y="-20.000"/>
+							<point x="5.500" y="-3.000"/>
+							<point x="5.500" y="3.000"/>
+						</polygon>
+            <polygon>
+							<point x="16.500" y="2.000"/>
+							<point x="10.500" y="5.000"/>
+							<point x="7.500" y="5.000"/>
+							<point x="5.500" y="3.000"/>
+							<point x="5.500" y="-3.000"/>
+							<point x="7.500" y="-5.000"/>
+							<point x="10.500" y="-5.000"/>
+							<point x="16.500" y="-2.000"/>
+						</polygon>
+            <polygon>
+							<point x="-12.500" y="-7.000"/>
+							<point x="-12.500" y="7.000"/>
+							<point x="-15.500" y="5.000"/>
+							<point x="-15.500" y="-5.000"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+			</fixtureGroups>
+		</body>
+		<body name="tinyship038" width="40.000" height="33.000">
+			<fixtureGroups>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="19.000" y="1.500"/>
+							<point x="17.000" y="3.500"/>
+							<point x="11.000" y="3.500"/>
+							<point x="11.000" y="-3.500"/>
+							<point x="17.000" y="-3.500"/>
+							<point x="19.000" y="-1.500"/>
+						</polygon>
+            <polygon>
+							<point x="-12.000" y="15.500"/>
+							<point x="-19.000" y="8.500"/>
+							<point x="-19.000" y="-8.500"/>
+							<point x="-12.000" y="-15.500"/>
+							<point x="-1.000" y="-15.500"/>
+							<point x="11.000" y="-3.500"/>
+							<point x="11.000" y="3.500"/>
+							<point x="-1.000" y="15.500"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+			</fixtureGroups>
+		</body>
+		<body name="tinyship039" width="40.000" height="39.000">
+			<fixtureGroups>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="19.000" y="1.500"/>
+							<point x="17.000" y="3.500"/>
+							<point x="11.000" y="3.500"/>
+							<point x="11.000" y="-3.500"/>
+							<point x="17.000" y="-3.500"/>
+							<point x="19.000" y="-1.500"/>
+						</polygon>
+            <polygon>
+							<point x="-19.000" y="8.500"/>
+							<point x="-19.000" y="-8.500"/>
+							<point x="-9.000" y="-18.500"/>
+							<point x="-1.000" y="-15.500"/>
+							<point x="11.000" y="-3.500"/>
+							<point x="-1.000" y="15.500"/>
+							<point x="-9.000" y="18.500"/>
+						</polygon>
+            <polygon>
+							<point x="11.000" y="3.500"/>
+							<point x="-1.000" y="15.500"/>
+							<point x="11.000" y="-3.500"/>
+						</polygon>
+            <polygon>
+							<point x="16.000" y="15.500"/>
+							<point x="16.000" y="18.500"/>
+							<point x="-9.000" y="18.500"/>
+							<point x="-1.000" y="15.500"/>
+						</polygon>
+            <polygon>
+							<point x="16.000" y="-15.500"/>
+							<point x="-1.000" y="-15.500"/>
+							<point x="-9.000" y="-18.500"/>
+							<point x="16.000" y="-18.500"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+			</fixtureGroups>
+		</body>
+		<body name="tinyship040" width="31.000" height="36.000">
+			<fixtureGroups>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="6.500" y="8.000"/>
+							<point x="0.500" y="8.000"/>
+							<point x="0.500" y="-8.000"/>
+							<point x="6.500" y="-8.000"/>
+						</polygon>
+            <polygon>
+							<point x="3.500" y="16.000"/>
+							<point x="3.500" y="17.000"/>
+							<point x="-3.500" y="17.000"/>
+							<point x="0.500" y="16.000"/>
+						</polygon>
+            <polygon>
+							<point x="3.500" y="-16.000"/>
+							<point x="0.500" y="-16.000"/>
+							<point x="-3.500" y="-17.000"/>
+							<point x="3.500" y="-17.000"/>
+						</polygon>
+            <polygon>
+							<point x="-12.500" y="-8.000"/>
+							<point x="-3.500" y="-17.000"/>
+							<point x="0.500" y="-8.000"/>
+							<point x="0.500" y="16.000"/>
+							<point x="-3.500" y="17.000"/>
+							<point x="-12.500" y="8.000"/>
+							<point x="-13.500" y="0.000"/>
+						</polygon>
+            <polygon>
+							<point x="0.500" y="-16.000"/>
+							<point x="0.500" y="-8.000"/>
+							<point x="-3.500" y="-17.000"/>
+						</polygon>
+            <polygon>
+							<point x="14.500" y="1.000"/>
+							<point x="6.500" y="3.000"/>
+							<point x="6.500" y="-3.000"/>
+							<point x="14.500" y="-1.000"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+			</fixtureGroups>
+		</body>
+		<body name="tinyship041" width="36.000" height="38.000">
+			<fixtureGroups>
+				<fixtureGroup type="CIRCLE">
+          <circle r="17.000" x="0.072" y="-0.084"/>
+				</fixtureGroup>
+			</fixtureGroups>
+		</body>
+		<body name="tinyship042" width="21.000" height="35.000">
+			<fixtureGroups>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="-8.500" y="15.500"/>
+							<point x="-8.500" y="-15.500"/>
+							<point x="-5.500" y="-15.500"/>
+							<point x="8.500" y="-1.500"/>
+							<point x="8.500" y="1.500"/>
+							<point x="-5.500" y="15.500"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+			</fixtureGroups>
+		</body>
+		<body name="tinyship043" width="32.000" height="32.000">
+			<fixtureGroups>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="9.000" y="14.000"/>
+							<point x="-6.000" y="16.000"/>
+							<point x="-10.000" y="16.000"/>
+							<point x="-10.000" y="-16.000"/>
+							<point x="-6.000" y="-16.000"/>
+							<point x="9.000" y="-14.000"/>
+							<point x="15.000" y="-1.000"/>
+							<point x="15.000" y="1.000"/>
+						</polygon>
+            <polygon>
+							<point x="-15.000" y="13.000"/>
+							<point x="-16.000" y="0.000"/>
+							<point x="-15.000" y="-13.000"/>
+							<point x="-10.000" y="-16.000"/>
+							<point x="-10.000" y="16.000"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+			</fixtureGroups>
+		</body>
+		<body name="tinyship044" width="31.000" height="39.000">
+			<fixtureGroups>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="-6.500" y="18.500"/>
+							<point x="-6.500" y="12.500"/>
+							<point x="3.500" y="8.500"/>
+							<point x="-1.500" y="18.500"/>
+						</polygon>
+            <polygon>
+							<point x="-6.500" y="-18.500"/>
+							<point x="-1.500" y="-18.500"/>
+							<point x="3.500" y="-8.500"/>
+							<point x="-6.500" y="-12.500"/>
+						</polygon>
+            <polygon>
+							<point x="12.500" y="8.500"/>
+							<point x="3.500" y="8.500"/>
+							<point x="-12.500" y="-7.500"/>
+							<point x="3.500" y="-8.500"/>
+							<point x="12.500" y="-8.500"/>
+							<point x="14.500" y="-2.500"/>
+							<point x="14.500" y="2.500"/>
+						</polygon>
+            <polygon>
+							<point x="-10.500" y="-12.500"/>
+							<point x="-6.500" y="-12.500"/>
+							<point x="3.500" y="-8.500"/>
+							<point x="-12.500" y="-7.500"/>
+						</polygon>
+            <polygon>
+							<point x="-10.500" y="12.500"/>
+							<point x="-12.500" y="7.500"/>
+							<point x="-12.500" y="-7.500"/>
+							<point x="3.500" y="8.500"/>
+							<point x="-6.500" y="12.500"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+			</fixtureGroups>
+		</body>
+		<body name="tinyship045" width="32.000" height="39.000">
+			<fixtureGroups>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="-7.000" y="18.500"/>
+							<point x="-7.000" y="12.500"/>
+							<point x="1.000" y="12.500"/>
+							<point x="-2.000" y="18.500"/>
+						</polygon>
+            <polygon>
+							<point x="-7.000" y="-18.500"/>
+							<point x="-2.000" y="-18.500"/>
+							<point x="1.000" y="-12.500"/>
+							<point x="-7.000" y="-12.500"/>
+						</polygon>
+            <polygon>
+							<point x="-11.000" y="12.500"/>
+							<point x="-13.000" y="7.500"/>
+							<point x="-13.000" y="-7.500"/>
+							<point x="1.000" y="-12.500"/>
+							<point x="12.000" y="-12.500"/>
+							<point x="12.000" y="12.500"/>
+						</polygon>
+            <polygon>
+							<point x="-11.000" y="-12.500"/>
+							<point x="1.000" y="-12.500"/>
+							<point x="-13.000" y="-7.500"/>
+						</polygon>
+            <polygon>
+							<point x="15.000" y="10.500"/>
+							<point x="12.000" y="12.500"/>
+							<point x="12.000" y="-12.500"/>
+						</polygon>
+            <polygon>
+							<point x="15.000" y="-10.500"/>
+							<point x="14.000" y="-2.500"/>
+							<point x="12.000" y="-12.500"/>
+						</polygon>
+            <polygon>
+							<point x="14.000" y="-2.500"/>
+							<point x="14.000" y="2.500"/>
+							<point x="12.000" y="-12.500"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+			</fixtureGroups>
+		</body>
+		<body name="tinyship046" width="24.000" height="27.000">
+			<fixtureGroups>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="-9.000" y="12.500"/>
+							<point x="-9.000" y="7.500"/>
+							<point x="0.000" y="10.500"/>
+						</polygon>
+            <polygon>
+							<point x="-9.000" y="-12.500"/>
+							<point x="0.000" y="-10.500"/>
+							<point x="-9.000" y="-7.500"/>
+						</polygon>
+            <polygon>
+							<point x="-11.000" y="-7.500"/>
+							<point x="-9.000" y="-7.500"/>
+							<point x="-10.000" y="-2.500"/>
+						</polygon>
+            <polygon>
+							<point x="-11.000" y="7.500"/>
+							<point x="-10.000" y="2.500"/>
+							<point x="-9.000" y="7.500"/>
+						</polygon>
+            <polygon>
+							<point x="11.000" y="1.500"/>
+							<point x="9.000" y="3.500"/>
+							<point x="4.000" y="3.500"/>
+							<point x="-10.000" y="2.500"/>
+							<point x="-10.000" y="-2.500"/>
+							<point x="4.000" y="-3.500"/>
+							<point x="9.000" y="-3.500"/>
+							<point x="11.000" y="-1.500"/>
+						</polygon>
+            <polygon>
+							<point x="-9.000" y="-7.500"/>
+							<point x="0.000" y="-10.500"/>
+							<point x="3.000" y="-7.500"/>
+							<point x="4.000" y="-3.500"/>
+							<point x="-10.000" y="-2.500"/>
+						</polygon>
+            <polygon>
+							<point x="-9.000" y="7.500"/>
+							<point x="-10.000" y="2.500"/>
+							<point x="4.000" y="3.500"/>
+							<point x="3.000" y="7.500"/>
+							<point x="0.000" y="10.500"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+			</fixtureGroups>
+		</body>
+		<body name="tinyship047" width="30.000" height="27.000">
+			<fixtureGroups>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="-6.000" y="12.500"/>
+							<point x="-6.000" y="8.500"/>
+							<point x="2.000" y="7.500"/>
+							<point x="-3.000" y="12.500"/>
+						</polygon>
+            <polygon>
+							<point x="-6.000" y="-12.500"/>
+							<point x="-3.000" y="-12.500"/>
+							<point x="2.000" y="-7.500"/>
+							<point x="-6.000" y="-8.500"/>
+						</polygon>
+            <polygon>
+							<point x="-13.000" y="-3.500"/>
+							<point x="-9.000" y="-5.500"/>
+							<point x="2.000" y="-7.500"/>
+							<point x="14.000" y="-1.500"/>
+							<point x="14.000" y="1.500"/>
+							<point x="2.000" y="7.500"/>
+							<point x="-9.000" y="5.500"/>
+							<point x="-13.000" y="3.500"/>
+						</polygon>
+            <polygon>
+							<point x="8.000" y="7.500"/>
+							<point x="2.000" y="7.500"/>
+							<point x="14.000" y="1.500"/>
+						</polygon>
+            <polygon>
+							<point x="8.000" y="-7.500"/>
+							<point x="14.000" y="-1.500"/>
+							<point x="2.000" y="-7.500"/>
+						</polygon>
+            <polygon>
+							<point x="-6.000" y="-8.500"/>
+							<point x="2.000" y="-7.500"/>
+							<point x="-9.000" y="-5.500"/>
+						</polygon>
+            <polygon>
+							<point x="-6.000" y="8.500"/>
+							<point x="-9.000" y="5.500"/>
+							<point x="2.000" y="7.500"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+			</fixtureGroups>
+		</body>
+		<body name="tinyship048" width="33.000" height="35.000">
+			<fixtureGroups>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="-5.500" y="16.500"/>
+							<point x="-10.500" y="16.500"/>
+							<point x="-10.500" y="6.500"/>
+							<point x="-3.500" y="10.500"/>
+						</polygon>
+            <polygon>
+							<point x="-5.500" y="-16.500"/>
+							<point x="-3.500" y="-10.500"/>
+							<point x="-10.500" y="-6.500"/>
+							<point x="-10.500" y="-16.500"/>
+						</polygon>
+            <polygon>
+							<point x="0.500" y="10.500"/>
+							<point x="-3.500" y="10.500"/>
+							<point x="-10.500" y="6.500"/>
+							<point x="-14.500" y="3.500"/>
+							<point x="-10.500" y="-6.500"/>
+							<point x="2.500" y="-6.500"/>
+							<point x="2.500" y="6.500"/>
+						</polygon>
+            <polygon>
+							<point x="0.500" y="-10.500"/>
+							<point x="2.500" y="-6.500"/>
+							<point x="-10.500" y="-6.500"/>
+							<point x="-3.500" y="-10.500"/>
+						</polygon>
+            <polygon>
+							<point x="15.500" y="2.500"/>
+							<point x="15.500" y="4.500"/>
+							<point x="13.500" y="6.500"/>
+							<point x="2.500" y="6.500"/>
+							<point x="11.500" y="2.500"/>
+						</polygon>
+            <polygon>
+							<point x="15.500" y="-2.500"/>
+							<point x="11.500" y="-2.500"/>
+							<point x="2.500" y="-6.500"/>
+							<point x="13.500" y="-6.500"/>
+							<point x="15.500" y="-4.500"/>
+						</polygon>
+            <polygon>
+							<point x="-14.500" y="-3.500"/>
+							<point x="-10.500" y="-6.500"/>
+							<point x="-14.500" y="3.500"/>
+						</polygon>
+            <polygon>
+							<point x="11.500" y="2.500"/>
+							<point x="2.500" y="6.500"/>
+							<point x="2.500" y="-6.500"/>
+							<point x="11.500" y="-2.500"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+			</fixtureGroups>
+		</body>
+		<body name="tinyship049" width="62.000" height="24.000">
+			<fixtureGroups>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="30.000" y="3.000"/>
+							<point x="26.000" y="6.000"/>
+							<point x="22.000" y="6.000"/>
+							<point x="22.000" y="-6.000"/>
+							<point x="26.000" y="-6.000"/>
+							<point x="30.000" y="-3.000"/>
+						</polygon>
+            <polygon>
+							<point x="22.000" y="8.000"/>
+							<point x="13.000" y="8.000"/>
+							<point x="13.000" y="-8.000"/>
+							<point x="22.000" y="-8.000"/>
+						</polygon>
+            <polygon>
+							<point x="-28.000" y="10.000"/>
+							<point x="-30.000" y="7.000"/>
+							<point x="-30.000" y="-7.000"/>
+							<point x="-28.000" y="-10.000"/>
+							<point x="-13.000" y="-10.000"/>
+							<point x="-13.000" y="10.000"/>
+						</polygon>
+            <polygon>
+							<point x="13.000" y="11.000"/>
+							<point x="-12.000" y="11.000"/>
+							<point x="-13.000" y="10.000"/>
+							<point x="-13.000" y="-10.000"/>
+							<point x="-12.000" y="-11.000"/>
+							<point x="13.000" y="-11.000"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+			</fixtureGroups>
+		</body>
+		<body name="tinyship050" width="47.000" height="21.000">
+			<fixtureGroups>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="15.500" y="7.500"/>
+							<point x="9.500" y="7.500"/>
+							<point x="9.500" y="-7.500"/>
+							<point x="15.500" y="-7.500"/>
+						</polygon>
+            <polygon>
+							<point x="20.500" y="4.500"/>
+							<point x="15.500" y="4.500"/>
+							<point x="15.500" y="-4.500"/>
+							<point x="20.500" y="-4.500"/>
+							<point x="22.500" y="-2.500"/>
+							<point x="22.500" y="2.500"/>
+						</polygon>
+            <polygon>
+							<point x="-10.500" y="9.500"/>
+							<point x="-11.500" y="7.500"/>
+							<point x="-11.500" y="-7.500"/>
+							<point x="-1.500" y="-8.500"/>
+							<point x="9.500" y="-7.500"/>
+							<point x="-1.500" y="8.500"/>
+						</polygon>
+            <polygon>
+							<point x="-10.500" y="-9.500"/>
+							<point x="-1.500" y="-8.500"/>
+							<point x="-11.500" y="-7.500"/>
+						</polygon>
+            <polygon>
+							<point x="7.500" y="9.500"/>
+							<point x="-1.500" y="8.500"/>
+							<point x="9.500" y="-7.500"/>
+							<point x="9.500" y="7.500"/>
+						</polygon>
+            <polygon>
+							<point x="7.500" y="-9.500"/>
+							<point x="9.500" y="-7.500"/>
+							<point x="-1.500" y="-8.500"/>
+						</polygon>
+            <polygon>
+							<point x="-11.500" y="7.500"/>
+							<point x="-21.500" y="7.500"/>
+							<point x="-22.500" y="5.500"/>
+							<point x="-22.500" y="-5.500"/>
+							<point x="-21.500" y="-7.500"/>
+							<point x="-11.500" y="-7.500"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+			</fixtureGroups>
+		</body>
+		<body name="tinyship051" width="13.000" height="15.000">
+			<fixtureGroups>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="2.500" y="6.500"/>
+							<point x="-2.500" y="6.500"/>
+							<point x="-5.500" y="3.500"/>
+							<point x="0.500" y="4.500"/>
+						</polygon>
+            <polygon>
+							<point x="-5.500" y="3.500"/>
+							<point x="-5.500" y="-3.500"/>
+							<point x="0.500" y="-4.500"/>
+							<point x="5.500" y="-1.500"/>
+							<point x="5.500" y="1.500"/>
+							<point x="0.500" y="4.500"/>
+						</polygon>
+            <polygon>
+							<point x="2.500" y="-6.500"/>
+							<point x="0.500" y="-4.500"/>
+							<point x="-5.500" y="-3.500"/>
+							<point x="-2.500" y="-6.500"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+			</fixtureGroups>
+		</body>
+		<body name="tinyship052" width="17.000" height="17.000">
+			<fixtureGroups>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="-0.500" y="7.500"/>
+							<point x="-1.500" y="2.500"/>
+							<point x="-1.500" y="-2.500"/>
+							<point x="7.500" y="0.500"/>
+							<point x="6.500" y="4.500"/>
+						</polygon>
+            <polygon>
+							<point x="-0.500" y="-7.500"/>
+							<point x="6.500" y="-4.500"/>
+							<point x="7.500" y="0.500"/>
+							<point x="-1.500" y="-2.500"/>
+						</polygon>
+            <polygon>
+							<point x="-4.500" y="-2.500"/>
+							<point x="-1.500" y="-2.500"/>
+							<point x="-1.500" y="2.500"/>
+							<point x="-4.500" y="2.500"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+			</fixtureGroups>
+		</body>
+		<body name="tinyship052thrust" width="17.000" height="17.000">
+			<fixtureGroups>
+				<fixtureGroup type="CIRCLE">
+          <circle r="2.000" x="-5.500" y="0.000"/>
+				</fixtureGroup>
+			</fixtureGroups>
+		</body>
+		<body name="tinyship006" width="26.000" height="23.000">
+			<fixtureGroups>
+				<fixtureGroup type="CIRCLE">
+          <circle r="6.000" x="-6.300" y="0.000"/>
+				</fixtureGroup>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="12.000" y="7.500"/>
+							<point x="8.000" y="10.500"/>
+							<point x="-4.000" y="10.500"/>
+							<point x="-6.000" y="8.500"/>
+							<point x="-6.000" y="-8.500"/>
+							<point x="-4.000" y="-10.500"/>
+							<point x="8.000" y="-10.500"/>
+							<point x="12.000" y="-7.500"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+			</fixtureGroups>
+		</body>
+		<body name="tinyship053" width="17.000" height="17.000">
+			<fixtureGroups>
+				<fixtureGroup type="CIRCLE">
+          <circle r="7.000" x="0.600" y="0.000"/>
+				</fixtureGroup>
+			</fixtureGroups>
+		</body>
+		<body name="tinyship053thrust" width="17.000" height="17.000">
+			<fixtureGroups>
+				<fixtureGroup type="CIRCLE">
+          <circle r="2.000" x="-5.500" y="0.000"/>
+				</fixtureGroup>
+			</fixtureGroups>
+		</body>
+		<body name="ship003" width="491.000" height="681.000">
+			<fixtureGroups>
+				<fixtureGroup type="CIRCLE">
+          <circle r="135.000" x="110.434" y="-3.007"/>
+				</fixtureGroup>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="5.500" y="-97.500"/>
+							<point x="-20.500" y="-45.500"/>
+							<point x="-124.500" y="-40.500"/>
+						</polygon>
+            <polygon>
+							<point x="-20.500" y="-45.500"/>
+							<point x="-26.500" y="-7.500"/>
+							<point x="-125.500" y="30.500"/>
+							<point x="-124.500" y="-40.500"/>
+						</polygon>
+            <polygon>
+							<point x="6.500" y="87.500"/>
+							<point x="-125.500" y="30.500"/>
+							<point x="-20.500" y="35.500"/>
+						</polygon>
+            <polygon>
+							<point x="-20.500" y="35.500"/>
+							<point x="-125.500" y="30.500"/>
+							<point x="-26.500" y="-7.500"/>
+						</polygon>
+            <polygon>
+							<point x="-124.500" y="-40.500"/>
+							<point x="-125.500" y="30.500"/>
+							<point x="-146.500" y="30.500"/>
+							<point x="-246.500" y="-9.500"/>
+							<point x="-246.500" y="-10.500"/>
+							<point x="-146.500" y="-40.500"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="105.500" y="131.500"/>
+							<point x="101.500" y="168.500"/>
+							<point x="94.500" y="202.500"/>
+							<point x="79.500" y="242.500"/>
+							<point x="58.500" y="280.500"/>
+							<point x="6.500" y="265.500"/>
+							<point x="56.500" y="125.500"/>
+						</polygon>
+            <polygon>
+							<point x="4.500" y="340.500"/>
+							<point x="4.500" y="265.500"/>
+							<point x="6.500" y="265.500"/>
+							<point x="58.500" y="280.500"/>
+							<point x="30.500" y="315.500"/>
+						</polygon>
+            <polygon>
+							<point x="6.500" y="87.500"/>
+							<point x="56.500" y="125.500"/>
+							<point x="6.500" y="265.500"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="104.500" y="-138.500"/>
+							<point x="61.500" y="-131.500"/>
+							<point x="5.500" y="-266.500"/>
+							<point x="57.500" y="-269.500"/>
+							<point x="78.500" y="-226.500"/>
+							<point x="93.500" y="-184.500"/>
+						</polygon>
+            <polygon>
+							<point x="3.500" y="-340.500"/>
+							<point x="29.500" y="-311.500"/>
+							<point x="57.500" y="-269.500"/>
+							<point x="5.500" y="-266.500"/>
+							<point x="3.500" y="-266.500"/>
+						</polygon>
+            <polygon>
+							<point x="5.500" y="-97.500"/>
+							<point x="5.500" y="-266.500"/>
+							<point x="61.500" y="-131.500"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+			</fixtureGroups>
+		</body>
+		<body name="ship004" width="373.000" height="425.000">
+			<fixtureGroups>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="32.500" y="-69.500"/>
+							<point x="42.500" y="-76.500"/>
+							<point x="178.500" y="-35.500"/>
+							<point x="185.500" y="-8.500"/>
+							<point x="21.500" y="47.500"/>
+							<point x="11.500" y="22.500"/>
+							<point x="11.500" y="-26.500"/>
+							<point x="21.500" y="-52.500"/>
+						</polygon>
+            <polygon>
+							<point x="183.500" y="-24.500"/>
+							<point x="185.500" y="-8.500"/>
+							<point x="178.500" y="-35.500"/>
+						</polygon>
+            <polygon>
+							<point x="32.500" y="64.500"/>
+							<point x="21.500" y="47.500"/>
+							<point x="185.500" y="-8.500"/>
+							<point x="185.500" y="5.500"/>
+							<point x="183.500" y="19.500"/>
+							<point x="178.500" y="31.500"/>
+							<point x="42.500" y="72.500"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="-40.500" y="-19.500"/>
+							<point x="-16.500" y="-20.500"/>
+							<point x="-16.500" y="15.500"/>
+							<point x="-40.500" y="13.500"/>
+						</polygon>
+            <polygon>
+							<point x="11.500" y="22.500"/>
+							<point x="-16.500" y="15.500"/>
+							<point x="-16.500" y="-20.500"/>
+							<point x="11.500" y="-26.500"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="-95.500" y="22.500"/>
+							<point x="-95.500" y="-26.500"/>
+							<point x="-64.500" y="-20.500"/>
+							<point x="-64.500" y="15.500"/>
+						</polygon>
+            <polygon>
+							<point x="-40.500" y="-19.500"/>
+							<point x="-40.500" y="13.500"/>
+							<point x="-64.500" y="15.500"/>
+							<point x="-64.500" y="-20.500"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="-162.500" y="101.500"/>
+							<point x="-169.500" y="62.500"/>
+							<point x="-173.500" y="20.500"/>
+							<point x="-173.500" y="-20.500"/>
+							<point x="-111.500" y="-71.500"/>
+							<point x="-109.500" y="93.500"/>
+						</polygon>
+            <polygon>
+							<point x="-162.500" y="-102.500"/>
+							<point x="-111.500" y="-96.500"/>
+							<point x="-111.500" y="-71.500"/>
+							<point x="-173.500" y="-20.500"/>
+							<point x="-168.500" y="-70.500"/>
+						</polygon>
+            <polygon>
+							<point x="-95.500" y="23.500"/>
+							<point x="-103.500" y="40.500"/>
+							<point x="-103.500" y="-42.500"/>
+							<point x="-95.500" y="-25.500"/>
+						</polygon>
+            <polygon>
+							<point x="-111.500" y="-71.500"/>
+							<point x="-103.500" y="-42.500"/>
+							<point x="-103.500" y="40.500"/>
+							<point x="-109.500" y="60.500"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="-26.500" y="178.500"/>
+							<point x="-31.500" y="188.500"/>
+							<point x="-42.500" y="197.500"/>
+							<point x="-63.500" y="206.500"/>
+							<point x="-67.500" y="141.500"/>
+							<point x="-48.500" y="148.500"/>
+							<point x="-34.500" y="157.500"/>
+							<point x="-27.500" y="167.500"/>
+						</polygon>
+            <polygon>
+							<point x="-67.500" y="141.500"/>
+							<point x="-63.500" y="206.500"/>
+							<point x="-82.500" y="210.500"/>
+							<point x="-111.500" y="212.500"/>
+							<point x="-137.500" y="209.500"/>
+							<point x="-138.500" y="139.500"/>
+							<point x="-114.500" y="136.500"/>
+							<point x="-96.500" y="137.500"/>
+						</polygon>
+            <polygon>
+							<point x="-184.500" y="164.500"/>
+							<point x="-173.500" y="153.500"/>
+							<point x="-159.500" y="146.500"/>
+							<point x="-151.500" y="143.500"/>
+							<point x="-138.500" y="139.500"/>
+							<point x="-174.500" y="195.500"/>
+							<point x="-184.500" y="184.500"/>
+							<point x="-186.500" y="175.500"/>
+						</polygon>
+            <polygon>
+							<point x="-137.500" y="209.500"/>
+							<point x="-155.500" y="204.500"/>
+							<point x="-174.500" y="195.500"/>
+							<point x="-138.500" y="139.500"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="-26.500" y="-178.500"/>
+							<point x="-27.500" y="-167.500"/>
+							<point x="-34.500" y="-157.500"/>
+							<point x="-48.500" y="-148.500"/>
+							<point x="-67.500" y="-141.500"/>
+							<point x="-63.500" y="-206.500"/>
+							<point x="-42.500" y="-197.500"/>
+							<point x="-31.500" y="-188.500"/>
+						</polygon>
+            <polygon>
+							<point x="-67.500" y="-141.500"/>
+							<point x="-96.500" y="-137.500"/>
+							<point x="-123.500" y="-137.500"/>
+							<point x="-152.500" y="-143.500"/>
+							<point x="-186.500" y="-175.500"/>
+							<point x="-155.500" y="-204.500"/>
+							<point x="-82.500" y="-210.500"/>
+							<point x="-63.500" y="-206.500"/>
+						</polygon>
+            <polygon>
+							<point x="-184.500" y="-164.500"/>
+							<point x="-186.500" y="-175.500"/>
+							<point x="-152.500" y="-143.500"/>
+							<point x="-173.500" y="-153.500"/>
+						</polygon>
+            <polygon>
+							<point x="-184.500" y="-184.500"/>
+							<point x="-174.500" y="-195.500"/>
+							<point x="-155.500" y="-204.500"/>
+							<point x="-186.500" y="-175.500"/>
+						</polygon>
+            <polygon>
+							<point x="-111.500" y="-212.500"/>
+							<point x="-82.500" y="-210.500"/>
+							<point x="-155.500" y="-204.500"/>
+							<point x="-137.500" y="-209.500"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="-162.500" y="100.500"/>
+							<point x="-109.500" y="92.500"/>
+							<point x="-104.500" y="112.500"/>
+							<point x="-138.500" y="139.500"/>
+							<point x="-151.500" y="143.500"/>
+						</polygon>
+            <polygon>
+							<point x="-96.500" y="137.500"/>
+							<point x="-114.500" y="136.500"/>
+							<point x="-104.500" y="112.500"/>
+						</polygon>
+            <polygon>
+							<point x="-114.500" y="136.500"/>
+							<point x="-138.500" y="139.500"/>
+							<point x="-104.500" y="112.500"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="-96.500" y="-137.500"/>
+							<point x="-105.500" y="-119.500"/>
+							<point x="-123.500" y="-137.500"/>
+						</polygon>
+            <polygon>
+							<point x="-162.500" y="-103.500"/>
+							<point x="-152.500" y="-143.500"/>
+							<point x="-123.500" y="-137.500"/>
+							<point x="-105.500" y="-119.500"/>
+							<point x="-111.500" y="-97.500"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+			</fixtureGroups>
+		</body>
+		<body name="ship005" width="145.000" height="517.000">
+			<fixtureGroups>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="14.500" y="88.500"/>
+							<point x="14.500" y="100.500"/>
+							<point x="12.500" y="103.500"/>
+							<point x="-1.500" y="87.500"/>
+						</polygon>
+            <polygon>
+							<point x="14.500" y="253.500"/>
+							<point x="13.500" y="258.500"/>
+							<point x="-39.500" y="183.500"/>
+							<point x="12.500" y="250.500"/>
+						</polygon>
+            <polygon>
+							<point x="-1.500" y="87.500"/>
+							<point x="12.500" y="103.500"/>
+							<point x="12.500" y="250.500"/>
+							<point x="-39.500" y="183.500"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="72.500" y="-4.500"/>
+							<point x="24.500" y="91.500"/>
+							<point x="14.500" y="88.500"/>
+							<point x="-63.500" y="56.500"/>
+						</polygon>
+            <polygon>
+							<point x="-39.500" y="183.500"/>
+							<point x="-63.500" y="56.500"/>
+							<point x="-1.500" y="87.500"/>
+						</polygon>
+            <polygon>
+							<point x="-1.500" y="87.500"/>
+							<point x="-63.500" y="56.500"/>
+							<point x="14.500" y="88.500"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="72.500" y="-4.500"/>
+							<point x="-63.500" y="56.500"/>
+							<point x="-63.500" y="-72.500"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="-39.500" y="-191.500"/>
+							<point x="-0.500" y="-91.500"/>
+							<point x="-63.500" y="-72.500"/>
+						</polygon>
+            <polygon>
+							<point x="-63.500" y="-72.500"/>
+							<point x="-0.500" y="-91.500"/>
+							<point x="72.500" y="-4.500"/>
+						</polygon>
+            <polygon>
+							<point x="-0.500" y="-91.500"/>
+							<point x="14.500" y="-96.500"/>
+							<point x="72.500" y="-4.500"/>
+						</polygon>
+            <polygon>
+							<point x="22.500" y="-99.500"/>
+							<point x="72.500" y="-4.500"/>
+							<point x="14.500" y="-96.500"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="14.500" y="-96.500"/>
+							<point x="-0.500" y="-91.500"/>
+							<point x="-39.500" y="-191.500"/>
+							<point x="14.500" y="-110.500"/>
+						</polygon>
+            <polygon>
+							<point x="14.500" y="-254.500"/>
+							<point x="12.500" y="-251.500"/>
+							<point x="-39.500" y="-191.500"/>
+							<point x="13.500" y="-258.500"/>
+						</polygon>
+            <polygon>
+							<point x="12.500" y="-113.500"/>
+							<point x="-39.500" y="-191.500"/>
+							<point x="12.500" y="-251.500"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+			</fixtureGroups>
+		</body>
+		<body name="ship006" width="376.000" height="275.000">
+			<fixtureGroups>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="-185.000" y="7.500"/>
+							<point x="-149.000" y="7.500"/>
+							<point x="-92.000" y="40.500"/>
+							<point x="-138.000" y="40.500"/>
+						</polygon>
+            <polygon>
+							<point x="-185.000" y="-6.500"/>
+							<point x="-138.000" y="-39.500"/>
+							<point x="-149.000" y="-6.500"/>
+						</polygon>
+            <polygon>
+							<point x="-92.000" y="40.500"/>
+							<point x="-149.000" y="7.500"/>
+							<point x="-149.000" y="-6.500"/>
+							<point x="-138.000" y="-39.500"/>
+							<point x="-92.000" y="-39.500"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="151.000" y="54.500"/>
+							<point x="11.000" y="133.500"/>
+							<point x="-71.000" y="84.500"/>
+							<point x="-4.000" y="69.500"/>
+						</polygon>
+            <polygon>
+							<point x="11.000" y="133.500"/>
+							<point x="-172.000" y="86.500"/>
+							<point x="-172.000" y="84.500"/>
+							<point x="-71.000" y="84.500"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="-71.000" y="84.500"/>
+							<point x="-92.000" y="40.500"/>
+							<point x="-92.000" y="-39.500"/>
+							<point x="-3.000" y="-70.500"/>
+							<point x="149.000" y="-55.500"/>
+							<point x="-4.000" y="69.500"/>
+						</polygon>
+            <polygon>
+							<point x="-71.000" y="-83.500"/>
+							<point x="-3.000" y="-70.500"/>
+							<point x="-92.000" y="-39.500"/>
+						</polygon>
+            <polygon>
+							<point x="-4.000" y="69.500"/>
+							<point x="149.000" y="-55.500"/>
+							<point x="184.000" y="-23.500"/>
+							<point x="184.000" y="24.500"/>
+							<point x="151.000" y="54.500"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="149.000" y="-55.500"/>
+							<point x="-3.000" y="-70.500"/>
+							<point x="-71.000" y="-83.500"/>
+							<point x="-49.000" y="-116.500"/>
+							<point x="0.000" y="-133.500"/>
+						</polygon>
+            <polygon>
+							<point x="-49.000" y="-116.500"/>
+							<point x="-71.000" y="-83.500"/>
+							<point x="-172.000" y="-84.500"/>
+							<point x="-172.000" y="-86.500"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+			</fixtureGroups>
+		</body>
+		<body name="ship007" width="389.000" height="209.000">
+			<fixtureGroups>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="24.500" y="23.500"/>
+							<point x="192.500" y="23.500"/>
+							<point x="169.500" y="31.500"/>
+							<point x="70.500" y="50.500"/>
+							<point x="5.500" y="55.500"/>
+							<point x="2.500" y="53.500"/>
+						</polygon>
+            <polygon>
+							<point x="138.500" y="40.500"/>
+							<point x="70.500" y="50.500"/>
+							<point x="169.500" y="31.500"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="24.500" y="-24.500"/>
+							<point x="2.500" y="-54.500"/>
+							<point x="5.500" y="-56.500"/>
+							<point x="70.500" y="-51.500"/>
+							<point x="169.500" y="-32.500"/>
+							<point x="192.500" y="-24.500"/>
+						</polygon>
+            <polygon>
+							<point x="138.500" y="-41.500"/>
+							<point x="169.500" y="-32.500"/>
+							<point x="70.500" y="-51.500"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="-193.500" y="23.500"/>
+							<point x="-172.500" y="6.500"/>
+							<point x="-143.500" y="21.500"/>
+							<point x="-122.500" y="42.500"/>
+							<point x="-161.500" y="55.500"/>
+						</polygon>
+            <polygon>
+							<point x="78.500" y="70.500"/>
+							<point x="-36.500" y="102.500"/>
+							<point x="-37.500" y="86.500"/>
+							<point x="-5.500" y="70.500"/>
+						</polygon>
+            <polygon>
+							<point x="-161.500" y="55.500"/>
+							<point x="-122.500" y="42.500"/>
+							<point x="-37.500" y="86.500"/>
+							<point x="-36.500" y="102.500"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="-193.500" y="-24.500"/>
+							<point x="-161.500" y="-56.500"/>
+							<point x="-122.500" y="-43.500"/>
+							<point x="-143.500" y="-22.500"/>
+							<point x="-172.500" y="-7.500"/>
+						</polygon>
+            <polygon>
+							<point x="78.500" y="-71.500"/>
+							<point x="-5.500" y="-71.500"/>
+							<point x="-37.500" y="-87.500"/>
+							<point x="-36.500" y="-103.500"/>
+						</polygon>
+            <polygon>
+							<point x="-161.500" y="-56.500"/>
+							<point x="-36.500" y="-103.500"/>
+							<point x="-37.500" y="-87.500"/>
+							<point x="-122.500" y="-43.500"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="-172.500" y="6.500"/>
+							<point x="-172.500" y="-7.500"/>
+							<point x="-143.500" y="-22.500"/>
+							<point x="-143.500" y="21.500"/>
+						</polygon>
+            <polygon>
+							<point x="-143.500" y="21.500"/>
+							<point x="-143.500" y="-22.500"/>
+							<point x="-122.500" y="-43.500"/>
+							<point x="-5.500" y="-71.500"/>
+							<point x="2.500" y="53.500"/>
+							<point x="-5.500" y="70.500"/>
+							<point x="-37.500" y="86.500"/>
+							<point x="-122.500" y="42.500"/>
+						</polygon>
+            <polygon>
+							<point x="-37.500" y="-87.500"/>
+							<point x="-5.500" y="-71.500"/>
+							<point x="-122.500" y="-43.500"/>
+						</polygon>
+            <polygon>
+							<point x="24.500" y="23.500"/>
+							<point x="2.500" y="53.500"/>
+							<point x="15.500" y="23.500"/>
+						</polygon>
+            <polygon>
+							<point x="24.500" y="-24.500"/>
+							<point x="15.500" y="-24.500"/>
+							<point x="2.500" y="-54.500"/>
+						</polygon>
+            <polygon>
+							<point x="5.500" y="55.500"/>
+							<point x="-5.500" y="70.500"/>
+							<point x="2.500" y="53.500"/>
+						</polygon>
+            <polygon>
+							<point x="5.500" y="-56.500"/>
+							<point x="2.500" y="-54.500"/>
+							<point x="-5.500" y="-71.500"/>
+						</polygon>
+            <polygon>
+							<point x="15.500" y="23.500"/>
+							<point x="2.500" y="53.500"/>
+							<point x="-5.500" y="-71.500"/>
+							<point x="15.500" y="-24.500"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+			</fixtureGroups>
+		</body>
+		<body name="ship008" width="361.000" height="335.000">
+			<fixtureGroups>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="-121.500" y="116.500"/>
+							<point x="-178.500" y="30.500"/>
+							<point x="-176.500" y="28.500"/>
+							<point x="-139.500" y="52.500"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="-112.500" y="6.500"/>
+							<point x="-121.500" y="116.500"/>
+							<point x="-139.500" y="52.500"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="-63.500" y="91.500"/>
+							<point x="-121.500" y="116.500"/>
+							<point x="-112.500" y="6.500"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="43.500" y="165.500"/>
+							<point x="-63.500" y="91.500"/>
+							<point x="-112.500" y="6.500"/>
+							<point x="99.500" y="76.500"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="43.500" y="165.500"/>
+							<point x="-121.500" y="116.500"/>
+							<point x="-63.500" y="91.500"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="43.500" y="165.500"/>
+							<point x="99.500" y="76.500"/>
+							<point x="177.500" y="64.500"/>
+							<point x="179.500" y="67.500"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="100.500" y="-76.500"/>
+							<point x="-29.500" y="6.500"/>
+							<point x="-112.500" y="6.500"/>
+						</polygon>
+            <polygon>
+							<point x="99.500" y="76.500"/>
+							<point x="-112.500" y="6.500"/>
+							<point x="-29.500" y="6.500"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="42.500" y="-165.500"/>
+							<point x="100.500" y="-76.500"/>
+							<point x="-112.500" y="6.500"/>
+							<point x="-71.500" y="-80.500"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="-71.500" y="-80.500"/>
+							<point x="-112.500" y="6.500"/>
+							<point x="-121.500" y="-116.500"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="-112.500" y="6.500"/>
+							<point x="-139.500" y="-39.500"/>
+							<point x="-121.500" y="-116.500"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="-121.500" y="-116.500"/>
+							<point x="-139.500" y="-39.500"/>
+							<point x="-176.500" y="-15.500"/>
+							<point x="-178.500" y="-17.500"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="42.500" y="-165.500"/>
+							<point x="-71.500" y="-80.500"/>
+							<point x="-121.500" y="-116.500"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="42.500" y="-165.500"/>
+							<point x="178.500" y="-67.500"/>
+							<point x="177.500" y="-64.500"/>
+							<point x="100.500" y="-76.500"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+			</fixtureGroups>
+		</body>
+		<body name="ship009" width="382.000" height="293.000">
+			<fixtureGroups>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="57.000" y="53.500"/>
+							<point x="57.000" y="-53.500"/>
+							<point x="190.000" y="-3.500"/>
+							<point x="190.000" y="3.500"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="-190.000" y="-3.500"/>
+							<point x="-155.000" y="-53.500"/>
+							<point x="57.000" y="-53.500"/>
+							<point x="57.000" y="53.500"/>
+							<point x="-155.000" y="53.500"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="58.000" y="123.500"/>
+							<point x="58.000" y="145.500"/>
+							<point x="-71.000" y="145.500"/>
+							<point x="-35.000" y="109.500"/>
+							<point x="40.000" y="109.500"/>
+						</polygon>
+            <polygon>
+							<point x="-71.000" y="145.500"/>
+							<point x="-71.000" y="74.500"/>
+							<point x="-35.000" y="53.500"/>
+							<point x="-35.000" y="109.500"/>
+						</polygon>
+            <polygon>
+							<point x="-138.000" y="74.500"/>
+							<point x="-155.000" y="53.500"/>
+							<point x="-35.000" y="53.500"/>
+							<point x="-71.000" y="74.500"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="58.000" y="-123.500"/>
+							<point x="40.000" y="-109.500"/>
+							<point x="-35.000" y="-109.500"/>
+							<point x="-71.000" y="-145.500"/>
+							<point x="58.000" y="-145.500"/>
+						</polygon>
+            <polygon>
+							<point x="-71.000" y="-145.500"/>
+							<point x="-35.000" y="-109.500"/>
+							<point x="-35.000" y="-53.500"/>
+							<point x="-71.000" y="-74.500"/>
+						</polygon>
+            <polygon>
+							<point x="-35.000" y="-53.500"/>
+							<point x="-155.000" y="-53.500"/>
+							<point x="-138.000" y="-74.500"/>
+							<point x="-71.000" y="-74.500"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+			</fixtureGroups>
+		</body>
+		<body name="ship010" width="413.000" height="183.000">
+			<fixtureGroups>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="-205.500" y="90.500"/>
+							<point x="-205.500" y="49.500"/>
+							<point x="-175.500" y="39.500"/>
+							<point x="-114.500" y="29.500"/>
+							<point x="-145.500" y="70.500"/>
+							<point x="-179.500" y="90.500"/>
+						</polygon>
+            <polygon>
+							<point x="-145.500" y="70.500"/>
+							<point x="-114.500" y="29.500"/>
+							<point x="-33.500" y="39.500"/>
+							<point x="-44.500" y="90.500"/>
+							<point x="-85.500" y="90.500"/>
+						</polygon>
+            <polygon>
+							<point x="205.500" y="39.500"/>
+							<point x="-44.500" y="90.500"/>
+							<point x="-33.500" y="39.500"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="35.500" y="-0.500"/>
+							<point x="-33.500" y="39.500"/>
+							<point x="-114.500" y="29.500"/>
+							<point x="-114.500" y="-29.500"/>
+							<point x="-33.500" y="-39.500"/>
+						</polygon>
+            <polygon>
+							<point x="-205.500" y="-0.500"/>
+							<point x="-176.500" y="-39.500"/>
+							<point x="-114.500" y="-29.500"/>
+							<point x="-114.500" y="29.500"/>
+							<point x="-175.500" y="39.500"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="-205.500" y="-90.500"/>
+							<point x="-174.500" y="-90.500"/>
+							<point x="-145.500" y="-70.500"/>
+							<point x="-114.500" y="-29.500"/>
+							<point x="-176.500" y="-39.500"/>
+							<point x="-205.500" y="-49.500"/>
+						</polygon>
+            <polygon>
+							<point x="-145.500" y="-70.500"/>
+							<point x="-85.500" y="-90.500"/>
+							<point x="-44.500" y="-90.500"/>
+							<point x="-33.500" y="-39.500"/>
+							<point x="-114.500" y="-29.500"/>
+						</polygon>
+            <polygon>
+							<point x="205.500" y="-39.500"/>
+							<point x="-33.500" y="-39.500"/>
+							<point x="-44.500" y="-90.500"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+			</fixtureGroups>
+		</body>
+		<body name="ship011" width="389.000" height="415.000">
+			<fixtureGroups>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="-193.500" y="-0.500"/>
+							<point x="-77.500" y="-100.500"/>
+							<point x="-12.500" y="-53.500"/>
+							<point x="-11.500" y="52.500"/>
+							<point x="-77.500" y="99.500"/>
+						</polygon>
+            <polygon>
+							<point x="80.500" y="14.500"/>
+							<point x="52.500" y="45.500"/>
+							<point x="8.500" y="67.500"/>
+							<point x="-11.500" y="52.500"/>
+							<point x="-12.500" y="-53.500"/>
+							<point x="8.500" y="-67.500"/>
+							<point x="71.500" y="-0.500"/>
+						</polygon>
+            <polygon>
+							<point x="80.500" y="-15.500"/>
+							<point x="71.500" y="-0.500"/>
+							<point x="8.500" y="-67.500"/>
+							<point x="54.500" y="-50.500"/>
+						</polygon>
+            <polygon>
+							<point x="-36.500" y="99.500"/>
+							<point x="-38.500" y="96.500"/>
+							<point x="-11.500" y="52.500"/>
+							<point x="8.500" y="67.500"/>
+						</polygon>
+            <polygon>
+							<point x="8.500" y="-67.500"/>
+							<point x="-12.500" y="-53.500"/>
+							<point x="-38.500" y="-97.500"/>
+							<point x="-36.500" y="-99.500"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="8.500" y="-67.500"/>
+							<point x="-5.500" y="-139.500"/>
+							<point x="12.500" y="-171.500"/>
+							<point x="42.500" y="-100.500"/>
+							<point x="54.500" y="-50.500"/>
+						</polygon>
+            <polygon>
+							<point x="109.500" y="-15.500"/>
+							<point x="80.500" y="-15.500"/>
+							<point x="54.500" y="-50.500"/>
+							<point x="114.500" y="-47.500"/>
+							<point x="126.500" y="-33.500"/>
+						</polygon>
+            <polygon>
+							<point x="126.500" y="-47.500"/>
+							<point x="151.500" y="-19.500"/>
+							<point x="149.500" y="-16.500"/>
+							<point x="126.500" y="-33.500"/>
+							<point x="114.500" y="-47.500"/>
+						</polygon>
+            <polygon>
+							<point x="114.500" y="-47.500"/>
+							<point x="54.500" y="-50.500"/>
+							<point x="102.500" y="-66.500"/>
+							<point x="134.500" y="-68.500"/>
+						</polygon>
+            <polygon>
+							<point x="-43.500" y="-122.500"/>
+							<point x="-46.500" y="-125.500"/>
+							<point x="12.500" y="-171.500"/>
+							<point x="-5.500" y="-139.500"/>
+						</polygon>
+            <polygon>
+							<point x="42.500" y="-100.500"/>
+							<point x="42.500" y="-204.500"/>
+							<point x="71.500" y="-166.500"/>
+							<point x="71.500" y="-70.500"/>
+							<point x="54.500" y="-50.500"/>
+						</polygon>
+            <polygon>
+							<point x="191.500" y="-77.500"/>
+							<point x="127.500" y="-112.500"/>
+							<point x="117.500" y="-145.500"/>
+							<point x="192.500" y="-81.500"/>
+						</polygon>
+            <polygon>
+							<point x="117.500" y="-145.500"/>
+							<point x="127.500" y="-112.500"/>
+							<point x="102.500" y="-66.500"/>
+							<point x="71.500" y="-70.500"/>
+						</polygon>
+            <polygon>
+							<point x="191.500" y="-15.500"/>
+							<point x="134.500" y="-68.500"/>
+							<point x="134.500" y="-100.500"/>
+							<point x="192.500" y="-19.500"/>
+						</polygon>
+            <polygon>
+							<point x="134.500" y="-100.500"/>
+							<point x="134.500" y="-68.500"/>
+							<point x="102.500" y="-66.500"/>
+						</polygon>
+            <polygon>
+							<point x="102.500" y="-66.500"/>
+							<point x="54.500" y="-50.500"/>
+							<point x="71.500" y="-70.500"/>
+						</polygon>
+            <polygon>
+							<point x="71.500" y="-166.500"/>
+							<point x="42.500" y="-204.500"/>
+							<point x="44.500" y="-206.500"/>
+							<point x="192.500" y="-170.500"/>
+							<point x="192.500" y="-166.500"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="109.500" y="14.500"/>
+							<point x="126.500" y="32.500"/>
+							<point x="114.500" y="46.500"/>
+							<point x="52.500" y="45.500"/>
+							<point x="80.500" y="14.500"/>
+						</polygon>
+            <polygon>
+							<point x="8.500" y="67.500"/>
+							<point x="52.500" y="45.500"/>
+							<point x="42.500" y="107.500"/>
+							<point x="12.500" y="171.500"/>
+							<point x="-5.500" y="138.500"/>
+						</polygon>
+            <polygon>
+							<point x="126.500" y="46.500"/>
+							<point x="114.500" y="46.500"/>
+							<point x="126.500" y="32.500"/>
+							<point x="149.500" y="15.500"/>
+							<point x="151.500" y="18.500"/>
+						</polygon>
+            <polygon>
+							<point x="114.500" y="46.500"/>
+							<point x="134.500" y="67.500"/>
+							<point x="102.500" y="65.500"/>
+							<point x="52.500" y="45.500"/>
+						</polygon>
+            <polygon>
+							<point x="-43.500" y="121.500"/>
+							<point x="-5.500" y="138.500"/>
+							<point x="12.500" y="171.500"/>
+							<point x="-46.500" y="124.500"/>
+						</polygon>
+            <polygon>
+							<point x="42.500" y="107.500"/>
+							<point x="52.500" y="45.500"/>
+							<point x="71.500" y="69.500"/>
+							<point x="71.500" y="165.500"/>
+							<point x="42.500" y="203.500"/>
+						</polygon>
+            <polygon>
+							<point x="191.500" y="76.500"/>
+							<point x="192.500" y="80.500"/>
+							<point x="117.500" y="144.500"/>
+							<point x="126.500" y="112.500"/>
+						</polygon>
+            <polygon>
+							<point x="117.500" y="144.500"/>
+							<point x="71.500" y="69.500"/>
+							<point x="102.500" y="65.500"/>
+							<point x="126.500" y="112.500"/>
+						</polygon>
+            <polygon>
+							<point x="191.500" y="14.500"/>
+							<point x="192.500" y="18.500"/>
+							<point x="134.500" y="99.500"/>
+							<point x="134.500" y="67.500"/>
+						</polygon>
+            <polygon>
+							<point x="134.500" y="99.500"/>
+							<point x="102.500" y="65.500"/>
+							<point x="134.500" y="67.500"/>
+						</polygon>
+            <polygon>
+							<point x="102.500" y="65.500"/>
+							<point x="71.500" y="69.500"/>
+							<point x="52.500" y="45.500"/>
+						</polygon>
+            <polygon>
+							<point x="71.500" y="165.500"/>
+							<point x="192.500" y="165.500"/>
+							<point x="192.500" y="169.500"/>
+							<point x="44.500" y="205.500"/>
+							<point x="42.500" y="203.500"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+			</fixtureGroups>
+		</body>
+		<body name="ship012" width="383.000" height="469.000">
+			<fixtureGroups>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="-190.500" y="-44.500"/>
+							<point x="-160.500" y="-33.500"/>
+							<point x="-180.500" y="-21.500"/>
+						</polygon>
+            <polygon>
+							<point x="-190.500" y="44.500"/>
+							<point x="-180.500" y="22.500"/>
+							<point x="-160.500" y="33.500"/>
+						</polygon>
+            <polygon>
+							<point x="-160.500" y="-33.500"/>
+							<point x="-160.500" y="33.500"/>
+							<point x="-180.500" y="22.500"/>
+							<point x="-190.500" y="11.500"/>
+							<point x="-190.500" y="-11.500"/>
+							<point x="-180.500" y="-21.500"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="-160.500" y="33.500"/>
+							<point x="-160.500" y="-33.500"/>
+							<point x="-20.500" y="-33.500"/>
+							<point x="0.500" y="-9.500"/>
+							<point x="0.500" y="9.500"/>
+							<point x="-20.500" y="33.500"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="190.500" y="0.500"/>
+							<point x="50.500" y="55.500"/>
+							<point x="39.500" y="33.500"/>
+							<point x="39.500" y="-56.500"/>
+							<point x="49.500" y="-56.500"/>
+						</polygon>
+            <polygon>
+							<point x="0.500" y="33.500"/>
+							<point x="0.500" y="-33.500"/>
+							<point x="39.500" y="-33.500"/>
+							<point x="39.500" y="33.500"/>
+						</polygon>
+            <polygon>
+							<point x="39.500" y="55.500"/>
+							<point x="39.500" y="33.500"/>
+							<point x="50.500" y="55.500"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="-100.500" y="55.500"/>
+							<point x="-80.500" y="33.500"/>
+							<point x="-20.500" y="33.500"/>
+							<point x="-9.500" y="76.500"/>
+							<point x="0.500" y="133.500"/>
+							<point x="-80.500" y="77.500"/>
+						</polygon>
+            <polygon>
+							<point x="0.500" y="9.500"/>
+							<point x="0.500" y="33.500"/>
+							<point x="-9.500" y="76.500"/>
+							<point x="-20.500" y="33.500"/>
+						</polygon>
+            <polygon>
+							<point x="-100.500" y="155.500"/>
+							<point x="-81.500" y="122.500"/>
+							<point x="-80.500" y="166.500"/>
+						</polygon>
+            <polygon>
+							<point x="-100.500" y="110.500"/>
+							<point x="-80.500" y="77.500"/>
+							<point x="-81.500" y="122.500"/>
+						</polygon>
+            <polygon>
+							<point x="0.500" y="133.500"/>
+							<point x="-79.500" y="233.500"/>
+							<point x="-80.500" y="77.500"/>
+						</polygon>
+            <polygon>
+							<point x="-100.500" y="233.500"/>
+							<point x="-100.500" y="189.500"/>
+							<point x="-80.500" y="166.500"/>
+							<point x="-79.500" y="233.500"/>
+						</polygon>
+            <polygon>
+							<point x="-81.500" y="122.500"/>
+							<point x="-80.500" y="77.500"/>
+							<point x="-80.500" y="166.500"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="-100.500" y="-55.500"/>
+							<point x="-80.500" y="-77.500"/>
+							<point x="0.500" y="-133.500"/>
+							<point x="-9.500" y="-76.500"/>
+							<point x="-20.500" y="-33.500"/>
+							<point x="-80.500" y="-33.500"/>
+						</polygon>
+            <polygon>
+							<point x="0.500" y="-9.500"/>
+							<point x="-20.500" y="-33.500"/>
+							<point x="-9.500" y="-76.500"/>
+							<point x="0.500" y="-33.500"/>
+						</polygon>
+            <polygon>
+							<point x="-100.500" y="-155.500"/>
+							<point x="-80.500" y="-166.500"/>
+							<point x="0.500" y="-133.500"/>
+							<point x="-80.500" y="-122.500"/>
+						</polygon>
+            <polygon>
+							<point x="-100.500" y="-110.500"/>
+							<point x="-80.500" y="-122.500"/>
+							<point x="0.500" y="-133.500"/>
+							<point x="-80.500" y="-77.500"/>
+						</polygon>
+            <polygon>
+							<point x="0.500" y="-133.500"/>
+							<point x="-80.500" y="-166.500"/>
+							<point x="-100.500" y="-189.500"/>
+							<point x="-100.500" y="-233.500"/>
+							<point x="-80.500" y="-233.500"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+			</fixtureGroups>
+		</body>
+		<body name="ship013" width="669.000" height="808.000">
+			<fixtureGroups>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="75.500" y="168.000"/>
+							<point x="56.500" y="205.000"/>
+							<point x="39.500" y="235.000"/>
+							<point x="24.500" y="259.000"/>
+							<point x="5.500" y="278.000"/>
+							<point x="-11.500" y="291.000"/>
+							<point x="-28.500" y="302.000"/>
+							<point x="-132.500" y="189.000"/>
+						</polygon>
+            <polygon>
+							<point x="-79.500" y="326.000"/>
+							<point x="-85.500" y="324.000"/>
+							<point x="-168.500" y="267.000"/>
+							<point x="-170.500" y="263.000"/>
+							<point x="-147.500" y="237.000"/>
+							<point x="-28.500" y="302.000"/>
+							<point x="-55.500" y="316.000"/>
+						</polygon>
+            <polygon>
+							<point x="-132.500" y="189.000"/>
+							<point x="-28.500" y="302.000"/>
+							<point x="-135.500" y="210.000"/>
+						</polygon>
+            <polygon>
+							<point x="-135.500" y="210.000"/>
+							<point x="-28.500" y="302.000"/>
+							<point x="-142.500" y="228.000"/>
+						</polygon>
+            <polygon>
+							<point x="-142.500" y="228.000"/>
+							<point x="-28.500" y="302.000"/>
+							<point x="-147.500" y="237.000"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="-85.500" y="323.000"/>
+							<point x="-186.500" y="357.000"/>
+							<point x="-215.500" y="313.000"/>
+							<point x="-168.500" y="266.000"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="-332.500" y="401.000"/>
+							<point x="-329.500" y="397.000"/>
+							<point x="-215.500" y="313.000"/>
+							<point x="-256.500" y="384.000"/>
+							<point x="-330.500" y="403.000"/>
+						</polygon>
+            <polygon>
+							<point x="-186.500" y="361.000"/>
+							<point x="-194.500" y="365.000"/>
+							<point x="-256.500" y="384.000"/>
+							<point x="-215.500" y="313.000"/>
+							<point x="-186.500" y="357.000"/>
+						</polygon>
+            <polygon>
+							<point x="-220.500" y="312.000"/>
+							<point x="-215.500" y="313.000"/>
+							<point x="-264.500" y="348.000"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="47.500" y="113.000"/>
+							<point x="-19.500" y="136.000"/>
+							<point x="-135.500" y="136.000"/>
+							<point x="-167.500" y="79.000"/>
+							<point x="-167.500" y="-77.000"/>
+							<point x="-134.500" y="-135.000"/>
+							<point x="-19.500" y="-135.000"/>
+							<point x="47.500" y="-112.000"/>
+						</polygon>
+            <polygon>
+							<point x="-185.500" y="1.000"/>
+							<point x="-167.500" y="-77.000"/>
+							<point x="-167.500" y="79.000"/>
+						</polygon>
+            <polygon>
+							<point x="-199.500" y="105.000"/>
+							<point x="-167.500" y="79.000"/>
+							<point x="-135.500" y="136.000"/>
+							<point x="-150.500" y="130.000"/>
+							<point x="-197.500" y="108.000"/>
+						</polygon>
+            <polygon>
+							<point x="-167.500" y="-77.000"/>
+							<point x="-199.500" y="-104.000"/>
+							<point x="-197.500" y="-107.000"/>
+							<point x="-134.500" y="-135.000"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="301.500" y="-28.000"/>
+							<point x="303.500" y="-24.000"/>
+							<point x="303.500" y="-18.000"/>
+							<point x="206.500" y="57.000"/>
+							<point x="283.500" y="-32.000"/>
+							<point x="296.500" y="-31.000"/>
+						</polygon>
+            <polygon>
+							<point x="301.500" y="26.000"/>
+							<point x="296.500" y="29.000"/>
+							<point x="283.500" y="30.000"/>
+							<point x="303.500" y="16.000"/>
+							<point x="303.500" y="22.000"/>
+						</polygon>
+            <polygon>
+							<point x="327.500" y="10.000"/>
+							<point x="320.500" y="14.000"/>
+							<point x="303.500" y="16.000"/>
+							<point x="333.500" y="-2.000"/>
+							<point x="333.500" y="0.000"/>
+						</polygon>
+            <polygon>
+							<point x="327.500" y="-12.000"/>
+							<point x="333.500" y="-2.000"/>
+							<point x="303.500" y="16.000"/>
+							<point x="206.500" y="57.000"/>
+							<point x="303.500" y="-18.000"/>
+							<point x="320.500" y="-16.000"/>
+						</polygon>
+            <polygon>
+							<point x="206.500" y="-59.000"/>
+							<point x="216.500" y="-59.000"/>
+							<point x="228.500" y="-57.000"/>
+							<point x="245.500" y="-51.000"/>
+							<point x="283.500" y="-32.000"/>
+							<point x="206.500" y="57.000"/>
+						</polygon>
+            <polygon>
+							<point x="216.500" y="57.000"/>
+							<point x="206.500" y="57.000"/>
+							<point x="303.500" y="16.000"/>
+							<point x="283.500" y="30.000"/>
+							<point x="245.500" y="49.000"/>
+							<point x="228.500" y="55.000"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="47.500" y="113.000"/>
+							<point x="47.500" y="-112.000"/>
+							<point x="160.500" y="-89.000"/>
+							<point x="206.500" y="-59.000"/>
+							<point x="206.500" y="57.000"/>
+							<point x="160.500" y="89.000"/>
+						</polygon>
+            <polygon>
+							<point x="203.500" y="-78.000"/>
+							<point x="205.500" y="-73.000"/>
+							<point x="206.500" y="-59.000"/>
+							<point x="160.500" y="-89.000"/>
+							<point x="198.500" y="-81.000"/>
+						</polygon>
+            <polygon>
+							<point x="160.500" y="89.000"/>
+							<point x="206.500" y="57.000"/>
+							<point x="205.500" y="69.000"/>
+							<point x="204.500" y="75.000"/>
+							<point x="202.500" y="79.000"/>
+							<point x="194.500" y="82.000"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="160.500" y="90.000"/>
+							<point x="140.500" y="137.000"/>
+							<point x="-132.500" y="190.000"/>
+							<point x="-143.500" y="184.000"/>
+							<point x="47.500" y="114.000"/>
+						</polygon>
+            <polygon>
+							<point x="-150.500" y="131.000"/>
+							<point x="-135.500" y="137.000"/>
+							<point x="-143.500" y="184.000"/>
+							<point x="-150.500" y="168.000"/>
+						</polygon>
+            <polygon>
+							<point x="-135.500" y="137.000"/>
+							<point x="-19.500" y="137.000"/>
+							<point x="-143.500" y="184.000"/>
+						</polygon>
+            <polygon>
+							<point x="82.500" y="166.000"/>
+							<point x="75.500" y="169.000"/>
+							<point x="-132.500" y="190.000"/>
+							<point x="91.500" y="147.000"/>
+							<point x="85.500" y="162.000"/>
+						</polygon>
+            <polygon>
+							<point x="134.500" y="142.000"/>
+							<point x="91.500" y="147.000"/>
+							<point x="140.500" y="137.000"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="160.500" y="-88.000"/>
+							<point x="47.500" y="-112.000"/>
+							<point x="91.500" y="-145.000"/>
+							<point x="134.500" y="-140.000"/>
+							<point x="140.500" y="-135.000"/>
+						</polygon>
+            <polygon>
+							<point x="-150.500" y="-128.000"/>
+							<point x="-150.500" y="-168.000"/>
+							<point x="-144.500" y="-181.000"/>
+							<point x="-132.500" y="-188.000"/>
+							<point x="-134.500" y="-135.000"/>
+						</polygon>
+            <polygon>
+							<point x="-139.500" y="-186.000"/>
+							<point x="-132.500" y="-188.000"/>
+							<point x="-144.500" y="-181.000"/>
+						</polygon>
+            <polygon>
+							<point x="-134.500" y="-135.000"/>
+							<point x="-132.500" y="-188.000"/>
+							<point x="75.500" y="-167.000"/>
+							<point x="-19.500" y="-135.000"/>
+						</polygon>
+            <polygon>
+							<point x="-19.500" y="-135.000"/>
+							<point x="75.500" y="-167.000"/>
+							<point x="85.500" y="-160.000"/>
+							<point x="91.500" y="-145.000"/>
+							<point x="47.500" y="-112.000"/>
+						</polygon>
+            <polygon>
+							<point x="82.500" y="-164.000"/>
+							<point x="85.500" y="-160.000"/>
+							<point x="75.500" y="-167.000"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="75.500" y="-167.000"/>
+							<point x="-132.500" y="-188.000"/>
+							<point x="-135.500" y="-208.000"/>
+							<point x="-12.500" y="-291.000"/>
+							<point x="6.500" y="-276.000"/>
+							<point x="25.500" y="-257.000"/>
+							<point x="57.500" y="-203.000"/>
+						</polygon>
+            <polygon>
+							<point x="-79.500" y="-325.000"/>
+							<point x="-28.500" y="-301.000"/>
+							<point x="-155.500" y="-246.000"/>
+							<point x="-170.500" y="-262.000"/>
+							<point x="-168.500" y="-265.000"/>
+							<point x="-85.500" y="-322.000"/>
+						</polygon>
+            <polygon>
+							<point x="-155.500" y="-246.000"/>
+							<point x="-28.500" y="-301.000"/>
+							<point x="-141.500" y="-225.000"/>
+						</polygon>
+            <polygon>
+							<point x="-141.500" y="-225.000"/>
+							<point x="-28.500" y="-301.000"/>
+							<point x="-12.500" y="-291.000"/>
+							<point x="-135.500" y="-208.000"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="-85.500" y="-322.000"/>
+							<point x="-168.500" y="-265.000"/>
+							<point x="-215.500" y="-312.000"/>
+							<point x="-186.500" y="-356.000"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="-332.500" y="-400.000"/>
+							<point x="-330.500" y="-402.000"/>
+							<point x="-256.500" y="-383.000"/>
+							<point x="-215.500" y="-312.000"/>
+							<point x="-329.500" y="-396.000"/>
+						</polygon>
+            <polygon>
+							<point x="-186.500" y="-360.000"/>
+							<point x="-186.500" y="-356.000"/>
+							<point x="-215.500" y="-312.000"/>
+							<point x="-256.500" y="-383.000"/>
+							<point x="-194.500" y="-364.000"/>
+						</polygon>
+            <polygon>
+							<point x="-220.500" y="-311.000"/>
+							<point x="-264.500" y="-347.000"/>
+							<point x="-215.500" y="-312.000"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+			</fixtureGroups>
+		</body>
+		<body name="ship001" width="88.000" height="109.000">
+			<fixtureGroups>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="-29.000" y="44.500"/>
+							<point x="-25.000" y="42.500"/>
+							<point x="42.000" y="42.500"/>
+							<point x="43.000" y="43.500"/>
+							<point x="43.000" y="52.500"/>
+							<point x="42.000" y="53.500"/>
+							<point x="-25.000" y="53.500"/>
+							<point x="-29.000" y="51.500"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="-29.000" y="32.500"/>
+							<point x="-25.000" y="30.500"/>
+							<point x="42.000" y="30.500"/>
+							<point x="43.000" y="31.500"/>
+							<point x="43.000" y="40.500"/>
+							<point x="42.000" y="41.500"/>
+							<point x="-25.000" y="41.500"/>
+							<point x="-29.000" y="39.500"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="15.000" y="9.500"/>
+							<point x="4.000" y="30.500"/>
+							<point x="-15.000" y="30.500"/>
+							<point x="-14.000" y="27.500"/>
+							<point x="3.000" y="10.500"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="15.000" y="9.500"/>
+							<point x="4.000" y="30.500"/>
+							<point x="-15.000" y="30.500"/>
+							<point x="-14.000" y="27.500"/>
+							<point x="3.000" y="10.500"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="-40.000" y="8.500"/>
+							<point x="-21.000" y="8.500"/>
+							<point x="-18.000" y="12.500"/>
+							<point x="-18.000" y="21.500"/>
+							<point x="-26.000" y="24.500"/>
+							<point x="-36.000" y="14.500"/>
+						</polygon>
+            <polygon>
+							<point x="-21.000" y="24.500"/>
+							<point x="-26.000" y="24.500"/>
+							<point x="-18.000" y="21.500"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="-40.000" y="-8.500"/>
+							<point x="-36.000" y="-14.500"/>
+							<point x="-26.000" y="-24.500"/>
+							<point x="-18.000" y="-21.500"/>
+							<point x="-18.000" y="-12.500"/>
+							<point x="-21.000" y="-8.500"/>
+						</polygon>
+            <polygon>
+							<point x="-21.000" y="-24.500"/>
+							<point x="-18.000" y="-21.500"/>
+							<point x="-26.000" y="-24.500"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="15.000" y="-9.500"/>
+							<point x="3.000" y="-10.500"/>
+							<point x="-14.000" y="-27.500"/>
+							<point x="-15.000" y="-30.500"/>
+							<point x="4.000" y="-30.500"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="-29.000" y="-39.500"/>
+							<point x="-25.000" y="-41.500"/>
+							<point x="42.000" y="-41.500"/>
+							<point x="43.000" y="-40.500"/>
+							<point x="43.000" y="-31.500"/>
+							<point x="42.000" y="-30.500"/>
+							<point x="-25.000" y="-30.500"/>
+							<point x="-29.000" y="-32.500"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="-29.000" y="-51.500"/>
+							<point x="-25.000" y="-53.500"/>
+							<point x="42.000" y="-53.500"/>
+							<point x="43.000" y="-52.500"/>
+							<point x="43.000" y="-43.500"/>
+							<point x="42.000" y="-42.500"/>
+							<point x="-25.000" y="-42.500"/>
+							<point x="-29.000" y="-44.500"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="-43.000" y="3.500"/>
+							<point x="-43.000" y="-3.500"/>
+							<point x="-37.000" y="-8.500"/>
+							<point x="-17.000" y="-8.500"/>
+							<point x="-17.000" y="8.500"/>
+							<point x="-37.000" y="8.500"/>
+						</polygon>
+            <polygon>
+							<point x="33.000" y="6.500"/>
+							<point x="23.000" y="9.500"/>
+							<point x="15.000" y="9.500"/>
+							<point x="15.000" y="-9.500"/>
+							<point x="23.000" y="-9.500"/>
+							<point x="36.000" y="-1.500"/>
+							<point x="36.000" y="1.500"/>
+						</polygon>
+            <polygon>
+							<point x="33.000" y="-6.500"/>
+							<point x="36.000" y="-1.500"/>
+							<point x="23.000" y="-9.500"/>
+						</polygon>
+            <polygon>
+							<point x="15.000" y="9.500"/>
+							<point x="3.000" y="10.500"/>
+							<point x="-15.000" y="10.500"/>
+							<point x="-17.000" y="8.500"/>
+							<point x="-17.000" y="-8.500"/>
+							<point x="-15.000" y="-10.500"/>
+							<point x="3.000" y="-10.500"/>
+							<point x="15.000" y="-9.500"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+			</fixtureGroups>
+		</body>
+		<body name="ship113" width="75.000" height="112.000">
+			<fixtureGroups>
+			</fixtureGroups>
+		</body>
+		<body name="ship114" width="75.000" height="98.000">
+			<fixtureGroups>
+			</fixtureGroups>
+		</body>
+		<body name="ship115" width="91.000" height="91.000">
+			<fixtureGroups>
+			</fixtureGroups>
+		</body>
+		<body name="ship112" width="75.000" height="99.000">
+			<fixtureGroups>
+			</fixtureGroups>
+		</body>
+		<body name="asteroidlarge1" width="45.000" height="45.000">
+			<fixtureGroups>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="17.500" y="18.500"/>
+							<point x="-9.500" y="20.500"/>
+							<point x="-21.500" y="4.500"/>
+							<point x="-14.500" y="-15.500"/>
+							<point x="0.500" y="-20.500"/>
+							<point x="21.500" y="-6.500"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+			</fixtureGroups>
+		</body>
+		<body name="asteroidlarge2" width="47.000" height="42.000">
+			<fixtureGroups>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="22.500" y="2.000"/>
+							<point x="9.500" y="19.000"/>
+							<point x="-15.500" y="15.000"/>
+							<point x="-22.500" y="-5.000"/>
+							<point x="-8.500" y="-18.000"/>
+							<point x="6.500" y="-20.000"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+			</fixtureGroups>
+		</body>
+		<body name="asteroidmedium1" width="30.000" height="30.000">
+			<fixtureGroups>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="11.000" y="12.000"/>
+							<point x="-7.000" y="13.000"/>
+							<point x="-14.000" y="3.000"/>
+							<point x="-10.000" y="-10.000"/>
+							<point x="-2.000" y="-13.000"/>
+							<point x="1.000" y="-13.000"/>
+							<point x="13.000" y="-5.000"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+			</fixtureGroups>
+		</body>
+		<body name="asteroidmedium2" width="31.000" height="28.000">
+			<fixtureGroups>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="-14.500" y="-3.000"/>
+							<point x="-4.500" y="-12.000"/>
+							<point x="5.500" y="-12.000"/>
+							<point x="13.500" y="0.000"/>
+							<point x="13.500" y="3.000"/>
+							<point x="5.500" y="12.000"/>
+							<point x="-10.500" y="10.000"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+			</fixtureGroups>
+		</body>
+		<body name="asteroidsmall1" width="20.000" height="20.000">
+			<fixtureGroups>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="-2.000" y="9.000"/>
+							<point x="-8.000" y="0.000"/>
+							<point x="-3.000" y="-8.000"/>
+							<point x="6.000" y="-7.000"/>
+							<point x="8.000" y="5.000"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+			</fixtureGroups>
+		</body>
+		<body name="asteroidsmall2" width="18.000" height="17.000">
+			<fixtureGroups>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="-8.000" y="-0.500"/>
+							<point x="2.000" y="-7.500"/>
+							<point x="7.000" y="0.500"/>
+							<point x="7.000" y="3.500"/>
+							<point x="-1.000" y="7.500"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+			</fixtureGroups>
+		</body>
+		<body name="asteroidxlarge1" width="102.000" height="84.000">
+			<fixtureGroups>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="-33.000" y="41.000"/>
+							<point x="-50.000" y="-10.000"/>
+							<point x="-21.000" y="-41.000"/>
+							<point x="11.000" y="-29.000"/>
+							<point x="50.000" y="-1.000"/>
+							<point x="50.000" y="3.000"/>
+							<point x="24.000" y="41.000"/>
+						</polygon>
+            <polygon>
+							<point x="34.000" y="-33.000"/>
+							<point x="50.000" y="-1.000"/>
+							<point x="11.000" y="-29.000"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+			</fixtureGroups>
+		</body>
+		<body name="asteroidxlarge2" width="122.000" height="100.000">
+			<fixtureGroups>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="59.000" y="29.000"/>
+							<point x="7.000" y="48.000"/>
+							<point x="-40.000" y="41.000"/>
+							<point x="-60.000" y="4.000"/>
+							<point x="-54.000" y="-27.000"/>
+							<point x="-9.000" y="-33.000"/>
+							<point x="46.000" y="-18.000"/>
+						</polygon>
+            <polygon>
+							<point x="-26.000" y="-48.000"/>
+							<point x="-9.000" y="-33.000"/>
+							<point x="-54.000" y="-27.000"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+			</fixtureGroups>
+		</body>
+		<body name="asteroidxlarge3" width="91.000" height="84.000">
+			<fixtureGroups>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="20.500" y="-41.000"/>
+							<point x="43.500" y="-3.000"/>
+							<point x="43.500" y="1.000"/>
+							<point x="-42.500" y="-14.000"/>
+							<point x="-27.500" y="-34.000"/>
+						</polygon>
+            <polygon>
+							<point x="-44.500" y="19.000"/>
+							<point x="-42.500" y="-14.000"/>
+							<point x="43.500" y="1.000"/>
+							<point x="28.500" y="28.000"/>
+							<point x="-10.500" y="40.000"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+			</fixtureGroups>
+		</body>
+		<body name="asteroidxlarge4" width="100.000" height="98.000">
+			<fixtureGroups>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="30.000" y="-42.000"/>
+							<point x="49.000" y="12.000"/>
+							<point x="17.000" y="47.000"/>
+							<point x="-35.000" y="34.000"/>
+							<point x="-49.000" y="-10.000"/>
+							<point x="-20.000" y="-47.000"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+			</fixtureGroups>
+		</body>
+		<body name="fireball1" width="15.000" height="15.000">
+			<fixtureGroups>
+				<fixtureGroup type="CIRCLE">
+          <circle r="3.556" x="0.000" y="0.000"/>
+				</fixtureGroup>
+			</fixtureGroups>
+		</body>
+		<body name="rocket005" width="35.000" height="7.000">
+			<fixtureGroups>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="0.500" y="1.500"/>
+							<point x="0.500" y="-1.500"/>
+							<point x="5.500" y="-2.500"/>
+							<point x="16.500" y="-0.500"/>
+							<point x="16.500" y="0.500"/>
+							<point x="5.500" y="2.500"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+			</fixtureGroups>
+		</body>
+		<body name="rocket006" width="41.000" height="8.000">
+			<fixtureGroups>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="3.500" y="2.000"/>
+							<point x="3.500" y="-2.000"/>
+							<point x="8.500" y="-3.000"/>
+							<point x="18.500" y="-2.000"/>
+							<point x="19.500" y="0.000"/>
+							<point x="18.500" y="2.000"/>
+							<point x="8.500" y="3.000"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+			</fixtureGroups>
+		</body>
+		<body name="rocket007" width="42.000" height="17.000">
+			<fixtureGroups>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="20.000" y="0.500"/>
+							<point x="19.000" y="1.500"/>
+							<point x="4.000" y="1.500"/>
+							<point x="4.000" y="-1.500"/>
+							<point x="19.000" y="-1.500"/>
+							<point x="20.000" y="-0.500"/>
+						</polygon>
+            <polygon>
+							<point x="3.000" y="-2.500"/>
+							<point x="4.000" y="-1.500"/>
+							<point x="4.000" y="1.500"/>
+							<point x="3.000" y="2.500"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+			</fixtureGroups>
+		</body>
+	</bodies>
+	<metadata>
+		<format>1</format>
+		<ptm_ratio>32.000</ptm_ratio>
+	</metadata>
+</bodydef>
+
+
+

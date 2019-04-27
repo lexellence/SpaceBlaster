@@ -1,0 +1,91 @@
+{
+  firstLevel: TEST1
+  cameraDimensionRange: [ 75, 300 ]
+  cameraZoomSpeed: 1.2
+  cameraInitialZoomOutPercent: 0.5
+  starfield: 
+  {
+    edgePaddingFactor: 1.3
+    density: 0.01
+    speedFactorRange: [ 0.001, 0.20 ]
+    pointSizeIndexRange: [ 0, 7 ]
+    maxPointSizeIndexVariation: 2
+    colorMin: [ 1, 1, 1, 0.3 ]
+    colorMax: [ 1, 1, 1, 0.95 ]
+    maxAlphaVariation: 0.2
+  }
+  constants: 
+  {
+    asteroidSize: 16
+    xLargeAsteroidSize: 1
+    largeAsteroidSizeModifier: 0.46
+    mediumAsteroidSizeModifier: 0.3
+    smallAsteroidSizeModifier: 0.183
+  }
+  entityDefGroups:
+  {
+    XLargeAsteroids: 
+    [
+      {
+        prototype: "XLargeAsteroid"
+        shapes: [ "asteroidxlarge1" ]
+        size: [ 1.133, 0.933 ]
+      }
+      {
+        entity: "XLargeAsteroid1"
+        shapes: [ "asteroidxlarge2" ]
+        size: [ 1.329, 1.089 ]
+        sizeModifiers: [ "asteroidSizeModifier", "xLargeAsteroidSizeModifier" ]
+      }
+      {
+        entity: "XLargeAsteroid2"
+        shapes: [ "asteroidxlarge2" ]
+        size: [ 0.987, 0.911 ]
+        sizeModifiers: [ "asteroidSizeModifier", "xLargeAsteroidSizeModifier" ]
+      }
+      {
+        entity: "XLargeAsteroid3"
+        shapes: [ "asteroidxlarge2" ]
+        size: [ 1.089, 1.067 ]
+        sizeModifiers: [ "asteroidSizeModifier", "xLargeAsteroidSizeModifier" ]
+      }
+    ]
+  }
+  entityDefs: 
+  {
+    XLargeAsteroid: {
+      sizeModifiers: [ "asteroidSizeModifier", "xLargeAsteroidSizeModifier" ]
+    }
+    LargeAsteroid: {
+      sizeModifiers: [ "asteroidSizeModifier", "xLargeAsteroidSizeModifier" ]
+    }
+    MediumAsteroid: {
+      sizeModifiers: [ "asteroidSizeModifier", "xLargeAsteroidSizeModifier" ]
+    }
+    SmallAsteroid: {
+      sizeModifiers: [ "asteroidSizeModifier", "xLargeAsteroidSizeModifier" ]
+    }
+  }
+  levels: 
+  [
+    {
+      level: TEST0
+      center: [ 0, 0 ]
+      size: [ 100, 100 ]
+      player: {
+        position: [ 0, 0 ]
+        rotationPercent: [ 0.25 ]
+      }
+      entities: 
+      [
+        {
+          entity: XLargeAsteroid0
+          position: [ 0, 10 ]
+          rotationPercent: 0
+          linearVelocity: [ 0, 0 ]
+          angularVelocity: 0
+        }
+      ]
+    }
+  ]
+}

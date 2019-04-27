@@ -1,0 +1,1077 @@
+/**************************************************************************************\
+** File: WorldUpdate.cpp
+** Project:
+** Author: David Leksen
+** Date:
+**
+** Source code file for the update functions of the World class
+**
+\**************************************************************************************/
+#include "pch.h"
+#include "World.h"
+#include "ParticleSystem.h"
+#include <iomanip>
+
+namespace Space
+{
+	//+-------------\---------------------------------------------
+	//|	  Update    |
+	//\-------------/---------------------------------------------
+	void World::Update(float dt, PlayerController& playerController)
+	{
+		// Slow-mo rather than allowing a huge leap forward without user input
+		d2d::ClampHigh(dt, m_settings.maxUpdateTime);
+
+		// Add time to internal buffer
+		m_timestepAccumulator += dt;
+
+		// Calculate the number of physics steps to take
+		float stepTime{ 1.0f / m_settings.stepsPerSecond };
+		int numSteps{ (int)std::floor(m_timestepAccumulator / stepTime) };
+		SDL_assert(numSteps >= 0);
+
+		// Reduce the accumulator by the amount of time we are going to use
+		if(numSteps > 0)
+			m_timestepAccumulator -= numSteps * stepTime;
+
+		// Do update in steps
+		for(int i = 0; i < numSteps; ++i)
+			SingleUpdateStep(stepTime, playerController);
+
+		SmoothStates(m_timestepAccumulator / stepTime);
+	}
+	void World::SingleUpdateStep(float dt, PlayerController& playerController)
+	{
+		UpdateEntityCount();
+		UpdateDestructionDelayComponents(dt);
+		UpdatePlayerControllerComponents(dt, playerController);
+		UpdateRotatorComponents();
+		UpdateSetThrustFactorAfterDelayComponents(dt);
+		UpdateThrusterComponents(dt);
+		UpdateBrakeComponents();
+		UpdateProjectileLauncherComponents(dt, false);
+		UpdateProjectileLauncherComponents(dt, true);
+		UpdatePhysics(dt);
+		m_particleSystem.Update(dt);
+		UpdateDrawAnimationComponents(dt);
+	}
+	void World::UpdateEntityCount()
+	{
+		// Keep track of how close we get to running out of bodies
+		m_highestActiveEntityCount = std::max(GetEntityCount(), m_highestActiveEntityCount);
+	}
+	void World::UpdateDestructionDelayComponents(float dt)
+	{
+		for(unsigned id = 0; id < WORLD_MAX_ENTITIES; ++id)
+			if(HasComponents(id, COMPONENT_DESTRUCTION_DELAY) && IsActive(id))
+				if(m_destructionDelayComponents[id] > 0.0f)
+				{
+					m_destructionDelayComponents[id] -= dt;
+					if(m_destructionDelayComponents[id] <= 0.0f)
+						m_destroyBuffer.push(id);
+				}
+	}
+	//+------------------------\----------------------------------
+	//|	   Getting Around	   |
+	//\------------------------/----------------------------------
+	void World::UpdatePlayerControllerComponents(float dt, PlayerController& playerController)
+	{
+		if(playerController.morph)
+		{
+			std::vector<unsigned> morphList;
+			for(unsigned id = 0; id < WORLD_MAX_ENTITIES; ++id)
+				if(HasFlags(id, FLAG_PLAYER_CONTROLLED) && IsActive(id))
+					if(playerController.morph && HasComponents(id, COMPONENT_MORPH_INTO_ENTITY_ID))
+						morphList.push_back(id);
+
+			for(unsigned id : morphList)
+			{
+				//	Move new entity on top of existing entity so that their centers of mass and velocities coincide.
+				const b2Transform& transform{ GetSmoothedTransform(id) };
+				unsigned newID{ m_morphIntoEntityIDs[id] };
+				Deactivate(id);
+				Activate(newID);
+				SetTransform(newID,
+					b2Mul(transform, GetLocalCenterOfMass(id)) - b2Mul(transform.q, GetLocalCenterOfMass(newID)),
+					GetSmoothedTransform(id).q.GetAngle());
+				SetLinearVelocity(newID, GetLinearVelocity(id));
+				SetAngularVelocity(newID, GetAngularVelocity(id));
+
+				// Notify external listener of change in ID
+				if(m_morphListenerPtr)
+					m_morphListenerPtr->MorphedIntoEntity(id, newID);
+			}
+
+			playerController.morph = false;
+		}
+
+		for(unsigned id = 0; id < WORLD_MAX_ENTITIES; ++id)
+			if(HasFlags(id, FLAG_PLAYER_CONTROLLED) && IsActive(id))
+			{
+				if(HasComponents(id, COMPONENT_PRIMARY_PROJECTILE_LAUNCHER))
+					m_primaryProjectileLauncherComponents[id].factor = playerController.primaryFireFactor;
+				if(HasComponents(id, COMPONENT_SECONDARY_PROJECTILE_LAUNCHER))
+					m_secondaryProjectileLauncherComponents[id].factor = playerController.secondaryFireFactor;
+
+				if(HasComponents(id, COMPONENT_ROTATOR))
+				{
+					m_rotatorComponents[id].lastFactor = m_rotatorComponents[id].factor;
+					m_rotatorComponents[id].factor = playerController.turnFactor;
+				}
+
+				if(HasComponents(id, COMPONENT_THRUSTER))
+					m_thrusterComponents[id].factor = playerController.thrustFactor;
+
+				if(HasComponents(id, COMPONENT_BRAKE))
+					m_brakeComponents[id].factor = playerController.brakeFactor;
+
+			}
+	}
+	void World::UpdateRotatorComponents()
+	{
+		BitMask requiredComponents{ COMPONENT_ROTATOR | COMPONENT_PHYSICS };
+		for(unsigned id = 0; id < WORLD_MAX_ENTITIES; ++id)
+			if(HasComponents(id, requiredComponents) && IsActive(id))
+			{
+				// If entity was just turning but now not, stop rotation.
+				if(m_rotatorComponents[id].lastFactor != 0.0f && m_rotatorComponents[id].factor == 0.0f)
+					m_physicsComponents[id].mainBody.b2BodyPtr->SetAngularVelocity(0.0f);
+
+				// If entity is turning, tell it's body to rotate 
+				if(m_rotatorComponents[id].factor != 0.0f)
+					m_physicsComponents[id].mainBody.b2BodyPtr->SetAngularVelocity(m_rotatorComponents[id].factor * m_rotatorComponents[id].rotationSpeed);
+			}
+	}
+	void World::UpdateThrusterComponents(float dt)
+	{
+		BitMask requiredComponents{ COMPONENT_THRUSTER | COMPONENT_PHYSICS };
+		for(unsigned id = 0; id < WORLD_MAX_ENTITIES; ++id)
+			if(HasComponents(id, requiredComponents) && IsActive(id))
+				if(m_thrusterComponents[id].factor > 0.0f)
+				{
+					// Calculate and apply thrust force
+					float sumAccelerations{ 0.0f };
+					SDL_assert(m_thrusterComponents[id].numSlots <= WORLD_MAX_THRUSTER_SLOTS);
+					for(unsigned i = 0; i < m_thrusterComponents[id].numSlots; ++i)
+						if(m_thrusterComponents[id].thrusters[i].enabled && !m_thrusterComponents[id].thrusters[i].temporarilyDisabled)
+							sumAccelerations += m_thrusterComponents[id].thrusters[i].acceleration;
+					
+					float angle{ m_physicsComponents[id].mainBody.b2BodyPtr->GetAngle() };
+					float inputAdjustedForce{ m_physicsComponents[id].mainBody.b2BodyPtr->GetMass() * sumAccelerations * m_thrusterComponents[id].factor };
+					b2Vec2 forceVec{ inputAdjustedForce * cosf(angle), inputAdjustedForce * sinf(angle) };
+					ApplyForceToCenter(id, forceVec);
+
+					// Update thruster animations
+					for(unsigned i = 0; i < m_thrusterComponents[id].numSlots; ++i)
+						UpdateDrawAnimationComponent(m_thrusterComponents[id].thrusters[i].drawAnimationComponent, dt);
+				}
+	}
+	void World::UpdateSetThrustFactorAfterDelayComponents(float dt)
+	{
+		for(unsigned id = 0; id < WORLD_MAX_ENTITIES; ++id)
+			if(HasComponents(id, COMPONENT_SET_THRUST_AFTER_DELAY) && IsActive(id))
+			{
+				m_setThrustFactorAfterDelayComponents[id].delay -= dt;
+				if(m_setThrustFactorAfterDelayComponents[id].delay <= 0.0f)
+				{
+					if(HasComponents(id, COMPONENT_THRUSTER))
+						m_thrusterComponents[id].factor = m_setThrustFactorAfterDelayComponents[id].factor;
+					RemoveComponents(id, COMPONENT_SET_THRUST_AFTER_DELAY);
+				}
+			}
+	}
+	void World::UpdateBrakeComponents()
+	{
+		BitMask requiredComponents{ COMPONENT_BRAKE | COMPONENT_PHYSICS };
+		for(unsigned id = 0; id < WORLD_MAX_ENTITIES; ++id)
+			if(HasComponents(id, requiredComponents) && IsActive(id))
+				if(m_brakeComponents[id].factor > 0.0f)
+				{
+					b2Vec2 unitVelocity{ m_physicsComponents[id].mainBody.b2BodyPtr->GetLinearVelocity() };
+					unitVelocity.Normalize();
+					b2Vec2 brakeForce{ -m_brakeComponents[id].deceleration * m_physicsComponents[id].mainBody.b2BodyPtr->GetMass() * m_brakeComponents[id].factor * unitVelocity };
+					ApplyForceToCenter(id, brakeForce);
+				}
+	}
+	//+------------------------\----------------------------------
+	//|	   Weapon Systems	   |
+	//\------------------------/----------------------------------
+	void World::UpdateProjectileLauncherComponents(float dt, bool secondaryLaunchers)
+	{
+		ComponentArray< ProjectileLauncherComponent >* projectileLauncherComponentsPtr;
+		BitMask requiredComponents{ COMPONENT_PHYSICS };
+		if(secondaryLaunchers)
+		{
+			projectileLauncherComponentsPtr = &m_secondaryProjectileLauncherComponents;
+			requiredComponents |= COMPONENT_SECONDARY_PROJECTILE_LAUNCHER;
+		}
+		else
+		{
+			projectileLauncherComponentsPtr = &m_primaryProjectileLauncherComponents;
+			requiredComponents |= COMPONENT_PRIMARY_PROJECTILE_LAUNCHER;
+		}
+		ComponentArray< ProjectileLauncherComponent >& projectileLauncherComponents{ *projectileLauncherComponentsPtr };
+
+		for(unsigned id = 0; id < WORLD_MAX_ENTITIES; ++id)
+			if(HasComponents(id, requiredComponents) && IsActive(id))
+			{
+				for(unsigned i = 0; i < projectileLauncherComponents[id].numSlots; ++i)
+				{
+					ProjectileLauncher& launcher{ projectileLauncherComponents[id].projectileLaunchers[i] };
+					if(launcher.intervalAccumulator < launcher.interval)
+						launcher.intervalAccumulator += dt;
+				}
+
+				// If projectile system engaged, fire projectiles
+				if(projectileLauncherComponents[id].factor > 0.0f)
+					for(unsigned i = 0; i < projectileLauncherComponents[id].numSlots; ++i)
+					{
+						ProjectileLauncher& launcher{ projectileLauncherComponents[id].projectileLaunchers[i] };
+						if(launcher.enabled && !launcher.temporarilyDisabled)
+						{
+							if(launcher.intervalAccumulator >= launcher.interval)
+							{
+								b2Body* b2BodyPtr{ m_physicsComponents[id].mainBody.b2BodyPtr };
+								const b2Transform& transform{ b2BodyPtr->GetTransform() };
+								b2Vec2 localBulletPosition{ launcher.localRelativePosition * m_sizeComponents[id] };
+								b2Vec2 globalBulletPosition{ b2Mul(transform, localBulletPosition) };
+								if(m_projectileLauncherCallbackPtr)
+									m_projectileLauncherCallbackPtr->LaunchProjectile(launcher.projectileDef, 
+										globalBulletPosition, transform.q.GetAngle(), launcher.impulse,
+										b2BodyPtr->GetLinearVelocity(), id);
+								launcher.intervalAccumulator = 0.0f;
+							}
+						}
+					}
+			}
+	}
+	//+-------------\---------------------------------------------
+	//|	Animations  |
+	//\-------------/---------------------------------------------
+	void World::UpdateDrawAnimationComponents(float dt)
+	{
+		for(unsigned id = 0; id < WORLD_MAX_ENTITIES; ++id)
+			if(HasComponents(id, COMPONENT_DRAW_ANIMATION) && IsActive(id))
+			{
+				UpdateDrawAnimationComponent(m_drawAnimationComponents[id], dt);
+				bool notAnimated{ m_drawAnimationComponents[id].type == AnimationType::NOT_ANIMATED };
+				if(notAnimated && HasFlags(id, FLAG_DESTRUCTION_ON_ANIMATION_COMPLETION))
+					m_destroyBuffer.push(id);
+			}
+	}
+	//+--------------------------------\--------------------------------------
+	//|  UpdateDrawAnimationComponent  | (private)
+	//\--------------------------------/--------------------------------------
+	void World::UpdateDrawAnimationComponent(DrawAnimationComponent& drawAnimationComponent, float dt)
+	{
+		if(drawAnimationComponent.type != AnimationType::NOT_ANIMATED &&
+			drawAnimationComponent.numFrames > 0)
+			{
+				SDL_assert(drawAnimationComponent.numFrames <= WORLD_MAX_ANIMATION_FRAMES);
+				Frame& currentFrame{ drawAnimationComponent.frames[drawAnimationComponent.currentFrameIndex] };
+				currentFrame.frameTimeAccumulator += dt;
+				if(currentFrame.frameTimeAccumulator >= currentFrame.frameTime)
+				{
+					// Go to next frame
+					float timeOverflow{ currentFrame.frameTimeAccumulator - currentFrame.frameTime };
+					bool reachedEnd{ drawAnimationComponent.movingForward && (drawAnimationComponent.currentFrameIndex == drawAnimationComponent.numFrames - 1) };
+					bool reachedBeginning{ !drawAnimationComponent.movingForward && (drawAnimationComponent.currentFrameIndex == 0) };
+					bool stillNeedsToChangeFrame{ true };
+					switch(drawAnimationComponent.type)
+					{
+					case AnimationType::SINGLE_PASS:
+						if(reachedEnd || reachedBeginning)
+						{
+							drawAnimationComponent.type = AnimationType::NOT_ANIMATED;
+							return;
+						}
+						break;
+					case AnimationType::LOOP:
+						if(reachedEnd || reachedBeginning)
+							stillNeedsToChangeFrame = false;
+						if(reachedEnd)
+							drawAnimationComponent.currentFrameIndex = 0;
+						else if(reachedBeginning)
+							drawAnimationComponent.currentFrameIndex = drawAnimationComponent.numFrames - 1;
+						break;
+					case AnimationType::PENDULUM:
+					default:
+						if(reachedEnd)
+							drawAnimationComponent.movingForward = false;
+						else if(reachedBeginning)
+							drawAnimationComponent.movingForward = true;
+						break;
+					}
+
+					if(stillNeedsToChangeFrame)
+					{
+						// Go to next frame
+						if(drawAnimationComponent.movingForward)
+							++drawAnimationComponent.currentFrameIndex;
+						else
+							--drawAnimationComponent.currentFrameIndex;
+					}
+
+					// Add leftover time to new frame
+					drawAnimationComponent.frames[drawAnimationComponent.currentFrameIndex].frameTimeAccumulator = timeOverflow;
+				}
+			}
+	}
+	//+-------------\---------------------------------------------
+	//|	  Physics   |
+	//\-------------/---------------------------------------------
+	void World::UpdatePhysics(float dt)
+	{
+		SaveVelocities();
+		ResetSmoothStates();
+		SyncClones();
+		m_b2WorldPtr->Step(dt, m_settings.velocityIterationsPerStep, m_settings.positionIterationsPerStep);
+		ProcessDestroyBuffer();
+		SyncClones();
+		WrapEntities();
+		m_b2WorldPtr->ClearForces();
+	}
+	void World::SaveVelocities()
+	{
+		// Velocities saved for use in calculating particle explosion velocities
+		for(unsigned id = 0; id < WORLD_MAX_ENTITIES; ++id)
+			if(HasPhysics(id))
+				m_lastLinearVelocities[id] = m_physicsComponents[id].mainBody.b2BodyPtr->GetLinearVelocity();
+	}
+	void World::EmptyPhysicsStep()
+	{
+		m_b2WorldPtr->Step(0.0f, 0, 0);
+		ProcessDestroyBuffer();
+	}
+	void World::ResetSmoothStates()
+	{
+		for(unsigned id = 0; id < WORLD_MAX_ENTITIES; ++id)
+			if(HasPhysics(id))
+			{
+				m_lastTransforms[id] = m_physicsComponents[id].mainBody.b2BodyPtr->GetTransform();
+				m_smoothedTransforms[id] = m_lastTransforms[id];
+			}
+	}
+	void World::SyncClones()
+	{
+		// For each entity, use quadrant to determine which clones it should have. 
+		// Then replace old clones with new ones at correct locations while retaining  
+		// existing ones which are already at the correct location.
+		for(unsigned id = 0; id < WORLD_MAX_ENTITIES; ++id)
+			if(HasPhysics(id) && IsActive(id))
+			{
+				// Determine locations of clones we should have
+				CloneSectionList newCloneSections{ GetCloneSectionList(*m_physicsComponents[id].mainBody.b2BodyPtr) };
+				std::queue<CloneSection> locationsNeedingHomes;
+				std::queue<unsigned> availableIndices;
+
+				// Make a list of locations that should have a clone but currently do not
+				for(unsigned i = 0; i < WORLD_NUM_CLONES; ++i)
+				{
+					bool needsHome{ true };
+					for(auto& cloneBody : m_physicsComponents[id].cloneBodyList)
+						if(newCloneSections[i] == cloneBody.section)
+						{
+							needsHome = false;
+							break;
+						}
+					if(needsHome)
+						locationsNeedingHomes.push(newCloneSections[i]);
+				}
+
+				// Decide which spots the new clones will over-write
+				for(unsigned i = 0; i < WORLD_NUM_CLONES; ++i)
+				{
+					bool indexAvailable{ true };
+					for(auto cloneSection : newCloneSections)
+						if(m_physicsComponents[id].cloneBodyList[i].section == cloneSection)
+						{
+							indexAvailable = false;
+							break;
+						}
+					if(indexAvailable)
+						availableIndices.push(i);
+				}
+
+				// Over-write clone locations
+				while(!locationsNeedingHomes.empty())
+				{
+					SDL_assert(!availableIndices.empty() && "No available index for location needing a home.");
+					m_physicsComponents[id].cloneBodyList[availableIndices.front()].section = locationsNeedingHomes.front();
+					locationsNeedingHomes.pop();
+					availableIndices.pop();
+				}
+
+				// De-activate clone bodies that need syncing
+				b2Body* mainB2BodyPtr{ m_physicsComponents[id].mainBody.b2BodyPtr };
+				float angle{ mainB2BodyPtr->GetAngle() };
+				float angularVelocity{ mainB2BodyPtr->GetAngularVelocity() };
+				for(unsigned i = 0; i < WORLD_NUM_CLONES; ++i)
+				{
+					CloneBody& cloneBody{ m_physicsComponents[id].cloneBodyList[i] };
+					CloneSyncData& cloneSyncData{ m_cloneSyncDataArrays[id][i] };
+
+					cloneSyncData.positionNeedsSync = NeedsSync(cloneBody.b2BodyPtr->GetPosition(), mainB2BodyPtr->GetPosition() + GetCloneOffset(cloneBody.section));
+					cloneSyncData.velocityNeedsSync = NeedsSync(cloneBody.b2BodyPtr->GetLinearVelocity(), mainB2BodyPtr->GetLinearVelocity());
+					cloneSyncData.angleNeedsSync	= NeedsSync(cloneBody.b2BodyPtr->GetAngle(), angle);
+					cloneSyncData.angularVelocityNeedsSync = NeedsSync(cloneBody.b2BodyPtr->GetAngularVelocity(), angularVelocity);
+
+					cloneSyncData.needsReactivation = (cloneSyncData.positionNeedsSync || cloneSyncData.angleNeedsSync);
+					if(cloneSyncData.needsReactivation)
+						cloneBody.b2BodyPtr->SetActive(false);
+				}
+					
+			}
+		EmptyPhysicsStep();
+
+		// Now that the proper clone locations are in place, update states as necessary
+		for(unsigned id = 0; id < WORLD_MAX_ENTITIES; ++id)
+			if(HasPhysics(id) && IsActive(id))
+			{
+				b2Body* mainB2BodyPtr{ m_physicsComponents[id].mainBody.b2BodyPtr };
+				for(unsigned i = 0; i < WORLD_NUM_CLONES; ++i)
+				{
+					CloneBody& cloneBody{ m_physicsComponents[id].cloneBodyList[i] };
+					CloneSyncData& syncData{ m_cloneSyncDataArrays[id][i] };
+
+					if(syncData.positionNeedsSync || syncData.angleNeedsSync)
+					{
+						b2Vec2 clonePosition{ mainB2BodyPtr->GetPosition() + GetCloneOffset(cloneBody.section) };
+						cloneBody.b2BodyPtr->SetTransform(clonePosition, mainB2BodyPtr->GetAngle());
+					}
+					if(syncData.velocityNeedsSync)
+						cloneBody.b2BodyPtr->SetLinearVelocity(mainB2BodyPtr->GetLinearVelocity());
+					if(syncData.angularVelocityNeedsSync)
+						cloneBody.b2BodyPtr->SetAngularVelocity(mainB2BodyPtr->GetAngularVelocity());
+					if(syncData.needsReactivation)
+						cloneBody.b2BodyPtr->SetActive(true);
+				}
+			}
+		EmptyPhysicsStep();
+	}
+	bool World::NeedsSync(float actualValue, float perfectValue) const
+	{
+		float errorMagnitude{ fabs(actualValue - perfectValue) };
+		return (errorMagnitude > WORLD_CLONE_SYNC_TOLERANCE_FLT_EPSILONS);
+	}
+	bool World::NeedsSync(const b2Vec2& actualValue, const b2Vec2& perfectValue) const
+	{
+		return NeedsSync(actualValue.x, perfectValue.x) ||
+			   NeedsSync(actualValue.y, perfectValue.y);
+	}
+	void World::ProcessDestroyBuffer()
+	{
+		while(!m_destroyBuffer.empty())
+		{
+			unsigned id{ m_destroyBuffer.front() };
+			{
+				// Send notification to Game
+				if(m_destructionListenerPtr)
+					m_destructionListenerPtr->SayGoodbye(id);
+
+				// Particle explosion
+				if(HasComponents(id, COMPONENT_PARTICLE_EXPLOSION | COMPONENT_PHYSICS) && IsActive(id))
+					CreateExplosionFromEntity(id, m_particleExplosionComponents[id]);
+
+				// Destroy Box2D bodies
+				if(HasPhysics(id))
+				{
+					m_b2WorldPtr->DestroyBody(m_physicsComponents[id].mainBody.b2BodyPtr);
+					m_physicsComponents[id].mainBody.b2BodyPtr = nullptr;
+					for(CloneBody& cloneBody : m_physicsComponents[id].cloneBodyList)
+					{
+						m_b2WorldPtr->DestroyBody(cloneBody.b2BodyPtr);
+						cloneBody.b2BodyPtr = nullptr;
+					}
+				}
+
+				// Disable all components/flags
+				m_componentBits[id] = COMPONENT_NONE;
+				m_flagBits[id] = FLAG_NONE;
+			}
+			m_destroyBuffer.pop();
+		}
+	}
+	void World::WrapEntities()
+	{
+		bool doManualWrapping{ false };
+		for(unsigned id = 0; id < WORLD_MAX_ENTITIES; ++id)
+		{
+			if(HasPhysics(id) && IsActive(id))
+			{
+				const b2Vec2& currentPosition{ m_physicsComponents[id].mainBody.b2BodyPtr->GetPosition() };
+				m_physicsWrapDatas[id].requiresManualWrapping = false;
+				m_physicsWrapDatas[id].crossedLeftBound = (currentPosition.x < m_worldRect.lowerBound.x);
+				m_physicsWrapDatas[id].crossedRightBound = (currentPosition.x > m_worldRect.upperBound.x);
+				m_physicsWrapDatas[id].crossedLowerBound = (currentPosition.y < m_worldRect.lowerBound.y);
+				m_physicsWrapDatas[id].crossedUpperBound = (currentPosition.y > m_worldRect.upperBound.y);
+
+				// Figure out if we can simply switch Box2D bodies or if we have to wrap manually
+				// (we should be able to switch unless an object is going super fast such that  
+				// the corresponding clone section is not found among the existing clones) 
+				CloneSection newCloneSectionAfterSwitch;
+				bool wrapNeeded{ GetCloneSectionFromWrapData(m_physicsWrapDatas[id], newCloneSectionAfterSwitch) };
+				if(!wrapNeeded)
+					continue;
+				CloneSection cloneSectionWithWhichToSwitchB2BodyPointers{ GetOpposingCloneSection(newCloneSectionAfterSwitch) };
+
+				// Find clone to switch b2Body pointers
+				unsigned cloneIndex;
+				bool cloneIndexFound{ false };
+				for(const CloneBody& cloneBody : m_physicsComponents[id].cloneBodyList)
+				{
+					if(cloneBody.section == cloneSectionWithWhichToSwitchB2BodyPointers)
+					{
+						cloneIndex = cloneBody.cloneIndex;
+						cloneIndexFound = true;
+						break;
+					}
+				}
+
+				// Switch if proper clone found
+				if(cloneIndexFound)
+				{
+					// If we're doing the switch method, make sure we don't do the backup method
+					m_physicsWrapDatas[id].requiresManualWrapping = false;
+
+					// Wrap saved states
+					b2Vec2 translation{ m_physicsComponents[id].cloneBodyList[cloneIndex].b2BodyPtr->GetPosition() - currentPosition };
+					m_lastTransforms[id].p += translation;
+					m_smoothedTransforms[id].p += translation;
+
+					// Switch b2Body pointers and change section of clone body
+					SwitchB2Bodies(m_physicsComponents[id].mainBody, m_physicsComponents[id].cloneBodyList[cloneIndex]);
+					m_physicsComponents[id].cloneBodyList[cloneIndex].section = newCloneSectionAfterSwitch;
+
+					// Notify wrap listener
+					if(m_wrappedEntityListenerPtr)
+						m_wrappedEntityListenerPtr->EntityWrapped(id, translation);
+
+				}
+				else
+				{
+					// Proper clone not found, so flag for manual wrap (should only happen with super fast bodies, if at all)
+					// It's possible that this backup method is unnecessary, and could maybe be removed.
+					m_physicsWrapDatas[id].requiresManualWrapping = true;
+					if(!doManualWrapping)
+						doManualWrapping = true;
+				}
+			}
+		}
+		SyncClones();
+
+		if(doManualWrapping)
+		{
+			// De-activate bodies flagged for manual wrap
+			for(unsigned id = 0; id < WORLD_MAX_ENTITIES; ++id)
+				if(HasPhysics(id) && IsActive(id))
+					if(m_physicsWrapDatas[id].requiresManualWrapping)
+							m_physicsComponents[id].mainBody.b2BodyPtr->SetActive(false);
+			EmptyPhysicsStep();
+
+			// Manual wraps
+			for(unsigned id = 0; id < WORLD_MAX_ENTITIES; ++id)
+				if(HasPhysics(id) && IsActive(id))
+					if(m_physicsWrapDatas[id].requiresManualWrapping)
+					{
+						const b2Transform& currentTransform{ m_physicsComponents[id].mainBody.b2BodyPtr->GetTransform() };
+						b2Vec2 translation;
+						if(m_physicsWrapDatas[id].crossedLeftBound)
+							translation.x = m_worldDimensions.x;
+						else if(m_physicsWrapDatas[id].crossedRightBound)
+							translation.x = -m_worldDimensions.x;
+						else
+							translation.x = 0.0f;
+
+						if(m_physicsWrapDatas[id].crossedLowerBound)
+							translation.y = m_worldDimensions.y;
+						else if(m_physicsWrapDatas[id].crossedRightBound)
+							translation.y = -m_worldDimensions.y;
+						else
+							translation.y = 0.0f;
+
+						if(translation != b2Vec2_zero)
+						{
+							// Wrap entity 
+							b2Vec2 wrappedPosition{ m_physicsComponents[id].mainBody.b2BodyPtr->GetPosition() + translation };
+							m_physicsComponents[id].mainBody.b2BodyPtr->SetTransform(wrappedPosition, currentTransform.q.GetAngle());
+
+							// Re-activate
+							m_physicsComponents[id].mainBody.b2BodyPtr->SetActive(true);
+							m_physicsWrapDatas[id].requiresManualWrapping = false;
+
+							// Wrap saved states
+							m_lastTransforms[id].p += translation;
+							m_smoothedTransforms[id].p += translation;
+
+							// Notify wrap listener
+							if(m_wrappedEntityListenerPtr)
+								m_wrappedEntityListenerPtr->EntityWrapped(id, translation);
+						}
+					}
+		}
+		SyncClones();
+	}
+	//+---------------------------------\-------------------------------------
+	//|  GetCloneSectionFromWrapData	| (private)
+	//\---------------------------------/
+	//	Called by WrapEntities().
+	//	If wrap data shows at least one boundary crossed, sets cloneSectionOut 
+	//		to the clone section that the entity wandered into and returns true.
+	//	Otherwise, return false to indicate no wrap is needed.
+	//+-----------------------------------------------------------------------
+	 bool World::GetCloneSectionFromWrapData(const PhysicsWrapData& wrapData, CloneSection& cloneSectionOut) const
+	{
+		 if(wrapData.crossedLeftBound)
+		 {
+			 if(wrapData.crossedLowerBound)
+				 cloneSectionOut = CloneSection::BOTTOM_LEFT;
+			 else if(wrapData.crossedUpperBound)
+				 cloneSectionOut = CloneSection::TOP_LEFT;
+			 else
+				 cloneSectionOut = CloneSection::LEFT;
+		 }
+		 else if(wrapData.crossedRightBound)
+		 {
+			 if(wrapData.crossedLowerBound)
+				 cloneSectionOut = CloneSection::BOTTOM_RIGHT;
+			 else if(wrapData.crossedUpperBound)
+				 cloneSectionOut = CloneSection::TOP_RIGHT;
+			 else
+				 cloneSectionOut = CloneSection::RIGHT;
+		 }
+		 else if(wrapData.crossedLowerBound)
+			 cloneSectionOut = CloneSection::BOTTOM;
+		 else if(wrapData.crossedUpperBound)
+			 cloneSectionOut = CloneSection::TOP;
+		 else
+			 return false;
+		 return true;
+	}
+	//+---------------------------------\-------------------------------------
+	//|     GetOpposingCloneSection     | (private)
+	//\---------------------------------/
+	//	Called by WrapEntities()
+	//+-----------------------------------------------------------------------
+	World::CloneSection World::GetOpposingCloneSection(CloneSection cloneSection) const
+	{
+		switch(cloneSection)
+		{
+		case CloneSection::BOTTOM_LEFT:  return CloneSection::TOP_RIGHT;
+		case CloneSection::BOTTOM:		 return CloneSection::TOP;
+		case CloneSection::BOTTOM_RIGHT: return CloneSection::TOP_LEFT;
+		case CloneSection::RIGHT:		 return CloneSection::LEFT;
+		case CloneSection::TOP_RIGHT:	 return CloneSection::BOTTOM_LEFT;
+		case CloneSection::TOP:			 return CloneSection::BOTTOM;
+		case CloneSection::TOP_LEFT:	 return CloneSection::BOTTOM_RIGHT;
+		case CloneSection::LEFT: default: return CloneSection::RIGHT;
+		}
+	}
+	void World::SwitchB2Bodies(Body& body1, Body& body2)
+	{
+		std::swap(body1.b2BodyPtr, body2.b2BodyPtr);
+		body1.b2BodyPtr->SetUserData(&body1);
+		body2.b2BodyPtr->SetUserData(&body2);
+	}
+	void World::SmoothStates(float timestepAlpha)
+	{
+		// Use current transform for static bodies, otherwise use interpolated transform
+		for(unsigned id = 0; id < WORLD_MAX_ENTITIES; ++id)
+			if(HasPhysics(id) && IsActive(id))
+			{
+				if(m_physicsComponents[id].mainBody.b2BodyPtr->GetType() == b2_staticBody)
+					m_smoothedTransforms[id] = m_physicsComponents[id].mainBody.b2BodyPtr->GetTransform();
+				else
+					m_smoothedTransforms[id] = d2d::Lerp(m_lastTransforms[id], m_physicsComponents[id].mainBody.b2BodyPtr->GetTransform(), timestepAlpha);
+			}
+
+		m_particleSystem.SmoothStates(timestepAlpha);
+	}
+	//+------------------------\----------------------------------
+	//|	  Physics Callbacks	   |
+	//\------------------------/----------------------------------
+	bool World::ShouldCollide(b2Fixture* fixturePtr1, b2Fixture* fixturePtr2)
+	{
+		SDL_assert(fixturePtr1 && fixturePtr2 && "Box2D Bug");
+
+		b2Body* b2BodyPtr1{ fixturePtr1->GetBody() };
+		b2Body* b2BodyPtr2{ fixturePtr2->GetBody() };
+		SDL_assert(b2BodyPtr1 && b2BodyPtr2 && "Box2D Bug");
+
+		Body* bodyPtr1{ (Body*)(b2BodyPtr1->GetUserData()) };
+		Body* bodyPtr2{ (Body*)(b2BodyPtr2->GetUserData()) };
+		SDL_assert(bodyPtr1 && bodyPtr2);
+		SDL_assert(bodyPtr1->b2BodyPtr && bodyPtr2->b2BodyPtr);
+
+		// Ignore disabled collisions
+		if(m_physicsComponents[bodyPtr1->entityID].disableCollisions || 
+			m_physicsComponents[bodyPtr2->entityID].disableCollisions)
+			return false;
+
+		// Ignore clone vs. clone collisions
+		if(WORLD_IGNORE_CLONE_VS_CLONE_COLLISIONS)
+			if(bodyPtr1->isClone && bodyPtr2->isClone)
+				return false;
+
+		// Ignore collisions with parents (if flag is set)
+		unsigned id1{ bodyPtr1->entityID };
+		unsigned id2{ bodyPtr2->entityID };
+		bool entity1IsParentOf2{ HasComponents(id2, COMPONENT_PARENT) && m_parentComponents[id2] == id1 };
+		bool entity2IsParentOf1{ HasComponents(id1, COMPONENT_PARENT) && m_parentComponents[id1] == id2 };
+		if((entity2IsParentOf1 && HasFlags(id1, FLAG_IGNORE_PARENT_COLLISIONS_UNTIL_FIRST_CONTACT_END)) ||
+			(entity1IsParentOf2 && HasFlags(id2, FLAG_IGNORE_PARENT_COLLISIONS_UNTIL_FIRST_CONTACT_END)))
+			return false;
+		else
+			return ShouldCollideDefaultFiltering(fixturePtr1->GetFilterData(), fixturePtr2->GetFilterData());
+	}
+	bool World::ShouldCollideDefaultFiltering(const b2Filter& filter1, const b2Filter& filter2) const
+	{
+		if(filter1.groupIndex == filter2.groupIndex && filter1.groupIndex != 0)
+			return filter1.groupIndex > 0;
+		else
+			return (filter1.maskBits & filter2.categoryBits) != 0 &&
+					(filter1.categoryBits & filter2.maskBits) != 0;
+	}
+	void World::BeginContact(b2Contact* contactPtr)
+	{	}
+	void World::PreSolve(b2Contact* contactPtr, const b2Manifold* oldManifoldPtr)
+	{	}
+	void World::PostSolve(b2Contact* contactPtr, const b2ContactImpulse* impulsePtr)
+	{
+		SDL_assert(contactPtr && impulsePtr && "Box2D Bug");
+
+		b2Fixture* fixturePtr1{ contactPtr->GetFixtureA() };
+		b2Fixture* fixturePtr2{ contactPtr->GetFixtureB() };
+		SDL_assert(fixturePtr1 && fixturePtr2 && "Box2D Bug");
+
+		b2Body* b2BodyPtr1{ fixturePtr1->GetBody() };
+		b2Body* b2BodyPtr2{ fixturePtr2->GetBody() };
+		SDL_assert(b2BodyPtr1 && b2BodyPtr2 && "Box2D Bug");
+
+		Body* bodyPtr1{ (Body*)(b2BodyPtr1->GetUserData()) };
+		Body* bodyPtr2{ (Body*)(b2BodyPtr2->GetUserData()) };
+		SDL_assert(bodyPtr1 && bodyPtr2);
+		SDL_assert(bodyPtr1->b2BodyPtr && bodyPtr2->b2BodyPtr);
+		if(bodyPtr1->isClone && bodyPtr2->isClone)
+			return;
+
+		b2Manifold* manifoldPtr{ contactPtr->GetManifold() };
+		SDL_assert(manifoldPtr && "Box2D Bug");
+
+		int numManifoldPoints{ manifoldPtr->pointCount };
+		SDL_assert(numManifoldPoints >= 0 && numManifoldPoints <= b2_maxManifoldPoints && "Box2D Bug");
+
+		std::stringstream damageLog;
+		if(m_settings.damageLogging)
+			damageLog << "PostSolve: Impulses(" << numManifoldPoints << "): ";
+
+		float impulse{ 0.0f };
+		for(int i = 0; i < numManifoldPoints; ++i)
+		{
+			if(m_settings.addImpulsesForDamages)
+				impulse += impulsePtr->normalImpulses[i];
+			else
+				impulse = std::max(impulse, impulsePtr->normalImpulses[i]);
+			if(m_settings.damageLogging)
+				damageLog << impulsePtr->normalImpulses[i] << ' ';
+		}
+		if(m_settings.damageLogging)
+		{
+			if(m_settings.addImpulsesForDamages)
+				damageLog << "Total Impulse: " << impulse;
+			else
+				damageLog << "Max Impulse: " << impulse;
+			
+			damageLog << "     IDs: " << bodyPtr1->entityID;
+			if(bodyPtr1->isClone)
+				damageLog << "(clone)";
+			damageLog << " and " << bodyPtr2->entityID;
+			if(bodyPtr2->isClone)
+				damageLog << "(clone)";
+			damageLog << '\n';
+		}
+
+		float totalDamage{ impulse * m_settings.damageToImpulseRatio };
+		if(totalDamage >= m_settings.minTotalCollisionDamage)
+		{
+			if(m_settings.damageLogging)
+				damageLog << "     Total Damage: " << std::setw(8) << totalDamage;
+			float damage1, damage2;
+			damage1 = damage2 = 0.5f * totalDamage;
+			if(!bodyPtr1->isClone)
+			{
+				AdjustHealth(bodyPtr1->entityID, -damage1);
+				if(m_settings.damageLogging)
+					damageLog << " Damage: " << damage1 << " on entity " << bodyPtr1->entityID;
+			}
+			if(!bodyPtr2->isClone)
+			{
+				AdjustHealth(bodyPtr2->entityID, -damage2);
+				if(m_settings.damageLogging)
+					damageLog << " Damage: " << damage2 << " on entity " << bodyPtr2->entityID;
+			}
+			if(m_settings.damageLogging)
+				damageLog << '\n';
+		}
+		if(m_settings.damageLogging)
+			d2LogInfo << damageLog.str();
+	}
+	void World::EndContact(b2Contact* contactPtr)
+	{
+		// Establish the pair of bodies in contact
+		SDL_assert(contactPtr && "Box2D Bug");
+		std::array<Body*, 2> bodyPtrs{ 
+			(Body*)(contactPtr->GetFixtureA()->GetBody()->GetUserData()),
+			(Body*)(contactPtr->GetFixtureB()->GetBody()->GetUserData()) };
+		SDL_assert(bodyPtrs[0] && bodyPtrs[1]);
+
+		// COMPONENT_DESTRUCTION_DELAY_ON_CONTACT
+		for(Body* bodyPtr : bodyPtrs)
+			if(!bodyPtr->isClone && HasComponents(bodyPtr->entityID, COMPONENT_DESTRUCTION_DELAY_ON_CONTACT))
+			{
+				AddDestructionDelayComponent(bodyPtr->entityID, m_destructionDelayOnContactComponents[bodyPtr->entityID]);
+				RemoveComponents(bodyPtr->entityID, COMPONENT_DESTRUCTION_DELAY_ON_CONTACT);
+			}
+
+		// COMPONENT_DESTRUCTION_CHANCE_ON_CONTACT
+		for(Body* bodyPtr : bodyPtrs)
+			if(!bodyPtr->isClone && HasComponents(bodyPtr->entityID, COMPONENT_DESTRUCTION_CHANCE_ON_CONTACT))
+				if(d2d::RandomFloatPercent() <= m_destructionChanceOnContactComponents[bodyPtr->entityID])
+					m_destroyBuffer.push(bodyPtr->entityID);
+
+		// FLAG_IGNORE_PARENT_COLLISIONS_UNTIL_FIRST_CONTACT_END
+		unsigned id1{ bodyPtrs[0]->entityID };
+		unsigned id2{ bodyPtrs[1]->entityID };
+		bool entity1IsParentOf2{ HasComponents(id2, COMPONENT_PARENT) && m_parentComponents[id2] == id1 };
+		bool entity2IsParentOf1{ HasComponents(id1, COMPONENT_PARENT) && m_parentComponents[id1] == id2 };
+		if(entity2IsParentOf1 && HasFlags(id1, FLAG_IGNORE_PARENT_COLLISIONS_UNTIL_FIRST_CONTACT_END)) 
+			SetFlags(id1, FLAG_IGNORE_PARENT_COLLISIONS_UNTIL_FIRST_CONTACT_END, false);
+		if(entity1IsParentOf2 && HasFlags(id2, FLAG_IGNORE_PARENT_COLLISIONS_UNTIL_FIRST_CONTACT_END))
+			SetFlags(id2, FLAG_IGNORE_PARENT_COLLISIONS_UNTIL_FIRST_CONTACT_END, false);
+	}
+	void World::AdjustHealth(unsigned entityID, float healthChange)
+	{
+		if(HasComponents(entityID, COMPONENT_HEALTH))
+		{
+			if(m_healthComponents[entityID].hp + healthChange <= 0.0f)
+				ReduceHealthToZero(entityID);
+			else
+				m_healthComponents[entityID].hp += healthChange;
+		}
+	}
+	void World::ReduceHealthToZero(unsigned entityID)
+	{
+		if(HasComponents(entityID, COMPONENT_HEALTH))
+		{
+			if(m_healthComponents[entityID].hp > 0.0f)
+			{
+				m_healthComponents[entityID].deathDamage = m_healthComponents[entityID].hp;
+				m_healthComponents[entityID].hp = 0.0f;
+			}
+			m_destroyBuffer.push(entityID);
+		}
+	}
+	void World::CreateExplosionFromEntity(unsigned entityID, const ParticleExplosionComponent& particleExplosion)
+	{
+		unsigned numParticles{ particleExplosion.numParticles };
+		int numParticlesOverflowing{ (int)(m_particleSystem.firstUnusedIndex + numParticles) - (int)MAX_PARTICLES };
+		if(numParticlesOverflowing > 0)
+		{
+			d2LogError << "Error: Ran out of particles!";
+			numParticles -= numParticlesOverflowing;
+		}
+
+		float WEIGHT_OF_CURRENT_VELOCITY{ 0.2f };
+		b2Vec2 explosionVelocity{ d2d::Lerp(m_lastLinearVelocities[entityID], m_physicsComponents[entityID].mainBody.b2BodyPtr->GetLinearVelocity(), WEIGHT_OF_CURRENT_VELOCITY) };
+		float deathDamage{ HasComponents(entityID, COMPONENT_HEALTH) ? m_healthComponents[entityID].deathDamage : 0.0f };
+
+		// Add particles before modifying values
+		unsigned firstIndex{ m_particleSystem.firstUnusedIndex };
+		m_particleSystem.firstUnusedIndex += numParticles;
+
+		// Timers
+		for(unsigned i = firstIndex; i < m_particleSystem.firstUnusedIndex; ++i)
+		{
+			m_particleSystem.timers[i].age = 0.0f;
+			m_particleSystem.timers[i].fadeIn = particleExplosion.fadeIn;
+			m_particleSystem.timers[i].fadeOut = particleExplosion.fadeOut;
+			m_particleSystem.timers[i].lifetime = particleExplosion.lifetime;
+		}
+
+		// Movements and sizes
+		for(unsigned i = firstIndex; i < m_particleSystem.firstUnusedIndex; ++i)
+		{
+			// Random direction
+			float randomAngle{ d2d::RandomFloat({0.0f, d2d::TWO_PI}) };
+			b2Vec2 randomUnitVector{ cosf(randomAngle), sinf(randomAngle) };
+
+			// Random point in that direction
+			float diameter{ particleExplosion.relativeSize * (m_sizeComponents[entityID].x + m_sizeComponents[entityID].y) * 0.5f };
+			float randomRadius{ d2d::RandomFloat({0.0f, 0.5f * diameter}) };
+			m_particleSystem.physics[i].position = randomRadius * randomUnitVector + m_smoothedTransforms[entityID].p;
+
+			// Random relativeSize
+			int randomSizeIndex{ d2d::RandomInt(particleExplosion.sizeIndexRange) };
+			m_particleSystem.pointSizeIndices[i] = randomSizeIndex;
+
+			// Speed based on relativeSize
+			float percentOfWayToMaxSpeed;
+			if(particleExplosion.sizeIndexRange.GetSize() == 0)
+				percentOfWayToMaxSpeed = 1.0f;
+			else
+				percentOfWayToMaxSpeed = 1.0f - ((float)(randomSizeIndex - particleExplosion.sizeIndexRange.GetMin()) / (float)(particleExplosion.sizeIndexRange.GetSize()));
+			float speed{ (percentOfWayToMaxSpeed * (particleExplosion.speedRange.GetSize())) + particleExplosion.speedRange.GetMin() };
+
+			// Speed increased proportional to damage
+			if(particleExplosion.damageBasedSpeedIncreaseFactor > 0.0f)
+				speed += d2d::RandomFloat({ 0.0f, particleExplosion.damageBasedSpeedIncreaseFactor * deathDamage });
+
+			// Vary speed and angle randomly and factor in the general velocity of the explosion
+			const float maxSpeedFluctuationPercent{ 0.2f };
+			const float maxAngleFluctuation{ d2d::PI_OVER_SIX };
+			float randomSpeedFluctuationFactor{ d2d::RandomFloat({1.0f - maxSpeedFluctuationPercent, 1.0f + maxSpeedFluctuationPercent}) };
+			float randomAngleFluctuation{ d2d::RandomFloat({-maxAngleFluctuation, maxAngleFluctuation}) };
+			randomAngle += randomAngleFluctuation;
+			randomUnitVector.Set(cosf(randomAngle), sinf(randomAngle));
+			m_particleSystem.physics[i].velocity = randomSpeedFluctuationFactor * speed * randomUnitVector + explosionVelocity;
+		}
+			
+		// Layers
+		for(unsigned i = firstIndex; i < m_particleSystem.firstUnusedIndex; ++i)
+		{
+			int newLayer{ m_drawLayerComponents[entityID] };
+			d2d::RandomBool() ? ++newLayer : --newLayer;
+			d2d::Clamp(newLayer, m_settings.drawLayerRange);
+			m_particleSystem.layers[i] = newLayer;
+		}
+
+		// Colors
+		for(unsigned i = firstIndex; i < m_particleSystem.firstUnusedIndex; ++i)
+			m_particleSystem.colors[i] = particleExplosion.colorRange.Lerp( d2d::RandomFloatPercent() );
+	}
+	//+------------------------\----------------------------------
+	//|	 Clone-aware modifiers |
+	//\------------------------/----------------------------------
+	void World::SetTransform(unsigned entityID, const b2Vec2& position, float angle)
+	{
+		if(HasPhysics(entityID))
+		{
+			m_physicsComponents[entityID].mainBody.b2BodyPtr->SetTransform(position, angle);
+			m_lastTransforms[entityID] = m_smoothedTransforms[entityID] = m_physicsComponents[entityID].mainBody.b2BodyPtr->GetTransform();
+			for(const CloneBody& cloneBody : m_physicsComponents[entityID].cloneBodyList)
+				cloneBody.b2BodyPtr->SetTransform(position + GetCloneOffset(cloneBody.section), angle);
+		}
+	}
+	void World::SetLinearVelocity(unsigned entityID, const b2Vec2& velocity)
+	{
+		if(HasPhysics(entityID))
+		{
+			m_physicsComponents[entityID].mainBody.b2BodyPtr->SetLinearVelocity(velocity);
+			for(const CloneBody& cloneBody : m_physicsComponents[entityID].cloneBodyList)
+				cloneBody.b2BodyPtr->SetLinearVelocity(velocity);
+		}
+	}
+	void World::SetAngularVelocity(unsigned entityID, float angularVelocity)
+	{
+		if(HasPhysics(entityID))
+		{
+			m_physicsComponents[entityID].mainBody.b2BodyPtr->SetAngularVelocity(angularVelocity);
+			for(const CloneBody& cloneBody : m_physicsComponents[entityID].cloneBodyList)
+				cloneBody.b2BodyPtr->SetAngularVelocity(angularVelocity);
+		}
+	}
+	void World::Activate(unsigned entityID)
+	{
+		SetFlags(entityID, FLAG_ACTIVE, true);
+		if(HasPhysics(entityID))
+		{
+			m_physicsComponents[entityID].mainBody.b2BodyPtr->SetActive(true);
+			for(const CloneBody& cloneBody : m_physicsComponents[entityID].cloneBodyList)
+				cloneBody.b2BodyPtr->SetActive(true);
+		}
+	}
+	void World::Deactivate(unsigned entityID)
+	{
+		SetFlags(entityID, FLAG_ACTIVE, false);
+		if(HasPhysics(entityID))
+		{
+			m_physicsComponents[entityID].mainBody.b2BodyPtr->SetActive(false);
+			for(const CloneBody& cloneBody : m_physicsComponents[entityID].cloneBodyList)
+				cloneBody.b2BodyPtr->SetActive(false);
+		}
+	}
+	void World::ApplyForceToCenter(unsigned entityID, const b2Vec2& force)
+	{
+		if(HasPhysics(entityID))
+		{
+			m_physicsComponents[entityID].mainBody.b2BodyPtr->ApplyForceToCenter(force, true);
+			for(const CloneBody& cloneBody : m_physicsComponents[entityID].cloneBodyList)
+				cloneBody.b2BodyPtr->ApplyForceToCenter(force, true);
+		}
+	}
+	void World::ApplyForceToLocalPoint(unsigned entityID, const b2Vec2& force, const b2Vec2& localPoint)
+	{
+		if(HasPhysics(entityID))
+		{
+			m_physicsComponents[entityID].mainBody.b2BodyPtr->ApplyForce(force, m_physicsComponents[entityID].mainBody.b2BodyPtr->GetWorldPoint(localPoint), true);
+			for(const CloneBody& cloneBody : m_physicsComponents[entityID].cloneBodyList)
+				cloneBody.b2BodyPtr->ApplyForce(force, cloneBody.b2BodyPtr->GetWorldPoint(localPoint), true);
+		}
+	}
+	void World::ApplyForceToWorldPoint(unsigned entityID, const b2Vec2& force, const b2Vec2& worldPoint)
+	{
+		if(HasPhysics(entityID))
+		{
+			m_physicsComponents[entityID].mainBody.b2BodyPtr->ApplyForce(force, worldPoint, true);
+			b2Vec2 localPoint{ m_physicsComponents[entityID].mainBody.b2BodyPtr->GetLocalPoint(worldPoint) };
+			for(const CloneBody& cloneBody : m_physicsComponents[entityID].cloneBodyList)
+				cloneBody.b2BodyPtr->ApplyForce(force, cloneBody.b2BodyPtr->GetWorldPoint(localPoint), true);
+		}
+	}
+	void World::ApplyTorque(unsigned entityID, float torque)
+	{
+		if(HasPhysics(entityID))
+		{
+			m_physicsComponents[entityID].mainBody.b2BodyPtr->ApplyTorque(torque, true);
+			for(const CloneBody& cloneBody : m_physicsComponents[entityID].cloneBodyList)
+				cloneBody.b2BodyPtr->ApplyTorque(torque, true);
+		}
+	}
+	void World::ApplyLinearImpulseToCenter(unsigned entityID, const b2Vec2& impulse)
+	{
+		if(HasPhysics(entityID))
+		{
+			m_physicsComponents[entityID].mainBody.b2BodyPtr->ApplyLinearImpulseToCenter(impulse, true);
+			for(const CloneBody& cloneBody : m_physicsComponents[entityID].cloneBodyList)
+				cloneBody.b2BodyPtr->ApplyLinearImpulseToCenter(impulse, true);
+		}
+	}
+	void World::ApplyLinearImpulseToLocalPoint(unsigned entityID, const b2Vec2& impulse, const b2Vec2& localPoint)
+	{
+		if(HasPhysics(entityID))
+		{
+			m_physicsComponents[entityID].mainBody.b2BodyPtr->ApplyLinearImpulse(impulse, m_physicsComponents[entityID].mainBody.b2BodyPtr->GetWorldPoint(localPoint), true);
+			for(const CloneBody& cloneBody : m_physicsComponents[entityID].cloneBodyList)
+				cloneBody.b2BodyPtr->ApplyLinearImpulse(impulse, cloneBody.b2BodyPtr->GetWorldPoint(localPoint), true);
+		}
+	}
+	void World::ApplyLinearImpulseToWorldPoint(unsigned entityID, const b2Vec2& impulse, const b2Vec2& worldPoint)
+	{
+		if(HasPhysics(entityID))
+		{
+			m_physicsComponents[entityID].mainBody.b2BodyPtr->ApplyLinearImpulse(impulse, worldPoint, true);
+			b2Vec2 localPoint{ m_physicsComponents[entityID].mainBody.b2BodyPtr->GetLocalPoint(worldPoint) };
+			for(const CloneBody& cloneBody : m_physicsComponents[entityID].cloneBodyList)
+				cloneBody.b2BodyPtr->ApplyLinearImpulse(impulse, cloneBody.b2BodyPtr->GetWorldPoint(localPoint), true);
+		}
+	}
+	void World::ApplyAngularImpulse(unsigned entityID, float impulse)
+	{
+		if(HasPhysics(entityID))
+		{
+			m_physicsComponents[entityID].mainBody.b2BodyPtr->ApplyAngularImpulse(impulse, true);
+			for(const CloneBody& cloneBody : m_physicsComponents[entityID].cloneBodyList)
+				cloneBody.b2BodyPtr->ApplyAngularImpulse(impulse, true);
+		}
+	}
+}
