@@ -76,7 +76,7 @@ namespace Space
 			initialFrameIndex{ initialFrame },
 			initiallyMovingForward{ forward }
 		{
-			SDL_assert(numFrames <= newFrameDefArray.size());
+			d2Assert(numFrames <= newFrameDefArray.size());
 			for(unsigned i = 0; i < numFrames; ++i)
 				frameDefs[i] = newFrameDefArray[i];
 		}

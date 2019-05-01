@@ -279,7 +279,7 @@ namespace Space
 	unsigned Game::CreateXLargeAsteroid(World& world, unsigned modelIndex, bool isRock,
 		const b2Vec2& position, float angle, const b2Vec2& velocity, float angularVelocity, bool activate)
 	{
-		SDL_assert(modelIndex < NUM_XLARGE_ASTEROID_MODELS);
+		d2Assert(modelIndex < NUM_XLARGE_ASTEROID_MODELS);
 		unsigned id;
 		{
 			float height{ XLARGE_ASTEROID_HEIGHT * XLARGE_ASTEROID_RELATIVE_HEIGHTS[modelIndex] };
@@ -299,7 +299,7 @@ namespace Space
 	unsigned Game::CreateLargeAsteroid(World& world, unsigned modelIndex, bool isRock,
 		const b2Vec2& position, float angle, const b2Vec2& velocity, float angularVelocity, bool activate)
 	{
-		SDL_assert(modelIndex < NUM_LARGE_ASTEROID_MODELS);
+		d2Assert(modelIndex < NUM_LARGE_ASTEROID_MODELS);
 		unsigned id;
 		{
 			float height{ LARGE_ASTEROID_HEIGHT * LARGE_ASTEROID_RELATIVE_HEIGHTS[modelIndex] };
@@ -319,7 +319,7 @@ namespace Space
 	unsigned Game::CreateMediumAsteroid(World& world, unsigned modelIndex, bool isRock,
 		const b2Vec2& position, float angle, const b2Vec2& velocity, float angularVelocity, bool activate)
 	{
-		SDL_assert(modelIndex < NUM_MEDIUM_ASTEROID_MODELS);
+		d2Assert(modelIndex < NUM_MEDIUM_ASTEROID_MODELS);
 		unsigned id;
 		{
 			float height{ MEDIUM_ASTEROID_HEIGHT * MEDIUM_ASTEROID_RELATIVE_HEIGHTS[modelIndex] };
@@ -339,7 +339,7 @@ namespace Space
 	unsigned Game::CreateSmallAsteroid(World& world, unsigned modelIndex, bool isRock,
 		const b2Vec2& position, float angle, const b2Vec2& velocity, float angularVelocity, bool activate)
 	{
-		SDL_assert(modelIndex < NUM_SMALL_ASTEROID_MODELS);
+		d2Assert(modelIndex < NUM_SMALL_ASTEROID_MODELS);
 		unsigned id;
 		{
 			float height{ SMALL_ASTEROID_HEIGHT * SMALL_ASTEROID_RELATIVE_HEIGHTS[modelIndex] };

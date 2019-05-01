@@ -118,10 +118,10 @@ namespace Space
 	void World::DrawAnimationFrame(const DrawAnimationComponent& drawAnimationComponent,
 		const b2Vec2& entitySize, const b2Vec2& position, float angle, const d2d::Color& colorFactor)
 	{
-		SDL_assert(drawAnimationComponent.numFrames <= WORLD_MAX_ANIMATION_FRAMES);
+		d2Assert(drawAnimationComponent.numFrames <= WORLD_MAX_ANIMATION_FRAMES);
 		if(drawAnimationComponent.numFrames > 0)
 		{
-			SDL_assert(drawAnimationComponent.currentFrameIndex < drawAnimationComponent.numFrames);
+			d2Assert(drawAnimationComponent.currentFrameIndex < drawAnimationComponent.numFrames);
 			unsigned frameIndex{ drawAnimationComponent.currentFrameIndex };
 			const Texture& currentTexture{ drawAnimationComponent.frames[frameIndex].texture };
 			b2Vec2 size{ currentTexture.relativeSize * entitySize };

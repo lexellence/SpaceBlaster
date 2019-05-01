@@ -109,7 +109,7 @@ namespace Space
 		while(b2BodyPtr) 
 		{
 			Body* bodyPtr{ (Body*)b2BodyPtr->GetUserData() };
-			SDL_assert(bodyPtr);
+			d2Assert(bodyPtr);
 
 			b2Vec2 relativePosition{ b2BodyPtr->GetPosition() - position };
 			float boundingCircleRadius;
@@ -144,7 +144,7 @@ namespace Space
 	//+-----------------------------------------------------------------------
 	const b2Transform& World::GetSmoothedTransform(unsigned entityID) const
 	{
-		SDL_assert(HasPhysics(entityID));
+		d2Assert(HasPhysics(entityID));
 		return m_smoothedTransforms[entityID];
 	}	
 	//+-------------------------\---------------------------------------------
@@ -154,7 +154,7 @@ namespace Space
 	//+-----------------------------------------------------------------------
 	const b2Vec2& World::GetLinearVelocity(unsigned entityID) const
 	{
-		SDL_assert(HasPhysics(entityID));
+		d2Assert(HasPhysics(entityID));
 		return m_physicsComponents[entityID].mainBody.b2BodyPtr->GetLinearVelocity();
 	}
 	//+-------------------------\---------------------------------------------
@@ -164,7 +164,7 @@ namespace Space
 	//+-----------------------------------------------------------------------
 	float World::GetAngularVelocity(unsigned entityID) const
 	{
-		SDL_assert(HasPhysics(entityID));
+		d2Assert(HasPhysics(entityID));
 		return m_physicsComponents[entityID].mainBody.b2BodyPtr->GetAngularVelocity();
 	}
 	//+-------------------------\---------------------------------------------
@@ -174,7 +174,7 @@ namespace Space
 	//+-----------------------------------------------------------------------
 	const b2Vec2& World::GetLocalCenterOfMass(unsigned entityID) const
 	{
-		SDL_assert(HasPhysics(entityID));
+		d2Assert(HasPhysics(entityID));
 		return m_physicsComponents[entityID].mainBody.b2BodyPtr->GetLocalCenter();
 	}
 	//+---------------------\-------------------------------------------------
@@ -184,7 +184,7 @@ namespace Space
 	//+-----------------------------------------------------------------------
 	const b2Vec2& World::GetWorldCenter(unsigned entityID) const
 	{
-		SDL_assert(HasPhysics(entityID));
+		d2Assert(HasPhysics(entityID));
 		return m_physicsComponents[entityID].mainBody.b2BodyPtr->GetWorldCenter();
 	}
 

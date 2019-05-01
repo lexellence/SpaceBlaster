@@ -28,7 +28,7 @@ namespace Space
 		// Calculate the number of physics steps to take
 		float stepTime{ 1.0f / m_settings.stepsPerSecond };
 		int numSteps{ (int)std::floor(m_timestepAccumulator / stepTime) };
-		SDL_assert(numSteps >= 0);
+		d2Assert(numSteps >= 0);
 
 		// Reduce the accumulator by the amount of time we are going to use
 		if(numSteps > 0)
@@ -151,7 +151,7 @@ namespace Space
 				{
 					// Calculate and apply thrust force
 					float sumAccelerations{ 0.0f };
-					SDL_assert(m_thrusterComponents[id].numSlots <= WORLD_MAX_THRUSTER_SLOTS);
+					d2Assert(m_thrusterComponents[id].numSlots <= WORLD_MAX_THRUSTER_SLOTS);
 					for(unsigned i = 0; i < m_thrusterComponents[id].numSlots; ++i)
 						if(m_thrusterComponents[id].thrusters[i].enabled && !m_thrusterComponents[id].thrusters[i].temporarilyDisabled)
 							sumAccelerations += m_thrusterComponents[id].thrusters[i].acceleration;
@@ -267,7 +267,7 @@ namespace Space
 		if(drawAnimationComponent.type != AnimationType::NOT_ANIMATED &&
 			drawAnimationComponent.numFrames > 0)
 			{
-				SDL_assert(drawAnimationComponent.numFrames <= WORLD_MAX_ANIMATION_FRAMES);
+				d2Assert(drawAnimationComponent.numFrames <= WORLD_MAX_ANIMATION_FRAMES);
 				Frame& currentFrame{ drawAnimationComponent.frames[drawAnimationComponent.currentFrameIndex] };
 				currentFrame.frameTimeAccumulator += dt;
 				if(currentFrame.frameTimeAccumulator >= currentFrame.frameTime)
@@ -396,7 +396,7 @@ namespace Space
 				// Over-write clone locations
 				while(!locationsNeedingHomes.empty())
 				{
-					SDL_assert(!availableIndices.empty() && "No available index for location needing a home.");
+					d2Assert(!availableIndices.empty() && "No available index for location needing a home.");
 					m_physicsComponents[id].cloneBodyList[availableIndices.front()].section = locationsNeedingHomes.front();
 					locationsNeedingHomes.pop();
 					availableIndices.pop();
@@ -692,16 +692,16 @@ namespace Space
 	//\------------------------/----------------------------------
 	bool World::ShouldCollide(b2Fixture* fixturePtr1, b2Fixture* fixturePtr2)
 	{
-		SDL_assert(fixturePtr1 && fixturePtr2 && "Box2D Bug");
+		d2Assert(fixturePtr1 && fixturePtr2 && "Box2D Bug");
 
 		b2Body* b2BodyPtr1{ fixturePtr1->GetBody() };
 		b2Body* b2BodyPtr2{ fixturePtr2->GetBody() };
-		SDL_assert(b2BodyPtr1 && b2BodyPtr2 && "Box2D Bug");
+		d2Assert(b2BodyPtr1 && b2BodyPtr2 && "Box2D Bug");
 
 		Body* bodyPtr1{ (Body*)(b2BodyPtr1->GetUserData()) };
 		Body* bodyPtr2{ (Body*)(b2BodyPtr2->GetUserData()) };
-		SDL_assert(bodyPtr1 && bodyPtr2);
-		SDL_assert(bodyPtr1->b2BodyPtr && bodyPtr2->b2BodyPtr);
+		d2Assert(bodyPtr1 && bodyPtr2);
+		d2Assert(bodyPtr1->b2BodyPtr && bodyPtr2->b2BodyPtr);
 
 		// Ignore disabled collisions
 		if(m_physicsComponents[bodyPtr1->entityID].disableCollisions || 
@@ -738,28 +738,28 @@ namespace Space
 	{	}
 	void World::PostSolve(b2Contact* contactPtr, const b2ContactImpulse* impulsePtr)
 	{
-		SDL_assert(contactPtr && impulsePtr && "Box2D Bug");
+		d2Assert(contactPtr && impulsePtr && "Box2D Bug");
 
 		b2Fixture* fixturePtr1{ contactPtr->GetFixtureA() };
 		b2Fixture* fixturePtr2{ contactPtr->GetFixtureB() };
-		SDL_assert(fixturePtr1 && fixturePtr2 && "Box2D Bug");
+		d2Assert(fixturePtr1 && fixturePtr2 && "Box2D Bug");
 
 		b2Body* b2BodyPtr1{ fixturePtr1->GetBody() };
 		b2Body* b2BodyPtr2{ fixturePtr2->GetBody() };
-		SDL_assert(b2BodyPtr1 && b2BodyPtr2 && "Box2D Bug");
+		d2Assert(b2BodyPtr1 && b2BodyPtr2 && "Box2D Bug");
 
 		Body* bodyPtr1{ (Body*)(b2BodyPtr1->GetUserData()) };
 		Body* bodyPtr2{ (Body*)(b2BodyPtr2->GetUserData()) };
-		SDL_assert(bodyPtr1 && bodyPtr2);
-		SDL_assert(bodyPtr1->b2BodyPtr && bodyPtr2->b2BodyPtr);
+		d2Assert(bodyPtr1 && bodyPtr2);
+		d2Assert(bodyPtr1->b2BodyPtr && bodyPtr2->b2BodyPtr);
 		if(bodyPtr1->isClone && bodyPtr2->isClone)
 			return;
 
 		b2Manifold* manifoldPtr{ contactPtr->GetManifold() };
-		SDL_assert(manifoldPtr && "Box2D Bug");
+		d2Assert(manifoldPtr && "Box2D Bug");
 
 		int numManifoldPoints{ manifoldPtr->pointCount };
-		SDL_assert(numManifoldPoints >= 0 && numManifoldPoints <= b2_maxManifoldPoints && "Box2D Bug");
+		d2Assert(numManifoldPoints >= 0 && numManifoldPoints <= b2_maxManifoldPoints && "Box2D Bug");
 
 		std::stringstream damageLog;
 		if(m_settings.damageLogging)
@@ -819,11 +819,11 @@ namespace Space
 	void World::EndContact(b2Contact* contactPtr)
 	{
 		// Establish the pair of bodies in contact
-		SDL_assert(contactPtr && "Box2D Bug");
+		d2Assert(contactPtr && "Box2D Bug");
 		std::array<Body*, 2> bodyPtrs{ 
 			(Body*)(contactPtr->GetFixtureA()->GetBody()->GetUserData()),
 			(Body*)(contactPtr->GetFixtureB()->GetBody()->GetUserData()) };
-		SDL_assert(bodyPtrs[0] && bodyPtrs[1]);
+		d2Assert(bodyPtrs[0] && bodyPtrs[1]);
 
 		// COMPONENT_DESTRUCTION_DELAY_ON_CONTACT
 		for(Body* bodyPtr : bodyPtrs)
