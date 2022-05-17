@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bodydef version="1.0">
+	<bodies>{% for body in bodies %}
+		<body name="{{body.name}}" width="{{body.size.width|floatformat:3}}" height="{{body.size.height|floatformat:3}}">
+			<fixtureGroups>{% for fixture in body.fixtures %}
+				<fixtureGroup density="{{fixture.density|floatformat:3}}" friction="{{fixture.friction|floatformat:3}}" restitution="{{fixture.restitution|floatformat:3}}"
+					filter_categoryBits="{{fixture.filter_categoryBits}}" filter_groupIndex="{{fixture.filter_groupIndex}}" filter_maskBits="{{fixture.filter_maskBits}}"
+					type="{{fixture.type}}" isSensor="{{fixture.isSensor}}">{% if fixture.isCircle %}
+                    		<circle r="{{fixture.radius|floatformat:3}}" x="{{fixture.center.x|floatformat:3}}" y="{{fixture.center.y|floatformat:3}}"/>{% else %}
+					<polygons>{% for polygon in fixture.polygons %}
+                   			<polygon>{% for point in polygon %}
+							<point x="{{point.x|floatformat:3}}" y="{{point.y|floatformat:3}}"/>{% endfor %}
+						</polygon>{% endfor %}
+					</polygons>{% endif %}
+				</fixtureGroup>{% endfor %}
+			</fixtureGroups>
+		</body>{% endfor %}
+	</bodies>
+	<metadata>
+		<format>1</format>
+		<ptm_ratio>{{global.ptm_ratio|floatformat:3}}</ptm_ratio>
+	</metadata>
+</bodydef>
+
+
+

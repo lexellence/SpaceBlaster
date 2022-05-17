@@ -133,7 +133,7 @@ namespace Space
 	int World::GetDrawLayer(unsigned entityID) const
 	{
 		if(EntityExists(entityID))
-			return m_drawLayerComponents[entityID];
+			return m_drawAnimationComponents[entityID].layer;
 		else
 			return 0;
 	}

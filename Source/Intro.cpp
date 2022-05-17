@@ -21,7 +21,7 @@ namespace Space
 		m_titlePosition.Set(0.5f, m_titleStartScreenY);
 		m_titleSpeedScreensPerSecond = 0.0f;
 		m_authorFadingIn = false;
-		m_authorColor.SetFloat(0.5f, 0.0f, 0.7f, m_authorStartAlpha);
+		m_authorTextStyle.color.SetFloat(0.5f, 0.0f, 0.7f, m_authorStartAlpha);
 		m_authorFadeDelayElapsed = 0.0f;
 	}
 	void Intro::ProcessEvent(const SDL_Event& event)
@@ -39,7 +39,7 @@ namespace Space
 				m_titlePosition.y = m_titleFinalScreenY;
 
 				m_authorFadingIn = false;
-				m_authorColor.alpha = m_authorFinalAlpha;
+				m_authorTextStyle.color.alpha = m_authorFinalAlpha;
 				m_animationsComplete = true;
 			}
 		}
@@ -76,13 +76,13 @@ namespace Space
 				if(m_authorFadeDelayElapsed >= m_authorFadeDelay)
 				{
 					// Fade text in
-					m_authorColor.alpha += m_authorFadesPerSecond * dt;
+					m_authorTextStyle.color.alpha += m_authorFadesPerSecond * dt;
 
 					// If the text's alpha has reached it's destination within the fade tolerance
-					if((m_authorColor.alpha + m_fadeTolerance) > m_authorFinalAlpha)
+					if((m_authorTextStyle.color.alpha + m_fadeTolerance) > m_authorFinalAlpha)
 					{
 						// Set text's final destination
-						m_authorColor.alpha = m_authorFinalAlpha;
+						m_authorTextStyle.color.alpha = m_authorFinalAlpha;
 
 						// End animation
 						m_authorFadingIn = false;
@@ -107,17 +107,17 @@ namespace Space
 		d2d::Window::SetCameraRect({ b2Vec2_zero, resolution });
 
 		// Draw title
-		d2d::Window::SetColor(m_titleColor);
+		d2d::Window::SetColor(m_titleTextStyle.color);
 		d2d::Window::PushMatrix();
 		d2d::Window::Translate(m_titlePosition * resolution);
-		d2d::Window::DrawString(m_title, m_titleAlignment, m_titleFontSize * resolution.x, m_titleFontID);
+		d2d::Window::DrawString(m_title, m_titleAlignment, m_titleTextStyle.size * resolution.x, m_titleTextStyle.font);
 		d2d::Window::PopMatrix();
 
 		// Draw author
-		d2d::Window::SetColor(m_authorColor);
+		d2d::Window::SetColor(m_authorTextStyle.color);
 		d2d::Window::PushMatrix();
 		d2d::Window::Translate(m_authorPosition * resolution);
-		d2d::Window::DrawString(m_author, m_authorAlignment, m_authorFontSize * resolution.x, m_authorFontID);
+		d2d::Window::DrawString(m_author, m_authorAlignment, m_authorTextStyle.size * resolution.x, m_authorTextStyle.font);
 		d2d::Window::PopMatrix();
 	}
 }

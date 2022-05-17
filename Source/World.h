@@ -33,75 +33,14 @@ namespace Space
 		d2d::Color color;
 		unsigned pointSizeIndex{ 1 };
 	};
-	struct Texture
-	{
-		unsigned resourceID;
-		b2Vec2 relativeSize{ 1.0f, 1.0f };
-		b2Vec2 relativePosition{ b2Vec2_zero };
-		float relativeAngle{ 0.0f };
-		d2d::Color tintColor{ d2d::WHITE_OPAQUE };
-		bool flipX{ false };
-		bool flipY{ false };
-	};
-	struct FrameDef
-	{
-		float frameTime;
-		Texture texture;
-	};
-	struct Frame
-	{
-		float frameTime;
-		float frameTimeAccumulator;
-		Texture texture;
-	};
-	enum class AnimationType
-	{
-		NOT_ANIMATED, SINGLE_PASS, LOOP, PENDULUM
-	};
-	typedef std::array<Frame, WORLD_MAX_ANIMATION_FRAMES> FrameArray;
-	typedef std::array<FrameDef, WORLD_MAX_ANIMATION_FRAMES> FrameDefArray;
-	struct AnimationDef
-	{
-		AnimationType type;
-		unsigned numFrames;
-		unsigned initialFrameIndex;
-		bool initiallyMovingForward;
-		FrameDefArray frameDefs;
-
-		AnimationDef() = delete;
-		AnimationDef(AnimationType newType, unsigned frames, 
-			unsigned initialFrame, bool forward, const FrameDefArray& newFrameDefArray)
-		  : type{ newType }, 
-			numFrames{ frames },
-			initialFrameIndex{ initialFrame },
-			initiallyMovingForward{ forward }
-		{
-			d2Assert(numFrames <= newFrameDefArray.size());
-			for(unsigned i = 0; i < numFrames; ++i)
-				frameDefs[i] = newFrameDefArray[i];
-		}
-		AnimationDef(const Texture& texture)
-		  : type{ AnimationType::NOT_ANIMATED }, 
-			numFrames{ 1 },
-			initialFrameIndex{ 0 },
-			initiallyMovingForward{ true }
-		{
-			frameDefs[0].texture = texture;
-		}
-	};
 	struct DrawAnimationComponent
 	{
-		void Init(const AnimationDef* const animationDefPtr);
-		AnimationType type;
-		int drawLayer;
-		unsigned numFrames;
-		unsigned currentFrameIndex;
-		bool movingForward;
-		FrameArray frames;
+		int layer;
+		d2d::Animation animation;
 	};
 	struct ProjectileDef
 	{
-		const AnimationDef* animationDefPtr{ nullptr };
+		const d2d::AnimationDef* animationDefPtr{ nullptr };
 		std::string modelName;
 		d2d::Material material;
 		b2Vec2 dimensions;
@@ -234,8 +173,8 @@ namespace Space
 		// Visual
 		void AddDrawRadarComponent(unsigned entityID, const DrawRadarComponent& radarComponent);
 		void AddDrawFixturesComponent(unsigned entityID, const DrawFixturesComponent& fixturesComponent);
-		void AddDrawAnimationComponent(unsigned entityID, const AnimationDef* const animationDefPtr);
-		void SetDrawLayer(unsigned entityID, int layer);
+		void AddDrawAnimationComponent(unsigned entityID, const d2d::AnimationDef* const animationDefPtr);
+		void SetAnimationLayer(unsigned entityID, int layer);
 
 		// Life and Death
 		void AddHealthComponent(unsigned entityID, float maxHP);
@@ -258,7 +197,7 @@ namespace Space
 
 		// Getting around
 		void AddThrusterComponent(unsigned entityID, unsigned numSlots, float initialFactor = 0.0f);
-		void AddThruster(unsigned entityID, unsigned slot, const AnimationDef* const animationDefPtr,
+		void AddThruster(unsigned entityID, unsigned slot, const d2d::AnimationDef* const animationDefPtr,
 			float acceleration, const b2Vec2& localRelativePosition);
 		void RemoveThruster(unsigned entityID, unsigned slot);
 		bool IsValidThrusterSlot(unsigned entityID, unsigned slot) const;
@@ -356,7 +295,7 @@ namespace Space
 		{
 			bool enabled;
 			bool temporarilyDisabled;
-			DrawAnimationComponent drawAnimationComponent;
+			d2d::Animation animation;
 			float acceleration;
 			b2Vec2 localRelativePosition;
 		};
@@ -430,7 +369,6 @@ namespace Space
 		void UpdateBrakeComponents();
 		void UpdateProjectileLauncherComponents(float dt, bool secondaryLaunchers);
 		void UpdateDrawAnimationComponents(float dt);
-		void UpdateDrawAnimationComponent(DrawAnimationComponent& drawAnimationComponent, float dt);
 
 		// Physics
 		void UpdatePhysics(float dt);
@@ -461,9 +399,7 @@ namespace Space
 		void DrawThrusterComponent(const ThrusterComponent& thrusterComponent, const b2Vec2& entitySize,
 			const b2Vec2& position, float angle);
 		void DrawAllAnimationComponents(int layer);
-		void DrawAnimationFrame(const DrawAnimationComponent& drawAnimationComponent,
-			const b2Vec2& entitySize, const b2Vec2& position, float angle, const d2d::Color& colorFactor = d2d::WHITE_OPAQUE);
-		void DrawTexture(unsigned textureID, const b2Vec2& size, const b2Vec2& position, float angle);
+		void DrawAnimation(const d2d::Animation& animation, const b2Vec2& size, const b2Vec2& position, float angle);
 		void DrawAllFixturesComponents(int layer);
 		void DrawFixtureList(b2Fixture* fixturePtr, const b2Vec2& position, float angle, bool fill);
 		void DrawAllHealthMeters();
@@ -518,7 +454,6 @@ namespace Space
 
 		ParticleSystem m_particleSystem;
 		ComponentArray< ParticleExplosionComponent > m_particleExplosionComponents;
-		ComponentArray< int > m_drawLayerComponents;
 		ComponentArray< DrawAnimationComponent > m_drawAnimationComponents;
 		ComponentArray< DrawFixturesComponent > m_drawFixtureComponents;
 		ComponentArray< DrawRadarComponent > m_drawRadarComponents;

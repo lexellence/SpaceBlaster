@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with TexturePacker https://www.codeandweb.com/texturepacker -->
+<!-- $TexturePacker:SmartUpdate:697b53e17a4a7b2dfc07d2d39d851389:f754d8b26190d5b2548a76ad85704e90:b8997a6ffb68cdb06c44127de0be9d5e$ -->
+<!--Format:
+n  => name of the sprite
+x  => sprite x pos in texture
+y  => sprite y pos in texture
+w  => sprite width (may be trimmed)
+h  => sprite height (may be trimmed)
+pX => x pos of the pivot point (relative to sprite width)
+pY => y pos of the pivot point (relative to sprite height)
+oX => sprite's x-corner offset (only available if trimmed)
+oY => sprite's y-corner offset (only available if trimmed)
+oW => sprite's original width (only available if trimmed)
+oH => sprite's original height (only available if trimmed)
+r => 'y' only set if sprite is rotated
+with polygon mode enabled:
+vertices   => points in sprite coordinate system (x0,y0,x1,y1,x2,y2, ...)
+verticesUV => points in sheet coordinate system (x0,y0,x1,y1,x2,y2, ...)
+triangles  => sprite triangulation, 3 vertex indices per triangle
+-->
+<TextureAtlas imagePath="asteroids.png" width="251" height="368">
+    <sprite n="asteroidlarge1.png" x="196" y="184" w="45" h="45" pX="0.5" pY="0.5"/>
+    <sprite n="asteroidlarge2.png" x="204" y="100" w="47" h="42" pX="0.5" pY="0.5"/>
+    <sprite n="asteroidmedium1.png" x="213" y="314" w="30" h="30" pX="0.5" pY="0.5"/>
+    <sprite n="asteroidmedium2.png" x="196" y="274" w="31" h="28" pX="0.5" pY="0.5"/>
+    <sprite n="asteroidsmall1.png" x="227" y="274" w="20" h="20" pX="0.5" pY="0.5"/>
+    <sprite n="asteroidsmall2.png" x="212" y="344" w="17" h="18" pX="0.5" pY="0.5" r="y"/>
+    <sprite n="asteroidxlarge1.png" x="0" y="100" w="102" h="84" pX="0.5" pY="0.5"/>
+    <sprite n="asteroidxlarge2.png" x="0" y="0" w="122" h="100" pX="0.5" pY="0.5"/>
+    <sprite n="asteroidxlarge3.png" x="0" y="284" w="91" h="84" pX="0.5" pY="0.5"/>
+    <sprite n="asteroidxlarge4.png" x="0" y="184" w="98" h="100" pX="0.5" pY="0.5" r="y"/>
+    <sprite n="rocklarge1.png" x="196" y="229" w="45" h="45" pX="0.5" pY="0.5"/>
+    <sprite n="rocklarge2.png" x="204" y="142" w="47" h="42" pX="0.5" pY="0.5"/>
+    <sprite n="rockmedium1.png" x="182" y="330" w="30" h="30" pX="0.5" pY="0.5"/>
+    <sprite n="rockmedium2.png" x="182" y="302" w="31" h="28" pX="0.5" pY="0.5"/>
+    <sprite n="rocksmall1.png" x="227" y="294" w="20" h="20" pX="0.5" pY="0.5"/>
+    <sprite n="rocksmall2.png" x="229" y="344" w="18" h="17" pX="0.5" pY="0.5"/>
+    <sprite n="rockxlarge1.png" x="102" y="100" w="102" h="84" pX="0.5" pY="0.5"/>
+    <sprite n="rockxlarge2.png" x="122" y="0" w="122" h="100" pX="0.5" pY="0.5"/>
+    <sprite n="rockxlarge3.png" x="91" y="284" w="91" h="84" pX="0.5" pY="0.5"/>
+    <sprite n="rockxlarge4.png" x="98" y="184" w="98" h="100" pX="0.5" pY="0.5" r="y"/>
+</TextureAtlas>

@@ -44,11 +44,6 @@ namespace Space
 		}
 		d2d::SeedRandomNumberGenerator();
 
-		//std::array<std::string,2> testString{"Test1","Test2"};
-		//d2LogFatal << "Init::testString=" << "Test1";
-		//d2d::Window::FontReference m_orbitronLightFont{ "Fonts\\OrbitronLight.otf" };
-		//d2LogFatal << "Init::testString=" << "Test2";
-
 		// Allocate AppState memory
 		m_introPtr = std::make_shared<Intro>();
 		m_mainMenuPtr = std::make_shared<MainMenu>();

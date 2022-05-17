@@ -17,7 +17,7 @@ namespace Space
 {
 	World::~World()
 	{
-		d2LogDebug << "World used " << m_highestActiveEntityCount << " / " << WORLD_MAX_ENTITIES << " entities";
+		d2LogDebug << "World used " << m_highestActiveEntityCount << " / " << WORLD_MAX_ENTITIES << " entities. ";
 		if(m_b2WorldPtr)
 		{
 			delete m_b2WorldPtr;
@@ -90,7 +90,7 @@ namespace Space
 				if(activate)
 					Activate(entityID);
 
-				m_drawLayerComponents[entityID] = drawLayer;
+				m_drawAnimationComponents[entityID].layer = drawLayer;
 				return entityID;
 			}
 		throw GameException{ "World ran out of entities" };
@@ -254,40 +254,37 @@ namespace Space
 		m_componentBits[entityID] |= COMPONENT_DRAW_FIXTURES;
 		m_drawFixtureComponents[entityID] = fixturesComponent;
 	}
-	void World::AddDrawAnimationComponent(unsigned entityID, const AnimationDef* const animationDefPtr)
+	void World::AddDrawAnimationComponent(unsigned entityID, const d2d::AnimationDef* const animationDefPtr)
 	{
 		d2Assert(entityID < WORLD_MAX_ENTITIES);
 		m_componentBits[entityID] |= COMPONENT_DRAW_ANIMATION;
-		m_drawAnimationComponents[entityID].Init(animationDefPtr);
+		m_drawAnimationComponents[entityID].animation.Init(animationDefPtr);
 	}	
-	//+--------------------------------\--------------------------------------
-	//|   LoadXML   | (private)
-	//\--------------------------------/--------------------------------------
-	void DrawAnimationComponent::Init(const AnimationDef* const animationDefPtr)
-	{
-		if(!animationDefPtr)
-		{
-			type = AnimationType::NOT_ANIMATED;
-			numFrames = 0;
-			return;
-		}
-		d2Assert(animationDefPtr->numFrames <= WORLD_MAX_ANIMATION_FRAMES);
-		type = animationDefPtr->type;
-		numFrames = animationDefPtr->numFrames;
-		currentFrameIndex = animationDefPtr->initialFrameIndex;
-		movingForward = animationDefPtr->initiallyMovingForward;
-		for(unsigned i = 0; i < animationDefPtr->numFrames; ++i)
-		{
-			frames[i].frameTime = animationDefPtr->frameDefs[i].frameTime;
-			frames[i].frameTimeAccumulator = 0.0f;
-			frames[i].texture = animationDefPtr->frameDefs[i].texture;
-		}
-	}
-	void World::SetDrawLayer(unsigned entityID, int layer)
+	//void DrawAnimationComponent::Init(const d2d::AnimationDef* const animationDefPtr)
+	//{
+		//if(!animationDefPtr)
+		//{
+		//	type = d2d::AnimationType::STATIC;
+		//	numFrames = 0;
+		//	return;
+		//}
+		//d2Assert(animationDefPtr->numFrames <= WORLD_MAX_ANIMATION_FRAMES);
+		//type = animationDefPtr->type;
+		//numFrames = animationDefPtr->numFrames;
+		//currentFrameIndex = animationDefPtr->initialFrameIndex;
+		//movingForward = animationDefPtr->initiallyMovingForward;
+		//for(unsigned i = 0; i < animationDefPtr->numFrames; ++i)
+		//{
+		//	frames[i].frameTime = animationDefPtr->frameDefs[i].frameTime;
+		//	frames[i].frameTimeAccumulator = 0.0f;
+		//	frames[i].sprite = animationDefPtr->frameDefs[i].sprite;
+		//}
+	//}
+	void World::SetAnimationLayer(unsigned entityID, int layer)
 	{
 		d2Assert(entityID < WORLD_MAX_ENTITIES);
 		d2d::Clamp(layer, m_settings.drawLayerRange);
-		m_drawLayerComponents[entityID] = layer;
+		m_drawAnimationComponents[entityID].layer = layer;
 	}
 	//+--------------------\--------------------------------------
 	//|	  Life and Death   |
@@ -416,14 +413,14 @@ namespace Space
 		for(unsigned i = 0; i < WORLD_MAX_THRUSTER_SLOTS; ++i)
 			thrusterComponent.thrusters[i].enabled = false;
 	}
-	void World::AddThruster(unsigned entityID, unsigned slot, const AnimationDef* const animationDefPtr,
+	void World::AddThruster(unsigned entityID, unsigned slot, const d2d::AnimationDef* const animationDefPtr,
 		float acceleration, const b2Vec2& localRelativePosition)
 	{
 		d2Assert(entityID < WORLD_MAX_ENTITIES);
 		d2Assert(IsValidThrusterSlot(entityID, slot));
 		m_thrusterComponents[entityID].thrusters[slot].enabled = true;
 		m_thrusterComponents[entityID].thrusters[slot].temporarilyDisabled = false;
-		m_thrusterComponents[entityID].thrusters[slot].drawAnimationComponent.Init(animationDefPtr);
+		m_thrusterComponents[entityID].thrusters[slot].animation.Init(animationDefPtr);
 		m_thrusterComponents[entityID].thrusters[slot].acceleration = acceleration;
 		m_thrusterComponents[entityID].thrusters[slot].localRelativePosition = localRelativePosition;
 	}

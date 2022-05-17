@@ -84,7 +84,7 @@ namespace Space
 		if(starfield.edgePaddingFactor < 0.0f) throw SettingOutOfRangeException{ "starfield.edgePaddingFactor" };
 		if(starfield.density < 0.0f) throw SettingOutOfRangeException{ "starfield.density" };
 		if(starfield.speedFactorRange.GetMin() < 0.0f) throw SettingOutOfRangeException{ "starfield.speedFactorRange[0]" };
-		if(!d2d::Window::VALID_POINT_SIZE_RANGE.Contains(starfield.pointSizeIndexRange)) throw SettingOutOfRangeException{ "starfield.pointSizeIndexRange" };
+		if(!d2d::Window::VALID_POINT_SIZES.Contains(starfield.pointSizeIndexRange)) throw SettingOutOfRangeException{ "starfield.pointSizeIndexRange" };
 		if(starfield.maxAlphaVariation < 0.0f) throw SettingOutOfRangeException{ "starfield.maxAlphaVariation" };
 		if(starfield.maxPointSizeIndexVariation < 0) throw SettingOutOfRangeException{ "starfield.maxPointSizeIndexVariation" };
 		//if(entityDefMap.empty()) throw SettingOutOfRangeException{ "starfield.entityDefMap" } ;

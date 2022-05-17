@@ -103,7 +103,7 @@ namespace Space
 		if(window.title.empty()) throw SettingOutOfRangeException{ "window.title" };
 		if(window.size[0] < 0) throw SettingOutOfRangeException{ "window.size[0]" };
 		if(window.size[1] < 0) throw SettingOutOfRangeException{ "window.size[1]" };
-		if(!d2d::Window::VALID_SAMPLE_RANGE.Contains(window.antiAliasingSamples))
+		if(!d2d::Window::VALID_ANTI_ALIASING_SAMPLES.Contains(window.antiAliasingSamples))
 			throw SettingOutOfRangeException{ "window.antiAliasingSamples" };
 
 		for(unsigned i = 0; i < window.colorChannelBits.size(); ++i)

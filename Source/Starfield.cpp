@@ -34,11 +34,11 @@ namespace Space
 
 			// Speed/relativeSize/color properties are proportional to each other
 			float randomPercent{ d2d::RandomFloatPercent() };
-			float weightedRandomPercent{ pow(randomPercent, 8) };
+			float weightedRandomPercent{ powf(randomPercent, 8) };
 			m_speedFactors[i] = d2d::Lerp(def.speedFactorRange, weightedRandomPercent);
 			m_pointSizeIndices[i] = (int)(d2d::Lerp((float)def.pointSizeIndexRange.GetMin(), (float)def.pointSizeIndexRange.GetMax(), weightedRandomPercent) + 0.5f);
 			int randomPointSizeIndexVariation{ d2d::RandomInt( {-def.maxPointSizeIndexVariation, def.maxPointSizeIndexVariation} ) };
-			m_pointSizeIndices[i] = d2d::GetClamped(m_pointSizeIndices[i] + randomPointSizeIndexVariation, d2d::Window::VALID_POINT_SIZE_RANGE);
+			m_pointSizeIndices[i] = d2d::GetClamped(m_pointSizeIndices[i] + randomPointSizeIndexVariation, d2d::Window::VALID_POINT_SIZES);
 			m_colors[i] = def.colorRange.Lerp(weightedRandomPercent);
 
 			float randomAlphaVariation = d2d::RandomFloat( {-def.maxAlphaVariation, def.maxAlphaVariation } );
@@ -55,7 +55,7 @@ namespace Space
 			{
 				// Move star proportional to viewport change, then wrap around the boundary
 				m_positions[i] -= m_speedFactors[i] * cameraChange;
-				m_positions[i] = d2d::WrapVec2InRect(m_positions[i], m_boundaryRect);
+				d2d::WrapVector(m_positions[i], m_boundaryRect);
 			}
 			m_cameraPosition = newCameraPosition;
 		}

@@ -162,8 +162,8 @@ namespace Space
 					ApplyForceToCenter(id, forceVec);
 
 					// Update thruster animations
-					for(unsigned i = 0; i < m_thrusterComponents[id].numSlots; ++i)
-						UpdateDrawAnimationComponent(m_thrusterComponents[id].thrusters[i].drawAnimationComponent, dt);
+					for (unsigned i = 0; i < m_thrusterComponents[id].numSlots; ++i)
+						m_thrusterComponents[id].thrusters[i].animation.Update(dt);
 				}
 	}
 	void World::UpdateSetThrustFactorAfterDelayComponents(float dt)
@@ -253,70 +253,71 @@ namespace Space
 		for(unsigned id = 0; id < WORLD_MAX_ENTITIES; ++id)
 			if(HasComponents(id, COMPONENT_DRAW_ANIMATION) && IsActive(id))
 			{
-				UpdateDrawAnimationComponent(m_drawAnimationComponents[id], dt);
-				bool notAnimated{ m_drawAnimationComponents[id].type == AnimationType::NOT_ANIMATED };
-				if(notAnimated && HasFlags(id, FLAG_DESTRUCTION_ON_ANIMATION_COMPLETION))
+				//UpdateDrawAnimationComponent(m_drawAnimationComponents[id], dt);
+				m_drawAnimationComponents[id].animation.Update(dt);
+				//bool notAnimated{ m_drawAnimationComponents[id].type == d2d::AnimationType::NOT_ANIMATED };
+				if(!m_drawAnimationComponents[id].animation.IsAnimated() && HasFlags(id, FLAG_DESTRUCTION_ON_ANIMATION_COMPLETION))
 					m_destroyBuffer.push(id);
 			}
 	}
 	//+--------------------------------\--------------------------------------
 	//|  UpdateDrawAnimationComponent  | (private)
 	//\--------------------------------/--------------------------------------
-	void World::UpdateDrawAnimationComponent(DrawAnimationComponent& drawAnimationComponent, float dt)
-	{
-		if(drawAnimationComponent.type != AnimationType::NOT_ANIMATED &&
-			drawAnimationComponent.numFrames > 0)
-			{
-				d2Assert(drawAnimationComponent.numFrames <= WORLD_MAX_ANIMATION_FRAMES);
-				Frame& currentFrame{ drawAnimationComponent.frames[drawAnimationComponent.currentFrameIndex] };
-				currentFrame.frameTimeAccumulator += dt;
-				if(currentFrame.frameTimeAccumulator >= currentFrame.frameTime)
-				{
-					// Go to next frame
-					float timeOverflow{ currentFrame.frameTimeAccumulator - currentFrame.frameTime };
-					bool reachedEnd{ drawAnimationComponent.movingForward && (drawAnimationComponent.currentFrameIndex == drawAnimationComponent.numFrames - 1) };
-					bool reachedBeginning{ !drawAnimationComponent.movingForward && (drawAnimationComponent.currentFrameIndex == 0) };
-					bool stillNeedsToChangeFrame{ true };
-					switch(drawAnimationComponent.type)
-					{
-					case AnimationType::SINGLE_PASS:
-						if(reachedEnd || reachedBeginning)
-						{
-							drawAnimationComponent.type = AnimationType::NOT_ANIMATED;
-							return;
-						}
-						break;
-					case AnimationType::LOOP:
-						if(reachedEnd || reachedBeginning)
-							stillNeedsToChangeFrame = false;
-						if(reachedEnd)
-							drawAnimationComponent.currentFrameIndex = 0;
-						else if(reachedBeginning)
-							drawAnimationComponent.currentFrameIndex = drawAnimationComponent.numFrames - 1;
-						break;
-					case AnimationType::PENDULUM:
-					default:
-						if(reachedEnd)
-							drawAnimationComponent.movingForward = false;
-						else if(reachedBeginning)
-							drawAnimationComponent.movingForward = true;
-						break;
-					}
+	//void World::UpdateDrawAnimationComponent(DrawAnimationComponent& drawAnimationComponent, float dt)
+	//{
+	//	if(drawAnimationComponent.type != AnimationType::NOT_ANIMATED &&
+	//		drawAnimationComponent.numFrames > 0)
+	//		{
+	//			d2Assert(drawAnimationComponent.numFrames <= WORLD_MAX_ANIMATION_FRAMES);
+	//			Frame& currentFrame{ drawAnimationComponent.frames[drawAnimationComponent.currentFrameIndex] };
+	//			currentFrame.frameTimeAccumulator += dt;
+	//			if(currentFrame.frameTimeAccumulator >= currentFrame.frameTime)
+	//			{
+	//				// Go to next frame
+	//				float timeOverflow{ currentFrame.frameTimeAccumulator - currentFrame.frameTime };
+	//				bool reachedEnd{ drawAnimationComponent.movingForward && (drawAnimationComponent.currentFrameIndex == drawAnimationComponent.numFrames - 1) };
+	//				bool reachedBeginning{ !drawAnimationComponent.movingForward && (drawAnimationComponent.currentFrameIndex == 0) };
+	//				bool stillNeedsToChangeFrame{ true };
+	//				switch(drawAnimationComponent.type)
+	//				{
+	//				case AnimationType::SINGLE_PASS:
+	//					if(reachedEnd || reachedBeginning)
+	//					{
+	//						drawAnimationComponent.type = AnimationType::NOT_ANIMATED;
+	//						return;
+	//					}
+	//					break;
+	//				case AnimationType::LOOP:
+	//					if(reachedEnd || reachedBeginning)
+	//						stillNeedsToChangeFrame = false;
+	//					if(reachedEnd)
+	//						drawAnimationComponent.currentFrameIndex = 0;
+	//					else if(reachedBeginning)
+	//						drawAnimationComponent.currentFrameIndex = drawAnimationComponent.numFrames - 1;
+	//					break;
+	//				case AnimationType::PENDULUM:
+	//				default:
+	//					if(reachedEnd)
+	//						drawAnimationComponent.movingForward = false;
+	//					else if(reachedBeginning)
+	//						drawAnimationComponent.movingForward = true;
+	//					break;
+	//				}
 
-					if(stillNeedsToChangeFrame)
-					{
-						// Go to next frame
-						if(drawAnimationComponent.movingForward)
-							++drawAnimationComponent.currentFrameIndex;
-						else
-							--drawAnimationComponent.currentFrameIndex;
-					}
+	//				if(stillNeedsToChangeFrame)
+	//				{
+	//					// Go to next frame
+	//					if(drawAnimationComponent.movingForward)
+	//						++drawAnimationComponent.currentFrameIndex;
+	//					else
+	//						--drawAnimationComponent.currentFrameIndex;
+	//				}
 
-					// Add leftover time to new frame
-					drawAnimationComponent.frames[drawAnimationComponent.currentFrameIndex].frameTimeAccumulator = timeOverflow;
-				}
-			}
-	}
+	//				// Add leftover time to new frame
+	//				drawAnimationComponent.frames[drawAnimationComponent.currentFrameIndex].frameTimeAccumulator = timeOverflow;
+	//			}
+	//		}
+	//}
 	//+-------------\---------------------------------------------
 	//|	  Physics   |
 	//\-------------/---------------------------------------------
@@ -939,7 +940,7 @@ namespace Space
 		// Layers
 		for(unsigned i = firstIndex; i < m_particleSystem.firstUnusedIndex; ++i)
 		{
-			int newLayer{ m_drawLayerComponents[entityID] };
+			int newLayer{ m_drawAnimationComponents[entityID].layer };
 			d2d::RandomBool() ? ++newLayer : --newLayer;
 			d2d::Clamp(newLayer, m_settings.drawLayerRange);
 			m_particleSystem.layers[i] = newLayer;

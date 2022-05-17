@@ -267,10 +267,10 @@ namespace Space
 
 			d2d::Window::DisableTextures();
 			d2d::Window::EnableBlending();
-			d2d::Window::SetColor(m_fpsColor);
+			d2d::Window::SetColor(m_fpsTextStyle.color);
 			d2d::Window::PushMatrix();
 			d2d::Window::Translate(m_fpsPosition * resolution);
-			d2d::Window::DrawString(fpsString, m_fpsAlignment, m_fpsFontSize * resolution.y, m_fpsFontID);
+			d2d::Window::DrawString(fpsString, m_fpsAlignment, m_fpsTextStyle.size * resolution.y, m_fpsTextStyle.font);
 			d2d::Window::PopMatrix();
 		}
 	}

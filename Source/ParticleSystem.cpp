@@ -14,7 +14,7 @@ namespace Space
 {
 	ParticleSystem::~ParticleSystem()
 	{
-		d2LogDebug << "ParticleSystem required " << m_highestActiveParticleCount << " / " << MAX_PARTICLES << " particles.";
+		d2LogDebug << "ParticleSystem required " << m_highestActiveParticleCount << " / " << MAX_PARTICLES << " particles. ";
 	}
 	void ParticleSystem::Init()
 	{

@@ -24,7 +24,7 @@ namespace Space
 	void World::DrawWorldEdge()
 	{
 		d2d::Window::SetColor({ 1.0f, 0.0f, 1.0f, 1.0f });
-		d2d::Window::DrawRect(m_worldRect.lowerBound, m_worldRect.upperBound, false);
+		d2d::Window::DrawRect(m_worldRect, false);
 
 		std::array<CloneSection, 4> cloneLocations{ 
 			CloneSection::TOP, CloneSection::RIGHT, 
@@ -32,7 +32,10 @@ namespace Space
 		for(auto cloneLocation : cloneLocations)
 		{
 			b2Vec2 offset{ GetCloneOffset(cloneLocation) };
-			d2d::Window::DrawRect(m_worldRect.lowerBound + offset, m_worldRect.upperBound + offset, false);
+			d2d::Window::PushMatrix();
+			d2d::Window::Translate(offset);
+			d2d::Window::DrawRect(m_worldRect, false);
+			d2d::Window::PopMatrix();
 		}
 	}
 	void World::DrawLayer(int layer)
@@ -54,11 +57,15 @@ namespace Space
 				if(m_particleSystem.layers[i] == layer)
 					if(m_particleSystem.pointSizeIndices[i] == sizeIndex)
 					{
-						d2d::Window::SetColor(
-							m_particleSystem.colors[i].red,
-							m_particleSystem.colors[i].green,
-							m_particleSystem.colors[i].blue,
-							m_particleSystem.CalculateFadedAlpha(i));
+						//d2d::Window::SetColor(
+						//	m_particleSystem.colors[i].red,
+						//	m_particleSystem.colors[i].green,
+						//	m_particleSystem.colors[i].blue,
+						//	m_particleSystem.CalculateFadedAlpha(i));
+						d2d::Color newColor{ m_particleSystem.colors[i] };
+						newColor.alpha = m_particleSystem.CalculateFadedAlpha(i);
+						d2d::Window::SetColor(newColor);
+
 						d2d::Window::DrawPoint(m_particleSystem.smoothedPositions[i]);
 						CloneSectionList cloneLocations{ GetCloneSectionList(m_particleSystem.smoothedPositions[i]) };
 						for(auto &cloneLocation : cloneLocations)
@@ -72,7 +79,7 @@ namespace Space
 		d2d::Window::EnableBlending();
 		BitMask requiredComponents{ COMPONENT_THRUSTER | COMPONENT_PHYSICS };
 		for(unsigned id = 0; id < WORLD_MAX_ENTITIES; ++id)
-			if(m_drawLayerComponents[id] == layer)
+			if(m_drawAnimationComponents[id].layer == layer)
 				if(HasComponents(id, requiredComponents) && HasSize2D(id) && IsActive(id))
 					if(m_thrusterComponents[id].factor > 0.0f)
 					{
@@ -94,8 +101,7 @@ namespace Space
 			if(thruster.enabled && !thruster.temporarilyDisabled)
 			{
 				d2d::Color colorFactor{1.0f, 1.0f, 1.0f, thrusterComponent.factor };
-				DrawAnimationFrame(thruster.drawAnimationComponent,
-					entitySize, thruster.localRelativePosition * entitySize, 0.0f, colorFactor);
+				DrawAnimation(thruster.animation, entitySize, thruster.localRelativePosition * entitySize, 0.0f);
 			}
 		}
 		d2d::Window::PopMatrix();
@@ -106,35 +112,39 @@ namespace Space
 		d2d::Window::EnableBlending();
 		BitMask requiredComponents{ COMPONENT_DRAW_ANIMATION | COMPONENT_PHYSICS };
 		for(unsigned id = 0; id < WORLD_MAX_ENTITIES; ++id)
-			if(m_drawLayerComponents[id] == layer)
+			if(m_drawAnimationComponents[id].layer == layer)
 				if(HasComponents(id, requiredComponents) && HasSize2D(id) && IsActive(id))
 				{
 					float angle{ m_physicsComponents[id].mainBody.b2BodyPtr->GetAngle() };
-					DrawAnimationFrame(m_drawAnimationComponents[id], m_sizeComponents[id], m_smoothedTransforms[id].p, angle);
+
+					// Main entity
+					DrawAnimation(m_drawAnimationComponents[id].animation, m_sizeComponents[id], m_smoothedTransforms[id].p, angle);
+
+					// Clones
 					for(const CloneBody& cloneBody : m_physicsComponents[id].cloneBodyList)
-						DrawAnimationFrame(m_drawAnimationComponents[id], m_sizeComponents[id], m_smoothedTransforms[id].p + GetCloneOffset(cloneBody.section), angle);
+						DrawAnimation(m_drawAnimationComponents[id].animation, m_sizeComponents[id], m_smoothedTransforms[id].p + GetCloneOffset(cloneBody.section), angle);
 				}
 	}
-	void World::DrawAnimationFrame(const DrawAnimationComponent& drawAnimationComponent,
-		const b2Vec2& entitySize, const b2Vec2& position, float angle, const d2d::Color& colorFactor)
-	{
-		d2Assert(drawAnimationComponent.numFrames <= WORLD_MAX_ANIMATION_FRAMES);
-		if(drawAnimationComponent.numFrames > 0)
-		{
-			d2Assert(drawAnimationComponent.currentFrameIndex < drawAnimationComponent.numFrames);
-			unsigned frameIndex{ drawAnimationComponent.currentFrameIndex };
-			const Texture& currentTexture{ drawAnimationComponent.frames[frameIndex].texture };
-			b2Vec2 size{ currentTexture.relativeSize * entitySize };
-			d2d::Window::SetColor(currentTexture.tintColor * colorFactor);
-			DrawTexture(currentTexture.resourceID, size, position, angle);
-		}
-	}
-	void World::DrawTexture(unsigned textureID, const b2Vec2& size, const b2Vec2& position, float angle)
+	//void World::DrawAnimationFrame(const DrawAnimationComponent& drawAnimationComponent,
+	//	const b2Vec2& entitySize, const b2Vec2& position, float angle, const d2d::Color& colorFactor)
+	//{
+	//	d2Assert(drawAnimationComponent.numFrames <= WORLD_MAX_ANIMATION_FRAMES);
+	//	if(drawAnimationComponent.numFrames > 0)
+	//	{
+	//		d2Assert(drawAnimationComponent.currentFrameIndex < drawAnimationComponent.numFrames);
+	//		unsigned frameIndex{ drawAnimationComponent.currentFrameIndex };
+	//		const Sprite& currentTexture{ drawAnimationComponent.frames[frameIndex].sprite };
+	//		b2Vec2 size{ currentTexture.relativeSize * entitySize };
+	//		d2d::Window::SetColor(currentTexture.tintColor * colorFactor);
+	//		DrawTexture(currentTexture, size, position, angle);
+	//	}
+	//}
+	void World::DrawAnimation(const d2d::Animation& animation, const b2Vec2& size, const b2Vec2& position, float angle)
 	{
 		d2d::Window::PushMatrix();
 		d2d::Window::Translate(position);
 		d2d::Window::Rotate(angle);
-		d2d::Window::DrawTexture(textureID, size);
+		animation.Draw(size);
 		d2d::Window::PopMatrix();
 	}
 	void World::DrawAllFixturesComponents(int layer)
@@ -144,7 +154,7 @@ namespace Space
 		d2d::Window::SetLineWidth(m_settings.drawFixturesLineWidth);
 		BitMask requiredComponents{ COMPONENT_DRAW_FIXTURES | COMPONENT_PHYSICS };
 		for(unsigned id = 0; id < WORLD_MAX_ENTITIES; ++id)
-			if(m_drawLayerComponents[id] == layer)
+			if(m_drawAnimationComponents[id].layer == layer)
 			{
 				bool draw{ false };
 				if(HasPhysics(id) && IsActive(id))
@@ -234,7 +244,7 @@ namespace Space
 		d2d::Rect meterRect;
 		meterRect.SetCenter(b2Vec2_zero, { m_settings.healthMeter.widthPerPoint * hpMax, m_settings.healthMeter.height });
 		d2d::Window::SetColor(m_settings.healthMeter.backgroundColor);
-		d2d::Window::DrawRect(meterRect.lowerBound, meterRect.upperBound, true);
+		d2d::Window::DrawRect(meterRect, true);
 
 		// Draw hp meter with hp-based relativeSize and color
 		float hpPercent{ hp / hpMax };
@@ -245,7 +255,7 @@ namespace Space
 			d2d::Window::SetColor(m_settings.healthMeter.damagedColor);
 		else
 			d2d::Window::SetColor(m_settings.healthMeter.badlyDamagedColor);
-		d2d::Window::DrawRect(meterRect.lowerBound, meterRect.upperBound, true);
+		d2d::Window::DrawRect(meterRect, true);
 		d2d::Window::PopMatrix();
 	}
 	void World::DrawRadar()
