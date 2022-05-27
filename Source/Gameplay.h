@@ -86,7 +86,7 @@ namespace Space
 		const SDL_Keycode m_previousMissileKey{ SDLK_q };
 		const SDL_Keycode m_nextMissileKey{ SDLK_e };
 
-		d2d::FontReference m_orbitronLightFont{ std::string{"Fonts\\OrbitronLight.otf"} };
+		d2d::FontReference m_orbitronLightFont{ "Fonts\\OrbitronLight.otf"s };
 
 		// Pause menu button text
 		std::string m_resumeString{ "RESUME" };

@@ -67,10 +67,10 @@ namespace Space
 			window.imageExtensions = 0;
 			for(unsigned i = 0; i < windowData["imageExtensions"].size(); ++i)
 			{
-				std::string flagString{ d2d::GetVectorString(windowData, "imageExtensions", i) };
+				std::string flagString{ d2d::GetVectorString(windowData, "imageExtensions"s, i) };
 				int flag{ d2d::StringToImageInitFlag(flagString) };
 				if(!flag)
-					throw LoadSettingsFileException{ appFilePath + "Invalid value: window.imageExtensions[" + d2d::ToString(i) + "]: " + flagString };
+					throw LoadSettingsFileException{ appFilePath + "Invalid value: window.imageExtensions["s + d2d::ToString(i) + "]: "s + flagString };
 				window.imageExtensions |= flag;
 			}
 

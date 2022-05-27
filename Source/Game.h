@@ -223,10 +223,10 @@ namespace Space
 		
 		// XL asteroid animations
 		const std::array<d2d::TextureReference, NUM_XLARGE_ASTEROID_MODELS> 
-			m_asteroidXLargeTextures{ d2d::TextureReference{"Textures\\Asteroids\\asteroidxlarge1.png"},
-									 d2d::TextureReference{"Textures\\Asteroids\\asteroidxlarge2.png"},
-									 d2d::TextureReference{"Textures\\Asteroids\\asteroidxlarge3.png"},
-									 d2d::TextureReference{"Textures\\Asteroids\\asteroidxlarge4.png"} };
+			m_asteroidXLargeTextures{"Textures\\Asteroids\\asteroidxlarge1.png"s,
+									 "Textures\\Asteroids\\asteroidxlarge2.png"s,
+									 "Textures\\Asteroids\\asteroidxlarge3.png"s,
+									 "Textures\\Asteroids\\asteroidxlarge4.png"s };
 		const std::array<d2d::AnimationDef, NUM_XLARGE_ASTEROID_MODELS>
 			m_asteroidXLargeAnimationDefs{ 
 				d2d::AnimationFrame{ &m_asteroidXLargeTextures.at(0) },
@@ -236,10 +236,10 @@ namespace Space
 
 		// XL rock animations
 		const std::array<d2d::TextureReference, NUM_XLARGE_ASTEROID_MODELS>
-			m_rockXLargeTextures{ d2d::TextureReference{"Textures\\Asteroids\\rockxlarge1.png"},
-								  d2d::TextureReference{"Textures\\Asteroids\\rockxlarge2.png"},
-								  d2d::TextureReference{"Textures\\Asteroids\\rockxlarge3.png"},
-								  d2d::TextureReference{"Textures\\Asteroids\\rockxlarge4.png"} };
+			m_rockXLargeTextures{ "Textures\\Asteroids\\rockxlarge1.png"s,
+								  "Textures\\Asteroids\\rockxlarge2.png"s,
+								  "Textures\\Asteroids\\rockxlarge3.png"s,
+								  "Textures\\Asteroids\\rockxlarge4.png"s };
 		const std::array<d2d::AnimationDef, NUM_XLARGE_ASTEROID_MODELS>
 			m_rockXLargeAnimationDefs{
 				d2d::AnimationFrame{ &m_rockXLargeTextures.at(0) },
@@ -255,8 +255,8 @@ namespace Space
 
 		// Large asteroid animations
 		const std::array<d2d::TextureReference, NUM_LARGE_ASTEROID_MODELS> 
-			m_asteroidLargeTextures{ d2d::TextureReference{"Textures\\Asteroids\\asteroidlarge1.png"},
-									 d2d::TextureReference{"Textures\\Asteroids\\asteroidlarge2.png"} };
+			m_asteroidLargeTextures{ "Textures\\Asteroids\\asteroidlarge1.png"s,
+									 "Textures\\Asteroids\\asteroidlarge2.png"s };
 		const std::array<d2d::AnimationDef, NUM_LARGE_ASTEROID_MODELS>
 			m_asteroidLargeAnimationDefs{
 				d2d::AnimationFrame{ &m_asteroidLargeTextures.at(0) },
@@ -264,8 +264,8 @@ namespace Space
 
 		// Large rock animations
 		const std::array<d2d::TextureReference, NUM_LARGE_ASTEROID_MODELS> 
-			m_rockLargeTextures{ d2d::TextureReference{"Textures\\Asteroids\\rocklarge1.png"}, 
-								 d2d::TextureReference{"Textures\\Asteroids\\rocklarge2.png"} };
+			m_rockLargeTextures{ "Textures\\Asteroids\\rocklarge1.png"s, 
+								 "Textures\\Asteroids\\rocklarge2.png"s };
 		const std::array<d2d::AnimationDef, NUM_LARGE_ASTEROID_MODELS>
 			m_rockLargeAnimationDefs{
 				d2d::AnimationFrame{ &m_rockLargeTextures.at(0) },
@@ -279,8 +279,8 @@ namespace Space
 
 		// Medium asteroid animations
 		const std::array<d2d::TextureReference, NUM_MEDIUM_ASTEROID_MODELS>
-			m_asteroidMediumTextures{ d2d::TextureReference{"Textures\\Asteroids\\asteroidmedium1.png"},
-									  d2d::TextureReference{"Textures\\Asteroids\\asteroidmedium2.png"} };
+			m_asteroidMediumTextures{ "Textures\\Asteroids\\asteroidmedium1.png"s,
+									  "Textures\\Asteroids\\asteroidmedium2.png"s };
 		const std::array<d2d::AnimationDef, NUM_MEDIUM_ASTEROID_MODELS>
 			m_asteroidMediumAnimationDefs{
 				d2d::AnimationFrame{ &m_asteroidMediumTextures.at(0) },
@@ -288,8 +288,8 @@ namespace Space
 
 		// Medium rock animations
 		const std::array<d2d::TextureReference, NUM_MEDIUM_ASTEROID_MODELS>
-			m_rockMediumTextures{ d2d::TextureReference{"Textures\\Asteroids\\rockmedium1.png"},
-								  d2d::TextureReference{"Textures\\Asteroids\\rockmedium2.png"} };
+			m_rockMediumTextures{ "Textures\\Asteroids\\rockmedium1.png"s,
+								  "Textures\\Asteroids\\rockmedium2.png"s };
 		const std::array<d2d::AnimationDef, NUM_MEDIUM_ASTEROID_MODELS>
 			m_rockMediumAnimationDefs{
 				d2d::AnimationFrame{ &m_rockMediumTextures.at(0) },
@@ -303,8 +303,8 @@ namespace Space
 
 		// Small asteroid animations
 		const std::array<d2d::TextureReference, NUM_SMALL_ASTEROID_MODELS>
-			m_asteroidSmallTextures{ d2d::TextureReference{"Textures\\Asteroids\\asteroidsmall1.png"},
-									 d2d::TextureReference{"Textures\\Asteroids\\asteroidsmall2.png"} };
+			m_asteroidSmallTextures{ "Textures\\Asteroids\\asteroidsmall1.png"s,
+									 "Textures\\Asteroids\\asteroidsmall2.png"s };
 		const std::array<d2d::AnimationDef, NUM_SMALL_ASTEROID_MODELS>
 			m_asteroidSmallAnimationDefs{
 				d2d::AnimationFrame{ &m_asteroidSmallTextures.at(0) },
@@ -312,8 +312,8 @@ namespace Space
 
 		// Small rock animations
 		const std::array<d2d::TextureReference, NUM_SMALL_ASTEROID_MODELS>
-			m_rockSmallTextures{ d2d::TextureReference{"Textures\\Asteroids\\rocksmall1.png"},
-								 d2d::TextureReference{"Textures\\Asteroids\\rocksmall2.png"} };
+			m_rockSmallTextures{ "Textures\\Asteroids\\rocksmall1.png"s,
+								 "Textures\\Asteroids\\rocksmall2.png"s };
 		const std::array<d2d::AnimationDef, NUM_SMALL_ASTEROID_MODELS>
 			m_rockSmallAnimationDefs{
 				d2d::AnimationFrame{ &m_rockSmallTextures.at(0) },

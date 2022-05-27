@@ -95,7 +95,7 @@ namespace Space
 		}
 		catch(const GameException& e)
 		{
-			std::string message{ "AppState init error: " + std::string{ e.what() } };
+			std::string message{ "AppState init error: "s + std::string{ e.what() } };
 			SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Error", message.c_str(), nullptr);
 			m_currentState = AppStateID::QUIT;
 		}
@@ -138,7 +138,7 @@ namespace Space
 			}
 			catch(const GameException& e)
 			{
-				std::string message{ "Game update error: " + std::string{ e.what() } };
+				std::string message{ "Game update error: "s + std::string{ e.what() } };
 				SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Error", message.c_str(), nullptr);
 				m_nextState = AppStateID::QUIT;
 			}
