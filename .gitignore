@@ -4,4 +4,9 @@
 *.iobj
 *.ipdb
 *.log
-/.vs
+.vs/
+Debug/
+Release/
+*.suo
+*.user
+
