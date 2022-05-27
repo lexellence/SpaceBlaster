@@ -93,9 +93,6 @@ namespace Space
 		std::string m_quitToMenuString{ "QUIT TO MAIN MENU" };
 		std::string m_quitString{ "QUIT TO OPERATING SYSTEM" };
 		const std::vector<std::string> m_buttonTextList{ m_resumeString, m_quitToMenuString, m_quitString };
-		//const d2d::Color m_buttonTextColor{ 0.0f, 0.5f, 0.8f, 1.0f };
-		//const unsigned m_buttonFontID{ m_orbitronLightFont.GetID() };
-		//const float m_buttonFontSize{ 0.035f };
 		const d2d::TextStyle m_buttonTextStyle{
 			m_orbitronLightFont,
 			{ 0.0f, 0.5f, 0.8f, 1.0f },
@@ -104,9 +101,6 @@ namespace Space
 
 		// Pause menu title text
 		const std::string m_title{ "Paused" };
-		//const d2d::Color m_titleColor{ 0.8f, 0.8f, 0.8f, 0.8f };
-		//const unsigned m_titleFontID{ m_orbitronLightFont.GetID() };
-		//const float m_titleFontSize{ 0.045f };
 		const d2d::TextStyle m_titleTextStyle{
 			m_orbitronLightFont,
 			{ 0.8f, 0.8f, 0.8f, 0.8f },
@@ -119,7 +113,6 @@ namespace Space
 		const d2d::Color m_buttonBorderColor{ 0.5f, 0.5f, 0.5f, 0.5f };
 		const d2d::Color m_backgroundColor{ 0.2f, 0.2f, 0.2f, 0.4f };
 
-		//d2d::Menu m_pauseMenu{ m_buttonTextList, m_buttonTextColor, m_buttonFontID, m_buttonFontSize,
 		d2d::Menu m_pauseMenu{ m_buttonTextList, m_buttonTextStyle,
 			m_title, m_titleTextStyle,
 			m_buttonColor, m_buttonHighlightColor, 
@@ -128,9 +121,6 @@ namespace Space
 		// FPS display
 		const b2Vec2 m_fpsPosition{ 1.0f, 1.0f };
 		const d2d::Alignment m_fpsAlignment{ d2d::Alignment::RIGHT_TOP };
-		//const float m_fpsFontSize{ 0.05f };
-		//const unsigned m_fpsFontID{ m_orbitronLightFont.GetID() };
-		//const d2d::Color m_fpsColor{ 1.0f, 1.0f, 0.0f, 1.0f };
 		const d2d::TextStyle m_fpsTextStyle{
 			m_orbitronLightFont,
 			{ 1.0f, 1.0f, 0.0f, 1.0f },
