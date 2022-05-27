@@ -419,7 +419,7 @@ namespace Space
 
 					cloneSyncData.needsReactivation = (cloneSyncData.positionNeedsSync || cloneSyncData.angleNeedsSync);
 					if(cloneSyncData.needsReactivation)
-						cloneBody.b2BodyPtr->SetActive(false);
+						cloneBody.b2BodyPtr->SetEnabled(false);
 				}
 					
 			}
@@ -445,7 +445,7 @@ namespace Space
 					if(syncData.angularVelocityNeedsSync)
 						cloneBody.b2BodyPtr->SetAngularVelocity(mainB2BodyPtr->GetAngularVelocity());
 					if(syncData.needsReactivation)
-						cloneBody.b2BodyPtr->SetActive(true);
+						cloneBody.b2BodyPtr->SetEnabled(true);
 				}
 			}
 		EmptyPhysicsStep();
@@ -567,7 +567,7 @@ namespace Space
 			for(unsigned id = 0; id < WORLD_MAX_ENTITIES; ++id)
 				if(HasPhysics(id) && IsActive(id))
 					if(m_physicsWrapDatas[id].requiresManualWrapping)
-							m_physicsComponents[id].mainBody.b2BodyPtr->SetActive(false);
+							m_physicsComponents[id].mainBody.b2BodyPtr->SetEnabled(false);
 			EmptyPhysicsStep();
 
 			// Manual wraps
@@ -598,7 +598,7 @@ namespace Space
 							m_physicsComponents[id].mainBody.b2BodyPtr->SetTransform(wrappedPosition, currentTransform.q.GetAngle());
 
 							// Re-activate
-							m_physicsComponents[id].mainBody.b2BodyPtr->SetActive(true);
+							m_physicsComponents[id].mainBody.b2BodyPtr->SetEnabled(true);
 							m_physicsWrapDatas[id].requiresManualWrapping = false;
 
 							// Wrap saved states
@@ -670,9 +670,9 @@ namespace Space
 	}
 	void World::SwitchB2Bodies(Body& body1, Body& body2)
 	{
-		std::swap(body1.b2BodyPtr, body2.b2BodyPtr);
-		body1.b2BodyPtr->SetUserData(&body1);
-		body2.b2BodyPtr->SetUserData(&body2);
+		b2Body* tempPtr = body1.b2BodyPtr;
+		SetB2BodyPtr(&body1, body2.b2BodyPtr);
+		SetB2BodyPtr(&body2, tempPtr);
 	}
 	void World::SmoothStates(float timestepAlpha)
 	{
@@ -699,8 +699,8 @@ namespace Space
 		b2Body* b2BodyPtr2{ fixturePtr2->GetBody() };
 		d2Assert(b2BodyPtr1 && b2BodyPtr2 && "Box2D Bug");
 
-		Body* bodyPtr1{ (Body*)(b2BodyPtr1->GetUserData()) };
-		Body* bodyPtr2{ (Body*)(b2BodyPtr2->GetUserData()) };
+		Body* bodyPtr1{ GetUserBodyPtr(b2BodyPtr1) };
+		Body* bodyPtr2{ GetUserBodyPtr(b2BodyPtr2) };
 		d2Assert(bodyPtr1 && bodyPtr2);
 		d2Assert(bodyPtr1->b2BodyPtr && bodyPtr2->b2BodyPtr);
 
@@ -749,8 +749,8 @@ namespace Space
 		b2Body* b2BodyPtr2{ fixturePtr2->GetBody() };
 		d2Assert(b2BodyPtr1 && b2BodyPtr2 && "Box2D Bug");
 
-		Body* bodyPtr1{ (Body*)(b2BodyPtr1->GetUserData()) };
-		Body* bodyPtr2{ (Body*)(b2BodyPtr2->GetUserData()) };
+		Body* bodyPtr1{ GetUserBodyPtr(b2BodyPtr1) };
+		Body* bodyPtr2{ GetUserBodyPtr(b2BodyPtr2) };
 		d2Assert(bodyPtr1 && bodyPtr2);
 		d2Assert(bodyPtr1->b2BodyPtr && bodyPtr2->b2BodyPtr);
 		if(bodyPtr1->isClone && bodyPtr2->isClone)
@@ -822,8 +822,8 @@ namespace Space
 		// Establish the pair of bodies in contact
 		d2Assert(contactPtr && "Box2D Bug");
 		std::array<Body*, 2> bodyPtrs{ 
-			(Body*)(contactPtr->GetFixtureA()->GetBody()->GetUserData()),
-			(Body*)(contactPtr->GetFixtureB()->GetBody()->GetUserData()) };
+			GetUserBodyPtr(contactPtr->GetFixtureA()->GetBody()),
+			GetUserBodyPtr(contactPtr->GetFixtureB()->GetBody()) };
 		d2Assert(bodyPtrs[0] && bodyPtrs[1]);
 
 		// COMPONENT_DESTRUCTION_DELAY_ON_CONTACT
@@ -951,6 +951,30 @@ namespace Space
 			m_particleSystem.colors[i] = particleExplosion.colorRange.Lerp( d2d::RandomFloatPercent() );
 	}
 	//+------------------------\----------------------------------
+	//|	   Box2D user data     |
+	//\------------------------/----------------------------------
+	World::Body* World::GetUserBodyPtr(b2Body* b2BodyPtr) const
+	{
+		if(b2BodyPtr)
+			return reinterpret_cast<Body*>(b2BodyPtr->GetUserData().pointer);
+		return nullptr;
+	}
+	void World::SetB2BodyPtr(Body* bodyPtr, b2Body* b2BodyPtr)
+	{
+		if(bodyPtr)
+		{
+			bodyPtr->b2BodyPtr = b2BodyPtr;
+			if(bodyPtr->b2BodyPtr)
+			{
+				bodyPtr->b2BodyPtr->GetUserData().pointer = reinterpret_cast<uintptr_t>(bodyPtr);
+			}
+		}
+	}
+	void World::SwapB2Bodies(Body& body1, Body& body2)
+	{
+
+	}
+	//+------------------------\----------------------------------
 	//|	 Clone-aware modifiers |
 	//\------------------------/----------------------------------
 	void World::SetTransform(unsigned entityID, const b2Vec2& position, float angle)
@@ -986,9 +1010,9 @@ namespace Space
 		SetFlags(entityID, FLAG_ACTIVE, true);
 		if(HasPhysics(entityID))
 		{
-			m_physicsComponents[entityID].mainBody.b2BodyPtr->SetActive(true);
+			m_physicsComponents[entityID].mainBody.b2BodyPtr->SetEnabled(true);
 			for(const CloneBody& cloneBody : m_physicsComponents[entityID].cloneBodyList)
-				cloneBody.b2BodyPtr->SetActive(true);
+				cloneBody.b2BodyPtr->SetEnabled(true);
 		}
 	}
 	void World::Deactivate(unsigned entityID)
@@ -996,9 +1020,9 @@ namespace Space
 		SetFlags(entityID, FLAG_ACTIVE, false);
 		if(HasPhysics(entityID))
 		{
-			m_physicsComponents[entityID].mainBody.b2BodyPtr->SetActive(false);
+			m_physicsComponents[entityID].mainBody.b2BodyPtr->SetEnabled(false);
 			for(const CloneBody& cloneBody : m_physicsComponents[entityID].cloneBodyList)
-				cloneBody.b2BodyPtr->SetActive(false);
+				cloneBody.b2BodyPtr->SetEnabled(false);
 		}
 	}
 	void World::ApplyForceToCenter(unsigned entityID, const b2Vec2& force)

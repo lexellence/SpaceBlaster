@@ -143,19 +143,16 @@ namespace Space
 		// Create main body
 		b2BodyDef bodyDef;
 		bodyDef.type = type;
-		bodyDef.active = IsActive(entityID);
+		bodyDef.awake = IsActive(entityID);
 		bodyDef.position = position;
 		bodyDef.angle = angle;
 		bodyDef.linearVelocity = velocity;
 		bodyDef.angularVelocity = angularVelocity;
 		bodyDef.fixedRotation = fixedRotation;
 		bodyDef.bullet = continuousCollisionDetection;
-		m_physicsComponents[entityID].mainBody.b2BodyPtr = m_b2WorldPtr->CreateBody(&bodyDef);
-
-		// Set body
 		m_physicsComponents[entityID].mainBody.entityID = entityID;
 		m_physicsComponents[entityID].mainBody.isClone = false;
-		m_physicsComponents[entityID].mainBody.b2BodyPtr->SetUserData(&m_physicsComponents[entityID].mainBody);
+		SetB2BodyPtr(&m_physicsComponents[entityID].mainBody, m_b2WorldPtr->CreateBody(&bodyDef));		
 		
 		// Create clones
 		CloneSectionList cloneLocationList{ GetCloneSectionList(*m_physicsComponents[entityID].mainBody.b2BodyPtr) };
@@ -170,8 +167,7 @@ namespace Space
 
 			// Create clone body
 			bodyDef.position = position + GetCloneOffset(cloneLocationList.at(i));
-			cloneBody.b2BodyPtr = m_b2WorldPtr->CreateBody(&bodyDef);
-			cloneBody.b2BodyPtr->SetUserData(&cloneBody);
+			SetB2BodyPtr(&cloneBody, m_b2WorldPtr->CreateBody(&bodyDef));
 
 			// Traverse clone location list at the same time
 			++i;

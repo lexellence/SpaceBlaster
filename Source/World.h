@@ -390,6 +390,11 @@ namespace Space
 		void ProcessDestroyBuffer();
 		bool ShouldCollideDefaultFiltering(const b2Filter& filter1, const b2Filter& filter2) const;
 		void CreateExplosionFromEntity(unsigned entityID, const ParticleExplosionComponent& particleExplosion);
+		
+		// Box2D user data
+		Body* GetUserBodyPtr(b2Body* b2BodyPtr) const;
+		void SetB2BodyPtr(Body* bodyPtr, b2Body* b2BodyPtr);
+		void SwapB2Bodies(Body& body1, Body& body2);
 
 		// Graphics
 		void DrawWorldEdge();

@@ -108,22 +108,23 @@ namespace Space
 		float closestGap{ FLT_MAX };
 		while(b2BodyPtr) 
 		{
-			Body* bodyPtr{ (Body*)b2BodyPtr->GetUserData() };
-			d2Assert(bodyPtr);
-
-			b2Vec2 relativePosition{ b2BodyPtr->GetPosition() - position };
-			float boundingCircleRadius;
-			if(HasSize(bodyPtr->entityID))
-				boundingCircleRadius = m_boundingRadiusComponents[bodyPtr->entityID];
-			else
-				boundingCircleRadius = 0.0f;
-			float gap{ relativePosition.Length() - boudingRadius - boundingCircleRadius };
-			if(gap < closestGap)
+			Body* bodyPtr = GetUserBodyPtr(b2BodyPtr);
+			if(bodyPtr)
 			{
-				closestEntityID = bodyPtr->entityID;
-				closestGap = gap;
-			}	
-			b2BodyPtr = b2BodyPtr->GetNext();
+				b2Vec2 relativePosition{ b2BodyPtr->GetPosition() - position };
+				float boundingCircleRadius;
+				if(HasSize(bodyPtr->entityID))
+					boundingCircleRadius = m_boundingRadiusComponents[bodyPtr->entityID];
+				else
+					boundingCircleRadius = 0.0f;
+				float gap{ relativePosition.Length() - boudingRadius - boundingCircleRadius };
+				if(gap < closestGap)
+				{
+					closestEntityID = bodyPtr->entityID;
+					closestGap = gap;
+				}
+				b2BodyPtr = b2BodyPtr->GetNext();
+			}
 		}
 
 		entityIDOut = closestEntityID;
