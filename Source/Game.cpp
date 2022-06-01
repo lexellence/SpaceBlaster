@@ -51,7 +51,7 @@ namespace Space
 		else
 			throw GameException{ "Invalid level name: " + level };
 	}
-	void Game::SetPlayer(unsigned entityID)
+	void Game::SetPlayer(WorldID entityID)
 	{
 		if(m_world.EntityExists(entityID))
 		{
@@ -65,7 +65,7 @@ namespace Space
 			m_playerSet = true;
 		}
 	}
-	void Game::FollowEntity(unsigned entityID)
+	void Game::FollowEntity(WorldID entityID)
 	{
 		m_cameraFollowingEntity = true;
 		m_cameraFollowEntityID = entityID;
@@ -195,16 +195,16 @@ namespace Space
 	}*/
 	void Game::CreatePlayer(World& world, const b2Vec2& position, float angle)
 	{
-		unsigned blasterID{ CreateBlaster(world, position, d2d::PI_OVER_TWO, true) };
-		unsigned scoutID{ CreateScout(world, position, d2d::PI_OVER_TWO, false) };
+		WorldID blasterID{ CreateBlaster(world, position, d2d::PI_OVER_TWO, true) };
+		WorldID scoutID{ CreateScout(world, position, d2d::PI_OVER_TWO, false) };
 		world.AddMorphIntoEntityID(blasterID, scoutID);
 		world.AddMorphIntoEntityID(scoutID, blasterID);
 		SetPlayer(blasterID);
 		FollowEntity(blasterID);
 	}
-	unsigned Game::CreateScout(World& world, const b2Vec2& position, float angle, bool activate)
+	WorldID Game::CreateScout(World& world, const b2Vec2& position, float angle, bool activate)
 	{
-		unsigned id;
+		WorldID id;
 		{
 			b2Vec2 size{ SCOUT_HEIGHT * m_scoutTexture.GetWidthToHeightRatio(), SCOUT_HEIGHT };
 			id = m_world.NewEntityID(size, SHIP_DRAW_LAYER, activate);
@@ -233,9 +233,9 @@ namespace Space
 			SCOUT_PARTICLE_LIFETIME, PARTICLE_EXPLOSION_FADEIN, SCOUT_PARTICLE_FADEOUT);
 		return id;
 	}
-	unsigned Game::CreateBlaster(World& world, const b2Vec2& position, float angle, bool activate)
+	WorldID Game::CreateBlaster(World& world, const b2Vec2& position, float angle, bool activate)
 	{
-		unsigned id;
+		WorldID id;
 		{
 			b2Vec2 size{ BLASTER_HEIGHT * m_blasterTexture.GetWidthToHeightRatio(), BLASTER_HEIGHT };
 			id = m_world.NewEntityID(size, SHIP_DRAW_LAYER, activate);
@@ -276,11 +276,11 @@ namespace Space
 			BLASTER_PARTICLE_LIFETIME, PARTICLE_EXPLOSION_FADEIN, BLASTER_PARTICLE_FADEOUT);
 		return id;
 	}
-	unsigned Game::CreateXLargeAsteroid(World& world, unsigned modelIndex, bool isRock,
+	WorldID Game::CreateXLargeAsteroid(World& world, unsigned modelIndex, bool isRock,
 		const b2Vec2& position, float angle, const b2Vec2& velocity, float angularVelocity, bool activate)
 	{
 		d2Assert(modelIndex < NUM_XLARGE_ASTEROID_MODELS);
-		unsigned id;
+		WorldID id;
 		{
 			float height{ XLARGE_ASTEROID_HEIGHT * XLARGE_ASTEROID_RELATIVE_HEIGHTS[modelIndex] };
 			b2Vec2 size{ height * m_asteroidXLargeTextures[modelIndex].GetWidthToHeightRatio(), height };
@@ -296,11 +296,11 @@ namespace Space
 			XLARGE_ASTEROID_PARTICLE_LIFETIME, PARTICLE_EXPLOSION_FADEIN, XLARGE_ASTEROID_PARTICLE_FADEOUT);
 		return id;
 	}
-	unsigned Game::CreateLargeAsteroid(World& world, unsigned modelIndex, bool isRock,
+	WorldID Game::CreateLargeAsteroid(World& world, unsigned modelIndex, bool isRock,
 		const b2Vec2& position, float angle, const b2Vec2& velocity, float angularVelocity, bool activate)
 	{
 		d2Assert(modelIndex < NUM_LARGE_ASTEROID_MODELS);
-		unsigned id;
+		WorldID id;
 		{
 			float height{ LARGE_ASTEROID_HEIGHT * LARGE_ASTEROID_RELATIVE_HEIGHTS[modelIndex] };
 			b2Vec2 size{ height * m_asteroidLargeTextures[modelIndex].GetWidthToHeightRatio(), height };
@@ -316,11 +316,11 @@ namespace Space
 			LARGE_ASTEROID_PARTICLE_LIFETIME, PARTICLE_EXPLOSION_FADEIN, LARGE_ASTEROID_PARTICLE_FADEOUT);
 		return id;
 	}
-	unsigned Game::CreateMediumAsteroid(World& world, unsigned modelIndex, bool isRock,
+	WorldID Game::CreateMediumAsteroid(World& world, unsigned modelIndex, bool isRock,
 		const b2Vec2& position, float angle, const b2Vec2& velocity, float angularVelocity, bool activate)
 	{
 		d2Assert(modelIndex < NUM_MEDIUM_ASTEROID_MODELS);
-		unsigned id;
+		WorldID id;
 		{
 			float height{ MEDIUM_ASTEROID_HEIGHT * MEDIUM_ASTEROID_RELATIVE_HEIGHTS[modelIndex] };
 			b2Vec2 size{ height * m_asteroidMediumTextures[modelIndex].GetWidthToHeightRatio(), height };
@@ -336,11 +336,11 @@ namespace Space
 			MEDIUM_ASTEROID_PARTICLE_LIFETIME, PARTICLE_EXPLOSION_FADEIN, MEDIUM_ASTEROID_PARTICLE_FADEOUT);
 		return id;
 	}
-	unsigned Game::CreateSmallAsteroid(World& world, unsigned modelIndex, bool isRock,
+	WorldID Game::CreateSmallAsteroid(World& world, unsigned modelIndex, bool isRock,
 		const b2Vec2& position, float angle, const b2Vec2& velocity, float angularVelocity, bool activate)
 	{
 		d2Assert(modelIndex < NUM_SMALL_ASTEROID_MODELS);
-		unsigned id;
+		WorldID id;
 		{
 			float height{ SMALL_ASTEROID_HEIGHT * SMALL_ASTEROID_RELATIVE_HEIGHTS[modelIndex] };
 			b2Vec2 size{ height * m_asteroidSmallTextures[modelIndex].GetWidthToHeightRatio(), height };
@@ -385,6 +385,7 @@ namespace Space
 	}
 	void Game::UpdateCamera(float dt, const PlayerController& playerController)
 	{
+		std::cout << "Game::UpdateCamera" << std::endl;
 		if(m_cameraFollowingEntity)
 			if(m_world.HasPhysics(m_cameraFollowEntityID))
 				m_camera.SetPosition(b2Mul( m_world.GetSmoothedTransform(m_cameraFollowEntityID), 
@@ -394,7 +395,7 @@ namespace Space
 	//+------------------------\----------------------------------
 	//|	  World Callbacks	   |
 	//\------------------------/----------------------------------
-	void Game::SayGoodbye(unsigned entityID)
+	void Game::SayGoodbye(WorldID entityID)
 	{
 		if(m_cameraFollowingEntity && entityID == m_cameraFollowEntityID)
 			m_cameraFollowingEntity = false;
@@ -405,15 +406,15 @@ namespace Space
 			m_playerSet = false;
 		}
 	}
-	void Game::EntityWrapped(unsigned entityID, const b2Vec2& translation)
+	void Game::EntityWrapped(WorldID entityID, const b2Vec2& translation)
 	{
 		if(m_cameraFollowingEntity && entityID == m_cameraFollowEntityID)
 			m_starfield.Translate(translation);
 	}
-	unsigned Game::LaunchProjectile(const ProjectileDef& projectileDef, const b2Vec2& position,
-		float angle, float impulse, const b2Vec2& parentVelocity, unsigned parentID)
+	WorldID Game::LaunchProjectile(const ProjectileDef& projectileDef, const b2Vec2& position,
+		float angle, float impulse, const b2Vec2& parentVelocity, WorldID parentID)
 	{
-		unsigned id{ m_world.NewEntityID(projectileDef.dimensions, m_world.GetDrawLayer(parentID) - 1, true) };
+		WorldID id{ m_world.NewEntityID(projectileDef.dimensions, m_world.GetDrawLayer(parentID) - 1, true) };
 		m_world.AddPhysicsComponent(id, b2_dynamicBody,
 			position, angle, parentVelocity, 0.0f,
 			projectileDef.fixedRotation, projectileDef.continuousCollisionDetection);
@@ -449,7 +450,7 @@ namespace Space
 		}
 		return id;
 	}
-	void Game::MorphedIntoEntity(unsigned replacedEntityID, unsigned newEntityID)
+	void Game::MorphedIntoEntity(WorldID replacedEntityID, WorldID newEntityID)
 	{
 		if(m_playerSet && replacedEntityID == m_playerID)
 			SetPlayer(newEntityID);

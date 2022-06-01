@@ -29,10 +29,10 @@ namespace Space
 	//+----------------------\------------------------------------
 	//|	   GetEntityCount	 |
 	//\----------------------/------------------------------------
-	unsigned World::GetEntityCount() const
+	WorldID World::GetEntityCount() const
 	{
-		unsigned entityCount{ 0 };
-		for(unsigned id = 0; id < WORLD_MAX_ENTITIES; ++id)
+		WorldID entityCount{ 0 };
+		for(WorldID id = 0; id < WORLD_MAX_ENTITIES; ++id)
 			if(EntityExists(id))
 				++entityCount;
 		return entityCount;
@@ -40,35 +40,35 @@ namespace Space
 	//+----------------------\------------------------------------
 	//|	   EntityExists 	 |
 	//\----------------------/------------------------------------
-	bool World::EntityExists(unsigned entityID) const
+	bool World::EntityExists(WorldID entityID) const
 	{
 		return m_componentBits[entityID] != COMPONENT_NONE || m_flagBits[entityID] != FLAG_NONE;
 	}
 	//+----------------------\------------------------------------
 	//|	   HasComponents	 |
 	//\----------------------/------------------------------------
-	bool World::HasComponents(unsigned entityID, BitMask componentMask) const
+	bool World::HasComponents(WorldID entityID, BitMask componentMask) const
 	{
 		return (m_componentBits[entityID] & componentMask) == componentMask;
 	}
 	//+----------------------\------------------------------------
 	//|		 HasFlags		 |
 	//\----------------------/------------------------------------
-	bool World::HasFlags(unsigned entityID, BitMask flagMask) const
+	bool World::HasFlags(WorldID entityID, BitMask flagMask) const
 	{
 		return (m_flagBits[entityID] & flagMask) == flagMask;
 	}
 	//+----------------------\------------------------------------
 	//|		 IsActive		 |
 	//\----------------------/------------------------------------
-	bool World::IsActive(unsigned entityID) const
+	bool World::IsActive(WorldID entityID) const
 	{
 		return HasFlags(entityID, FLAG_ACTIVE);
 	}
 	//+----------------------\------------------------------------
 	//|		  HasSize		 |
 	//\----------------------/------------------------------------
-	bool World::HasSize(unsigned entityID) const
+	bool World::HasSize(WorldID entityID) const
 	{
 		return EntityExists(entityID) && 
 			(m_sizeComponents[entityID].x > 0.0f ||
@@ -77,7 +77,7 @@ namespace Space
 	//+----------------------\------------------------------------
 	//|		 HasSize2D		 |
 	//\----------------------/------------------------------------
-	bool World::HasSize2D(unsigned entityID) const
+	bool World::HasSize2D(WorldID entityID) const
 	{
 		return EntityExists(entityID) && 
 			(m_sizeComponents[entityID].x > 0.0f &&
@@ -86,7 +86,7 @@ namespace Space
 	//+----------------------\------------------------------------
 	//|		 HasPhysics		 |
 	//\----------------------/------------------------------------
-	bool World::HasPhysics(unsigned entityID) const
+	bool World::HasPhysics(WorldID entityID) const
 	{
 		return HasComponents(entityID, COMPONENT_PHYSICS);
 	}
@@ -98,13 +98,13 @@ namespace Space
 	//	the closest entity (relativePosition may point to clone body)
 	//+-----------------------------------------------------------
 	bool World::GetClosestPhysicalEntity(const b2Vec2& position, float boudingRadius, 
-		unsigned& entityIDOut, float& boundingRadiiGapOut) const
+		WorldID& entityIDOut, float& boundingRadiiGapOut) const
 	{
 		b2Body* b2BodyPtr = m_b2WorldPtr->GetBodyList();
 		if(!b2BodyPtr)
 			return false;
 
-		unsigned closestEntityID;
+		WorldID closestEntityID;
 		float closestGap{ FLT_MAX };
 		while(b2BodyPtr) 
 		{
@@ -131,7 +131,7 @@ namespace Space
 		boundingRadiiGapOut = closestGap;
 		return true;
 	}
-	int World::GetDrawLayer(unsigned entityID) const
+	int World::GetDrawLayer(WorldID entityID) const
 	{
 		if(EntityExists(entityID))
 			return m_drawAnimationComponents[entityID].layer;
@@ -143,7 +143,7 @@ namespace Space
 	//\-------------------------/
 	//	Failure to ensure entity has a physics component will result in undefined behavior
 	//+-----------------------------------------------------------------------
-	const b2Transform& World::GetSmoothedTransform(unsigned entityID) const
+	const b2Transform& World::GetSmoothedTransform(WorldID entityID) const
 	{
 		d2Assert(HasPhysics(entityID));
 		return m_smoothedTransforms[entityID];
@@ -153,7 +153,7 @@ namespace Space
 	//\-------------------------/
 	//	Failure to ensure entity has a physics component will result in undefined behavior
 	//+-----------------------------------------------------------------------
-	const b2Vec2& World::GetLinearVelocity(unsigned entityID) const
+	const b2Vec2& World::GetLinearVelocity(WorldID entityID) const
 	{
 		d2Assert(HasPhysics(entityID));
 		return m_physicsComponents[entityID].mainBody.b2BodyPtr->GetLinearVelocity();
@@ -163,7 +163,7 @@ namespace Space
 	//\-------------------------/
 	//	Failure to ensure entity has a physics component will result in undefined behavior
 	//+-----------------------------------------------------------------------
-	float World::GetAngularVelocity(unsigned entityID) const
+	float World::GetAngularVelocity(WorldID entityID) const
 	{
 		d2Assert(HasPhysics(entityID));
 		return m_physicsComponents[entityID].mainBody.b2BodyPtr->GetAngularVelocity();
@@ -173,7 +173,7 @@ namespace Space
 	//\-------------------------/
 	//	Failure to ensure entity has a physics component will result in undefined behavior
 	//+-----------------------------------------------------------------------
-	const b2Vec2& World::GetLocalCenterOfMass(unsigned entityID) const
+	const b2Vec2& World::GetLocalCenterOfMass(WorldID entityID) const
 	{
 		d2Assert(HasPhysics(entityID));
 		return m_physicsComponents[entityID].mainBody.b2BodyPtr->GetLocalCenter();
@@ -183,7 +183,7 @@ namespace Space
 	//\---------------------/
 	//	Failure to ensure entity has a physics component will result in undefined behavior
 	//+-----------------------------------------------------------------------
-	const b2Vec2& World::GetWorldCenter(unsigned entityID) const
+	const b2Vec2& World::GetWorldCenter(WorldID entityID) const
 	{
 		d2Assert(HasPhysics(entityID));
 		return m_physicsComponents[entityID].mainBody.b2BodyPtr->GetWorldCenter();

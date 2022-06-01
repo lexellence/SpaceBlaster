@@ -14,7 +14,8 @@
 
 namespace Space
 {
-	const unsigned WORLD_MAX_ENTITIES{ 10000 };
+	using WorldID = size_t;
+	const WorldID WORLD_MAX_ENTITIES{ 10000 };
 	const unsigned WORLD_MAX_PROJECTILE_LAUNCHER_SLOTS{ 5 };
 	const unsigned WORLD_MAX_THRUSTER_SLOTS{ 5 };
 	const unsigned WORLD_NUM_CLONES{ 3 };
@@ -73,20 +74,20 @@ namespace Space
 	};
 	class DestroyListener
 	{	
-		public: virtual void SayGoodbye(unsigned entityID) = 0;	
+		public: virtual void SayGoodbye(WorldID entityID) = 0;
 	};
 	class WrapListener 
 	{	
-		public:	virtual void EntityWrapped(unsigned entityID, const b2Vec2& translation) = 0;	
+		public:	virtual void EntityWrapped(WorldID entityID, const b2Vec2& translation) = 0;
 	};
 	class ProjectileLauncherCallback
 	{
-		public:	virtual unsigned LaunchProjectile(const ProjectileDef& projectileDef, const b2Vec2& position,
-			float angle, float impulse, const b2Vec2& parentVelocity, unsigned parentID) = 0;
+		public:	virtual WorldID LaunchProjectile(const ProjectileDef& projectileDef, const b2Vec2& position,
+			float angle, float impulse, const b2Vec2& parentVelocity, WorldID parentID) = 0;
 	};
 	class MorphListener
 	{
-		public:	virtual void MorphedIntoEntity(unsigned replacedEntityID, unsigned newEntityID) = 0;
+		public:	virtual void MorphedIntoEntity(WorldID replacedEntityID, WorldID newEntityID) = 0;
 	};
 	struct ParticleExplosionComponent
 	{
@@ -151,81 +152,81 @@ namespace Space
 		void Draw();
 
 		// Creating entities
-		unsigned NewEntityID(const b2Vec2& size, int drawLayer = 0, bool activate = true);
-		void SetFlags(unsigned entityID, FlagBits flagBits, bool enable=true);
-		void RemoveComponents(unsigned entityID, ComponentBits componentBitMask);
+		WorldID NewEntityID(const b2Vec2& size, int drawLayer = 0, bool activate = true);
+		void SetFlags(WorldID entityID, FlagBits flagBits, bool enable=true);
+		void RemoveComponents(WorldID entityID, ComponentBits componentBitMask);
 
 		// Physics
 		bool GetRandomPositionAwayFromExistingEntities(float newBoundingRadius,
 			float minDistanceToClosestEntity, unsigned maxAttempts, b2Vec2& relativePositionOut) const;
-		void AddPhysicsComponent(unsigned entityID, b2BodyType type,
+		void AddPhysicsComponent(WorldID entityID, b2BodyType type,
 			const b2Vec2& position, float angle, const b2Vec2& velocity = b2Vec2_zero, float angularVelocity = 0.0f,
 			bool fixedRotation = false, bool continuousCollisionDetection = false);
-		void AddCircleShape(unsigned entityID, const d2d::Material& material, const d2d::Filter& filter, 
+		void AddCircleShape(WorldID entityID, const d2d::Material& material, const d2d::Filter& filter,
 			float sizeRelativeToWidth = 1.0f, const b2Vec2& position = b2Vec2_zero, bool isSensor = false);
-		void AddRectShape(unsigned entityID, const d2d::Material& material, const d2d::Filter& filter,
+		void AddRectShape(WorldID entityID, const d2d::Material& material, const d2d::Filter& filter,
 			const b2Vec2& relativeSize = { 1.0f, 1.0f }, bool isSensor = false,
 			const b2Vec2& position = b2Vec2_zero, float angle = 0.0f);
-		void AddShapes(unsigned entityID, const std::string& model,
+		void AddShapes(WorldID entityID, const std::string& model,
 			const d2d::Material& material, const d2d::Filter& filter, bool isSensor = false,
 			const b2Vec2& position = b2Vec2_zero, float angle = 0.0f);
 
 		// Visual
-		void AddDrawRadarComponent(unsigned entityID, const DrawRadarComponent& radarComponent);
-		void AddDrawFixturesComponent(unsigned entityID, const DrawFixturesComponent& fixturesComponent);
-		void AddDrawAnimationComponent(unsigned entityID, const d2d::AnimationDef* const animationDefPtr);
-		void SetAnimationLayer(unsigned entityID, int layer);
+		void AddDrawRadarComponent(WorldID entityID, const DrawRadarComponent& radarComponent);
+		void AddDrawFixturesComponent(WorldID entityID, const DrawFixturesComponent& fixturesComponent);
+		void AddDrawAnimationComponent(WorldID entityID, const d2d::AnimationDef* const animationDefPtr);
+		void SetAnimationLayer(WorldID entityID, int layer);
 
 		// Life and Death
-		void AddHealthComponent(unsigned entityID, float maxHP);
-		void AddParentComponent(unsigned entityID, unsigned parentID);
-		void AddParticleExplosionOnDeathComponent(unsigned entityID, float relativeSize,
+		void AddHealthComponent(WorldID entityID, float maxHP);
+		void AddParentComponent(WorldID entityID, WorldID parentID);
+		void AddParticleExplosionOnDeathComponent(WorldID entityID, float relativeSize,
 			unsigned numParticles, const d2d::Range<float>& speedRange, float damageBasedSpeedIncreaseFactor,
 			const d2d::Range<int>& sizeIndexRange, const d2d::ColorRange& colorRange,
 			float lifetime, float fadeIn, float fadeOut);
-		void AddDestructionDelayComponent(unsigned entityID, float delay);
-		void AddDestructionDelayOnContactComponent(unsigned entityID, float delay);
-		void AddDestructionChanceOnContactComponent(unsigned entityID, float delay);
-		void AddMorphIntoEntityID(unsigned entityID, unsigned newEntityID);
+		void AddDestructionDelayComponent(WorldID entityID, float delay);
+		void AddDestructionDelayOnContactComponent(WorldID entityID, float delay);
+		void AddDestructionChanceOnContactComponent(WorldID entityID, float delay);
+		void AddMorphIntoEntityID(WorldID entityID, WorldID newEntityID);
 
 		// Canons
-		void AddProjectileLauncherComponent(unsigned entityID, unsigned numSlots, bool secondaryLaunchers);
-		void AddProjectileLauncher(unsigned entityID, unsigned slot, const ProjectileDef& projectileDef,
+		void AddProjectileLauncherComponent(WorldID entityID, unsigned numSlots, bool secondaryLaunchers);
+		void AddProjectileLauncher(WorldID entityID, unsigned slot, const ProjectileDef& projectileDef,
 			const b2Vec2& localRelativePosition, float impulse, float interval, bool temporarilyDisabled, bool secondaryLaunchers);
-		void RemoveProjectileLauncher(unsigned entityID, unsigned slot, bool secondaryLaunchers);
-		bool IsValidProjectileLauncherSlot(unsigned entityID, unsigned slot, bool secondaryLaunchers) const;
+		void RemoveProjectileLauncher(WorldID entityID, unsigned slot, bool secondaryLaunchers);
+		bool IsValidProjectileLauncherSlot(WorldID entityID, unsigned slot, bool secondaryLaunchers) const;
 
 		// Getting around
-		void AddThrusterComponent(unsigned entityID, unsigned numSlots, float initialFactor = 0.0f);
-		void AddThruster(unsigned entityID, unsigned slot, const d2d::AnimationDef* const animationDefPtr,
+		void AddThrusterComponent(WorldID entityID, unsigned numSlots, float initialFactor = 0.0f);
+		void AddThruster(WorldID entityID, unsigned slot, const d2d::AnimationDef* const animationDefPtr,
 			float acceleration, const b2Vec2& localRelativePosition);
-		void RemoveThruster(unsigned entityID, unsigned slot);
-		bool IsValidThrusterSlot(unsigned entityID, unsigned slot) const;
-		void AddSetThrustFactorAfterDelayComponent(unsigned entityID, float thrustFactor, float delay);
-		void AddRotatorComponent(unsigned entityID, float rotationSpeed);
-		void AddBrakeComponent(unsigned entityID, float deceleration);
+		void RemoveThruster(WorldID entityID, unsigned slot);
+		bool IsValidThrusterSlot(WorldID entityID, unsigned slot) const;
+		void AddSetThrustFactorAfterDelayComponent(WorldID entityID, float thrustFactor, float delay);
+		void AddRotatorComponent(WorldID entityID, float rotationSpeed);
+		void AddBrakeComponent(WorldID entityID, float deceleration);
 
 		// Query
-		bool IsActive(unsigned entityID) const;
+		bool IsActive(WorldID entityID) const;
 		const d2d::Rect& GetWorldRect() const;
 		const b2Vec2& GetWorldCenter() const;
-		unsigned GetEntityCount() const;
-		bool EntityExists(unsigned entityID) const;
-		bool HasComponents(unsigned entityID, BitMask componentMask) const;
-		bool HasFlags(unsigned entityID, BitMask flagMask) const;
-		bool HasSize(unsigned entityID) const;
-		bool HasSize2D(unsigned entityID) const;
-		bool HasPhysics(unsigned entityID) const;
+		WorldID GetEntityCount() const;
+		bool EntityExists(WorldID entityID) const;
+		bool HasComponents(WorldID entityID, BitMask componentMask) const;
+		bool HasFlags(WorldID entityID, BitMask flagMask) const;
+		bool HasSize(WorldID entityID) const;
+		bool HasSize2D(WorldID entityID) const;
+		bool HasPhysics(WorldID entityID) const;
 		bool GetClosestPhysicalEntity(const b2Vec2& position, float boudingRadius,
-			unsigned& entityIDOut, float& boundingRadiiGapOut) const;
-		int GetDrawLayer(unsigned entityID) const;
+			WorldID& entityIDOut, float& boundingRadiiGapOut) const;
+		int GetDrawLayer(WorldID entityID) const;
 
 		// Callers of the following must ensure entity has a physics component
-		const b2Transform& GetSmoothedTransform(unsigned entityID) const;
-		const b2Vec2& GetLinearVelocity(unsigned entityID) const;
-		float GetAngularVelocity(unsigned entityID) const;
-		const b2Vec2& GetLocalCenterOfMass(unsigned entityID) const;
-		const b2Vec2& GetWorldCenter(unsigned entityID) const;
+		const b2Transform& GetSmoothedTransform(WorldID entityID) const;
+		const b2Vec2& GetLinearVelocity(WorldID entityID) const;
+		float GetAngularVelocity(WorldID entityID) const;
+		const b2Vec2& GetLocalCenterOfMass(WorldID entityID) const;
+		const b2Vec2& GetWorldCenter(WorldID entityID) const;
 
 		// Box2D callbacks
 		bool ShouldCollide(b2Fixture* fixturePtr1, b2Fixture* fixturePtr2) override;
@@ -235,23 +236,23 @@ namespace Space
 		void EndContact(b2Contact* contactPtr) override;
 
 		// Health modifiers
-		void AdjustHealth(unsigned entityID, float healthChange);
-		void ReduceHealthToZero(unsigned entityID);
+		void AdjustHealth(WorldID entityID, float healthChange);
+		void ReduceHealthToZero(WorldID entityID);
 
 		// Clone-aware modifiers
-		void SetTransform(unsigned entityID, const b2Vec2& position, float angle);
-		void SetLinearVelocity(unsigned entityID, const b2Vec2& velocity);
-		void SetAngularVelocity(unsigned entityID, float angularVelocity);
-		void Activate(unsigned entityID);
-		void Deactivate(unsigned entityID);
-		void ApplyForceToCenter(unsigned entityID, const b2Vec2& force);
-		void ApplyForceToLocalPoint(unsigned entityID, const b2Vec2& force, const b2Vec2& localPoint);
-		void ApplyForceToWorldPoint(unsigned entityID, const b2Vec2& force, const b2Vec2& worldPoint);
-		void ApplyTorque(unsigned entityID, float torque);
-		void ApplyLinearImpulseToCenter(unsigned entityID, const b2Vec2& impulse);
-		void ApplyLinearImpulseToLocalPoint(unsigned entityID, const b2Vec2& impulse, const b2Vec2& localPoint);
-		void ApplyLinearImpulseToWorldPoint(unsigned entityID, const b2Vec2& impulse, const b2Vec2& worldPoint);
-		void ApplyAngularImpulse(unsigned entityID, float impulse);
+		void SetTransform(WorldID entityID, const b2Vec2& position, float angle);
+		void SetLinearVelocity(WorldID entityID, const b2Vec2& velocity);
+		void SetAngularVelocity(WorldID entityID, float angularVelocity);
+		void Activate(WorldID entityID);
+		void Deactivate(WorldID entityID);
+		void ApplyForceToCenter(WorldID entityID, const b2Vec2& force);
+		void ApplyForceToLocalPoint(WorldID entityID, const b2Vec2& force, const b2Vec2& localPoint);
+		void ApplyForceToWorldPoint(WorldID entityID, const b2Vec2& force, const b2Vec2& worldPoint);
+		void ApplyTorque(WorldID entityID, float torque);
+		void ApplyLinearImpulseToCenter(WorldID entityID, const b2Vec2& impulse);
+		void ApplyLinearImpulseToLocalPoint(WorldID entityID, const b2Vec2& impulse, const b2Vec2& localPoint);
+		void ApplyLinearImpulseToWorldPoint(WorldID entityID, const b2Vec2& impulse, const b2Vec2& worldPoint);
+		void ApplyAngularImpulse(WorldID entityID, float impulse);
 
 	private:
 		//+---------------------------------------\
@@ -262,7 +263,7 @@ namespace Space
 		typedef std::array<CloneSection, WORLD_NUM_CLONES> CloneSectionList;
 		struct Body
 		{
-			unsigned entityID;
+			WorldID entityID;
 			bool isClone;
 			b2Body* b2BodyPtr;
 		};
@@ -348,7 +349,7 @@ namespace Space
 		struct DamageData
 		{
 			float damage;
-			unsigned entityID;
+			WorldID entityID;
 			b2Vec2 position;
 		};
 		template<class T> class ComponentArray 
@@ -389,7 +390,7 @@ namespace Space
 		void SmoothStates(float timestepAlpha);
 		void ProcessDestroyBuffer();
 		bool ShouldCollideDefaultFiltering(const b2Filter& filter1, const b2Filter& filter2) const;
-		void CreateExplosionFromEntity(unsigned entityID, const ParticleExplosionComponent& particleExplosion);
+		void CreateExplosionFromEntity(WorldID entityID, const ParticleExplosionComponent& particleExplosion);
 		
 		// Box2D user data
 		Body* GetUserBodyPtr(b2Body* b2BodyPtr) const;
@@ -415,7 +416,7 @@ namespace Space
 		//|			    Private Data	          |
 		//\---------------------------------------/
 		WorldDef m_settings;
-		unsigned m_highestActiveEntityCount{ 0 };
+		WorldID m_highestActiveEntityCount{ 0 };
 		DestroyListener* m_destructionListenerPtr{ nullptr };
 		WrapListener* m_wrappedEntityListenerPtr{ nullptr };
 		ProjectileLauncherCallback* m_projectileLauncherCallbackPtr{ nullptr };
@@ -423,7 +424,7 @@ namespace Space
 
 		float m_timestepAccumulator{ 0.0f };
 		b2World* m_b2WorldPtr{ nullptr };
-		std::queue< unsigned > m_destroyBuffer;
+		std::queue< WorldID > m_destroyBuffer;
 		std::list< DamageData > m_damageDataList;
 		b2Vec2 m_worldDimensions;
 		b2Vec2 m_worldCenter;
@@ -441,14 +442,14 @@ namespace Space
 		ComponentArray< float > m_destructionDelayComponents;
 		ComponentArray< float > m_destructionDelayOnContactComponents;
 		ComponentArray< float > m_destructionChanceOnContactComponents;
-		ComponentArray< unsigned > m_morphIntoEntityIDs;
+		ComponentArray< WorldID > m_morphIntoEntityIDs;
 		ComponentArray< RotatorComponent > m_rotatorComponents;
 		ComponentArray< SetThrustFactorAfterDelayComponent > m_setThrustFactorAfterDelayComponents;
 		ComponentArray< ThrusterComponent > m_thrusterComponents;
 		ComponentArray< BrakeComponent > m_brakeComponents;
 		ComponentArray< ProjectileLauncherComponent > m_primaryProjectileLauncherComponents;
 		ComponentArray< ProjectileLauncherComponent > m_secondaryProjectileLauncherComponents;
-		ComponentArray< unsigned > m_parentComponents;
+		ComponentArray< WorldID > m_parentComponents;
 
 		ComponentArray< PhysicsComponent > m_physicsComponents;
 		ComponentArray< PhysicsWrapData > m_physicsWrapDatas;

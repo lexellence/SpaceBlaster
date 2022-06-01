@@ -153,11 +153,11 @@ namespace Space
 		void Draw();
 
 		// World callbacks
-		void SayGoodbye(unsigned entityID) override;
-		void EntityWrapped(unsigned entityID, const b2Vec2& translation) override;
-		unsigned LaunchProjectile(const ProjectileDef& projectileDef, const b2Vec2& position, 
-			float angle, float impulse, const b2Vec2& parentVelocity, unsigned parentID) override;
-		void MorphedIntoEntity(unsigned replacedEntityID, unsigned newEntityID) override;
+		void SayGoodbye(WorldID entityID) override;
+		void EntityWrapped(WorldID entityID, const b2Vec2& translation) override;
+		WorldID LaunchProjectile(const ProjectileDef& projectileDef, const b2Vec2& position,
+			float angle, float impulse, const b2Vec2& parentVelocity, WorldID parentID) override;
+		void MorphedIntoEntity(WorldID replacedEntityID, WorldID newEntityID) override;
 
 	private:
 		void InitLevel(const std::string& level);
@@ -166,19 +166,19 @@ namespace Space
 		void LoadTest0();
 		void LoadTest1();
 		void LoadTest2();
-		void SetPlayer(unsigned entityID);
-		void FollowEntity(unsigned entityID);
+		void SetPlayer(WorldID entityID);
+		void FollowEntity(WorldID entityID);
 		//void CreateEntity(World& world);
 		void CreatePlayer(World& world, const b2Vec2& position, float angle);
-		unsigned CreateScout(World& world, const b2Vec2& position, float angle, bool activate = true);
-		unsigned CreateBlaster(World& world, const b2Vec2& position, float angle, bool activate = true);
-		unsigned CreateXLargeAsteroid(World& world, unsigned modelIndex, bool isRock,
+		WorldID CreateScout(World& world, const b2Vec2& position, float angle, bool activate = true);
+		WorldID CreateBlaster(World& world, const b2Vec2& position, float angle, bool activate = true);
+		WorldID CreateXLargeAsteroid(World& world, unsigned modelIndex, bool isRock,
 			const b2Vec2& position, float angle, const b2Vec2& velocity, float angularVelocity, bool activate = true);
-		unsigned CreateLargeAsteroid(World& world, unsigned modelIndex, bool isRock,
+		WorldID CreateLargeAsteroid(World& world, unsigned modelIndex, bool isRock,
 			const b2Vec2& position, float angle, const b2Vec2& velocity, float angularVelocity, bool activate = true);
-		unsigned CreateMediumAsteroid(World& world, unsigned modelIndex, bool isRock,
+		WorldID CreateMediumAsteroid(World& world, unsigned modelIndex, bool isRock,
 			const b2Vec2& position, float angle, const b2Vec2& velocity, float angularVelocity, bool activate = true);
-		unsigned CreateSmallAsteroid(World& world, unsigned modelIndex, bool isRock,
+		WorldID CreateSmallAsteroid(World& world, unsigned modelIndex, bool isRock,
 			const b2Vec2& position, float angle, const b2Vec2& velocity, float angularVelocity, bool activate = true);
 	private:
 		GameDef m_settings;
@@ -187,10 +187,10 @@ namespace Space
 
 		Camera m_camera;
 		bool m_cameraFollowingEntity{ false };	
-		unsigned m_cameraFollowEntityID;
+		WorldID m_cameraFollowEntityID;
 
 		bool m_playerSet{ false };
-		unsigned m_playerID;
+		WorldID m_playerID;
 
 		bool m_startOver{ false };
 		std::string m_currentLevel;

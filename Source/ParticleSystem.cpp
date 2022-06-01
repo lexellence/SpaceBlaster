@@ -27,14 +27,14 @@ namespace Space
 			m_highestActiveParticleCount = firstUnusedIndex;
 
 		// Save positions for interpolation, move particles, and interpolate
-		for(unsigned i = 0; i < firstUnusedIndex; ++i)
+		for(ParticleID i = 0; i < firstUnusedIndex; ++i)
 		{
 			physics[i].lastPosition = physics[i].position;
 			physics[i].position += dt * physics[i].velocity;
 		}
 
 		// Update ages and delete dead particles
-		unsigned i = 0;
+		ParticleID i = 0;
 		while(i < firstUnusedIndex)
 		{
 			timers[i].age += dt;
@@ -46,10 +46,10 @@ namespace Space
 	}
 	void ParticleSystem::SmoothStates(float timestepAlpha)
 	{
-		for(unsigned i = 0; i < firstUnusedIndex; ++i)
+		for(ParticleID i = 0; i < firstUnusedIndex; ++i)
 			smoothedPositions[i] = d2d::Lerp(physics[i].lastPosition, physics[i].position, timestepAlpha);
 	}
-	float ParticleSystem::CalculateFadedAlpha(unsigned index)
+	float ParticleSystem::CalculateFadedAlpha(ParticleID index)
 	{
 		// Partial alpha during fade-in or fade-out stages
 		if(timers[index].age < timers[index].fadeIn)
@@ -65,7 +65,7 @@ namespace Space
 		else
 			return colors[index].alpha;
 	}
-	void ParticleSystem::CopyParticle(unsigned from, unsigned to)
+	void ParticleSystem::CopyParticle(ParticleID from, ParticleID to)
 	{
 		timers[to] = timers[from];
 		physics[to] = physics[from];
@@ -73,7 +73,7 @@ namespace Space
 		colors[to] = colors[from];
 		pointSizeIndices[to] = pointSizeIndices[from];
 	}
-	void ParticleSystem::DeleteParticle(unsigned index)
+	void ParticleSystem::DeleteParticle(ParticleID index)
 	{
 		// Cut and paste particle from the end
 		--firstUnusedIndex;

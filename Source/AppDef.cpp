@@ -106,7 +106,7 @@ namespace Space
 		if(!d2d::Window::VALID_ANTI_ALIASING_SAMPLES.Contains(window.antiAliasingSamples))
 			throw SettingOutOfRangeException{ "window.antiAliasingSamples" };
 
-		for(unsigned i = 0; i < window.colorChannelBits.size(); ++i)
+		for(size_t i = 0; i < window.colorChannelBits.size(); ++i)
 			if(window.colorChannelBits[i] <= 0)
 				throw SettingOutOfRangeException{ "window.colorChannelBits[" + d2d::ToString(i) + "]" };
 

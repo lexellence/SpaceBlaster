@@ -10,6 +10,7 @@
 #pragma once
 namespace Space
 {
+	using ParticleID = unsigned long;
 	struct ParticleTimer
 	{
 		float lifetime{};
@@ -27,7 +28,7 @@ namespace Space
 	{
 		CIRCLE, RECT, USE_BODY_SHAPES
 	};
-	const unsigned long MAX_PARTICLES{ 50000ul };
+	const ParticleID MAX_PARTICLES{ 50000 };
 	class ParticleSystem
 	{
 	public:
@@ -35,7 +36,7 @@ namespace Space
 		void Init();
 		void Update(float dt);
 		void SmoothStates(float timestepAlpha);
-		float CalculateFadedAlpha(unsigned index);
+		float CalculateFadedAlpha(ParticleID index);
 
 	private:
 		// If you add more components, add it to CopyParticle()
@@ -46,12 +47,12 @@ namespace Space
 		d2d::Color colors[MAX_PARTICLES];
 		float fadedAlphas[MAX_PARTICLES];
 		unsigned pointSizeIndices[MAX_PARTICLES];
-		unsigned firstUnusedIndex{ 0 };
+		ParticleID firstUnusedIndex{ 0 };
 
-		unsigned m_highestActiveParticleCount{ 0u };
+		ParticleID m_highestActiveParticleCount{ 0u };
 		float m_timestepAccumulator{ 0.0f };
-		void CopyParticle(unsigned from, unsigned to);
-		void DeleteParticle(unsigned index);
+		void CopyParticle(ParticleID from, ParticleID to);
+		void DeleteParticle(ParticleID index);
 
 		friend class World;
 	};

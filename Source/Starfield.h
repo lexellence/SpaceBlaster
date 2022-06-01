@@ -10,7 +10,8 @@
 #pragma once
 namespace Space
 {
-	const unsigned STARFIELD_MAX_STARS{ 50000u };
+	using StarID = unsigned;
+	const StarID STARFIELD_MAX_STARS{ 50000 };
 	struct StarfieldDef
 	{
 		float maxCameraDimension;
@@ -33,7 +34,7 @@ namespace Space
 		bool m_firstDraw{ true };
 		b2Vec2 m_cameraPosition;
 		d2d::Rect m_boundaryRect;
-		unsigned m_numStars{};
+		StarID m_numStars{};
 		b2Vec2 m_positions[STARFIELD_MAX_STARS];
 		float m_speedFactors[STARFIELD_MAX_STARS];
 		int m_pointSizeIndices[STARFIELD_MAX_STARS];

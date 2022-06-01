@@ -39,9 +39,9 @@ namespace Space
 			m_destroyBuffer.pop();
 		
 		// Clear components and flags
-		for(unsigned i = 0; i < WORLD_MAX_ENTITIES; ++i)
+		for(WorldID i = 0; i < WORLD_MAX_ENTITIES; ++i)
 			m_componentBits[i] = COMPONENT_NONE;
-		for(unsigned i = 0; i < WORLD_MAX_ENTITIES; ++i)
+		for(WorldID i = 0; i < WORLD_MAX_ENTITIES; ++i)
 			m_flagBits[i] = FLAG_NONE;
 
 		// Create new Box2D physics world
@@ -79,9 +79,9 @@ namespace Space
 	//+------------------------\----------------------------------
 	//|	  Creating Entities    |
 	//\------------------------/----------------------------------
-	unsigned World::NewEntityID(const b2Vec2& size, int drawLayer, bool activate)
+	WorldID World::NewEntityID(const b2Vec2& size, int drawLayer, bool activate)
 	{
-		for(unsigned entityID = 0; entityID < WORLD_MAX_ENTITIES; ++entityID)
+		for(WorldID entityID = 0; entityID < WORLD_MAX_ENTITIES; ++entityID)
 			if(m_componentBits[entityID] == COMPONENT_NONE && m_flagBits[entityID] == FLAG_NONE)
 			{
 				m_sizeComponents[entityID] = size;
@@ -95,7 +95,7 @@ namespace Space
 			}
 		throw GameException{ "World ran out of entities" };
 	}
-	void World::SetFlags(unsigned entityID, FlagBits flagBits, bool enable)
+	void World::SetFlags(WorldID entityID, FlagBits flagBits, bool enable)
 	{
 		d2Assert(entityID < WORLD_MAX_ENTITIES);
 		if(enable)
@@ -103,7 +103,7 @@ namespace Space
 		else
 			m_flagBits[entityID] &= ~flagBits;
 	}
-	void World::RemoveComponents(unsigned entityID, ComponentBits componentBits)
+	void World::RemoveComponents(WorldID entityID, ComponentBits componentBits)
 	{
 		d2Assert(entityID < WORLD_MAX_ENTITIES);
 		m_componentBits[entityID] &= ~componentBits;
@@ -120,7 +120,7 @@ namespace Space
 		do
 		{
 			position = d2d::RandomVec2InRect(m_worldRect);
-			unsigned id;
+			WorldID id;
 			float boundingRadiiGap;
 			if(!GetClosestPhysicalEntity(position, newBoundingRadius, id, boundingRadiiGap))
 				acceptablePositionFound = true;
@@ -133,7 +133,7 @@ namespace Space
 
 		return acceptablePositionFound;
 	}
-	void World::AddPhysicsComponent(unsigned entityID, b2BodyType type, 
+	void World::AddPhysicsComponent(WorldID entityID, b2BodyType type,
 		const b2Vec2& position, float angle, const b2Vec2& velocity, float angularVelocity,
 		bool fixedRotation, bool continuousCollisionDetection)
 	{
@@ -184,7 +184,7 @@ namespace Space
 		m_smoothedTransforms[entityID] = m_lastTransforms[entityID];
 		m_lastLinearVelocities[entityID] = m_physicsComponents[entityID].mainBody.b2BodyPtr->GetLinearVelocity();
 	}
-	void World::AddCircleShape(unsigned entityID, const d2d::Material& material, const d2d::Filter& filter,
+	void World::AddCircleShape(WorldID entityID, const d2d::Material& material, const d2d::Filter& filter,
 		float sizeRelativeToWidth, const b2Vec2& position, bool isSensor)
 	{
 		d2Assert(entityID < WORLD_MAX_ENTITIES);
@@ -201,7 +201,7 @@ namespace Space
 					material, filter, isSensor, position);
 		}
 	}
-	void World::AddRectShape(unsigned entityID, const d2d::Material& material, const d2d::Filter& filter,
+	void World::AddRectShape(WorldID entityID, const d2d::Material& material, const d2d::Filter& filter,
 		const b2Vec2& relativeSize, bool isSensor, const b2Vec2& position, float angle)
 	{
 		d2Assert(entityID < WORLD_MAX_ENTITIES);
@@ -218,7 +218,7 @@ namespace Space
 					material, filter, isSensor, position, angle);
 		}
 	}
-	void World::AddShapes(unsigned entityID, const std::string& model, 
+	void World::AddShapes(WorldID entityID, const std::string& model,
 		const d2d::Material& material, const d2d::Filter& filter, bool isSensor,
 		const b2Vec2& position, float angle)
 	{
@@ -238,19 +238,19 @@ namespace Space
 	//+------------------------\----------------------------------
 	//|	  Visual Components    |
 	//\------------------------/----------------------------------
-	void World::AddDrawRadarComponent(unsigned entityID, const DrawRadarComponent& radarComponent)
+	void World::AddDrawRadarComponent(WorldID entityID, const DrawRadarComponent& radarComponent)
 	{
 		d2Assert(entityID < WORLD_MAX_ENTITIES);
 		m_componentBits[entityID] |= COMPONENT_DRAW_ON_RADAR;
 		m_drawRadarComponents[entityID] = radarComponent;
 	}
-	void World::AddDrawFixturesComponent(unsigned entityID, const DrawFixturesComponent& fixturesComponent)
+	void World::AddDrawFixturesComponent(WorldID entityID, const DrawFixturesComponent& fixturesComponent)
 	{
 		d2Assert(entityID < WORLD_MAX_ENTITIES);
 		m_componentBits[entityID] |= COMPONENT_DRAW_FIXTURES;
 		m_drawFixtureComponents[entityID] = fixturesComponent;
 	}
-	void World::AddDrawAnimationComponent(unsigned entityID, const d2d::AnimationDef* const animationDefPtr)
+	void World::AddDrawAnimationComponent(WorldID entityID, const d2d::AnimationDef* const animationDefPtr)
 	{
 		d2Assert(entityID < WORLD_MAX_ENTITIES);
 		m_componentBits[entityID] |= COMPONENT_DRAW_ANIMATION;
@@ -276,7 +276,7 @@ namespace Space
 		//	frames[i].sprite = animationDefPtr->frameDefs[i].sprite;
 		//}
 	//}
-	void World::SetAnimationLayer(unsigned entityID, int layer)
+	void World::SetAnimationLayer(WorldID entityID, int layer)
 	{
 		d2Assert(entityID < WORLD_MAX_ENTITIES);
 		d2d::Clamp(layer, m_settings.drawLayerRange);
@@ -285,7 +285,7 @@ namespace Space
 	//+--------------------\--------------------------------------
 	//|	  Life and Death   |
 	//\--------------------/--------------------------------------
-	void World::AddHealthComponent(unsigned entityID, float maxHP)
+	void World::AddHealthComponent(WorldID entityID, float maxHP)
 	{
 		d2Assert(entityID < WORLD_MAX_ENTITIES);
 		m_componentBits[entityID] |= COMPONENT_HEALTH;
@@ -293,13 +293,13 @@ namespace Space
 		m_healthComponents[entityID].hp = maxHP;
 		m_healthComponents[entityID].deathDamage = 0.0f;
 	}
-	void World::AddParentComponent(unsigned entityID, unsigned parentID)
+	void World::AddParentComponent(WorldID entityID, WorldID parentID)
 	{
 		d2Assert(entityID < WORLD_MAX_ENTITIES);
 		m_componentBits[entityID] |= COMPONENT_PARENT;
 		m_parentComponents[entityID] = parentID;
 	}
-	void World::AddParticleExplosionOnDeathComponent(unsigned entityID, float relativeSize, 
+	void World::AddParticleExplosionOnDeathComponent(WorldID entityID, float relativeSize,
 		unsigned numParticles, const d2d::Range<float>& speedRange, float damageBasedSpeedIncreaseFactor, 
 		const d2d::Range<int>& sizeIndexRange, const d2d::ColorRange& colorRange,
 		float lifetime, float fadeIn, float fadeOut)
@@ -316,25 +316,25 @@ namespace Space
 		m_particleExplosionComponents[entityID].fadeIn = fadeIn;
 		m_particleExplosionComponents[entityID].fadeOut = fadeOut;
 	}
-	void World::AddDestructionDelayComponent(unsigned entityID, float delay)
+	void World::AddDestructionDelayComponent(WorldID entityID, float delay)
 	{
 		d2Assert(entityID < WORLD_MAX_ENTITIES);
 		m_componentBits[entityID] |= COMPONENT_DESTRUCTION_DELAY;
 		m_destructionDelayComponents[entityID] = std::max(delay, 0.0f);
 	}
-	void World::AddDestructionDelayOnContactComponent(unsigned entityID, float delay)
+	void World::AddDestructionDelayOnContactComponent(WorldID entityID, float delay)
 	{
 		d2Assert(entityID < WORLD_MAX_ENTITIES);
 		m_componentBits[entityID] |= COMPONENT_DESTRUCTION_DELAY_ON_CONTACT;
 		m_destructionDelayOnContactComponents[entityID] = std::max(delay, 0.0f);
 	}
-	void World::AddDestructionChanceOnContactComponent(unsigned entityID, float destructionChance)
+	void World::AddDestructionChanceOnContactComponent(WorldID entityID, float destructionChance)
 	{
 		d2Assert(entityID < WORLD_MAX_ENTITIES);
 		m_componentBits[entityID] |= COMPONENT_DESTRUCTION_CHANCE_ON_CONTACT;
 		m_destructionChanceOnContactComponents[entityID] = std::clamp(destructionChance, 0.0f, 1.0f);
 	}
-	void World::AddMorphIntoEntityID(unsigned entityID, unsigned newEntityID)
+	void World::AddMorphIntoEntityID(WorldID entityID, WorldID newEntityID)
 	{
 		d2Assert(entityID < WORLD_MAX_ENTITIES);
 		d2Assert(newEntityID < WORLD_MAX_ENTITIES);
@@ -344,7 +344,7 @@ namespace Space
 	//+---------------------------\-------------------------------
 	//|	  Projectile Launchers    |
 	//\---------------------------/-------------------------------
-	void World::AddProjectileLauncherComponent(unsigned entityID, unsigned numSlots, bool secondaryLaunchers)
+	void World::AddProjectileLauncherComponent(WorldID entityID, unsigned numSlots, bool secondaryLaunchers)
 	{
 		d2Assert(entityID < WORLD_MAX_ENTITIES);
 		d2Assert(numSlots <= WORLD_MAX_PROJECTILE_LAUNCHER_SLOTS);
@@ -358,7 +358,7 @@ namespace Space
 		for(unsigned i = 0; i < WORLD_MAX_PROJECTILE_LAUNCHER_SLOTS; ++i)
 			launcherComponentPtr->projectileLaunchers[i].enabled = false;
 	}
-	void World::AddProjectileLauncher(unsigned entityID, unsigned slot, const ProjectileDef& projectileDef,
+	void World::AddProjectileLauncher(WorldID entityID, unsigned slot, const ProjectileDef& projectileDef,
 		const b2Vec2& localRelativePosition, float impulse, float interval, bool temporarilyDisabled, bool secondaryLaunchers)
 	{
 		d2Assert(entityID < WORLD_MAX_ENTITIES);
@@ -375,7 +375,7 @@ namespace Space
 			launcherComponentPtr->projectileLaunchers[slot].intervalAccumulator = interval;
 		}
 	}
-	void World::RemoveProjectileLauncher(unsigned entityID, unsigned slot, bool secondaryLaunchers)
+	void World::RemoveProjectileLauncher(WorldID entityID, unsigned slot, bool secondaryLaunchers)
 	{
 		d2Assert(entityID < WORLD_MAX_ENTITIES);
 		if(IsValidProjectileLauncherSlot(entityID, slot, secondaryLaunchers))
@@ -385,7 +385,7 @@ namespace Space
 			launcherComponentPtr->projectileLaunchers[slot].enabled = false;
 		}
 	}
-	bool World::IsValidProjectileLauncherSlot(unsigned entityID, unsigned slot, bool secondaryLaunchers) const
+	bool World::IsValidProjectileLauncherSlot(WorldID entityID, unsigned slot, bool secondaryLaunchers) const
 	{
 		d2Assert(entityID < WORLD_MAX_ENTITIES);
 		const ProjectileLauncherComponent* launcherComponentPtr{
@@ -397,7 +397,7 @@ namespace Space
 	//+----------------------\------------------------------------
 	//|	   Getting around	 |
 	//\----------------------/------------------------------------
-	void World::AddThrusterComponent(unsigned entityID, unsigned numSlots, float initialFactor)
+	void World::AddThrusterComponent(WorldID entityID, unsigned numSlots, float initialFactor)
 	{
 		d2Assert(entityID < WORLD_MAX_ENTITIES);
 		d2Assert(numSlots <= WORLD_MAX_THRUSTER_SLOTS);
@@ -409,7 +409,7 @@ namespace Space
 		for(unsigned i = 0; i < WORLD_MAX_THRUSTER_SLOTS; ++i)
 			thrusterComponent.thrusters[i].enabled = false;
 	}
-	void World::AddThruster(unsigned entityID, unsigned slot, const d2d::AnimationDef* const animationDefPtr,
+	void World::AddThruster(WorldID entityID, unsigned slot, const d2d::AnimationDef* const animationDefPtr,
 		float acceleration, const b2Vec2& localRelativePosition)
 	{
 		d2Assert(entityID < WORLD_MAX_ENTITIES);
@@ -420,26 +420,26 @@ namespace Space
 		m_thrusterComponents[entityID].thrusters[slot].acceleration = acceleration;
 		m_thrusterComponents[entityID].thrusters[slot].localRelativePosition = localRelativePosition;
 	}
-	void World::RemoveThruster(unsigned entityID, unsigned slot)
+	void World::RemoveThruster(WorldID entityID, unsigned slot)
 	{
 		d2Assert(entityID < WORLD_MAX_ENTITIES);
 		d2Assert(IsValidThrusterSlot(entityID, slot));
 		m_primaryProjectileLauncherComponents[entityID].projectileLaunchers[slot].enabled = false;
 	}
-	bool World::IsValidThrusterSlot(unsigned entityID, unsigned slot) const
+	bool World::IsValidThrusterSlot(WorldID entityID, unsigned slot) const
 	{
 		d2Assert(entityID < WORLD_MAX_ENTITIES);
 		return (HasComponents(entityID, COMPONENT_THRUSTER) &&
 			slot < m_thrusterComponents[entityID].numSlots);
 	}
-	void World::AddSetThrustFactorAfterDelayComponent(unsigned entityID, float thrustFactor, float delay)
+	void World::AddSetThrustFactorAfterDelayComponent(WorldID entityID, float thrustFactor, float delay)
 	{
 		d2Assert(entityID < WORLD_MAX_ENTITIES);
 		m_componentBits[entityID] |= COMPONENT_SET_THRUST_AFTER_DELAY;
 		m_setThrustFactorAfterDelayComponents[entityID].factor = thrustFactor;
 		m_setThrustFactorAfterDelayComponents[entityID].delay = delay;
 	}
-	void World::AddRotatorComponent(unsigned entityID, float rotationSpeed)
+	void World::AddRotatorComponent(WorldID entityID, float rotationSpeed)
 	{
 		d2Assert(entityID < WORLD_MAX_ENTITIES);
 		m_componentBits[entityID] |= COMPONENT_ROTATOR;
@@ -447,7 +447,7 @@ namespace Space
 		m_rotatorComponents[entityID].lastFactor = 0.0f;
 		m_rotatorComponents[entityID].rotationSpeed = rotationSpeed;
 	}
-	void World::AddBrakeComponent(unsigned entityID, float deceleration)
+	void World::AddBrakeComponent(WorldID entityID, float deceleration)
 	{
 		d2Assert(entityID < WORLD_MAX_ENTITIES);
 		m_componentBits[entityID] |= COMPONENT_BRAKE;

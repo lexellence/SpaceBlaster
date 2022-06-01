@@ -24,10 +24,10 @@ namespace Space
 
 		// Calculate number of stars and make sure it's not too many
 		float starfieldArea{ m_boundaryRect.GetWidth() * m_boundaryRect.GetHeight() };
-		m_numStars = d2d::GetClamped((unsigned)(starfieldArea * def.density), { 0u, STARFIELD_MAX_STARS });
+		m_numStars = d2d::GetClamped((StarID)(starfieldArea * def.density), { 0, STARFIELD_MAX_STARS });
 
 		// Random starfield
-		for (unsigned i = 0; i < m_numStars; ++i)
+		for (StarID i = 0; i < m_numStars; ++i)
 		{
 			// Random position
 			m_positions[i] = d2d::RandomVec2InRect(m_boundaryRect);
@@ -51,7 +51,7 @@ namespace Space
 		if(!m_firstDraw && newCameraPosition != m_cameraPosition)
 		{
 			b2Vec2 cameraChange{ newCameraPosition - m_cameraPosition };
-			for(unsigned i = 0; i < m_numStars; ++i)
+			for(StarID i = 0; i < m_numStars; ++i)
 			{
 				// Move star proportional to viewport change, then wrap around the boundary
 				m_positions[i] -= m_speedFactors[i] * cameraChange;
@@ -66,7 +66,7 @@ namespace Space
 		for (int sizeIndex = m_pointSizeIndexRange.GetMin(); sizeIndex <= m_pointSizeIndexRange.GetMax(); ++sizeIndex)
 		{
 			d2d::Window::SetPointSize(d2d::Window::POINT_SIZES[sizeIndex]);
-			for (unsigned i = 0; i < m_numStars; ++i)
+			for (StarID i = 0; i < m_numStars; ++i)
 			{
 				if (m_pointSizeIndices[i] == sizeIndex)
 				{

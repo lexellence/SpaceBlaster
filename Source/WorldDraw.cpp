@@ -53,7 +53,7 @@ namespace Space
 		for(unsigned sizeIndex = 0; sizeIndex < d2d::Window::NUM_POINT_SIZES; ++sizeIndex)
 		{
 			d2d::Window::SetPointSize(d2d::Window::POINT_SIZES[sizeIndex]);
-			for(unsigned i = 0; i < m_particleSystem.firstUnusedIndex; ++i)
+			for(ParticleID i = 0; i < m_particleSystem.firstUnusedIndex; ++i)
 				if(m_particleSystem.layers[i] == layer)
 					if(m_particleSystem.pointSizeIndices[i] == sizeIndex)
 					{
@@ -78,7 +78,7 @@ namespace Space
 		d2d::Window::EnableTextures();
 		d2d::Window::EnableBlending();
 		BitMask requiredComponents{ COMPONENT_THRUSTER | COMPONENT_PHYSICS };
-		for(unsigned id = 0; id < WORLD_MAX_ENTITIES; ++id)
+		for(WorldID id = 0; id < WORLD_MAX_ENTITIES; ++id)
 			if(m_drawAnimationComponents[id].layer == layer)
 				if(HasComponents(id, requiredComponents) && HasSize2D(id) && IsActive(id))
 					if(m_thrusterComponents[id].factor > 0.0f)
@@ -111,7 +111,7 @@ namespace Space
 		d2d::Window::EnableTextures();
 		d2d::Window::EnableBlending();
 		BitMask requiredComponents{ COMPONENT_DRAW_ANIMATION | COMPONENT_PHYSICS };
-		for(unsigned id = 0; id < WORLD_MAX_ENTITIES; ++id)
+		for(WorldID id = 0; id < WORLD_MAX_ENTITIES; ++id)
 			if(m_drawAnimationComponents[id].layer == layer)
 				if(HasComponents(id, requiredComponents) && HasSize2D(id) && IsActive(id))
 				{
@@ -153,7 +153,7 @@ namespace Space
 		d2d::Window::EnableBlending();
 		d2d::Window::SetLineWidth(m_settings.drawFixturesLineWidth);
 		BitMask requiredComponents{ COMPONENT_DRAW_FIXTURES | COMPONENT_PHYSICS };
-		for(unsigned id = 0; id < WORLD_MAX_ENTITIES; ++id)
+		for(WorldID id = 0; id < WORLD_MAX_ENTITIES; ++id)
 			if(m_drawAnimationComponents[id].layer == layer)
 			{
 				bool draw{ false };
@@ -217,10 +217,11 @@ namespace Space
 	}
 	void World::DrawAllHealthMeters()
 	{
+		std::cout << "World::DrawAllHealthMeters" << std::endl;
 		d2d::Window::DisableTextures();
 		d2d::Window::EnableBlending();
 		BitMask requiredComponents{ COMPONENT_HEALTH | COMPONENT_PHYSICS };
-		for(unsigned id = 0; id < WORLD_MAX_ENTITIES; ++id)
+		for(WorldID id = 0; id < WORLD_MAX_ENTITIES; ++id)
 			if(HasComponents(id, requiredComponents) && IsActive(id))
 				if(m_healthComponents[id].hp < m_healthComponents[id].hpMax)
 				{
