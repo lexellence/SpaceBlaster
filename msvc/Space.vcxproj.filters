@@ -122,5 +122,8 @@
     <ClInclude Include="..\Source\WorldDef.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\Source\b2_user_settings.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -34,6 +34,7 @@
     <ClInclude Include="..\Source\App.h" />
     <ClInclude Include="..\Source\AppDef.h" />
     <ClInclude Include="..\Source\AppState.h" />
+    <ClInclude Include="..\Source\b2_user_settings.h" />
     <ClInclude Include="..\Source\Camera.h" />
     <ClInclude Include="..\Source\EntityFactory.h" />
     <ClInclude Include="..\Source\Exceptions.h" />

@@ -13,6 +13,7 @@
 //		2 enable d2Assert
 //		3 enable d2AssertParanoid 
 #define D2_ASSERT_LEVEL 2
+#define B2_USER_SETTINGS
 #include "d2d.h"
 
 
