@@ -217,7 +217,6 @@ namespace Space
 	}
 	void World::DrawAllHealthMeters()
 	{
-		std::cout << "World::DrawAllHealthMeters" << std::endl;
 		d2d::Window::DisableTextures();
 		d2d::Window::EnableBlending();
 		BitMask requiredComponents{ COMPONENT_HEALTH | COMPONENT_PHYSICS };

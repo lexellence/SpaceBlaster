@@ -175,6 +175,7 @@ namespace Space
 	//+-----------------------------------------------------------------------
 	const b2Vec2& World::GetLocalCenterOfMass(WorldID entityID) const
 	{
+		//std::cout << "World::GetLocalCenterOfMass entityID=" << entityID << std::endl;
 		d2Assert(HasPhysics(entityID));
 		return m_physicsComponents[entityID].mainBody.b2BodyPtr->GetLocalCenter();
 	}

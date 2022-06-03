@@ -25,7 +25,7 @@ namespace Space
 		m_world.SetDestructionListener(this);
 		m_world.SetWrapListener(this);
 		m_world.SetProjectileLauncherCallback(this);
-		m_world.SetMorphListener(this);
+		//m_world.SetMorphListener(this);
 	}
 	void Game::Init()
 	{
@@ -196,9 +196,13 @@ namespace Space
 	void Game::CreatePlayer(World& world, const b2Vec2& position, float angle)
 	{
 		WorldID blasterID{ CreateBlaster(world, position, d2d::PI_OVER_TWO, true) };
-		WorldID scoutID{ CreateScout(world, position, d2d::PI_OVER_TWO, false) };
-		world.AddMorphIntoEntityID(blasterID, scoutID);
-		world.AddMorphIntoEntityID(scoutID, blasterID);
+		//WorldID scoutID{ CreateScout(world, position, d2d::PI_OVER_TWO, false) };
+		//std::cout << "Game::CreatePlayer blasterID " << blasterID << " scoutID " << scoutID << std::endl;
+		//std::cout << "CreatePlayer HasPhysics: " << blasterID << " " << m_world.HasPhysics(blasterID) << std::endl;
+		//std::cout << "HasPhysics: " << scoutID << " " << m_world.HasPhysics(scoutID) << std::endl;
+
+		//world.AddMorphIntoEntityID(blasterID, scoutID);
+		//world.AddMorphIntoEntityID(scoutID, blasterID);
 		SetPlayer(blasterID);
 		FollowEntity(blasterID);
 	}
@@ -361,6 +365,9 @@ namespace Space
 	//\-------------/---------------------------------------------
 	void Game::Update(float dt, PlayerController& playerController)
 	{
+		//std::cout << "HasPhysics: " << 0 << " " << m_world.HasPhysics(0) << std::endl;
+		//std::cout << "HasPhysics: " << 1 << " " << m_world.HasPhysics(1) << std::endl;
+
 		// Delayed level change
 		if(m_delayedLevelChange)
 		{
@@ -385,16 +392,15 @@ namespace Space
 	}
 	void Game::UpdateCamera(float dt, const PlayerController& playerController)
 	{
-		std::cout << "Game::UpdateCamera" << std::endl;
 		if(m_cameraFollowingEntity)
 			if(m_world.HasPhysics(m_cameraFollowEntityID))
 				m_camera.SetPosition(b2Mul( m_world.GetSmoothedTransform(m_cameraFollowEntityID), 
 										    m_world.GetLocalCenterOfMass(m_cameraFollowEntityID) ));
 		m_camera.Update(dt, playerController.zoomOutFactor);
 	}
-	//+------------------------\----------------------------------
-	//|	  World Callbacks	   |
-	//\------------------------/----------------------------------
+	//+--------------------------\--------------------------------
+	//|	       SayGoodbye        | override (DestroyListener)
+	//\--------------------------/--------------------------------
 	void Game::SayGoodbye(WorldID entityID)
 	{
 		if(m_cameraFollowingEntity && entityID == m_cameraFollowEntityID)
@@ -406,11 +412,17 @@ namespace Space
 			m_playerSet = false;
 		}
 	}
+	//+--------------------------\--------------------------------
+	//|	      EntityWrapped      | override (WrapListener)
+	//\--------------------------/--------------------------------
 	void Game::EntityWrapped(WorldID entityID, const b2Vec2& translation)
 	{
 		if(m_cameraFollowingEntity && entityID == m_cameraFollowEntityID)
 			m_starfield.Translate(translation);
 	}
+	//+--------------------------\--------------------------------
+	//|	    LaunchProjectile     | override (ProjectileLauncherCallback)
+	//\--------------------------/--------------------------------
 	WorldID Game::LaunchProjectile(const ProjectileDef& projectileDef, const b2Vec2& position,
 		float angle, float impulse, const b2Vec2& parentVelocity, WorldID parentID)
 	{
@@ -450,13 +462,16 @@ namespace Space
 		}
 		return id;
 	}
-	void Game::MorphedIntoEntity(WorldID replacedEntityID, WorldID newEntityID)
-	{
-		if(m_playerSet && replacedEntityID == m_playerID)
-			SetPlayer(newEntityID);
-		if(m_cameraFollowingEntity && replacedEntityID == m_cameraFollowEntityID)
-			FollowEntity(newEntityID);
-	}
+	//+--------------------------\--------------------------------
+	//|	   MorphedIntoEntity     | override (MorphListener)
+	//\--------------------------/--------------------------------
+	//void Game::MorphedIntoEntity(WorldID replacedEntityID, WorldID newEntityID)
+	//{
+	//	if(m_playerSet && replacedEntityID == m_playerID)
+	//		SetPlayer(newEntityID);
+	//	if(m_cameraFollowingEntity && replacedEntityID == m_cameraFollowEntityID)
+	//		FollowEntity(newEntityID);
+	//}
 	//+-------------\---------------------------------------------
 	//|	   Draw     |
 	//\-------------/---------------------------------------------

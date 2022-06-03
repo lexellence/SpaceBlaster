@@ -57,7 +57,7 @@ namespace Space
 		const Uint8 m_secondaryFireButton{ SDL_CONTROLLER_AXIS_TRIGGERLEFT };
 		float m_primaryFireFactor;
 		float m_secondaryFireFactor;
-		const Uint8 m_morphButton{ SDL_CONTROLLER_BUTTON_Y };
+		//const Uint8 m_morphButton{ SDL_CONTROLLER_BUTTON_Y };
 		const Uint8 m_previousMissileTypeButton{ SDL_CONTROLLER_BUTTON_DPAD_LEFT };
 		const Uint8 m_nextMissileTypeButton{ SDL_CONTROLLER_BUTTON_DPAD_RIGHT };
 
@@ -82,7 +82,7 @@ namespace Space
 		const SDL_Keycode m_secondaryFireKey{ SDLK_LSHIFT };
 		bool m_primaryFireKeyPressed;
 		bool m_secondaryFireKeyPressed;
-		const SDL_Keycode m_morphKey{ SDLK_TAB };
+		//const SDL_Keycode m_morphKey{ SDLK_TAB };
 		const SDL_Keycode m_previousMissileKey{ SDLK_q };
 		const SDL_Keycode m_nextMissileKey{ SDLK_e };
 

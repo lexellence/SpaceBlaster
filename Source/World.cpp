@@ -72,10 +72,10 @@ namespace Space
 	{
 		m_projectileLauncherCallbackPtr = callbackPtr;
 	}
-	void World::SetMorphListener(MorphListener* listenerPtr)
-	{
-		m_morphListenerPtr = listenerPtr;
-	}
+	//void World::SetMorphListener(MorphListener* listenerPtr)
+	//{
+	//	m_morphListenerPtr = listenerPtr;
+	//}
 	//+------------------------\----------------------------------
 	//|	  Creating Entities    |
 	//\------------------------/----------------------------------
@@ -334,13 +334,13 @@ namespace Space
 		m_componentBits[entityID] |= COMPONENT_DESTRUCTION_CHANCE_ON_CONTACT;
 		m_destructionChanceOnContactComponents[entityID] = std::clamp(destructionChance, 0.0f, 1.0f);
 	}
-	void World::AddMorphIntoEntityID(WorldID entityID, WorldID newEntityID)
-	{
-		d2Assert(entityID < WORLD_MAX_ENTITIES);
-		d2Assert(newEntityID < WORLD_MAX_ENTITIES);
-		m_componentBits[entityID] |= COMPONENT_MORPH_INTO_ENTITY_ID;
-		m_morphIntoEntityIDs[entityID] = newEntityID;
-	}
+	//void World::AddMorphIntoEntityID(WorldID entityID, WorldID newEntityID)
+	//{
+	//	d2Assert(entityID < WORLD_MAX_ENTITIES);
+	//	d2Assert(newEntityID < WORLD_MAX_ENTITIES);
+	//	m_componentBits[entityID] |= COMPONENT_MORPH_INTO_ENTITY_ID;
+	//	m_morphIntoEntityIDs[entityID] = newEntityID;
+	//}
 	//+---------------------------\-------------------------------
 	//|	  Projectile Launchers    |
 	//\---------------------------/-------------------------------

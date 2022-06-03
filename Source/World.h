@@ -69,7 +69,7 @@ namespace Space
 		float thrustFactor{};
 		float brakeFactor{};
 		float zoomOutFactor{};
-		bool morph{ false };
+		//bool doMorphOnce{ false };
 		int missileTypeChange{};
 	};
 	class DestroyListener
@@ -85,10 +85,10 @@ namespace Space
 		public:	virtual WorldID LaunchProjectile(const ProjectileDef& projectileDef, const b2Vec2& position,
 			float angle, float impulse, const b2Vec2& parentVelocity, WorldID parentID) = 0;
 	};
-	class MorphListener
-	{
-		public:	virtual void MorphedIntoEntity(WorldID replacedEntityID, WorldID newEntityID) = 0;
-	};
+	//class MorphListener
+	//{
+	//	public:	virtual void MorphedIntoEntity(WorldID replacedEntityID, WorldID newEntityID) = 0;
+	//};
 	struct ParticleExplosionComponent
 	{
 		float relativeSize;
@@ -121,7 +121,7 @@ namespace Space
 		COMPONENT_BRAKE 								= 1 << 13,
 		COMPONENT_PRIMARY_PROJECTILE_LAUNCHER			= 1 << 14,
 		COMPONENT_SECONDARY_PROJECTILE_LAUNCHER			= 1 << 15,
-		COMPONENT_MORPH_INTO_ENTITY_ID					= 1 << 16
+		//COMPONENT_MORPH_INTO_ENTITY_ID					= 1 << 16
 	};
 	// Unlike components, flags have no associated data
 	enum FlagBits : BitMask
@@ -147,7 +147,7 @@ namespace Space
 		void SetDestructionListener(DestroyListener* listenerPtr);
 		void SetWrapListener(WrapListener* listenerPtr);
 		void SetProjectileLauncherCallback(ProjectileLauncherCallback* callbackPtr);
-		void SetMorphListener(MorphListener* listenerPtr);
+		//void SetMorphListener(MorphListener* listenerPtr);
 		void Update(float dt, PlayerController& playerController);
 		void Draw();
 
@@ -187,7 +187,7 @@ namespace Space
 		void AddDestructionDelayComponent(WorldID entityID, float delay);
 		void AddDestructionDelayOnContactComponent(WorldID entityID, float delay);
 		void AddDestructionChanceOnContactComponent(WorldID entityID, float delay);
-		void AddMorphIntoEntityID(WorldID entityID, WorldID newEntityID);
+		//void AddMorphIntoEntityID(WorldID entityID, WorldID newEntityID);
 
 		// Canons
 		void AddProjectileLauncherComponent(WorldID entityID, unsigned numSlots, bool secondaryLaunchers);
@@ -420,7 +420,7 @@ namespace Space
 		DestroyListener* m_destructionListenerPtr{ nullptr };
 		WrapListener* m_wrappedEntityListenerPtr{ nullptr };
 		ProjectileLauncherCallback* m_projectileLauncherCallbackPtr{ nullptr };
-		MorphListener* m_morphListenerPtr{ nullptr };
+		//MorphListener* m_morphListenerPtr{ nullptr };
 
 		float m_timestepAccumulator{ 0.0f };
 		b2World* m_b2WorldPtr{ nullptr };
@@ -442,7 +442,7 @@ namespace Space
 		ComponentArray< float > m_destructionDelayComponents;
 		ComponentArray< float > m_destructionDelayOnContactComponents;
 		ComponentArray< float > m_destructionChanceOnContactComponents;
-		ComponentArray< WorldID > m_morphIntoEntityIDs;
+		//ComponentArray< WorldID > m_morphIntoEntityIDs;
 		ComponentArray< RotatorComponent > m_rotatorComponents;
 		ComponentArray< SetThrustFactorAfterDelayComponent > m_setThrustFactorAfterDelayComponents;
 		ComponentArray< ThrusterComponent > m_thrusterComponents;

@@ -76,35 +76,40 @@ namespace Space
 	//\------------------------/----------------------------------
 	void World::UpdatePlayerControllerComponents(float dt, PlayerController& playerController)
 	{
-		std::cout << "World::UpdatePlayerControllerComponents" << std::endl;
-		if(playerController.morph)
-		{
-			std::vector<WorldID> morphList;
-			for(WorldID id = 0; id < WORLD_MAX_ENTITIES; ++id)
-				if(HasFlags(id, FLAG_PLAYER_CONTROLLED) && IsActive(id))
-					if(playerController.morph && HasComponents(id, COMPONENT_MORPH_INTO_ENTITY_ID))
-						morphList.push_back(id);
+		//if(playerController.doMorphOnce)
+		//{
+		//	std::vector<WorldID> morphList;
+		//	for(WorldID id = 0; id < WORLD_MAX_ENTITIES; ++id)
+		//		if(HasFlags(id, FLAG_PLAYER_CONTROLLED) && IsActive(id))
+		//			if (HasComponents(id, COMPONENT_MORPH_INTO_ENTITY_ID))
+		//			{
+		//				morphList.push_back(id);
+		//				
+		//			}
 
-			for(WorldID id : morphList)
-			{
-				//	Move new entity on top of existing entity so that their centers of mass and velocities coincide.
-				const b2Transform& transform{ GetSmoothedTransform(id) };
-				WorldID newID{ m_morphIntoEntityIDs[id] };
-				Deactivate(id);
-				Activate(newID);
-				SetTransform(newID,
-					b2Mul(transform, GetLocalCenterOfMass(id)) - b2Mul(transform.q, GetLocalCenterOfMass(newID)),
-					GetSmoothedTransform(id).q.GetAngle());
-				SetLinearVelocity(newID, GetLinearVelocity(id));
-				SetAngularVelocity(newID, GetAngularVelocity(id));
+		//	for(WorldID id : morphList)
+		//	{
+		//		//	Move new entity on top of existing entity so that their centers of mass and velocities coincide.
+		//		const b2Transform& transform{ GetSmoothedTransform(id) };
+		//		WorldID newID{ m_morphIntoEntityIDs[id] };
+		//		std::cout << "Morphing: " << id << " > " << newID << std::endl;
+		//		Deactivate(id);
+		//		Activate(newID);
+		//		std::cout << "HasPhysics: " << id << " " << HasPhysics(id) << std::endl;
+		//		std::cout << "HasPhysics: " << newID << " " << HasPhysics(newID) << std::endl;
+		//		SetTransform(newID,
+		//			b2Mul(transform, GetLocalCenterOfMass(id)) - b2Mul(transform.q, GetLocalCenterOfMass(newID)),
+		//			GetSmoothedTransform(id).q.GetAngle());
+		//		SetLinearVelocity(newID, GetLinearVelocity(id));
+		//		SetAngularVelocity(newID, GetAngularVelocity(id));
 
-				// Notify external listener of change in ID
-				if(m_morphListenerPtr)
-					m_morphListenerPtr->MorphedIntoEntity(id, newID);
-			}
+		//		// Notify external listener of change in ID
+		//		if(m_morphListenerPtr)
+		//			m_morphListenerPtr->MorphedIntoEntity(id, newID);
+		//	}
 
-			playerController.morph = false;
-		}
+		//	playerController.doMorphOnce = false;
+		//}
 
 		for(WorldID id = 0; id < WORLD_MAX_ENTITIES; ++id)
 			if(HasFlags(id, FLAG_PLAYER_CONTROLLED) && IsActive(id))
@@ -1008,6 +1013,7 @@ namespace Space
 	}
 	void World::Activate(WorldID entityID)
 	{
+		//std::cout << "Activate: " << entityID << " HasPhysics: " << HasPhysics(entityID) << std::endl;
 		SetFlags(entityID, FLAG_ACTIVE, true);
 		if(HasPhysics(entityID))
 		{
@@ -1015,9 +1021,11 @@ namespace Space
 			for(const CloneBody& cloneBody : m_physicsComponents[entityID].cloneBodyList)
 				cloneBody.b2BodyPtr->SetEnabled(true);
 		}
+		//std::cout << "Activate done: " << entityID << std::endl;
 	}
 	void World::Deactivate(WorldID entityID)
 	{
+		//std::cout << "Deactivate: " << entityID << std::endl;
 		SetFlags(entityID, FLAG_ACTIVE, false);
 		if(HasPhysics(entityID))
 		{
@@ -1025,6 +1033,7 @@ namespace Space
 			for(const CloneBody& cloneBody : m_physicsComponents[entityID].cloneBodyList)
 				cloneBody.b2BodyPtr->SetEnabled(false);
 		}
+		//std::cout << "Deactivate done: " << entityID << std::endl;
 	}
 	void World::ApplyForceToCenter(WorldID entityID, const b2Vec2& force)
 	{

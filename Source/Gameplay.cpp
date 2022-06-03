@@ -106,7 +106,7 @@ namespace Space
 		else if(button == m_zoomButton)				m_gamepadZoomEngaged = true;
 		else if(button == m_primaryFireButton)		m_primaryFireFactor = 1.0f;
 		else if(button == m_secondaryFireButton)	m_secondaryFireFactor = 1.0f;
-		else if(button == m_morphButton)			m_playerController.morph = true;
+		//else if(button == m_morphButton)			m_playerController.doMorphOnce = true;
 		else if(button == m_previousMissileTypeButton)	--m_playerController.missileTypeChange;
 		else if(button == m_nextMissileTypeButton)	++m_playerController.missileTypeChange;
 	}
@@ -128,7 +128,7 @@ namespace Space
 		else if(key == m_brakeKey)			m_brakeKeyPressed = true;
 		else if(key == m_primaryFireKey)	m_primaryFireKeyPressed = true;
 		else if(key == m_secondaryFireKey)	m_secondaryFireKeyPressed = true;
-		else if(key == m_morphKey)			m_playerController.morph = true;
+		//else if(key == m_morphKey)			m_playerController.doMorphOnce = true;
 		else if(key == m_previousMissileKey) --m_playerController.missileTypeChange;
 		else if(key == m_nextMissileKey)	++m_playerController.missileTypeChange;
 	}
