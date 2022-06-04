@@ -10,9 +10,9 @@
 #pragma once
 #include "AppState.h"
 #include "AppDef.h"
-#include "Intro.h"
-#include "MainMenu.h"
-#include "Gameplay.h"
+#include "IntroState.h"
+#include "MainMenuState.h"
+#include "GameState.h"
 #include "Exceptions.h"
 namespace Space
 {
@@ -33,9 +33,9 @@ namespace Space
 		void DrawCurrentState();
 		void Shutdown();
 
-		std::shared_ptr<Intro> m_introPtr;
-		std::shared_ptr<MainMenu> m_mainMenuPtr;
-		std::shared_ptr<Gameplay> m_gameplayPtr;
+		std::shared_ptr<IntroState> m_introStatePtr;
+		std::shared_ptr<MainMenuState> m_mainMenuStatePtr;
+		std::shared_ptr<GameState> m_gameStatePtr;	
 
 		AppStateID m_currentState{ FIRST_APP_STATE };
 		AppStateID m_nextState{ FIRST_APP_STATE };

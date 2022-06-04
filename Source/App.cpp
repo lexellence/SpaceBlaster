@@ -11,9 +11,9 @@
 #include "App.h"
 #include "AppState.h"
 #include "AppDef.h"
-#include "Intro.h"
-#include "MainMenu.h"
-#include "Gameplay.h"
+#include "IntroState.h"
+#include "MainMenuState.h"
+#include "GameState.h"
 #include "Exceptions.h"
 namespace Space
 {
@@ -45,9 +45,9 @@ namespace Space
 		d2d::SeedRandomNumberGenerator();
 
 		// Allocate AppState memory
-		m_introPtr = std::make_shared<Intro>();
-		m_mainMenuPtr = std::make_shared<MainMenu>();
-		m_gameplayPtr = std::make_shared<Gameplay>();
+		m_introStatePtr = std::make_shared<IntroState>();
+		m_mainMenuStatePtr = std::make_shared<MainMenuState>();
+		m_gameStatePtr = std::make_shared<GameState>();
 
 		// Start first app state
 		m_currentState = FIRST_APP_STATE;
@@ -81,9 +81,9 @@ namespace Space
 	{
 		switch(appState)
 		{
-		case AppStateID::INTRO:		return m_introPtr;
-		case AppStateID::MAIN_MENU: return m_mainMenuPtr;
-		case AppStateID::GAMEPLAY:	return m_gameplayPtr;
+		case AppStateID::INTRO:		return m_introStatePtr;
+		case AppStateID::MAIN_MENU: return m_mainMenuStatePtr;
+		case AppStateID::GAME:	return m_gameStatePtr;
 		default: throw InvalidAppStateException{ "GetStatePtr(): No pointer exists for AppState (calling code must ensure argument is not QUIT)" };
 		}
 	}

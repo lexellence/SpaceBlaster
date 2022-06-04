@@ -17,10 +17,10 @@
     <ClCompile Include="..\Source\EntityFactory.cpp" />
     <ClCompile Include="..\Source\Game.cpp" />
     <ClCompile Include="..\Source\GameDef.cpp" />
-    <ClCompile Include="..\Source\Gameplay.cpp" />
-    <ClCompile Include="..\Source\Intro.cpp" />
+    <ClCompile Include="..\Source\GameState.cpp" />
+    <ClCompile Include="..\Source\IntroState.cpp" />
     <ClCompile Include="..\Source\main.cpp" />
-    <ClCompile Include="..\Source\MainMenu.cpp" />
+    <ClCompile Include="..\Source\MainMenuState.cpp" />
     <ClCompile Include="..\Source\ParticleSystem.cpp" />
     <ClCompile Include="..\Source\pch.cpp" />
     <ClCompile Include="..\Source\Starfield.cpp" />
@@ -41,9 +41,9 @@
     <ClInclude Include="..\Source\Game.h" />
     <ClInclude Include="..\Source\GameDef.h" />
     <ClInclude Include="..\Source\GameModelData.h" />
-    <ClInclude Include="..\Source\Gameplay.h" />
-    <ClInclude Include="..\Source\Intro.h" />
-    <ClInclude Include="..\Source\MainMenu.h" />
+    <ClInclude Include="..\Source\GameState.h" />
+    <ClInclude Include="..\Source\IntroState.h" />
+    <ClInclude Include="..\Source\MainMenuState.h" />
     <ClInclude Include="..\Source\ParticleSystem.h" />
     <ClInclude Include="..\Source\pch.h" />
     <ClInclude Include="..\Source\Starfield.h" />

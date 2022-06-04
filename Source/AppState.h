@@ -13,7 +13,7 @@ namespace Space
 {
 	enum class AppStateID
 	{
-		INTRO, MAIN_MENU, GAMEPLAY, QUIT
+		INTRO, MAIN_MENU, GAME, QUIT
 	};
 	class AppState
 	{
