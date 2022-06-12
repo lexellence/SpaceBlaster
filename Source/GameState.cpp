@@ -145,16 +145,22 @@ namespace Space
 	}
 	void GameState::ProcessAxisMotion(Uint8 axis, Sint16 value)
 	{
+		// Convert to percentage factor
 		float axisFactor;
 		if(axis == SDL_CONTROLLER_AXIS_TRIGGERRIGHT || axis == SDL_CONTROLLER_AXIS_TRIGGERLEFT) 
 			axisFactor = d2d::AxisToUnit(value, m_gamepadTriggerDeadZone, m_gamepadTriggerAliveZone);
 		else 
 			axisFactor = d2d::AxisToUnit(value, m_gamepadStickDeadZone, m_gamepadStickAliveZone);
 
+		// Zooming
 		if(axis == m_zoomAxis)
 			m_gamepadZoomOutFactor = axisFactor;
+
+		// Turning
 		else if(axis == m_turnAxis)
 			m_gamepadTurnFactor = -axisFactor;
+
+		// Thrusting
 		else if(axis == m_thrustAxis)
 		{
 			// If left stick down, brake
