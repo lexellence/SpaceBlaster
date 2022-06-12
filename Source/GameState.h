@@ -24,6 +24,8 @@ namespace Space
 	private:
 		void PauseGame();
 		void UnpauseGame();
+		void LessMissiles();
+		void MoreMissiles();
 		void ProcessKeyDown(SDL_Keycode key);
 		void ProcessKeyUp(SDL_Keycode key);
 		void ProcessButtonDown(Uint8 button);

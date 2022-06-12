@@ -99,13 +99,25 @@ namespace Space
 		if(m_paused)
 			m_paused = false;
 	}
+	void GameState::LessMissiles()
+	{
+		if(m_playerController.numMissiles > 1)
+			--m_playerController.numMissiles;
+	}
+	void GameState::MoreMissiles()
+	{
+		if(m_playerController.numMissiles < 5)
+			++m_playerController.numMissiles;
+	}
 	void GameState::ProcessButtonDown(Uint8 button)
 	{
-		if(button == m_pauseButton)					PauseGame();
-		else if(button == m_zoomButton)				m_gamepadZoomEngaged = true;
-		//else if(button == m_morphButton)			m_playerController.doMorphOnce = true;
-		else if(button == m_previousMissileTypeButton)	--m_playerController.missileTypeChange;
-		else if(button == m_nextMissileTypeButton)	++m_playerController.missileTypeChange;
+		if(button == m_pauseButton)						PauseGame();
+		else if(button == m_zoomButton)					m_gamepadZoomEngaged = true;
+		//else if(button == m_morphButton)				m_playerController.doMorphOnce = true;
+		else if(button == m_previousMissileTypeButton)	
+			LessMissiles();
+		else if(button == m_nextMissileTypeButton)	
+			MoreMissiles();
 	}
 	void GameState::ProcessButtonUp(Uint8 button)
 	{
@@ -113,19 +125,19 @@ namespace Space
 	}
 	void GameState::ProcessKeyDown(SDL_Keycode key)
 	{
-		if(key == m_pauseKey)				PauseGame();
-		else if(key == m_fpsToggleKey)		m_showFPS = !m_showFPS;
-		else if(key == m_zoomInKey)			m_zoomInKeyPressed = true;
-		else if(key == m_zoomOutKey)		m_zoomOutKeyPressed = true;
-		else if(key == m_turnLeftKey)		m_turnLeftKeyPressed = true;
-		else if(key == m_turnRightKey)		m_turnRightKeyPressed = true;
-		else if(key == m_thrustKey)			m_thrustKeyPressed = true;
-		else if(key == m_brakeKey)			m_brakeKeyPressed = true;
-		else if(key == m_primaryFireKey)	m_primaryFireKeyPressed = true;
-		else if(key == m_secondaryFireKey)	m_secondaryFireKeyPressed = true;
+		if(key == m_pauseKey)					PauseGame();
+		else if(key == m_fpsToggleKey)			m_showFPS = !m_showFPS;
+		else if(key == m_zoomInKey)				m_zoomInKeyPressed = true;
+		else if(key == m_zoomOutKey)			m_zoomOutKeyPressed = true;
+		else if(key == m_turnLeftKey)			m_turnLeftKeyPressed = true;
+		else if(key == m_turnRightKey)			m_turnRightKeyPressed = true;
+		else if(key == m_thrustKey)				m_thrustKeyPressed = true;
+		else if(key == m_brakeKey)				m_brakeKeyPressed = true;
+		else if(key == m_primaryFireKey)		m_primaryFireKeyPressed = true;
+		else if(key == m_secondaryFireKey)		m_secondaryFireKeyPressed = true;
 		//else if(key == m_morphKey)			m_playerController.doMorphOnce = true;
-		else if(key == m_previousMissileKey) --m_playerController.missileTypeChange;
-		else if(key == m_nextMissileKey)	++m_playerController.missileTypeChange;
+		else if(key == m_previousMissileKey)	LessMissiles();
+		else if(key == m_nextMissileKey)		MoreMissiles();
 	}
 	void GameState::ProcessKeyUp(SDL_Keycode key)
 	{

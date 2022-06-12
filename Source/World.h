@@ -70,7 +70,7 @@ namespace Space
 		float brakeFactor{};
 		float zoomOutFactor{};
 		//bool doMorphOnce{ false };
-		int missileTypeChange{};
+		int numMissiles{};
 	};
 	class DestroyListener
 	{	
