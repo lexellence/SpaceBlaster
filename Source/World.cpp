@@ -454,4 +454,15 @@ namespace Space
 		m_brakeComponents[entityID].factor = 0.0f;
 		m_brakeComponents[entityID].deceleration = deceleration;
 	}
+	//void World::SetLevelTag(WorldID entityID, int levelTag)
+	//{
+	//	d2Assert(entityID < WORLD_MAX_ENTITIES);
+	//	m_componentBits[entityID] |= COMPONENT_LEVEL_TAG;
+	//	m_levelTagComponents[entityID] = levelTag;
+	//}
+	//void World::RemoveLevelTag(WorldID entityID)
+	//{
+	//	RemoveComponents(entityID, COMPONENT_LEVEL_TAG);
+	//}
+
 }

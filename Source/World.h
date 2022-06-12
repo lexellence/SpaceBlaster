@@ -121,6 +121,7 @@ namespace Space
 		COMPONENT_BRAKE 								= 1 << 13,
 		COMPONENT_PRIMARY_PROJECTILE_LAUNCHER			= 1 << 14,
 		COMPONENT_SECONDARY_PROJECTILE_LAUNCHER			= 1 << 15,
+		//COMPONENT_LEVEL_TAG								= 1 << 16
 		//COMPONENT_MORPH_INTO_ENTITY_ID					= 1 << 16
 	};
 	// Unlike components, flags have no associated data
@@ -253,6 +254,10 @@ namespace Space
 		void ApplyLinearImpulseToLocalPoint(WorldID entityID, const b2Vec2& impulse, const b2Vec2& localPoint);
 		void ApplyLinearImpulseToWorldPoint(WorldID entityID, const b2Vec2& impulse, const b2Vec2& worldPoint);
 		void ApplyAngularImpulse(WorldID entityID, float impulse);
+
+		//// For external use
+		//void SetLevelTag(WorldID entityID, int levelTag);
+		//void RemoveLevelTag(WorldID entityID);
 
 	private:
 		//+---------------------------------------\
@@ -438,6 +443,7 @@ namespace Space
 		ComponentArray< float > m_boundingRadiusComponents;
 
 		// These must be manually added after calling NewEntityID()
+		//ComponentArray< int > m_levelTagComponents;
 		ComponentArray< HealthComponent > m_healthComponents;
 		ComponentArray< float > m_destructionDelayComponents;
 		ComponentArray< float > m_destructionDelayOnContactComponents;
