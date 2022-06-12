@@ -49,6 +49,10 @@ namespace Space
 		}
 		return cameraDimensions;
 	}
+	const d2d::Range<float>& Camera::GetDimensionRange() const
+	{
+		return m_dimensionRange;
+	}
 	const b2Vec2& Camera::GetPosition() const
 	{
 		return m_position;

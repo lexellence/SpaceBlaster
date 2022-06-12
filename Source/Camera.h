@@ -18,6 +18,7 @@ namespace Space
 			const b2Vec2& position=b2Vec2_zero);
 		void Update(float dt, float zoomOutFactor);
 		b2Vec2 GetDimensions(float xyAspectRatio) const;
+		const d2d::Range<float>& GetDimensionRange() const;
 		const b2Vec2& GetPosition() const;
 		void SetPosition(const b2Vec2& position);
 

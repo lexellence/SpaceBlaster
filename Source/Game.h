@@ -16,6 +16,7 @@
 #include "Starfield.h"
 namespace Space
 {
+	constexpr float MIN_WORLD_TO_CAMERA_RATIO{ 1.5f };
 	constexpr int SHIP_DRAW_LAYER{ 0 };
 	constexpr int ASTEROID_DRAW_LAYER{ 0 };
 

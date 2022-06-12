@@ -52,6 +52,16 @@ namespace Space
 			LoadLevel0();
 		else
 			throw GameException{ "Invalid level name: " + level };
+
+		// Limit world dimensions relative to maximum camera dimensions
+		float width = m_world.GetWorldRect().GetWidth();
+		float height = m_world.GetWorldRect().GetHeight();
+		float max = m_camera.GetDimensionRange().GetMax();
+		if(width < max * MIN_WORLD_TO_CAMERA_RATIO)
+			throw GameException{ "World width(" + d2d::ToString(width) + ") too small compared to max camera width(" + d2d::ToString(max) };
+		if(height < max * MIN_WORLD_TO_CAMERA_RATIO)
+			throw GameException{ "World height(" + d2d::ToString(height) + ") too small compared to max camera height(" + d2d::ToString(max) };
+
 	}
 	void Game::SetPlayer(WorldID entityID)
 	{
@@ -191,7 +201,7 @@ namespace Space
 	void Game::LoadLevel0()
 	{
 		b2Vec2 center{ b2Vec2_zero };
-		b2Vec2 size{ 200.0f, 200.0f };
+		b2Vec2 size{ 500.0f, 500.0f };
 		d2d::Rect worldRect;
 		worldRect.SetCenter(center, size);
 		m_world.Init(worldRect);
@@ -207,7 +217,7 @@ namespace Space
 		float minBoundingRadiiGap{ XLARGE_ASTEROID_HEIGHT * 0.25f };
 		unsigned maxAttempts{ 500 };
 		unsigned numFailed{ 0 };
-		for(unsigned i = 0; i < 20; ++i)
+		for(unsigned i = 0; i < 40; ++i)
 		{
 			int model{ d2d::RandomInt({0, NUM_XLARGE_ASTEROID_MODELS - 1}) };
 			b2Vec2 size;
