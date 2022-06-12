@@ -1,5 +1,7 @@
 {
   firstLevel: LEVEL0
+  // Both width and height will be restricted  
+  // to this range regardless of aspect ratio.
   cameraDimensionRange: [ 75, 300 ]
   cameraZoomSpeed: 1.2
   cameraInitialZoomOutPercent: 0.5
