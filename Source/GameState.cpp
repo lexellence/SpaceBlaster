@@ -101,11 +101,8 @@ namespace Space
 	}
 	void GameState::ProcessButtonDown(Uint8 button)
 	{
-		d2LogDebug << "ProcessButtonDown(" << (int)button << ")\n";
 		if(button == m_pauseButton)					PauseGame();
 		else if(button == m_zoomButton)				m_gamepadZoomEngaged = true;
-		else if(button == m_primaryFireButton)		m_primaryFireFactor = 1.0f;
-		else if(button == m_secondaryFireButton)	m_secondaryFireFactor = 1.0f;
 		//else if(button == m_morphButton)			m_playerController.doMorphOnce = true;
 		else if(button == m_previousMissileTypeButton)	--m_playerController.missileTypeChange;
 		else if(button == m_nextMissileTypeButton)	++m_playerController.missileTypeChange;
@@ -113,8 +110,6 @@ namespace Space
 	void GameState::ProcessButtonUp(Uint8 button)
 	{
 		if(button == m_zoomButton)		m_gamepadZoomEngaged = false;
-		else if(button == m_primaryFireButton)		m_primaryFireFactor = 0.0f;
-		else if(button == m_secondaryFireButton)	m_secondaryFireFactor = 0.0f;
 	}
 	void GameState::ProcessKeyDown(SDL_Keycode key)
 	{
@@ -181,9 +176,9 @@ namespace Space
 				m_gamepadBrakeFactor = 0.0f;
 			}
 		}
-		else if(axis == m_primaryFireButton)
+		else if(axis == m_primaryFireAxis)
 			m_primaryFireFactor = axisFactor;
-		else if(axis == m_secondaryFireButton)
+		else if(axis == m_secondaryFireAxis)
 			m_secondaryFireFactor = axisFactor;
 	}
 	void GameState::ProcessControllerRemoved()

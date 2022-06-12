@@ -53,8 +53,8 @@ namespace Space
 		const Uint8 m_thrustAxis{ SDL_CONTROLLER_AXIS_LEFTY };
 		float m_gamepadThrustFactor;
 		float m_gamepadBrakeFactor;
-		const Uint8 m_primaryFireButton{ SDL_CONTROLLER_AXIS_TRIGGERRIGHT };
-		const Uint8 m_secondaryFireButton{ SDL_CONTROLLER_AXIS_TRIGGERLEFT };
+		const Uint8 m_primaryFireAxis{ SDL_CONTROLLER_AXIS_TRIGGERRIGHT };
+		const Uint8 m_secondaryFireAxis{ SDL_CONTROLLER_AXIS_TRIGGERLEFT };
 		float m_primaryFireFactor;
 		float m_secondaryFireFactor;
 		//const Uint8 m_morphButton{ SDL_CONTROLLER_BUTTON_Y };
