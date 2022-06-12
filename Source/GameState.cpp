@@ -101,7 +101,7 @@ namespace Space
 	}
 	void GameState::ProcessButtonDown(Uint8 button)
 	{
-		d2LogDebug << "ProcessButtonDown(" << button << ")\n";
+		d2LogDebug << "ProcessButtonDown(" << (int)button << ")\n";
 		if(button == m_pauseButton)					PauseGame();
 		else if(button == m_zoomButton)				m_gamepadZoomEngaged = true;
 		else if(button == m_primaryFireButton)		m_primaryFireFactor = 1.0f;
