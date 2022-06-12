@@ -163,9 +163,11 @@ namespace Space
 		void InitLevel(const std::string& level);
 		void StartDelayedLevelChange(const std::string& level, float delay);
 		void UpdateCamera(float dt, const PlayerController& playerController);
+		void UpdateObjectives();
 		void LoadTest0();
 		void LoadTest1();
 		void LoadTest2();
+		void LoadLevel0();
 		void SetPlayer(WorldID entityID);
 		void FollowEntity(WorldID entityID);
 		//void CreateEntity(World& world);
@@ -198,9 +200,19 @@ namespace Space
 		std::string m_delayedLevel;
 		float m_levelChangeDelayTime;
 		float m_levelChangeDelayTimeAccumulator;
+		std::vector<Objective> m_objectives;
 
 		// Fonts
-		const d2d::FontReference m_orbitronLightFont{ "Fonts\\OrbitronLight.otf" };
+		d2d::FontReference m_orbitronLightFont{ "Fonts\\OrbitronLight.otf" };
+
+		// Objectives
+		const b2Vec2 m_objectivesPosition{ 0.90f, 0.90f };
+		const d2d::Alignment m_objectivesAlignment{ d2d::Alignment::RIGHT_TOP };
+		const d2d::TextStyle m_objectivesTextStyle{
+			m_orbitronLightFont,
+			{ 1.0f, 0.7f, 0.7f, 1.0f },
+			0.05f
+		};
 
 		// Ships
 		const std::string m_blasterModel{ "ship001" };

@@ -9,6 +9,7 @@
 \**************************************************************************************/
 #pragma once
 #include "Starfield.h"
+#include "World.h"
 namespace Space
 {
 	struct EntityDef
@@ -19,9 +20,16 @@ namespace Space
 	{
 
 	};
+	enum class ObjectiveType
+	{
+		DESTROY
+	};
 	struct Objective
 	{
-
+		ObjectiveType type;
+		std::string text;
+		std::vector<WorldID> entityIDs;
+		int num;
 	};
 	struct Quest
 	{

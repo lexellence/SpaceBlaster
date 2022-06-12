@@ -48,6 +48,8 @@ namespace Space
 			LoadTest1();
 		else if(level == "TEST2")
 			LoadTest2();
+		else if(level == "LEVEL0")
+			LoadLevel0();
 		else
 			throw GameException{ "Invalid level name: " + level };
 	}
@@ -186,6 +188,102 @@ namespace Space
 				CreateSmallAsteroid(m_world, model, isRock, playerStartPosition + b2Vec2{ 24.0f + j * 75.0f, (model + 1) * 20.0f }, 0.0f, b2Vec2_zero, 0.0f);
 		}
 	}
+	void Game::LoadLevel0()
+	{
+		b2Vec2 center{ b2Vec2_zero };
+		b2Vec2 size{ 200.0f, 200.0f };
+		d2d::Rect worldRect;
+		worldRect.SetCenter(center, size);
+		m_world.Init(worldRect);
+
+		b2Vec2 playerStartPosition{ b2Vec2_zero };
+		CreatePlayer(m_world, playerStartPosition, d2d::PI_OVER_TWO);
+
+		Objective destroyAsteroidsObjective;
+		destroyAsteroidsObjective.type = ObjectiveType::DESTROY;
+		destroyAsteroidsObjective.text = "Destroy all the biggest asteroids";
+		destroyAsteroidsObjective.num = 0;
+
+		float minBoundingRadiiGap{ XLARGE_ASTEROID_HEIGHT * 0.25f };
+		unsigned maxAttempts{ 500 };
+		unsigned numFailed{ 0 };
+		for(unsigned i = 0; i < 20; ++i)
+		{
+			int model{ d2d::RandomInt({0, NUM_XLARGE_ASTEROID_MODELS - 1}) };
+			b2Vec2 size;
+			size.y = XLARGE_ASTEROID_HEIGHT * XLARGE_ASTEROID_RELATIVE_HEIGHTS[model];
+			size.x = size.y * m_asteroidXLargeTextures[model].GetWidthToHeightRatio();
+			float boundingRadius{ size.Length() * 0.5f };
+			b2Vec2 position;
+			bool positionFound{ m_world.GetRandomPositionAwayFromExistingEntities(boundingRadius, minBoundingRadiiGap, maxAttempts, position) };
+			if(positionFound)
+			{
+				WorldID id = CreateXLargeAsteroid(m_world, model, d2d::RandomBool(), position,
+					d2d::RandomFloat({ 0.0f, d2d::TWO_PI }), b2Vec2_zero, 0.0f);
+				//m_world.SetLevelTag(id, 1);
+				destroyAsteroidsObjective.entityIDs.push_back(id);
+				destroyAsteroidsObjective.num++;
+			}
+			else
+				++numFailed;
+		}
+
+		minBoundingRadiiGap = LARGE_ASTEROID_HEIGHT * 0.25f;
+		for(unsigned i = 0; i < 30; ++i)
+		{
+			int model{ d2d::RandomInt({0, NUM_LARGE_ASTEROID_MODELS - 1}) };
+			b2Vec2 size;
+			size.y = LARGE_ASTEROID_HEIGHT * LARGE_ASTEROID_RELATIVE_HEIGHTS[model];
+			size.x = size.y * m_asteroidLargeTextures[model].GetWidthToHeightRatio();
+			float boundingRadius{ size.Length() * 0.5f };
+			b2Vec2 position;
+			bool positionFound{ m_world.GetRandomPositionAwayFromExistingEntities(boundingRadius, minBoundingRadiiGap, maxAttempts, position) };
+			if(positionFound)
+				CreateLargeAsteroid(m_world, model, d2d::RandomBool(), position,
+					d2d::RandomFloat({ 0.0f, d2d::TWO_PI }), b2Vec2_zero, 0.0f);
+			else
+				++numFailed;
+		}
+
+		//minBoundingRadiiGap = MEDIUM_ASTEROID_HEIGHT * 0.25f;
+		//for(unsigned i = 0; i < 40; ++i)
+		//{
+		//	int model{ d2d::RandomInt({0, NUM_MEDIUM_ASTEROID_MODELS - 1}) };
+		//	b2Vec2 size;
+		//	size.y = MEDIUM_ASTEROID_HEIGHT * MEDIUM_ASTEROID_RELATIVE_HEIGHTS[model];
+		//	size.x = size.y * m_asteroidMediumTextures[model].GetWidthToHeightRatio();
+		//	float boundingRadius{ size.Length() * 0.5f };
+		//	b2Vec2 position;
+		//	bool positionFound{ m_world.GetRandomPositionAwayFromExistingEntities(boundingRadius, minBoundingRadiiGap, maxAttempts, position) };
+		//	if(positionFound)
+		//		CreateMediumAsteroid(m_world, model, d2d::RandomBool(), position,
+		//			d2d::RandomFloat({ 0.0f, d2d::TWO_PI }), b2Vec2_zero, 0.0f);
+		//	else
+		//		++numFailed;
+		//}
+		// 
+		//minBoundingRadiiGap = SMALL_ASTEROID_HEIGHT * 0.25f;
+		//for(unsigned i = 0; i < 100; ++i)
+		//{
+		//	int model{ d2d::RandomInt({0, NUM_SMALL_ASTEROID_MODELS - 1}) };
+		//	b2Vec2 size;
+		//	size.y = SMALL_ASTEROID_HEIGHT * SMALL_ASTEROID_RELATIVE_HEIGHTS[model];
+		//	size.x = size.y * m_asteroidSmallTextures[model].GetWidthToHeightRatio();
+		//	float boundingRadius{ size.Length() * 0.5f };
+		//	b2Vec2 position;
+		//	bool positionFound{ m_world.GetRandomPositionAwayFromExistingEntities(boundingRadius, minBoundingRadiiGap, maxAttempts, position) };
+		//	if(positionFound)
+		//		CreateSmallAsteroid(m_world, model, d2d::RandomBool(), position,
+		//			d2d::RandomFloat({ 0.0f, d2d::TWO_PI }), b2Vec2_zero, 0.0f);
+		//	else
+		//		++numFailed;
+		//}
+		m_objectives.clear();
+		m_objectives.push_back(destroyAsteroidsObjective);
+		if(numFailed > 0)
+			d2LogInfo << "Game::LoadLevel0: Entity creation attempt limit reached " << numFailed << " times";
+	}
+
 	//+-------------\---------------------------------------------
 	//|	 Entities   |
 	//\-------------/---------------------------------------------
@@ -382,6 +480,7 @@ namespace Space
 		// Update
 		m_world.Update(dt, playerController);
 		UpdateCamera(dt, playerController);
+		UpdateObjectives();
 	}
 	void Game::StartDelayedLevelChange(const std::string& level, float delay)
 	{
@@ -398,11 +497,27 @@ namespace Space
 										    m_world.GetLocalCenterOfMass(m_cameraFollowEntityID) ));
 		m_camera.Update(dt, playerController.zoomOutFactor);
 	}
+	void Game::UpdateObjectives()
+	{
+
+	}
+
 	//+--------------------------\--------------------------------
 	//|	       SayGoodbye        | override (DestroyListener)
 	//\--------------------------/--------------------------------
 	void Game::SayGoodbye(WorldID entityID)
 	{
+		for(Objective& obj : m_objectives)
+			if(obj.type == ObjectiveType::DESTROY)
+			{
+				auto foundElementIterator = std::find(obj.entityIDs.begin(), obj.entityIDs.end(), entityID);
+				if(foundElementIterator != obj.entityIDs.end())
+				{
+					obj.entityIDs.erase(foundElementIterator);
+					obj.num--;
+				}
+			}
+
 		if(m_cameraFollowingEntity && entityID == m_cameraFollowEntityID)
 			m_cameraFollowingEntity = false;
 
@@ -483,5 +598,18 @@ namespace Space
 
 		m_starfield.Draw(m_camera.GetPosition());
 		m_world.Draw();
+		if(!m_objectives.empty())
+		{
+			b2Vec2 resolution{ d2d::Window::GetScreenResolution() };
+			d2d::Window::SetCameraRect({ b2Vec2_zero, resolution });
+			d2d::Window::DisableTextures();
+			d2d::Window::EnableBlending();
+			d2d::Window::SetColor(m_objectivesTextStyle.color);
+			d2d::Window::PushMatrix();
+			d2d::Window::Translate(m_objectivesPosition * resolution);
+			d2d::Window::DrawString(d2d::ToString(m_objectives[0].num), m_objectivesAlignment, m_objectivesTextStyle.size * resolution.y, m_objectivesTextStyle.font);
+			d2d::Window::PopMatrix();
+		}
+
 	}
 }

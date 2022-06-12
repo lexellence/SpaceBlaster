@@ -1,5 +1,5 @@
 {
-  firstLevel: TEST1
+  firstLevel: LEVEL0
   cameraDimensionRange: [ 75, 300 ]
   cameraZoomSpeed: 1.2
   cameraInitialZoomOutPercent: 0.5
