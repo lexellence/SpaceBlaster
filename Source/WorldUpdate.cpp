@@ -204,34 +204,35 @@ namespace Space
 	//\------------------------/----------------------------------
 	void World::UpdateProjectileLauncherComponents(float dt, bool secondaryLaunchers)
 	{
-		ProjectileLauncherComponent* projectileLauncherComponentsPtr;
+		ComponentArray< ProjectileLauncherComponent >* projectileLauncherComponentsPtr;
 		BitMask requiredComponents{ COMPONENT_PHYSICS };
 		if(secondaryLaunchers)
 		{
-			projectileLauncherComponentsPtr = m_secondaryProjectileLauncherComponents;
+			projectileLauncherComponentsPtr = &m_secondaryProjectileLauncherComponents;
 			requiredComponents |= COMPONENT_SECONDARY_PROJECTILE_LAUNCHER;
 		}
 		else
 		{
-			projectileLauncherComponentsPtr = m_primaryProjectileLauncherComponents;
+			projectileLauncherComponentsPtr = &m_primaryProjectileLauncherComponents;
 			requiredComponents |= COMPONENT_PRIMARY_PROJECTILE_LAUNCHER;
 		}
+		ComponentArray< ProjectileLauncherComponent >& projectileLauncherComponents{ *projectileLauncherComponentsPtr };
 
 		for(WorldID id = 0; id < WORLD_MAX_ENTITIES; ++id)
 			if(HasComponents(id, requiredComponents) && IsActive(id))
 			{
-				for(unsigned i = 0; i < projectileLauncherComponentsPtr[id].numSlots; ++i)
+				for(unsigned i = 0; i < projectileLauncherComponents[id].numSlots; ++i)
 				{
-					ProjectileLauncher& launcher{ projectileLauncherComponentsPtr[id].projectileLaunchers[i] };
+					ProjectileLauncher& launcher{ projectileLauncherComponents[id].projectileLaunchers[i] };
 					if(launcher.intervalAccumulator < launcher.interval)
 						launcher.intervalAccumulator += dt;
 				}
 
 				// If projectile system engaged, fire projectiles
-				if(projectileLauncherComponentsPtr[id].factor > 0.0f)
-					for(unsigned i = 0; i < projectileLauncherComponentsPtr[id].numSlots; ++i)
+				if(projectileLauncherComponents[id].factor > 0.0f)
+					for(unsigned i = 0; i < projectileLauncherComponents[id].numSlots; ++i)
 					{
-						ProjectileLauncher& launcher{ projectileLauncherComponentsPtr[id].projectileLaunchers[i] };
+						ProjectileLauncher& launcher{ projectileLauncherComponents[id].projectileLaunchers[i] };
 						if(launcher.enabled && !launcher.temporarilyDisabled)
 						{
 							if(launcher.intervalAccumulator >= launcher.interval)
