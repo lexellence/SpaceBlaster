@@ -357,8 +357,8 @@ namespace Space
 			WorldID entityID;
 			b2Vec2 position;
 		};
-		template<class T> class ComponentArray 
-			: public std::array<T, WORLD_MAX_ENTITIES>{};
+		//template<class T> class ComponentArray 
+		//	: public std::array<T, WORLD_MAX_ENTITIES>{};
 		typedef std::array<CloneSyncData, WORLD_NUM_CLONES> CloneSyncDataArray;
 
 		//+---------------------------------------\
@@ -436,39 +436,39 @@ namespace Space
 		d2d::Rect m_worldRect;
 
 		// All entities have these by default:
-		ComponentArray< BitMask > m_componentBits;
-		ComponentArray< BitMask > m_flagBits;
-		ComponentArray< bool > m_activeFlags;
-		ComponentArray< b2Vec2 > m_sizeComponents;
-		ComponentArray< float > m_boundingRadiusComponents;
+		BitMask m_componentBits[WORLD_MAX_ENTITIES];
+		BitMask m_flagBits[WORLD_MAX_ENTITIES];
+		bool m_activeFlags[WORLD_MAX_ENTITIES];
+		b2Vec2 m_sizeComponents[WORLD_MAX_ENTITIES];
+		float m_boundingRadiusComponents[WORLD_MAX_ENTITIES];
 
 		// These must be manually added after calling NewEntityID()
-		//ComponentArray< int > m_levelTagComponents;
-		ComponentArray< HealthComponent > m_healthComponents;
-		ComponentArray< float > m_destructionDelayComponents;
-		ComponentArray< float > m_destructionDelayOnContactComponents;
-		ComponentArray< float > m_destructionChanceOnContactComponents;
-		//ComponentArray< WorldID > m_morphIntoEntityIDs;
-		ComponentArray< RotatorComponent > m_rotatorComponents;
-		ComponentArray< SetThrustFactorAfterDelayComponent > m_setThrustFactorAfterDelayComponents;
-		ComponentArray< ThrusterComponent > m_thrusterComponents;
-		ComponentArray< BrakeComponent > m_brakeComponents;
-		ComponentArray< ProjectileLauncherComponent > m_primaryProjectileLauncherComponents;
-		ComponentArray< ProjectileLauncherComponent > m_secondaryProjectileLauncherComponents;
-		ComponentArray< WorldID > m_parentComponents;
+		//int m_levelTagComponents[WORLD_MAX_ENTITIES];
+		HealthComponent m_healthComponents[WORLD_MAX_ENTITIES];
+		float m_destructionDelayComponents[WORLD_MAX_ENTITIES];
+		float m_destructionDelayOnContactComponents[WORLD_MAX_ENTITIES];
+		float m_destructionChanceOnContactComponents[WORLD_MAX_ENTITIES];
+		//WorldID m_morphIntoEntityIDs[WORLD_MAX_ENTITIES];
+		RotatorComponent m_rotatorComponents[WORLD_MAX_ENTITIES];
+		SetThrustFactorAfterDelayComponent m_setThrustFactorAfterDelayComponents[WORLD_MAX_ENTITIES];
+		ThrusterComponent m_thrusterComponents[WORLD_MAX_ENTITIES];
+		BrakeComponent m_brakeComponents[WORLD_MAX_ENTITIES];
+		ProjectileLauncherComponent m_primaryProjectileLauncherComponents[WORLD_MAX_ENTITIES];
+		ProjectileLauncherComponent m_secondaryProjectileLauncherComponents[WORLD_MAX_ENTITIES];
+		WorldID m_parentComponents[WORLD_MAX_ENTITIES];
 
-		ComponentArray< PhysicsComponent > m_physicsComponents;
-		ComponentArray< PhysicsWrapData > m_physicsWrapDatas;
-		ComponentArray< b2Transform > m_lastTransforms;
-		ComponentArray< b2Transform > m_smoothedTransforms;
-		ComponentArray< b2Vec2 > m_lastLinearVelocities;
-		ComponentArray< CloneSyncDataArray > m_cloneSyncDataArrays;
+		PhysicsComponent m_physicsComponents[WORLD_MAX_ENTITIES];
+		PhysicsWrapData m_physicsWrapDatas[WORLD_MAX_ENTITIES];
+		b2Transform m_lastTransforms[WORLD_MAX_ENTITIES];
+		b2Transform m_smoothedTransforms[WORLD_MAX_ENTITIES];
+		b2Vec2 m_lastLinearVelocities[WORLD_MAX_ENTITIES];
+		CloneSyncDataArray m_cloneSyncDataArrays[WORLD_MAX_ENTITIES];
 
 		ParticleSystem m_particleSystem;
-		ComponentArray< ParticleExplosionComponent > m_particleExplosionComponents;
-		ComponentArray< DrawAnimationComponent > m_drawAnimationComponents;
-		ComponentArray< DrawFixturesComponent > m_drawFixtureComponents;
-		ComponentArray< DrawRadarComponent > m_drawRadarComponents;
+		ParticleExplosionComponent m_particleExplosionComponents[WORLD_MAX_ENTITIES];
+		DrawAnimationComponent m_drawAnimationComponents[WORLD_MAX_ENTITIES];
+		DrawFixturesComponent m_drawFixtureComponents[WORLD_MAX_ENTITIES];
+		DrawRadarComponent m_drawRadarComponents[WORLD_MAX_ENTITIES];
 		
 		d2d::ShapeFactory m_shapeFactory;
 	};
