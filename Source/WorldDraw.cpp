@@ -57,11 +57,6 @@ namespace Space
 				if(m_particleSystem.layers[i] == layer)
 					if(m_particleSystem.pointSizeIndices[i] == sizeIndex)
 					{
-						//d2d::Window::SetColor(
-						//	m_particleSystem.colors[i].red,
-						//	m_particleSystem.colors[i].green,
-						//	m_particleSystem.colors[i].blue,
-						//	m_particleSystem.CalculateFadedAlpha(i));
 						d2d::Color newColor{ m_particleSystem.colors[i] };
 						newColor.alpha = m_particleSystem.CalculateFadedAlpha(i);
 						d2d::Window::SetColor(newColor);
@@ -125,20 +120,6 @@ namespace Space
 						DrawAnimation(m_drawAnimationComponents[id].animation, m_sizeComponents[id], m_smoothedTransforms[id].p + GetCloneOffset(cloneBody.section), angle);
 				}
 	}
-	//void World::DrawAnimationFrame(const DrawAnimationComponent& drawAnimationComponent,
-	//	const b2Vec2& entitySize, const b2Vec2& position, float angle, const d2d::Color& colorFactor)
-	//{
-	//	d2Assert(drawAnimationComponent.numFrames <= WORLD_MAX_ANIMATION_FRAMES);
-	//	if(drawAnimationComponent.numFrames > 0)
-	//	{
-	//		d2Assert(drawAnimationComponent.currentFrameIndex < drawAnimationComponent.numFrames);
-	//		unsigned frameIndex{ drawAnimationComponent.currentFrameIndex };
-	//		const Sprite& currentTexture{ drawAnimationComponent.frames[frameIndex].sprite };
-	//		b2Vec2 size{ currentTexture.relativeSize * entitySize };
-	//		d2d::Window::SetColor(currentTexture.tintColor * colorFactor);
-	//		DrawTexture(currentTexture, size, position, angle);
-	//	}
-	//}
 	void World::DrawAnimation(const d2d::Animation& animation, const b2Vec2& size, const b2Vec2& position, float angle)
 	{
 		d2d::Window::PushMatrix();
