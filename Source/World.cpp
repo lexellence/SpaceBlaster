@@ -250,11 +250,11 @@ namespace Space
 		m_componentBits[entityID] |= COMPONENT_DRAW_FIXTURES;
 		m_drawFixtureComponents[entityID] = fixturesComponent;
 	}
-	void World::AddDrawAnimationComponent(WorldID entityID, const d2d::AnimationDef* const animationDefPtr)
+	void World::AddDrawAnimationComponent(WorldID entityID, const d2d::AnimationDef& animationDef)
 	{
 		d2Assert(entityID < WORLD_MAX_ENTITIES);
 		m_componentBits[entityID] |= COMPONENT_DRAW_ANIMATION;
-		m_drawAnimationComponents[entityID].animation.Init(animationDefPtr);
+		m_drawAnimationComponents[entityID].animation.Init(&animationDef);
 	}	
 	//void DrawAnimationComponent::Init(const d2d::AnimationDef* const animationDefPtr)
 	//{
@@ -409,7 +409,7 @@ namespace Space
 		for(unsigned i = 0; i < WORLD_MAX_THRUSTER_SLOTS; ++i)
 			thrusterComponent.thrusters[i].enabled = false;
 	}
-	void World::AddThruster(WorldID entityID, unsigned slot, const d2d::AnimationDef* const animationDefPtr,
+	void World::AddThruster(WorldID entityID, unsigned slot, d2d::AnimationDef const* animationDefPtr,
 		float acceleration, const b2Vec2& localRelativePosition)
 	{
 		d2Assert(entityID < WORLD_MAX_ENTITIES);

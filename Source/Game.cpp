@@ -323,7 +323,7 @@ namespace Space
 		}
 		world.AddPhysicsComponent(id, b2_dynamicBody, position, angle);
 		world.AddShapes(id, m_scoutModel, SHIP_MATERIAL, SHIP_FILTER);
-		world.AddDrawAnimationComponent(id, &m_scoutAnimationDef);
+		world.AddDrawAnimationComponent(id, m_scoutAnimationDef);
 		world.AddRotatorComponent(id, SCOUT_ROTATION_SPEED);
 		
 		world.AddThrusterComponent(id, 2);
@@ -354,7 +354,7 @@ namespace Space
 		}
 		world.AddPhysicsComponent(id, b2_dynamicBody, position, angle);
 		world.AddShapes(id, m_blasterModel, SHIP_MATERIAL, SHIP_FILTER);
-		world.AddDrawAnimationComponent(id, &m_blasterAnimationDef);
+		world.AddDrawAnimationComponent(id, m_blasterAnimationDef);
 		world.AddRotatorComponent(id, BLASTER_ROTATION_SPEED);
 
 		world.AddThrusterComponent(id, 4);
@@ -400,7 +400,7 @@ namespace Space
 		}
 		world.AddPhysicsComponent(id, b2_dynamicBody,	position, angle, velocity, angularVelocity);
 		world.AddShapes(id, m_asteroidXLargeModelNames[modelIndex], ASTEROID_MATERIAL, ASTEROID_FILTER);
-		world.AddDrawAnimationComponent(id, isRock ? &m_rockXLargeAnimationDefs[modelIndex] : &m_asteroidXLargeAnimationDefs[modelIndex]);
+		world.AddDrawAnimationComponent(id, isRock ? m_rockXLargeAnimationDefs[modelIndex] : m_asteroidXLargeAnimationDefs[modelIndex]);
 		world.AddHealthComponent(id, XLARGE_ASTEROID_HP);
 		world.AddParticleExplosionOnDeathComponent(id, PARTICLE_EXPLOSION_RELATIVE_SIZE,
 			XLARGE_ASTEROID_NUM_PARTICLES, ASTEROID_PARTICLE_SPEED_RANGE, DAMAGE_BASED_SPEED_INCREASE_FACTOR,
@@ -420,7 +420,7 @@ namespace Space
 		}
 		world.AddPhysicsComponent(id, b2_dynamicBody, position, angle, velocity, angularVelocity);
 		world.AddShapes(id, m_asteroidLargeModelNames[modelIndex], ASTEROID_MATERIAL, ASTEROID_FILTER);
-		world.AddDrawAnimationComponent(id, isRock ? &m_rockLargeAnimationDefs[modelIndex] : &m_asteroidLargeAnimationDefs[modelIndex]);
+		world.AddDrawAnimationComponent(id, isRock ? m_rockLargeAnimationDefs[modelIndex] : m_asteroidLargeAnimationDefs[modelIndex]);
 		world.AddHealthComponent(id, LARGE_ASTEROID_HP);
 		world.AddParticleExplosionOnDeathComponent(id, PARTICLE_EXPLOSION_RELATIVE_SIZE,
 			LARGE_ASTEROID_NUM_PARTICLES, ASTEROID_PARTICLE_SPEED_RANGE, DAMAGE_BASED_SPEED_INCREASE_FACTOR,
@@ -440,7 +440,7 @@ namespace Space
 		}
 		world.AddPhysicsComponent(id, b2_dynamicBody, position, angle, velocity, angularVelocity);
 		world.AddShapes(id, m_asteroidMediumModelNames[modelIndex], ASTEROID_MATERIAL, ASTEROID_FILTER);
-		world.AddDrawAnimationComponent(id, isRock ? &m_rockMediumAnimationDefs[modelIndex] : &m_asteroidMediumAnimationDefs[modelIndex]);
+		world.AddDrawAnimationComponent(id, isRock ? m_rockMediumAnimationDefs[modelIndex] : m_asteroidMediumAnimationDefs[modelIndex]);
 		world.AddHealthComponent(id, MEDIUM_ASTEROID_HP);
 		world.AddParticleExplosionOnDeathComponent(id, PARTICLE_EXPLOSION_RELATIVE_SIZE,
 			MEDIUM_ASTEROID_NUM_PARTICLES, ASTEROID_PARTICLE_SPEED_RANGE, DAMAGE_BASED_SPEED_INCREASE_FACTOR,
@@ -460,7 +460,7 @@ namespace Space
 		}
 		world.AddPhysicsComponent(id, b2_dynamicBody, position, angle, velocity, angularVelocity);
 		world.AddShapes(id, m_asteroidSmallModelNames[modelIndex], ASTEROID_MATERIAL, ASTEROID_FILTER);
-		world.AddDrawAnimationComponent(id, isRock ? &m_rockSmallAnimationDefs[modelIndex] : &m_asteroidSmallAnimationDefs[modelIndex]);
+		world.AddDrawAnimationComponent(id, isRock ? m_rockSmallAnimationDefs[modelIndex] : m_asteroidSmallAnimationDefs[modelIndex]);
 		world.AddHealthComponent(id, SMALL_ASTEROID_HP);
 		world.AddParticleExplosionOnDeathComponent(id, PARTICLE_EXPLOSION_RELATIVE_SIZE,
 			SMALL_ASTEROID_NUM_PARTICLES, ASTEROID_PARTICLE_SPEED_RANGE, DAMAGE_BASED_SPEED_INCREASE_FACTOR,
@@ -564,7 +564,7 @@ namespace Space
 			m_world.ApplyLinearImpulseToCenter(id, impulse * unitDirectionVector);
 		}
 
-		m_world.AddDrawAnimationComponent(id, projectileDef.animationDefPtr);
+		m_world.AddDrawAnimationComponent(id, projectileDef.animationDef);
 
 		if(projectileDef.destructionDelay)
 			m_world.AddDestructionDelayComponent(id, projectileDef.destructionDelayTime);
