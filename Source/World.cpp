@@ -250,32 +250,12 @@ namespace Space
 		m_componentBits[entityID] |= COMPONENT_DRAW_FIXTURES;
 		m_drawFixtureComponents[entityID] = fixturesComponent;
 	}
-	void World::AddDrawAnimationComponent(WorldID entityID, d2d::AnimationDef* animationDefPtr)
+	void World::AddDrawAnimationComponent(WorldID entityID, const d2d::AnimationDef& animationDef)
 	{
 		d2Assert(entityID < WORLD_MAX_ENTITIES);
 		m_componentBits[entityID] |= COMPONENT_DRAW_ANIMATION;
-		m_drawAnimationComponents[entityID].animation.Init(animationDefPtr);
+		m_drawAnimationComponents[entityID].animation.Init(animationDef);
 	}	
-	//void DrawAnimationComponent::Init(const d2d::AnimationDef* const animationDefPtr)
-	//{
-		//if(!animationDefPtr)
-		//{
-		//	type = d2d::AnimationType::STATIC;
-		//	numFrames = 0;
-		//	return;
-		//}
-		//d2Assert(animationDefPtr->numFrames <= WORLD_MAX_ANIMATION_FRAMES);
-		//type = animationDefPtr->type;
-		//numFrames = animationDefPtr->numFrames;
-		//currentFrameIndex = animationDefPtr->initialFrameIndex;
-		//movingForward = animationDefPtr->initiallyMovingForward;
-		//for(unsigned i = 0; i < animationDefPtr->numFrames; ++i)
-		//{
-		//	frames[i].frameTime = animationDefPtr->frameDefs[i].frameTime;
-		//	frames[i].frameTimeAccumulator = 0.0f;
-		//	frames[i].sprite = animationDefPtr->frameDefs[i].sprite;
-		//}
-	//}
 	void World::SetAnimationLayer(WorldID entityID, int layer)
 	{
 		d2Assert(entityID < WORLD_MAX_ENTITIES);
@@ -409,14 +389,14 @@ namespace Space
 		for(unsigned i = 0; i < WORLD_MAX_THRUSTER_SLOTS; ++i)
 			thrusterComponent.thrusters[i].enabled = false;
 	}
-	void World::AddThruster(WorldID entityID, unsigned slot, d2d::AnimationDef *const animationDefPtr,
+	void World::AddThruster(WorldID entityID, unsigned slot, const d2d::AnimationDef& animationDef,
 		float acceleration, const b2Vec2& localRelativePosition)
 	{
 		d2Assert(entityID < WORLD_MAX_ENTITIES);
 		d2Assert(IsValidThrusterSlot(entityID, slot));
 		m_thrusterComponents[entityID].thrusters[slot].enabled = true;
 		m_thrusterComponents[entityID].thrusters[slot].temporarilyDisabled = false;
-		m_thrusterComponents[entityID].thrusters[slot].animation.Init(animationDefPtr);
+		m_thrusterComponents[entityID].thrusters[slot].animation.Init(animationDef);
 		m_thrusterComponents[entityID].thrusters[slot].acceleration = acceleration;
 		m_thrusterComponents[entityID].thrusters[slot].localRelativePosition = localRelativePosition;
 	}

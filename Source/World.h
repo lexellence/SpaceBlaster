@@ -39,10 +39,14 @@ namespace Space
 		int layer;
 		d2d::Animation animation;
 	};
+	struct Model
+	{
+		std::string name;
+		d2d::AnimationDef animationDef;
+	};
 	struct ProjectileDef
 	{
-		d2d::AnimationDef* animationDefPtr;
-		std::string modelName;
+		Model model;
 		d2d::Material material;
 		b2Vec2 dimensions;
 		bool fixedRotation;
@@ -175,7 +179,7 @@ namespace Space
 		// Visual
 		void AddDrawRadarComponent(WorldID entityID, const DrawRadarComponent& radarComponent);
 		void AddDrawFixturesComponent(WorldID entityID, const DrawFixturesComponent& fixturesComponent);
-		void AddDrawAnimationComponent(WorldID entityID, d2d::AnimationDef* animationDefPtr);
+		void AddDrawAnimationComponent(WorldID entityID, const d2d::AnimationDef& animationDef);
 		void SetAnimationLayer(WorldID entityID, int layer);
 
 		// Life and Death
@@ -199,7 +203,7 @@ namespace Space
 
 		// Getting around
 		void AddThrusterComponent(WorldID entityID, unsigned numSlots, float initialFactor = 0.0f);
-		void AddThruster(WorldID entityID, unsigned slot, d2d::AnimationDef* animationDefPtr,
+		void AddThruster(WorldID entityID, unsigned slot, const d2d::AnimationDef& animationDef,
 			float acceleration, const b2Vec2& localRelativePosition);
 		void RemoveThruster(WorldID entityID, unsigned slot);
 		bool IsValidThrusterSlot(WorldID entityID, unsigned slot) const;

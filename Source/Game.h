@@ -221,168 +221,118 @@ namespace Space
 			0.05f
 		};
 
-		struct Model
-		{
-			std::string name;
-			d2d::TextureReference texture;
-		};
-		// Ships
-		Model m_blasterModel{ "ship001", { "Textures\\BigShips\\ship001.png" } };
-		Model m_scoutModel{ "ship002", { "Textures\\BigShips\\ship002.png" } };
-		Model m_thrusterModel{ "thruster1", { "Textures\\Effects\\thruster1.png" } };
-		Model m_bumperModel{ "repulser1", { "Textures\\Items\\repulser1.png" } };
-
+		//+---------------------------\-------------------------------
+		//|		    Textures		  |
+		//\---------------------------/-------------------------------
+		d2d::TextureReference m_blasterTexture{ "Textures\\BigShips\\ship001.png" };
+		d2d::TextureReference m_scoutTexture{ "Textures\\BigShips\\ship002.png" };
 		d2d::TextureReference m_thrusterTexture{ "Textures\\Effects\\thruster1.png" };
-		d2d::AnimationDef m_blasterThrusterAnimationDef{ d2d::AnimationFrame{ &m_thrusterTexture, 0.0f, d2d::WHITE_OPAQUE, BLASTER_THRUSTER_RELATIVE_SIZE } };
-		d2d::AnimationDef m_scoutThrusterAnimationDef{ d2d::AnimationFrame{ &m_thrusterTexture, 0.0f, d2d::WHITE_OPAQUE, SCOUT_THRUSTER_RELATIVE_SIZE } };
-
-		//+------------------------\----------------------------------
-		//|	  XL asteroids/rocks   |
-		//\------------------------/----------------------------------
-		std::array<std::string, NUM_XLARGE_ASTEROID_MODELS> 
-			m_asteroidXLargeModelNames{ "asteroidxlarge1", "asteroidxlarge2", "asteroidxlarge3", "asteroidxlarge4" };
-		
-		// XL asteroid animations
-		std::array<d2d::TextureReference, NUM_XLARGE_ASTEROID_MODELS> 
-			m_asteroidXLargeTextures{"Textures\\Asteroids\\asteroidxlarge1.png"s,
-									 "Textures\\Asteroids\\asteroidxlarge2.png"s,
-									 "Textures\\Asteroids\\asteroidxlarge3.png"s,
-									 "Textures\\Asteroids\\asteroidxlarge4.png"s };
-		std::array<d2d::AnimationDef, NUM_XLARGE_ASTEROID_MODELS>
-			m_asteroidXLargeAnimationDefs{ 
-				d2d::AnimationFrame{ &m_asteroidXLargeTextures.at(0) },
-				d2d::AnimationFrame{ &m_asteroidXLargeTextures.at(1) },
-				d2d::AnimationFrame{ &m_asteroidXLargeTextures.at(2) },
-				d2d::AnimationFrame{ &m_asteroidXLargeTextures.at(3) } };
-
-		// XL rock animations
+		d2d::TextureReference m_bumperTexture{ "Textures\\Items\\repulser1.png" };
+		// XLarge
 		std::array<d2d::TextureReference, NUM_XLARGE_ASTEROID_MODELS>
-			m_rockXLargeTextures{ "Textures\\Asteroids\\rockxlarge1.png"s,
-								  "Textures\\Asteroids\\rockxlarge2.png"s,
-								  "Textures\\Asteroids\\rockxlarge3.png"s,
-								  "Textures\\Asteroids\\rockxlarge4.png"s };
-		std::array<d2d::AnimationDef, NUM_XLARGE_ASTEROID_MODELS>
-			m_rockXLargeAnimationDefs{
-				d2d::AnimationFrame{ &m_rockXLargeTextures.at(0) },
-				d2d::AnimationFrame{ &m_rockXLargeTextures.at(1) },
-				d2d::AnimationFrame{ &m_rockXLargeTextures.at(2) },
-				d2d::AnimationFrame{ &m_rockXLargeTextures.at(3) } };
-
-		//+---------------------------\-------------------------------
-		//|	  Large asteroids/rocks   |
-		//\---------------------------/-------------------------------
-		std::array<std::string, NUM_LARGE_ASTEROID_MODELS>
-			m_asteroidLargeModelNames{ "asteroidlarge1", "asteroidlarge2" };
-
-		// Large asteroid animations
-		std::array<d2d::TextureReference, NUM_LARGE_ASTEROID_MODELS> 
-			m_asteroidLargeTextures{ "Textures\\Asteroids\\asteroidlarge1.png"s,
-									 "Textures\\Asteroids\\asteroidlarge2.png"s };
-		std::array<d2d::AnimationDef, NUM_LARGE_ASTEROID_MODELS>
-			m_asteroidLargeAnimationDefs{
-				d2d::AnimationFrame{ &m_asteroidLargeTextures.at(0) },
-				d2d::AnimationFrame{ &m_asteroidLargeTextures.at(1) } };
-
-		// Large rock animations
-		std::array<d2d::TextureReference, NUM_LARGE_ASTEROID_MODELS> 
-			m_rockLargeTextures{ "Textures\\Asteroids\\rocklarge1.png"s, 
-								 "Textures\\Asteroids\\rocklarge2.png"s };
-		std::array<d2d::AnimationDef, NUM_LARGE_ASTEROID_MODELS>
-			m_rockLargeAnimationDefs{
-				d2d::AnimationFrame{ &m_rockLargeTextures.at(0) },
-				d2d::AnimationFrame{ &m_rockLargeTextures.at(1) } };
-
-		//+---------------------------\-------------------------------
-		//|	 Medium asteroids/rocks   |
-		//\---------------------------/-------------------------------
-		std::array<std::string, NUM_MEDIUM_ASTEROID_MODELS>
-			m_asteroidMediumModelNames{ "asteroidmedium1", "asteroidmedium2" };
-
-		// Medium asteroid animations
+			m_asteroidXLargeTextures{ "Textures\\Asteroids\\asteroidxlarge1.png"s, "Textures\\Asteroids\\asteroidxlarge2.png"s,
+									  "Textures\\Asteroids\\asteroidxlarge3.png"s, "Textures\\Asteroids\\asteroidxlarge4.png"s };
+		std::array<d2d::TextureReference, NUM_XLARGE_ASTEROID_MODELS>
+			m_rockXLargeTextures{ "Textures\\Asteroids\\rockxlarge1.png"s, "Textures\\Asteroids\\rockxlarge2.png"s,
+								  "Textures\\Asteroids\\rockxlarge3.png"s, "Textures\\Asteroids\\rockxlarge4.png"s };
+		// Large
+		std::array<d2d::TextureReference, NUM_LARGE_ASTEROID_MODELS>
+			m_asteroidLargeTextures{ "Textures\\Asteroids\\asteroidlarge1.png"s, "Textures\\Asteroids\\asteroidlarge2.png"s };
+		std::array<d2d::TextureReference, NUM_LARGE_ASTEROID_MODELS>
+			m_rockLargeTextures{ "Textures\\Asteroids\\rocklarge1.png"s, "Textures\\Asteroids\\rocklarge2.png"s };
+		// Medium
 		std::array<d2d::TextureReference, NUM_MEDIUM_ASTEROID_MODELS>
-			m_asteroidMediumTextures{ "Textures\\Asteroids\\asteroidmedium1.png"s,
-									  "Textures\\Asteroids\\asteroidmedium2.png"s };
-		std::array<d2d::AnimationDef, NUM_MEDIUM_ASTEROID_MODELS>
-			m_asteroidMediumAnimationDefs{
-				d2d::AnimationFrame{ &m_asteroidMediumTextures.at(0) },
-				d2d::AnimationFrame{ &m_asteroidMediumTextures.at(1) } };
-
-		// Medium rock animations
+			m_asteroidMediumTextures{ "Textures\\Asteroids\\asteroidmedium1.png"s, "Textures\\Asteroids\\asteroidmedium2.png"s };
 		std::array<d2d::TextureReference, NUM_MEDIUM_ASTEROID_MODELS>
-			m_rockMediumTextures{ "Textures\\Asteroids\\rockmedium1.png"s,
-								  "Textures\\Asteroids\\rockmedium2.png"s };
-		std::array<d2d::AnimationDef, NUM_MEDIUM_ASTEROID_MODELS>
-			m_rockMediumAnimationDefs{
-				d2d::AnimationFrame{ &m_rockMediumTextures.at(0) },
-				d2d::AnimationFrame{ &m_rockMediumTextures.at(1) } };
+			m_rockMediumTextures{ "Textures\\Asteroids\\rockmedium1.png"s, "Textures\\Asteroids\\rockmedium2.png"s };
+		// Small
+		std::array<d2d::TextureReference, NUM_SMALL_ASTEROID_MODELS>
+			m_asteroidSmallTextures{ "Textures\\Asteroids\\asteroidsmall1.png"s, "Textures\\Asteroids\\asteroidsmall2.png"s };
+		std::array<d2d::TextureReference, NUM_SMALL_ASTEROID_MODELS>
+			m_rockSmallTextures{ "Textures\\Asteroids\\rocksmall1.png"s, "Textures\\Asteroids\\rocksmall2.png"s };
+		// Projectiles
+		d2d::TextureReference m_bulletTexture{ "Textures\\Projectiles\\fireball1.png" };
+		std::array<d2d::TextureReference, 2>
+			m_missileTextures{ "Textures\\Projectiles\\rocket005a.png"s, "Textures\\Projectiles\\rocket005b.png"s };
+		std::array<d2d::TextureReference, 2>
+			m_fatMissileTextures{ "Textures\\Projectiles\\rocket006a.png"s, "Textures\\Projectiles\\rocket006b.png"s };
 
 		//+---------------------------\-------------------------------
-		//|	  Small asteroids/rocks   |
+		//|			 Models 		  |
 		//\---------------------------/-------------------------------
-		std::array<std::string, NUM_SMALL_ASTEROID_MODELS>
-			m_asteroidSmallModelNames{ "asteroidsmall1", "asteroidsmall2" };
-
-		// Small asteroid animations
-		std::array<d2d::TextureReference, NUM_SMALL_ASTEROID_MODELS>
-			m_asteroidSmallTextures{ "Textures\\Asteroids\\asteroidsmall1.png"s,
-									 "Textures\\Asteroids\\asteroidsmall2.png"s };
-		std::array<d2d::AnimationDef, NUM_SMALL_ASTEROID_MODELS>
-			m_asteroidSmallAnimationDefs{
-				d2d::AnimationFrame{ &m_asteroidSmallTextures.at(0) },
-				d2d::AnimationFrame{ &m_asteroidSmallTextures.at(1) } };
-
-		// Small rock animations
-		std::array<d2d::TextureReference, NUM_SMALL_ASTEROID_MODELS>
-			m_rockSmallTextures{ "Textures\\Asteroids\\rocksmall1.png"s,
-								 "Textures\\Asteroids\\rocksmall2.png"s };
-		std::array<d2d::AnimationDef, NUM_SMALL_ASTEROID_MODELS>
-			m_rockSmallAnimationDefs{
-				d2d::AnimationFrame{ &m_rockSmallTextures.at(0) },
-				d2d::AnimationFrame{ &m_rockSmallTextures.at(1) } };
+		Model m_blasterModel{ "ship001", { &m_blasterTexture } };
+		Model m_scoutModel{ "ship002", { &m_scoutTexture } };
+		Model m_blasterThrusterModel{ "thruster1", {{ &m_thrusterTexture, 0.0f, d2d::WHITE_OPAQUE, BLASTER_THRUSTER_RELATIVE_SIZE }} };
+		Model m_scoutThrusterModel{ "thruster1", {{ &m_thrusterTexture, 0.0f, d2d::WHITE_OPAQUE, SCOUT_THRUSTER_RELATIVE_SIZE }} };
+		Model m_bumperModel{ "repulser1", { &m_bumperTexture } };	
+		// XLarge
+		std::array<Model, NUM_XLARGE_ASTEROID_MODELS> 
+			m_asteroidXLargeModels{
+				Model{ "asteroidxlarge1", { &m_asteroidXLargeTextures.at(0)}},
+				Model{ "asteroidxlarge2", { &m_asteroidXLargeTextures.at(1) } },
+				Model{ "asteroidxlarge3", { &m_asteroidXLargeTextures.at(2) } },
+				Model{ "asteroidxlarge4", { &m_asteroidXLargeTextures.at(3) } } };
+		std::array<Model, NUM_XLARGE_ASTEROID_MODELS>
+			m_rockXLargeModels{
+				Model{ "asteroidxlarge1", { &m_rockXLargeTextures.at(0) } },
+				Model{ "asteroidxlarge2", { &m_rockXLargeTextures.at(1) } },
+				Model{ "asteroidxlarge3", { &m_rockXLargeTextures.at(2) } },
+				Model{ "asteroidxlarge4", { &m_rockXLargeTextures.at(3) } } };
+		// Large
+		std::array<Model, NUM_LARGE_ASTEROID_MODELS>
+			m_asteroidLargeModels{ Model{ "asteroidlarge1", { &m_asteroidLargeTextures.at(0) } },
+								   Model{ "asteroidlarge2", { &m_asteroidLargeTextures.at(1) } } };
+		std::array<Model, NUM_LARGE_ASTEROID_MODELS>
+			m_rockLargeModels{ Model{ "rocklarge1", { &m_rockLargeTextures.at(0) } },
+							   Model{ "rocklarge2", { &m_rockLargeTextures.at(1) } } };
+		// Medium
+		std::array<Model, NUM_MEDIUM_ASTEROID_MODELS>
+			m_asteroidMediumModels{	Model{ "asteroidmedium1", { &m_asteroidMediumTextures.at(0) } },
+									Model{ "asteroidmedium2", { &m_asteroidMediumTextures.at(1) } } };
+		std::array<Model, NUM_MEDIUM_ASTEROID_MODELS>
+			m_rockMediumModels{ Model{ "rockmedium1", { &m_rockMediumTextures.at(0) } },
+								Model{ "rockmedium2", { &m_rockMediumTextures.at(1) } } };
+		// Small
+		std::array<Model, NUM_SMALL_ASTEROID_MODELS>
+			m_asteroidSmallModels{ Model{ "asteroidsmall1", { &m_asteroidSmallTextures.at(0) } },
+								   Model{ "asteroidsmall2", { &m_asteroidSmallTextures.at(1) } } };
+		std::array<Model, NUM_SMALL_ASTEROID_MODELS>
+			m_rockSmallModels{ Model{ "rocksmall1", { &m_rockSmallTextures.at(0) } },
+							   Model{ "rocksmall2", { &m_rockSmallTextures.at(1) } } };
+		// Projectiles
+		Model m_bulletModel{ "fireball1", { &m_bulletTexture } };
+		Model m_missileModel{ "rocket005", 
+			{{	d2d::AnimationFrame{ &m_missileTextures.at(0), MISSILE_TIME_PER_FRAME },
+				d2d::AnimationFrame{ &m_missileTextures.at(1), MISSILE_TIME_PER_FRAME }},
+			d2d::AnimationType::LOOP, 0, true
+		} };
+		Model m_fatMissileModel{ "rocket006",
+			{{	d2d::AnimationFrame{ &m_fatMissileTextures.at(0), MISSILE_TIME_PER_FRAME },
+				d2d::AnimationFrame{ &m_fatMissileTextures.at(1), MISSILE_TIME_PER_FRAME }},
+			d2d::AnimationType::LOOP, 0, true
+		} };
 
 		//+---------------------------\-------------------------------
 		//|		  Projectiles		  |
 		//\---------------------------/-------------------------------
-		d2d::TextureReference m_bulletTexture{ "Textures\\Projectiles\\fireball1.png" };
-		d2d::AnimationDef m_bulletAnimationDef{ d2d::AnimationFrame{ &m_bulletTexture } };
-		ProjectileDef m_bulletDef{ &m_bulletAnimationDef, "fireball1",
+		// Bullet
+		ProjectileDef m_bulletDef{ m_bulletModel,
 			BULLET_MATERIAL, { BULLET_HEIGHT * m_bulletTexture.GetWidthToHeightRatio(), BULLET_HEIGHT },
 			BULLET_FIXED_ROTATION, BULLET_CONTINUOUS_COLLISION_DETECTION, BULLET_FILTER, 
 			BULLET_DESTRUCTION_DELAY, BULLET_DESTRUCTION_DELAY_TIME, 
 			BULLET_DESTRUCTION_DELAY_ON_CONTACT, BULLET_DESTRUCTION_DELAY_ON_CONTACT_TIME,
 			BULLET_DESTRUCTION_CHANCE_ON_CONTACT, BULLET_DESTRUCTION_CHANCE,
 			BULLET_IGNORE_PARENT_COLLISIONS_UNTIL_FIRST_CONTACT, BULLET_ACCELERATION, BULLET_ACCELERATION_TIME };
-
-		static const unsigned M_NUM_MISSILE_TEXTURES = 2;
-		std::array<d2d::TextureReference, M_NUM_MISSILE_TEXTURES>
-			m_missileTextures{ "Textures\\Projectiles\\rocket005a.png"s,
-							   "Textures\\Projectiles\\rocket005b.png"s };
-		d2d::AnimationDef m_missileAnimationDef{
-			{
-				d2d::AnimationFrame{ &m_missileTextures.at(0), MISSILE_TIME_PER_FRAME },
-				d2d::AnimationFrame{ &m_missileTextures.at(1), MISSILE_TIME_PER_FRAME }
-			},
-			d2d::AnimationType::LOOP, 0, true };
-		ProjectileDef m_missileDef{ &m_missileAnimationDef, "rocket005",
+		// Missile
+		ProjectileDef m_missileDef{ m_missileModel,
 			MISSILE_MATERIAL, { MISSILE_HEIGHT * m_missileTextures[0].GetWidthToHeightRatio(), MISSILE_HEIGHT },
 			MISSILE_FIXED_ROTATION, MISSILE_CONTINUOUS_COLLISION_DETECTION, MISSILE_FILTER, 
 			MISSILE_DESTRUCTION_DELAY, MISSILE_DESTRUCTION_DELAY_TIME,
 			MISSILE_DESTRUCTION_DELAY_ON_CONTACT, MISSILE_DESTRUCTION_DELAY_ON_CONTACT_TIME,
 			MISSILE_DESTRUCTION_CHANCE_ON_CONTACT, MISSILE_DESTRUCTION_CHANCE,
 			MISSILE_IGNORE_PARENT_COLLISIONS_UNTIL_FIRST_CONTACT, MISSILE_ACCELERATION, MISSILE_ACCELERATION_TIME };
-
-		static const unsigned M_NUM_FAT_MISSILE_TEXTURES = 2;
-		std::array<d2d::TextureReference, M_NUM_FAT_MISSILE_TEXTURES>
-			m_fatMissileTextures{ "Textures\\Projectiles\\rocket006a.png"s,
-								  "Textures\\Projectiles\\rocket006b.png"s };
-		d2d::AnimationDef m_fatMissileAnimationDef{
-			{
-				d2d::AnimationFrame{ &m_fatMissileTextures.at(0), MISSILE_TIME_PER_FRAME },
-				d2d::AnimationFrame{ &m_fatMissileTextures.at(1), MISSILE_TIME_PER_FRAME }
-			},
-			d2d::AnimationType::LOOP, 0, true };
-
-		ProjectileDef m_fatMissileDef{ &m_fatMissileAnimationDef, "rocket006",
+		// Fat missile
+		ProjectileDef m_fatMissileDef{ m_fatMissileModel,
 			MISSILE_MATERIAL, { MISSILE_HEIGHT * m_fatMissileTextures[0].GetWidthToHeightRatio(), MISSILE_HEIGHT },
 			MISSILE_FIXED_ROTATION, MISSILE_CONTINUOUS_COLLISION_DETECTION, MISSILE_FILTER, 
 			MISSILE_DESTRUCTION_DELAY, MISSILE_DESTRUCTION_DELAY_TIME,
