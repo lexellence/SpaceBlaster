@@ -3703,6 +3703,54 @@
 				</fixtureGroup>
 			</fixtureGroups>
 		</body>
+		<body name="apple" width="24.000" height="26.000">
+			<fixtureGroups>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="11.900" y="2.800"/>
+							<point x="7.600" y="6.800"/>
+							<point x="-8.000" y="7.000"/>
+							<point x="-12.000" y="3.000"/>
+							<point x="-12.000" y="-7.000"/>
+							<point x="-8.100" y="-12.800"/>
+							<point x="7.800" y="-12.900"/>
+							<point x="12.000" y="-7.000"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+			</fixtureGroups>
+		</body>
+		<body name="watermelon" width="30.000" height="18.000">
+			<fixtureGroups>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="-15.000" y="9.000"/>
+							<point x="-15.000" y="-3.000"/>
+							<point x="-9.000" y="-8.600"/>
+							<point x="8.700" y="-8.700"/>
+							<point x="15.000" y="-2.600"/>
+							<point x="15.000" y="9.000"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+			</fixtureGroups>
+		</body>
+		<body name="sodacan" width="16.000" height="22.000">
+			<fixtureGroups>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="-8.000" y="-11.000"/>
+							<point x="8.000" y="-10.800"/>
+							<point x="8.000" y="11.000"/>
+							<point x="-8.000" y="11.000"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+			</fixtureGroups>
+		</body>
 	</bodies>
 	<metadata>
 		<format>1</format>

@@ -23,7 +23,16 @@ namespace Space
 	const d2d::Color WORLD_DEBUG_DRAW_FIXTURES_COLOR{ d2d::WHITE_OPAQUE };
 	const unsigned WORLD_MAX_ANIMATION_FRAMES{ 5 };
 	const bool WORLD_IGNORE_CLONE_VS_CLONE_COLLISIONS{ false };
+	const float WORLD_BOOST_FUEL_USE_PENALTY_FACTOR{ 2.0f };
 
+	struct InstanceDef
+	{
+		b2Vec2 position{ b2Vec2_zero };
+		float angle{ 0.0f };
+		b2Vec2 velocity{ b2Vec2_zero };
+		float angularVelocity{ 0.0f };
+		bool activate{ true };
+	};
 	struct DrawFixturesComponent
 	{
 		d2d::Color color;
@@ -72,6 +81,7 @@ namespace Space
 		float turnFactor{};
 		float thrustFactor{};
 		float brakeFactor{};
+		bool boost{ false };
 		float zoomOutFactor{};
 		//bool doMorphOnce{ false };
 		int numMissiles{};
@@ -125,6 +135,8 @@ namespace Space
 		COMPONENT_BRAKE 								= 1 << 13,
 		COMPONENT_PRIMARY_PROJECTILE_LAUNCHER			= 1 << 14,
 		COMPONENT_SECONDARY_PROJECTILE_LAUNCHER			= 1 << 15,
+		COMPONENT_FUEL									= 1 << 16,
+		COMPONENT_BOOSTER								= 1 << 17
 		//COMPONENT_LEVEL_TAG								= 1 << 16
 		//COMPONENT_MORPH_INTO_ENTITY_ID					= 1 << 16
 	};
@@ -165,8 +177,7 @@ namespace Space
 		bool GetRandomPositionAwayFromExistingEntities(float newBoundingRadius,
 			float minDistanceToClosestEntity, unsigned maxAttempts, b2Vec2& relativePositionOut) const;
 		void AddPhysicsComponent(WorldID entityID, b2BodyType type,
-			const b2Vec2& position, float angle, const b2Vec2& velocity = b2Vec2_zero, float angularVelocity = 0.0f,
-			bool fixedRotation = false, bool continuousCollisionDetection = false);
+			const InstanceDef& def,	bool fixedRotation = false, bool continuousCollisionDetection = false);
 		void AddCircleShape(WorldID entityID, const d2d::Material& material, const d2d::Filter& filter,
 			float sizeRelativeToWidth = 1.0f, const b2Vec2& position = b2Vec2_zero, bool isSensor = false);
 		void AddRectShape(WorldID entityID, const d2d::Material& material, const d2d::Filter& filter,
@@ -204,10 +215,12 @@ namespace Space
 		// Getting around
 		void AddThrusterComponent(WorldID entityID, unsigned numSlots, float initialFactor = 0.0f);
 		void AddThruster(WorldID entityID, unsigned slot, const d2d::AnimationDef& animationDef,
-			float acceleration, const b2Vec2& localRelativePosition);
+			float acceleration, float fuelPerSecond, const b2Vec2& localRelativePosition);
 		void RemoveThruster(WorldID entityID, unsigned slot);
 		bool IsValidThrusterSlot(WorldID entityID, unsigned slot) const;
 		void AddSetThrustFactorAfterDelayComponent(WorldID entityID, float thrustFactor, float delay);
+		void AddBoosterComponent(WorldID entityID, float factor, float boostSeconds, float cooldownSeconds);
+		void AddFuelComponent(WorldID entityID, float level, float max);
 		void AddRotatorComponent(WorldID entityID, float rotationSpeed);
 		void AddBrakeComponent(WorldID entityID, float deceleration);
 
@@ -225,6 +238,11 @@ namespace Space
 		bool GetClosestPhysicalEntity(const b2Vec2& position, float boudingRadius,
 			WorldID& entityIDOut, float& boundingRadiiGapOut) const;
 		int GetDrawLayer(WorldID entityID) const;
+		float GetFuelLevel(WorldID entityID) const;
+		float GetMaxFuelLevel(WorldID entityID) const;
+		float GetTotalThrusterAcceleration(WorldID id) const;
+		float GetTotalThrusterFuelRequired(WorldID id, float dt) const;
+
 
 		// Callers of the following must ensure entity has a physics component
 		const b2Transform& GetSmoothedTransform(WorldID entityID) const;
@@ -304,10 +322,20 @@ namespace Space
 		struct Thruster
 		{
 			bool enabled;
-			bool temporarilyDisabled;
 			d2d::Animation animation;
 			float acceleration;
 			b2Vec2 localRelativePosition;
+			float fuelPerSecond;
+		};
+		struct BoosterComponent
+		{
+			float factor;
+			float boostSeconds;
+			float cooldownSeconds;
+
+			bool engaged;
+			float secondsLeft;
+			float cooldownSecondsLeft;
 		};
 		struct ThrusterComponent
 		{
@@ -319,6 +347,11 @@ namespace Space
 		{
 			float factor;
 			float delay;
+		};
+		struct FuelComponent
+		{
+			float level;
+			float max;
 		};
 		struct BrakeComponent
 		{
@@ -375,7 +408,9 @@ namespace Space
 		void UpdatePlayerControllerComponents(float dt, PlayerController& playerController);
 		void UpdateRotatorComponents();
 		void UpdateSetThrustFactorAfterDelayComponents(float dt);
+		void ApplyThrust(WorldID id, float acceleration);
 		void UpdateThrusterComponents(float dt);
+		void UpdateBoosterComponents(float dt);
 		void UpdateBrakeComponents();
 		void UpdateProjectileLauncherComponents(float dt, bool secondaryLaunchers);
 		void UpdateDrawAnimationComponents(float dt);
@@ -456,6 +491,8 @@ namespace Space
 		ComponentArray< RotatorComponent > m_rotatorComponents;
 		ComponentArray< SetThrustFactorAfterDelayComponent > m_setThrustFactorAfterDelayComponents;
 		ComponentArray< ThrusterComponent > m_thrusterComponents;
+		ComponentArray< BoosterComponent > m_boosterComponents;
+		ComponentArray< FuelComponent > m_fuelComponents;
 		ComponentArray< BrakeComponent > m_brakeComponents;
 		ComponentArray< ProjectileLauncherComponent > m_primaryProjectileLauncherComponents;
 		ComponentArray< ProjectileLauncherComponent > m_secondaryProjectileLauncherComponents;

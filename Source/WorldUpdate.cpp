@@ -48,6 +48,7 @@ namespace Space
 		UpdateRotatorComponents();
 		UpdateSetThrustFactorAfterDelayComponents(dt);
 		UpdateThrusterComponents(dt);
+		UpdateBoosterComponents(dt);
 		UpdateBrakeComponents();
 		UpdateProjectileLauncherComponents(dt, false);
 		UpdateProjectileLauncherComponents(dt, true);
@@ -76,41 +77,6 @@ namespace Space
 	//\------------------------/----------------------------------
 	void World::UpdatePlayerControllerComponents(float dt, PlayerController& playerController)
 	{
-		//if(playerController.doMorphOnce)
-		//{
-		//	std::vector<WorldID> morphList;
-		//	for(WorldID id = 0; id < WORLD_MAX_ENTITIES; ++id)
-		//		if(HasFlags(id, FLAG_PLAYER_CONTROLLED) && IsActive(id))
-		//			if (HasComponents(id, COMPONENT_MORPH_INTO_ENTITY_ID))
-		//			{
-		//				morphList.push_back(id);
-		//				
-		//			}
-
-		//	for(WorldID id : morphList)
-		//	{
-		//		//	Move new entity on top of existing entity so that their centers of mass and velocities coincide.
-		//		const b2Transform& transform{ GetSmoothedTransform(id) };
-		//		WorldID newID{ m_morphIntoEntityIDs[id] };
-		//		std::cout << "Morphing: " << id << " > " << newID << std::endl;
-		//		Deactivate(id);
-		//		Activate(newID);
-		//		std::cout << "HasPhysics: " << id << " " << HasPhysics(id) << std::endl;
-		//		std::cout << "HasPhysics: " << newID << " " << HasPhysics(newID) << std::endl;
-		//		SetTransform(newID,
-		//			b2Mul(transform, GetLocalCenterOfMass(id)) - b2Mul(transform.q, GetLocalCenterOfMass(newID)),
-		//			GetSmoothedTransform(id).q.GetAngle());
-		//		SetLinearVelocity(newID, GetLinearVelocity(id));
-		//		SetAngularVelocity(newID, GetAngularVelocity(id));
-
-		//		// Notify external listener of change in ID
-		//		if(m_morphListenerPtr)
-		//			m_morphListenerPtr->MorphedIntoEntity(id, newID);
-		//	}
-
-		//	playerController.doMorphOnce = false;
-		//}
-
 		for(WorldID id = 0; id < WORLD_MAX_ENTITIES; ++id)
 			if(HasFlags(id, FLAG_PLAYER_CONTROLLED) && IsActive(id))
 			{
@@ -125,8 +91,15 @@ namespace Space
 					m_rotatorComponents[id].factor = playerController.turnFactor;
 				}
 
+				ThrusterComponent& thrusterComponent{ m_thrusterComponents[id] };
 				if(HasComponents(id, COMPONENT_THRUSTER))
-					m_thrusterComponents[id].factor = playerController.thrustFactor;
+					thrusterComponent.factor = playerController.thrustFactor;
+				if(playerController.boost && HasComponents(id, COMPONENT_BOOSTER) &&
+					m_boosterComponents[id].secondsLeft <= 0.0f &&
+					m_boosterComponents[id].cooldownSecondsLeft <= 0.0f)
+				{
+					m_boosterComponents[id].secondsLeft = m_boosterComponents[id].boostSeconds;
+				}
 
 				if(HasComponents(id, COMPONENT_BRAKE))
 					m_brakeComponents[id].factor = playerController.brakeFactor;
@@ -148,6 +121,13 @@ namespace Space
 					m_physicsComponents[id].mainBody.b2BodyPtr->SetAngularVelocity(m_rotatorComponents[id].factor * m_rotatorComponents[id].rotationSpeed);
 			}
 	}
+	void World::ApplyThrust(WorldID id, float acceleration)
+	{
+		float angle{ m_physicsComponents[id].mainBody.b2BodyPtr->GetAngle() };
+		float inputAdjustedForce{ m_physicsComponents[id].mainBody.b2BodyPtr->GetMass() * acceleration * m_thrusterComponents[id].factor };
+		b2Vec2 forceVec{ inputAdjustedForce * cosf(angle), inputAdjustedForce * sinf(angle) };
+		ApplyForceToCenter(id, forceVec);
+	}
 	void World::UpdateThrusterComponents(float dt)
 	{
 		BitMask requiredComponents{ COMPONENT_THRUSTER | COMPONENT_PHYSICS };
@@ -155,17 +135,25 @@ namespace Space
 			if(HasComponents(id, requiredComponents) && IsActive(id))
 				if(m_thrusterComponents[id].factor > 0.0f)
 				{
-					// Calculate and apply thrust force
-					float sumAccelerations{ 0.0f };
 					d2Assert(m_thrusterComponents[id].numSlots <= WORLD_MAX_THRUSTER_SLOTS);
-					for(unsigned i = 0; i < m_thrusterComponents[id].numSlots; ++i)
-						if(m_thrusterComponents[id].thrusters[i].enabled && !m_thrusterComponents[id].thrusters[i].temporarilyDisabled)
-							sumAccelerations += m_thrusterComponents[id].thrusters[i].acceleration;
-					
-					float angle{ m_physicsComponents[id].mainBody.b2BodyPtr->GetAngle() };
-					float inputAdjustedForce{ m_physicsComponents[id].mainBody.b2BodyPtr->GetMass() * sumAccelerations * m_thrusterComponents[id].factor };
-					b2Vec2 forceVec{ inputAdjustedForce * cosf(angle), inputAdjustedForce * sinf(angle) };
-					ApplyForceToCenter(id, forceVec);
+					float sumAccelerations = GetTotalThrusterAcceleration(id);
+					float fuelRequired = GetTotalThrusterFuelRequired(id, dt);
+
+					// Fuel
+					if(fuelRequired > 0.0f && HasComponents(id, COMPONENT_FUEL))
+					{
+						if(m_fuelComponents[id].level < fuelRequired)
+						{
+							float fuelFactor = m_fuelComponents[id].level / fuelRequired;
+							sumAccelerations *= fuelFactor;
+							m_fuelComponents[id].level = 0.0f;
+						}
+						else
+							m_fuelComponents[id].level -= fuelRequired;
+					}
+
+					// Thrust
+					ApplyThrust(id, sumAccelerations);
 
 					// Update thruster animations
 					for (unsigned i = 0; i < m_thrusterComponents[id].numSlots; ++i)
@@ -183,6 +171,32 @@ namespace Space
 					if(HasComponents(id, COMPONENT_THRUSTER))
 						m_thrusterComponents[id].factor = m_setThrustFactorAfterDelayComponents[id].factor;
 					RemoveComponents(id, COMPONENT_SET_THRUST_AFTER_DELAY);
+				}
+			}
+	}
+	void World::UpdateBoosterComponents(float dt)
+	{
+		BitMask requiredComponents{ COMPONENT_BOOSTER | COMPONENT_PHYSICS };
+		for(WorldID id = 0; id < WORLD_MAX_ENTITIES; ++id)
+			if(HasComponents(id, requiredComponents) && IsActive(id))
+			{
+				if(m_boosterComponents[id].secondsLeft > 0.0f)
+				{
+					// Boost mode
+					m_boosterComponents[id].secondsLeft -= dt;
+					if(m_boosterComponents[id].secondsLeft <= 0.0f)
+					{
+						// Switch to cooldown mode
+						m_boosterComponents[id].cooldownSecondsLeft = m_boosterComponents[id].cooldownSeconds + m_boosterComponents[id].secondsLeft;
+						m_boosterComponents[id].secondsLeft = 0.0f;
+						d2d::ClampLow(m_boosterComponents[id].cooldownSecondsLeft, 0.0f);
+					}
+				}
+				else if(m_boosterComponents[id].cooldownSecondsLeft > 0.0f)
+				{
+					// Cooldown mode
+					m_boosterComponents[id].cooldownSecondsLeft -= dt;
+					d2d::ClampLow(m_boosterComponents[id].cooldownSecondsLeft, 0.0f);
 				}
 			}
 	}
@@ -266,64 +280,6 @@ namespace Space
 					m_destroyBuffer.push(id);
 			}
 	}
-	//+--------------------------------\--------------------------------------
-	//|  UpdateDrawAnimationComponent  | (private)
-	//\--------------------------------/--------------------------------------
-	//void World::UpdateDrawAnimationComponent(DrawAnimationComponent& drawAnimationComponent, float dt)
-	//{
-	//	if(drawAnimationComponent.type != AnimationType::NOT_ANIMATED &&
-	//		drawAnimationComponent.numFrames > 0)
-	//		{
-	//			d2Assert(drawAnimationComponent.numFrames <= WORLD_MAX_ANIMATION_FRAMES);
-	//			Frame& currentFrame{ drawAnimationComponent.frames[drawAnimationComponent.currentFrameIndex] };
-	//			currentFrame.frameTimeAccumulator += dt;
-	//			if(currentFrame.frameTimeAccumulator >= currentFrame.frameTime)
-	//			{
-	//				// Go to next frame
-	//				float timeOverflow{ currentFrame.frameTimeAccumulator - currentFrame.frameTime };
-	//				bool reachedEnd{ drawAnimationComponent.movingForward && (drawAnimationComponent.currentFrameIndex == drawAnimationComponent.numFrames - 1) };
-	//				bool reachedBeginning{ !drawAnimationComponent.movingForward && (drawAnimationComponent.currentFrameIndex == 0) };
-	//				bool stillNeedsToChangeFrame{ true };
-	//				switch(drawAnimationComponent.type)
-	//				{
-	//				case AnimationType::SINGLE_PASS:
-	//					if(reachedEnd || reachedBeginning)
-	//					{
-	//						drawAnimationComponent.type = AnimationType::NOT_ANIMATED;
-	//						return;
-	//					}
-	//					break;
-	//				case AnimationType::LOOP:
-	//					if(reachedEnd || reachedBeginning)
-	//						stillNeedsToChangeFrame = false;
-	//					if(reachedEnd)
-	//						drawAnimationComponent.currentFrameIndex = 0;
-	//					else if(reachedBeginning)
-	//						drawAnimationComponent.currentFrameIndex = drawAnimationComponent.numFrames - 1;
-	//					break;
-	//				case AnimationType::PENDULUM:
-	//				default:
-	//					if(reachedEnd)
-	//						drawAnimationComponent.movingForward = false;
-	//					else if(reachedBeginning)
-	//						drawAnimationComponent.movingForward = true;
-	//					break;
-	//				}
-
-	//				if(stillNeedsToChangeFrame)
-	//				{
-	//					// Go to next frame
-	//					if(drawAnimationComponent.movingForward)
-	//						++drawAnimationComponent.currentFrameIndex;
-	//					else
-	//						--drawAnimationComponent.currentFrameIndex;
-	//				}
-
-	//				// Add leftover time to new frame
-	//				drawAnimationComponent.frames[drawAnimationComponent.currentFrameIndex].frameTimeAccumulator = timeOverflow;
-	//			}
-	//		}
-	//}
 	//+-------------\---------------------------------------------
 	//|	  Physics   |
 	//\-------------/---------------------------------------------

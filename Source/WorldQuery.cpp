@@ -138,6 +138,47 @@ namespace Space
 		else
 			return 0;
 	}
+	float World::GetFuelLevel(WorldID entityID) const
+	{
+		return m_fuelComponents[entityID].level;
+	}
+	float World::GetMaxFuelLevel(WorldID entityID) const
+	{
+		return m_fuelComponents[entityID].max;
+	}
+	float World::GetTotalThrusterAcceleration(WorldID id) const
+	{
+		float totalAcceleration{ 0.0f };
+		if(HasComponents(id, COMPONENT_THRUSTER) && IsActive(id))
+		{
+			for(unsigned i = 0; i < m_thrusterComponents[id].numSlots; ++i)
+				if(m_thrusterComponents[id].thrusters[i].enabled)
+					totalAcceleration += m_thrusterComponents[id].thrusters[i].acceleration;
+			// Boost
+			if(HasComponents(id, COMPONENT_BOOSTER))
+				if(m_boosterComponents[id].secondsLeft > 0.0f)
+					totalAcceleration *= m_boosterComponents[id].factor;
+		}
+		return totalAcceleration;
+	}
+	float World::GetTotalThrusterFuelRequired(WorldID id, float dt) const
+	{
+		float totalFuelRequired { 0.0f };
+		if(HasComponents(id, COMPONENT_THRUSTER) && IsActive(id))
+		{
+			for(unsigned i = 0; i < m_thrusterComponents[id].numSlots; ++i)
+				if(m_thrusterComponents[id].thrusters[i].enabled)
+					totalFuelRequired += dt * m_thrusterComponents[id].thrusters[i].fuelPerSecond * m_thrusterComponents[id].factor;
+			// Boost
+			if(HasComponents(id, COMPONENT_BOOSTER))
+				if(m_boosterComponents[id].secondsLeft > 0.0f)
+					totalFuelRequired *= m_boosterComponents[id].factor * WORLD_BOOST_FUEL_USE_PENALTY_FACTOR;
+
+		}
+		std::cout << "totalFuelRequired = " << totalFuelRequired << std::endl;
+		return totalFuelRequired;
+	}
+
 	//+-------------------------\---------------------------------------------
 	//|	 GetSmoothedTransform	| 
 	//\-------------------------/

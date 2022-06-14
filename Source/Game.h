@@ -17,23 +17,34 @@
 namespace Space
 {
 	constexpr float MIN_WORLD_TO_CAMERA_RATIO{ 1.5f };
-	constexpr int SHIP_DRAW_LAYER{ 0 };
-	constexpr int ASTEROID_DRAW_LAYER{ 0 };
-	constexpr int BUMPER_DRAW_LAYER{ 0 };
+	constexpr int SHIP_DRAW_LAYER		{ 0 };
+	constexpr int ASTEROID_DRAW_LAYER	{ 0 };
+	constexpr int BUMPER_DRAW_LAYER		{ 0 };
 
-	constexpr float BLASTER_ROTATION_SPEED{ 6.0f };
-	constexpr float SCOUT_ROTATION_SPEED{ 6.0f };
+	constexpr float BLASTER_ROTATION_SPEED	{ 6.0f };
+	constexpr float SCOUT_ROTATION_SPEED	{ 6.0f };
 
-	constexpr float BLASTER_THRUSTER_ACCELERATION{ 4.0f };
-	constexpr float SCOUT_THRUSTER_ACCELERATION{ 20.0f };
+	const float BLASTER_THRUSTER_ACCELERATION	{ 8.0f };
+	const float SCOUT_THRUSTER_ACCELERATION		{ 20.0f };
+	const float BLASTER_THRUSTER_FUEL_PER_SECOND{ 0.02f * BLASTER_THRUSTER_ACCELERATION };
+	const float SCOUT_THRUSTER_FUEL_PER_SECOND	{ 0.02f * SCOUT_THRUSTER_ACCELERATION };
 
-	constexpr float BLASTER_THRUSTER_OFFSET_X	{ -0.44f };
-	constexpr float SCOUT_THRUSTER_OFFSET_X		{ -0.9f };
+	constexpr float BLASTER_MAX_FUEL{ 100.0f };
+	constexpr float SCOUT_MAX_FUEL	{ 25.0f };
+
+	constexpr float BLASTER_BOOST_FACTOR{ 8.0f };
+	constexpr float SCOUT_BOOST_FACTOR	{ 5.0f };
+	constexpr float BOOST_SECONDS		{ 0.2f };
+	constexpr float BOOST_COOLDOWN_SECONDS		{ 1.0f };
+
+	constexpr float BLASTER_THRUSTER_OFFSET_X		{ -0.44f };
+	constexpr float SCOUT_THRUSTER_OFFSET_X			{ -0.9f };
 	constexpr float BLASTER_THRUSTER_INNER_SPREAD_Y { 0.33f };
 	constexpr float BLASTER_THRUSTER_OUTER_SPREAD_Y { 0.437f };
-	constexpr float SCOUT_THRUSTER_SPREAD_Y		{ 0.1f };
+	constexpr float SCOUT_THRUSTER_SPREAD_Y			{ 0.1f };
 
 	const b2Vec2 BLASTER_THRUSTER_RELATIVE_SIZE{ 0.25f, 0.075f };
+	const b2Vec2 BLASTER_BOOST_THRUSTER_RELATIVE_SIZE{ BLASTER_THRUSTER_RELATIVE_SIZE };
 	const b2Vec2 SCOUT_THRUSTER_RELATIVE_SIZE{ 1.5f, 0.15f };
 
 	constexpr float BLASTER_BRAKE_DECELERATION{ 40.0f };
@@ -66,8 +77,8 @@ namespace Space
 	constexpr float MISSILE_DESTRUCTION_DELAY_ON_CONTACT_TIME{ 2.0f };
 	constexpr bool BULLET_DESTRUCTION_CHANCE_ON_CONTACT{ true };
 	constexpr bool MISSILE_DESTRUCTION_CHANCE_ON_CONTACT{ true };
-	constexpr float BULLET_DESTRUCTION_CHANCE{ 0.3f };
-	constexpr float MISSILE_DESTRUCTION_CHANCE{ 0.0f };
+	constexpr float BULLET_DESTRUCTION_CHANCE{ 0.95f };
+	constexpr float MISSILE_DESTRUCTION_CHANCE{ 1.0f };
 	constexpr bool BULLET_IGNORE_PARENT_COLLISIONS_UNTIL_FIRST_CONTACT{ true };
 	constexpr bool MISSILE_IGNORE_PARENT_COLLISIONS_UNTIL_FIRST_CONTACT{ true };
 	constexpr float BULLET_ACCELERATION{ 0.0f };
@@ -86,7 +97,7 @@ namespace Space
 	const d2d::Material BULLET_MATERIAL  { /*density*/ 2.0f, /*friction*/ 0.9f, /*restitution*/ 0.2f };
 	const d2d::Material MISSILE_MATERIAL { /*density*/ 0.8f, /*friction*/ 0.7f, /*restitution*/ 0.7f };
 	const d2d::Material ASTEROID_MATERIAL{ /*density*/ 1.5f, /*friction*/ 0.6f, /*restitution*/ 0.5f };
-	const d2d::Material BUMPER_MATERIAL{ /*density*/ 1.5f, /*friction*/ 0.6f, /*restitution*/ 0.5f };
+	const d2d::Material BUMPER_MATERIAL  { /*density*/ 1.5f, /*friction*/ 0.6f, /*restitution*/ 0.5f };
 
 	const d2d::Filter SHIP_FILTER		{ d2d::FILTER_DEFAULT_CATEGORY_BITS, d2d::FILTER_DEFAULT_MASK_BITS, d2d::FILTER_DEFAULT_GROUP_INDEX };
 	const d2d::Filter BULLET_FILTER		{ d2d::FILTER_DEFAULT_CATEGORY_BITS, d2d::FILTER_DEFAULT_MASK_BITS, -10 };
@@ -174,20 +185,15 @@ namespace Space
 		void LoadLevel0();
 		void SetPlayer(WorldID entityID);
 		void FollowEntity(WorldID entityID);
-		//void CreateEntity(World& world);
-		void CreatePlayer(World& world, const b2Vec2& position, float angle);
-		WorldID CreateScout(World& world, const b2Vec2& position, float angle, bool activate = true);
-		WorldID CreateBlaster(World& world, const b2Vec2& position, float angle, bool activate = true);
-		WorldID CreateXLargeAsteroid(World& world, unsigned modelIndex, bool isRock,
-			const b2Vec2& position, float angle, const b2Vec2& velocity, float angularVelocity, bool activate = true);
-		WorldID CreateLargeAsteroid(World& world, unsigned modelIndex, bool isRock,
-			const b2Vec2& position, float angle, const b2Vec2& velocity, float angularVelocity, bool activate = true);
-		WorldID CreateMediumAsteroid(World& world, unsigned modelIndex, bool isRock,
-			const b2Vec2& position, float angle, const b2Vec2& velocity, float angularVelocity, bool activate = true);
-		WorldID CreateSmallAsteroid(World& world, unsigned modelIndex, bool isRock,
-			const b2Vec2& position, float angle, const b2Vec2& velocity, float angularVelocity, bool activate = true);
-		WorldID CreateBumper(World& world, const b2Vec2& position, float angle, 
-			const b2Vec2& velocity, float angularVelocity, bool activate = true);
+		void CreatePlayer(World& world, const InstanceDef& def);
+		WorldID CreateScout(World& world, const InstanceDef& def);
+		WorldID CreateBlaster(World& world, const InstanceDef& def);
+		WorldID CreateXLargeAsteroid(World& world, unsigned modelIndex, bool isRock, const InstanceDef& def);
+		WorldID CreateLargeAsteroid(World& world, unsigned modelIndex, bool isRock, const InstanceDef& def);
+		WorldID CreateMediumAsteroid(World& world, unsigned modelIndex, bool isRock, const InstanceDef& def);
+		WorldID CreateSmallAsteroid(World& world, unsigned modelIndex, bool isRock, const InstanceDef& def);
+		WorldID CreateBumper(World& world, const InstanceDef& def);
+		WorldID CreateFuel(World& world, const InstanceDef& def);
 
 	private:
 		GameDef m_settings;
@@ -210,15 +216,25 @@ namespace Space
 		std::vector<Objective> m_objectives;
 
 		// Fonts
-		d2d::FontReference m_orbitronLightFont{ "Fonts\\OrbitronLight.otf" };
+		d2d::FontReference m_hudFont{ "Fonts\\OrbitronLight.otf" };
+		float m_hudFontSize{ 0.05f };
 
-		// Objectives
+		// HUD Objectives
 		const b2Vec2 m_objectivesPosition{ 0.90f, 0.90f };
 		const d2d::Alignment m_objectivesAlignment{ d2d::Alignment::RIGHT_TOP };
 		const d2d::TextStyle m_objectivesTextStyle{
-			m_orbitronLightFont,
-			{ 1.0f, 0.7f, 0.7f, 1.0f },
-			0.05f
+			m_hudFont,
+			{ 0.5f, 0.3f, 0.8f, 1.0f },
+			m_hudFontSize
+		};
+
+		// HUD Fuel
+		const b2Vec2 m_fuelPosition{ 0.10f, 0.10f };
+		const d2d::Alignment m_fuelAlignment{ d2d::Alignment::LEFT_BOTTOM };
+		const d2d::TextStyle m_fuelTextStyle{
+			m_hudFont,
+			{ 1.0f, 0.2f, 0.2f, 1.0f },
+			m_hudFontSize
 		};
 
 		//+---------------------------\-------------------------------
@@ -264,7 +280,9 @@ namespace Space
 		Model m_scoutModel{ "ship002", { &m_scoutTexture } };
 		Model m_blasterThrusterModel{ "thruster1", {{ &m_thrusterTexture, 0.0f, d2d::WHITE_OPAQUE, BLASTER_THRUSTER_RELATIVE_SIZE }} };
 		Model m_scoutThrusterModel{ "thruster1", {{ &m_thrusterTexture, 0.0f, d2d::WHITE_OPAQUE, SCOUT_THRUSTER_RELATIVE_SIZE }} };
-		Model m_bumperModel{ "repulser1", { &m_bumperTexture } };	
+		Model m_bumperModel{ "repulser1", { &m_bumperTexture } };
+		d2d::Color m_boostColor{ 0.8f, 0.1f, 0.8f };
+
 		// XLarge
 		std::array<Model, NUM_XLARGE_ASTEROID_MODELS> 
 			m_asteroidXLargeModels{

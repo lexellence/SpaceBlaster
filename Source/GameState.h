@@ -38,55 +38,74 @@ namespace Space
 		void DrawFPS();
 
 		Game m_game;
+		bool m_paused;
+		bool m_showFPS;
 
 		// Gamepad input configuration
 		PlayerController m_playerController;
-		const float m_gamepadTriggerDeadZone{ 1000.0f };
-		const float m_gamepadTriggerAliveZone{ 2000.0f };
-		const float m_gamepadStickDeadZone{ 6700.0f };
-		const float m_gamepadStickAliveZone{ 2000.0f };
-		const Uint8 m_pauseButton{ SDL_CONTROLLER_BUTTON_START };
-		const Uint8 m_zoomButton{ SDL_CONTROLLER_BUTTON_LEFTSHOULDER };
-		const Uint8 m_zoomAxis{ SDL_CONTROLLER_AXIS_RIGHTY };
-		bool m_gamepadZoomEngaged;
-		float m_gamepadZoomOutFactor;
-		const Uint8 m_turnAxis{ SDL_CONTROLLER_AXIS_RIGHTX };
-		float m_gamepadTurnFactor;
-		const Uint8 m_thrustAxis{ SDL_CONTROLLER_AXIS_LEFTY };
-		float m_gamepadThrustFactor;
-		float m_gamepadBrakeFactor;
-		const Uint8 m_primaryFireAxis{ SDL_CONTROLLER_AXIS_TRIGGERRIGHT };
-		const Uint8 m_secondaryFireAxis{ SDL_CONTROLLER_AXIS_TRIGGERLEFT };
-		float m_primaryFireFactor;
-		float m_secondaryFireFactor;
-		//const Uint8 m_morphButton{ SDL_CONTROLLER_BUTTON_Y };
-		const Uint8 m_previousMissileTypeButton{ SDL_CONTROLLER_BUTTON_DPAD_LEFT };
-		const Uint8 m_nextMissileTypeButton{ SDL_CONTROLLER_BUTTON_DPAD_RIGHT };
+		struct Gamepad
+		{
+			// Deadzone
+			const float triggerDeadZone{ 1000.0f };
+			const float triggerAliveZone{ 2000.0f };
+			const float stickDeadZone{ 6700.0f };
+			const float stickAliveZone{ 2000.0f };
 
-		// Keyboard input configuration
-		const SDL_Keycode m_pauseKey{ SDLK_ESCAPE };
-		bool m_paused;
-		const SDL_Keycode m_fpsToggleKey{ SDLK_F12 };
-		bool m_showFPS;
-		const SDL_Keycode m_zoomInKey{ SDLK_PAGEUP };
-		const SDL_Keycode m_zoomOutKey{ SDLK_PAGEDOWN };
-		bool m_zoomInKeyPressed;
-		bool m_zoomOutKeyPressed;
-		const SDL_Keycode m_turnLeftKey{ SDLK_LEFT };
-		const SDL_Keycode m_turnRightKey{ SDLK_RIGHT };
-		bool m_turnLeftKeyPressed;
-		bool m_turnRightKeyPressed;
-		const SDL_Keycode m_thrustKey{ SDLK_UP };
-		const SDL_Keycode m_brakeKey{ SDLK_DOWN };
-		bool m_thrustKeyPressed;
-		bool m_brakeKeyPressed;
-		const SDL_Keycode m_primaryFireKey{ SDLK_SPACE };
-		const SDL_Keycode m_secondaryFireKey{ SDLK_LSHIFT };
-		bool m_primaryFireKeyPressed;
-		bool m_secondaryFireKeyPressed;
-		//const SDL_Keycode m_morphKey{ SDLK_TAB };
-		const SDL_Keycode m_previousMissileKey{ SDLK_q };
-		const SDL_Keycode m_nextMissileKey{ SDLK_e };
+			// Button/Axis
+			struct ControllerMapping
+			{
+				const Uint8 pauseButton{ SDL_CONTROLLER_BUTTON_START };
+				const Uint8 zoomInButton{ SDL_CONTROLLER_BUTTON_DPAD_UP };
+				const Uint8 zoomOutButton{ SDL_CONTROLLER_BUTTON_DPAD_DOWN };
+				const Uint8 turnAxis{ SDL_CONTROLLER_AXIS_RIGHTX };
+				const Uint8 thrustAxis{ SDL_CONTROLLER_AXIS_LEFTY };
+				const Uint8 boostButton{ SDL_CONTROLLER_BUTTON_LEFTSHOULDER };
+				const Uint8 primaryFireAxis{ SDL_CONTROLLER_AXIS_TRIGGERRIGHT };
+				const Uint8 secondaryFireAxis{ SDL_CONTROLLER_AXIS_TRIGGERLEFT };
+				//const Uint8 m_morphButton{ SDL_CONTROLLER_BUTTON_Y };
+				const Uint8 previousMissileTypeButton{ SDL_CONTROLLER_BUTTON_DPAD_LEFT };
+				const Uint8 nextMissileTypeButton{ SDL_CONTROLLER_BUTTON_DPAD_RIGHT };
+			} map;
+
+			bool zoomIn;
+			bool zoomOut;
+			float turnFactor;
+			float thrustFactor;
+			float brakeFactor;
+			bool boost;
+			float primaryFireFactor;
+			float secondaryFireFactor;
+		} m_gamepad;
+		struct Keyboard
+		{
+			struct KeyboardMapping
+			{
+				const SDL_Keycode pauseKey{ SDLK_ESCAPE };
+				const SDL_Keycode fpsToggleKey{ SDLK_F12 };
+				const SDL_Keycode zoomInKey{ SDLK_PAGEUP };
+				const SDL_Keycode zoomOutKey{ SDLK_PAGEDOWN };
+				const SDL_Keycode turnLeftKey{ SDLK_LEFT };
+				const SDL_Keycode turnRightKey{ SDLK_RIGHT };
+				const SDL_Keycode thrustKey{ SDLK_UP };
+				const SDL_Keycode brakeKey{ SDLK_DOWN };
+				const SDL_Keycode boostKey{ SDLK_LCTRL };
+				const SDL_Keycode primaryFireKey{ SDLK_SPACE };
+				const SDL_Keycode secondaryFireKey{ SDLK_LSHIFT };
+				//const SDL_Keycode morphKey{ SDLK_TAB };
+				const SDL_Keycode previousMissileKey{ SDLK_q };
+				const SDL_Keycode nextMissileKey{ SDLK_e };
+			} map;
+
+			bool zoomIn;
+			bool zoomOut;
+			bool turnLeft;
+			bool turnRight;
+			bool thrust;
+			bool brake;
+			bool boost;
+			bool primaryFire;
+			bool secondaryFire;
+		} m_keyboard;
 
 		d2d::FontReference m_orbitronLightFont{ "Fonts\\OrbitronLight.otf"s };
 

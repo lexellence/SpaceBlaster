@@ -78,10 +78,24 @@ namespace Space
 				if(HasComponents(id, requiredComponents) && HasSize2D(id) && IsActive(id))
 					if(m_thrusterComponents[id].factor > 0.0f)
 					{
-						float angle{ m_smoothedTransforms[id].q.GetAngle() };
-						DrawThrusterComponent(m_thrusterComponents[id], m_sizeComponents[id], m_smoothedTransforms[id].p, angle);
-						for(const CloneBody& cloneBody : m_physicsComponents[id].cloneBodyList)
-							DrawThrusterComponent(m_thrusterComponents[id], m_sizeComponents[id], m_smoothedTransforms[id].p + GetCloneOffset(cloneBody.section), angle);
+						bool draw{ true };
+						if(HasComponents(id, COMPONENT_FUEL))
+							if(m_fuelComponents[id].level <= 0.0f)
+								draw = false;
+						if(draw)
+						{
+							float angle{ m_smoothedTransforms[id].q.GetAngle() };
+							b2Vec2 size = m_sizeComponents[id];
+							bool boost = false;
+							if(HasComponents(id, COMPONENT_BOOSTER) &&
+								m_boosterComponents[id].secondsLeft > 0.0f)
+							{
+								boost = true;
+							}
+							DrawThrusterComponent(m_thrusterComponents[id], m_sizeComponents[id], m_smoothedTransforms[id].p, angle);
+							for(const CloneBody& cloneBody : m_physicsComponents[id].cloneBodyList)
+								DrawThrusterComponent(m_thrusterComponents[id], m_sizeComponents[id], m_smoothedTransforms[id].p + GetCloneOffset(cloneBody.section), angle);
+						}
 					}
 	}
 	void World::DrawThrusterComponent(const ThrusterComponent& thrusterComponent, const b2Vec2& entitySize,	
@@ -93,7 +107,7 @@ namespace Space
 		for(unsigned i = 0; i < thrusterComponent.numSlots; ++i)
 		{
 			const Thruster& thruster{ thrusterComponent.thrusters[i] };
-			if(thruster.enabled && !thruster.temporarilyDisabled)
+			if(thruster.enabled)
 			{
 				d2d::Color colorFactor{1.0f, 1.0f, 1.0f, thrusterComponent.factor };
 				DrawAnimation(thruster.animation, entitySize, thruster.localRelativePosition * entitySize, 0.0f);

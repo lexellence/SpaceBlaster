@@ -84,119 +84,119 @@ namespace Space
 	}
 	void Game::LoadTest0()
 	{
-		b2Vec2 center{ b2Vec2_zero };
-		b2Vec2 size{ 100.0f, 100.0f };
-		d2d::Rect worldRect;
-		worldRect.SetCenter(center, size);
-		m_world.Init(worldRect);
-		b2Vec2 playerStartPosition{ b2Vec2_zero };
-		float playerStartRotationPercent{ 0.25f };
-		CreatePlayer(m_world, playerStartPosition, playerStartRotationPercent * d2d::TWO_PI);
-		CreateXLargeAsteroid(m_world, 0, false, playerStartPosition + b2Vec2{ 0.0f, 10.0f }, 0.0f, b2Vec2_zero, 0.0f);
+		//b2Vec2 center{ b2Vec2_zero };
+		//b2Vec2 size{ 100.0f, 100.0f };
+		//d2d::Rect worldRect;
+		//worldRect.SetCenter(center, size);
+		//m_world.Init(worldRect);
+		//b2Vec2 playerStartPosition{ b2Vec2_zero };
+		//float playerStartRotationPercent{ 0.25f };
+		//CreatePlayer(m_world, playerStartPosition, playerStartRotationPercent * d2d::TWO_PI);
+		//CreateXLargeAsteroid(m_world, 0, false, playerStartPosition + b2Vec2{ 0.0f, 10.0f }, 0.0f, b2Vec2_zero, 0.0f);
 	}
 	void Game::LoadTest1()
 	{
-		b2Vec2 center{ b2Vec2_zero };
-		b2Vec2 size{ 500.0f, 500.0f };
-		d2d::Rect worldRect;
-		worldRect.SetCenter(center, size);
-		m_world.Init(worldRect);
+		//b2Vec2 center{ b2Vec2_zero };
+		//b2Vec2 size{ 500.0f, 500.0f };
+		//d2d::Rect worldRect;
+		//worldRect.SetCenter(center, size);
+		//m_world.Init(worldRect);
 
-		b2Vec2 playerStartPosition{ b2Vec2_zero };
-		CreatePlayer(m_world, playerStartPosition, d2d::PI_OVER_TWO);
+		//b2Vec2 playerStartPosition{ b2Vec2_zero };
+		//CreatePlayer(m_world, playerStartPosition, d2d::PI_OVER_TWO);
 
-		float minBoundingRadiiGap{ XLARGE_ASTEROID_HEIGHT * 0.25f };
-		unsigned maxAttempts{ 500 };
-		unsigned numFailed{ 0 };
-		for(unsigned i = 0; i < 20; ++i)
-		{
-			int model{ d2d::RandomInt({0, NUM_XLARGE_ASTEROID_MODELS - 1}) };
-			b2Vec2 size;
-			size.y = XLARGE_ASTEROID_HEIGHT * XLARGE_ASTEROID_RELATIVE_HEIGHTS[model];
-			size.x = size.y * m_asteroidXLargeTextures[model].GetWidthToHeightRatio();
-			float boundingRadius{ size.Length() * 0.5f };
-			b2Vec2 position;
-			bool positionFound{ m_world.GetRandomPositionAwayFromExistingEntities(boundingRadius, minBoundingRadiiGap, maxAttempts, position) };
-			if(positionFound)
-				CreateXLargeAsteroid(m_world, model, d2d::RandomBool(), position,
-					d2d::RandomFloat({ 0.0f, d2d::TWO_PI }), b2Vec2_zero, 0.0f);
-			else
-				++numFailed;
-		}
-		minBoundingRadiiGap = LARGE_ASTEROID_HEIGHT * 0.25f;
-		for(unsigned i = 0; i < 30; ++i)
-		{
-			int model{ d2d::RandomInt({0, NUM_LARGE_ASTEROID_MODELS - 1}) };
-			b2Vec2 size;
-			size.y = LARGE_ASTEROID_HEIGHT * LARGE_ASTEROID_RELATIVE_HEIGHTS[model];
-			size.x = size.y * m_asteroidLargeTextures[model].GetWidthToHeightRatio();
-			float boundingRadius{ size.Length() * 0.5f };
-			b2Vec2 position;
-			bool positionFound{ m_world.GetRandomPositionAwayFromExistingEntities(boundingRadius, minBoundingRadiiGap, maxAttempts, position) };
-			if(positionFound)
-				CreateLargeAsteroid(m_world, model, d2d::RandomBool(), position,
-					d2d::RandomFloat({ 0.0f, d2d::TWO_PI }), b2Vec2_zero, 0.0f);
-			else
-				++numFailed;
-		}
-		minBoundingRadiiGap = MEDIUM_ASTEROID_HEIGHT * 0.25f;
-		for(unsigned i = 0; i < 40; ++i)
-		{
-			int model{ d2d::RandomInt({0, NUM_MEDIUM_ASTEROID_MODELS - 1}) };
-			b2Vec2 size;
-			size.y = MEDIUM_ASTEROID_HEIGHT * MEDIUM_ASTEROID_RELATIVE_HEIGHTS[model];
-			size.x = size.y * m_asteroidMediumTextures[model].GetWidthToHeightRatio();
-			float boundingRadius{ size.Length() * 0.5f };
-			b2Vec2 position;
-			bool positionFound{ m_world.GetRandomPositionAwayFromExistingEntities(boundingRadius, minBoundingRadiiGap, maxAttempts, position) };
-			if(positionFound)
-				CreateMediumAsteroid(m_world, model, d2d::RandomBool(), position,
-					d2d::RandomFloat({ 0.0f, d2d::TWO_PI }), b2Vec2_zero, 0.0f);
-			else
-				++numFailed;
-		}
-		minBoundingRadiiGap = SMALL_ASTEROID_HEIGHT * 0.25f;
-		for(unsigned i = 0; i < 100; ++i)
-		{
-			int model{ d2d::RandomInt({0, NUM_SMALL_ASTEROID_MODELS - 1}) };
-			b2Vec2 size;
-			size.y = SMALL_ASTEROID_HEIGHT * SMALL_ASTEROID_RELATIVE_HEIGHTS[model];
-			size.x = size.y * m_asteroidSmallTextures[model].GetWidthToHeightRatio();
-			float boundingRadius{ size.Length() * 0.5f };
-			b2Vec2 position;
-			bool positionFound{ m_world.GetRandomPositionAwayFromExistingEntities(boundingRadius, minBoundingRadiiGap, maxAttempts, position) };
-			if(positionFound)
-				CreateSmallAsteroid(m_world, model, d2d::RandomBool(), position,
-					d2d::RandomFloat({ 0.0f, d2d::TWO_PI }), b2Vec2_zero, 0.0f);
-			else
-				++numFailed;
-		}
+		//float minBoundingRadiiGap{ XLARGE_ASTEROID_HEIGHT * 0.25f };
+		//unsigned maxAttempts{ 500 };
+		//unsigned numFailed{ 0 };
+		//for(unsigned i = 0; i < 20; ++i)
+		//{
+		//	int model{ d2d::RandomInt({0, NUM_XLARGE_ASTEROID_MODELS - 1}) };
+		//	b2Vec2 size;
+		//	size.y = XLARGE_ASTEROID_HEIGHT * XLARGE_ASTEROID_RELATIVE_HEIGHTS[model];
+		//	size.x = size.y * m_asteroidXLargeTextures[model].GetWidthToHeightRatio();
+		//	float boundingRadius{ size.Length() * 0.5f };
+		//	b2Vec2 position;
+		//	bool positionFound{ m_world.GetRandomPositionAwayFromExistingEntities(boundingRadius, minBoundingRadiiGap, maxAttempts, position) };
+		//	if(positionFound)
+		//		CreateXLargeAsteroid(m_world, model, d2d::RandomBool(), position,
+		//			d2d::RandomFloat({ 0.0f, d2d::TWO_PI }), b2Vec2_zero, 0.0f);
+		//	else
+		//		++numFailed;
+		//}
+		//minBoundingRadiiGap = LARGE_ASTEROID_HEIGHT * 0.25f;
+		//for(unsigned i = 0; i < 30; ++i)
+		//{
+		//	int model{ d2d::RandomInt({0, NUM_LARGE_ASTEROID_MODELS - 1}) };
+		//	b2Vec2 size;
+		//	size.y = LARGE_ASTEROID_HEIGHT * LARGE_ASTEROID_RELATIVE_HEIGHTS[model];
+		//	size.x = size.y * m_asteroidLargeTextures[model].GetWidthToHeightRatio();
+		//	float boundingRadius{ size.Length() * 0.5f };
+		//	b2Vec2 position;
+		//	bool positionFound{ m_world.GetRandomPositionAwayFromExistingEntities(boundingRadius, minBoundingRadiiGap, maxAttempts, position) };
+		//	if(positionFound)
+		//		CreateLargeAsteroid(m_world, model, d2d::RandomBool(), position,
+		//			d2d::RandomFloat({ 0.0f, d2d::TWO_PI }), b2Vec2_zero, 0.0f);
+		//	else
+		//		++numFailed;
+		//}
+		//minBoundingRadiiGap = MEDIUM_ASTEROID_HEIGHT * 0.25f;
+		//for(unsigned i = 0; i < 40; ++i)
+		//{
+		//	int model{ d2d::RandomInt({0, NUM_MEDIUM_ASTEROID_MODELS - 1}) };
+		//	b2Vec2 size;
+		//	size.y = MEDIUM_ASTEROID_HEIGHT * MEDIUM_ASTEROID_RELATIVE_HEIGHTS[model];
+		//	size.x = size.y * m_asteroidMediumTextures[model].GetWidthToHeightRatio();
+		//	float boundingRadius{ size.Length() * 0.5f };
+		//	b2Vec2 position;
+		//	bool positionFound{ m_world.GetRandomPositionAwayFromExistingEntities(boundingRadius, minBoundingRadiiGap, maxAttempts, position) };
+		//	if(positionFound)
+		//		CreateMediumAsteroid(m_world, model, d2d::RandomBool(), position,
+		//			d2d::RandomFloat({ 0.0f, d2d::TWO_PI }), b2Vec2_zero, 0.0f);
+		//	else
+		//		++numFailed;
+		//}
+		//minBoundingRadiiGap = SMALL_ASTEROID_HEIGHT * 0.25f;
+		//for(unsigned i = 0; i < 100; ++i)
+		//{
+		//	int model{ d2d::RandomInt({0, NUM_SMALL_ASTEROID_MODELS - 1}) };
+		//	b2Vec2 size;
+		//	size.y = SMALL_ASTEROID_HEIGHT * SMALL_ASTEROID_RELATIVE_HEIGHTS[model];
+		//	size.x = size.y * m_asteroidSmallTextures[model].GetWidthToHeightRatio();
+		//	float boundingRadius{ size.Length() * 0.5f };
+		//	b2Vec2 position;
+		//	bool positionFound{ m_world.GetRandomPositionAwayFromExistingEntities(boundingRadius, minBoundingRadiiGap, maxAttempts, position) };
+		//	if(positionFound)
+		//		CreateSmallAsteroid(m_world, model, d2d::RandomBool(), position,
+		//			d2d::RandomFloat({ 0.0f, d2d::TWO_PI }), b2Vec2_zero, 0.0f);
+		//	else
+		//		++numFailed;
+		//}
 
-		if(numFailed > 0)
-			d2LogInfo << "Game::LoadTest1: Entity creation attempt limit reached " << numFailed << " times";
+		//if(numFailed > 0)
+		//	d2LogInfo << "Game::LoadTest1: Entity creation attempt limit reached " << numFailed << " times";
 	}
 	void Game::LoadTest2()
 	{
-		b2Vec2 center{ b2Vec2_zero };
-		b2Vec2 size{ 1000.0f, 1000.0f };
-		d2d::Rect worldRect;
-		worldRect.SetCenter(center, size);
-		m_world.Init(worldRect);
+		//b2Vec2 center{ b2Vec2_zero };
+		//b2Vec2 size{ 1000.0f, 1000.0f };
+		//d2d::Rect worldRect;
+		//worldRect.SetCenter(center, size);
+		//m_world.Init(worldRect);
 
-		b2Vec2 playerStartPosition{ b2Vec2_zero };
-		CreatePlayer(m_world, playerStartPosition, d2d::PI_OVER_TWO);
-		for(unsigned j = 0; j < 2; ++j)
-		{
-			bool isRock{ (bool)j };
-			for(unsigned model = 0; model < NUM_XLARGE_ASTEROID_MODELS; ++model)
-				CreateXLargeAsteroid(m_world, model, isRock, playerStartPosition + b2Vec2{ j * 75.0f, (model + 1) * 20.0f }, 0.0f, b2Vec2_zero, 0.0f);
-			for(unsigned model = 0; model < NUM_LARGE_ASTEROID_MODELS; ++model)
-				CreateLargeAsteroid(m_world, model, isRock, playerStartPosition + b2Vec2{ 8.0f + j * 75.0f, (model + 1) * 20.0f }, 0.0f, b2Vec2_zero, 0.0f);
-			for(unsigned model = 0; model < NUM_MEDIUM_ASTEROID_MODELS; ++model)
-				CreateMediumAsteroid(m_world, model, isRock, playerStartPosition + b2Vec2{ 16.0f + j * 75.0f, (model + 1) * 20.0f }, 0.0f, b2Vec2_zero, 0.0f);
-			for(unsigned model = 0; model < NUM_SMALL_ASTEROID_MODELS; ++model)
-				CreateSmallAsteroid(m_world, model, isRock, playerStartPosition + b2Vec2{ 24.0f + j * 75.0f, (model + 1) * 20.0f }, 0.0f, b2Vec2_zero, 0.0f);
-		}
+		//b2Vec2 playerStartPosition{ b2Vec2_zero };
+		//CreatePlayer(m_world, playerStartPosition, d2d::PI_OVER_TWO);
+		//for(unsigned j = 0; j < 2; ++j)
+		//{
+		//	bool isRock{ (bool)j };
+		//	for(unsigned model = 0; model < NUM_XLARGE_ASTEROID_MODELS; ++model)
+		//		CreateXLargeAsteroid(m_world, model, isRock, playerStartPosition + b2Vec2{ j * 75.0f, (model + 1) * 20.0f }, 0.0f, b2Vec2_zero, 0.0f);
+		//	for(unsigned model = 0; model < NUM_LARGE_ASTEROID_MODELS; ++model)
+		//		CreateLargeAsteroid(m_world, model, isRock, playerStartPosition + b2Vec2{ 8.0f + j * 75.0f, (model + 1) * 20.0f }, 0.0f, b2Vec2_zero, 0.0f);
+		//	for(unsigned model = 0; model < NUM_MEDIUM_ASTEROID_MODELS; ++model)
+		//		CreateMediumAsteroid(m_world, model, isRock, playerStartPosition + b2Vec2{ 16.0f + j * 75.0f, (model + 1) * 20.0f }, 0.0f, b2Vec2_zero, 0.0f);
+		//	for(unsigned model = 0; model < NUM_SMALL_ASTEROID_MODELS; ++model)
+		//		CreateSmallAsteroid(m_world, model, isRock, playerStartPosition + b2Vec2{ 24.0f + j * 75.0f, (model + 1) * 20.0f }, 0.0f, b2Vec2_zero, 0.0f);
+		//}
 	}
 	void Game::LoadLevel0()
 	{
@@ -207,9 +207,13 @@ namespace Space
 		m_world.Init(worldRect);
 
 		b2Vec2 playerStartPosition{ b2Vec2_zero };
-		CreatePlayer(m_world, playerStartPosition, d2d::PI_OVER_TWO);
-		CreateBumper(m_world, { -5.0f, -12.0f }, 0.0f, b2Vec2_zero, 0.0f);
-		CreateBumper(m_world, { 5.0f, -12.0f }, d2d::PI, b2Vec2_zero, 0.0f);
+		InstanceDef instanceSettings{ playerStartPosition, d2d::PI_OVER_TWO };
+		CreatePlayer(m_world, instanceSettings);
+		instanceSettings.position.Set(-5.0f, -12.0f);
+		CreateBumper(m_world, instanceSettings);
+		instanceSettings.position.Set(5.0f, -12.0f);
+		instanceSettings.angle = d2d::PI;
+		CreateBumper(m_world, instanceSettings);
 
 		Objective destroyAsteroidsObjective;
 		destroyAsteroidsObjective.type = ObjectiveType::DESTROY;
@@ -226,12 +230,13 @@ namespace Space
 			size.y = XLARGE_ASTEROID_HEIGHT * XLARGE_ASTEROID_RELATIVE_HEIGHTS[model];
 			size.x = size.y * m_asteroidXLargeTextures[model].GetWidthToHeightRatio();
 			float boundingRadius{ size.Length() * 0.5f };
-			b2Vec2 position;
-			bool positionFound{ m_world.GetRandomPositionAwayFromExistingEntities(boundingRadius, minBoundingRadiiGap, maxAttempts, position) };
+
+			InstanceDef def;
+			bool positionFound = m_world.GetRandomPositionAwayFromExistingEntities(boundingRadius, minBoundingRadiiGap, maxAttempts, def.position);
 			if(positionFound)
 			{
-				WorldID id = CreateXLargeAsteroid(m_world, model, d2d::RandomBool(), position,
-					d2d::RandomFloat({ 0.0f, d2d::TWO_PI }), b2Vec2_zero, 0.0f);
+				def.angle = d2d::RandomFloat({ 0.0f, d2d::TWO_PI });
+				WorldID id = CreateXLargeAsteroid(m_world, model, d2d::RandomBool(), def);
 				//m_world.SetLevelTag(id, 1);
 				destroyAsteroidsObjective.entityIDs.push_back(id);
 				destroyAsteroidsObjective.num++;
@@ -249,10 +254,14 @@ namespace Space
 			size.x = size.y * m_asteroidLargeTextures[model].GetWidthToHeightRatio();
 			float boundingRadius{ size.Length() * 0.5f };
 			b2Vec2 position;
-			bool positionFound{ m_world.GetRandomPositionAwayFromExistingEntities(boundingRadius, minBoundingRadiiGap, maxAttempts, position) };
+
+			InstanceDef def;
+			bool positionFound = m_world.GetRandomPositionAwayFromExistingEntities(boundingRadius, minBoundingRadiiGap, maxAttempts, def.position);
 			if(positionFound)
-				CreateLargeAsteroid(m_world, model, d2d::RandomBool(), position,
-					d2d::RandomFloat({ 0.0f, d2d::TWO_PI }), b2Vec2_zero, 0.0f);
+			{
+				def.angle = d2d::RandomFloat({ 0.0f, d2d::TWO_PI });
+				CreateLargeAsteroid(m_world, model, d2d::RandomBool(), def);
+			}
 			else
 				++numFailed;
 		}
@@ -302,9 +311,9 @@ namespace Space
 	{
 
 	}*/
-	void Game::CreatePlayer(World& world, const b2Vec2& position, float angle)
+	void Game::CreatePlayer(World& world, const InstanceDef& def)
 	{
-		WorldID blasterID{ CreateBlaster(world, position, d2d::PI_OVER_TWO, true) };
+		WorldID blasterID = CreateBlaster(world, def);
 		//WorldID scoutID{ CreateScout(world, position, d2d::PI_OVER_TWO, false) };
 		//std::cout << "Game::CreatePlayer blasterID " << blasterID << " scoutID " << scoutID << std::endl;
 		//std::cout << "CreatePlayer HasPhysics: " << blasterID << " " << m_world.HasPhysics(blasterID) << std::endl;
@@ -315,30 +324,32 @@ namespace Space
 		SetPlayer(blasterID);
 		FollowEntity(blasterID);
 	}
-	WorldID Game::CreateScout(World& world, const b2Vec2& position, float angle, bool activate)
+	WorldID Game::CreateScout(World& world, const InstanceDef& def)
 	{
 		WorldID id;
 		{
 			b2Vec2 size{ SCOUT_HEIGHT * m_scoutTexture.GetWidthToHeightRatio(), SCOUT_HEIGHT };
-			id = m_world.NewEntityID(size, SHIP_DRAW_LAYER, activate);
+			id = m_world.NewEntityID(size, SHIP_DRAW_LAYER, def.activate);
 		}
-		world.AddPhysicsComponent(id, b2_dynamicBody, position, angle);
+		world.AddPhysicsComponent(id, b2_dynamicBody, def);
 		world.AddShapes(id, m_scoutModel.name, SHIP_MATERIAL, SHIP_FILTER);
 		world.AddDrawAnimationComponent(id, m_scoutModel.animationDef);
 		world.AddRotatorComponent(id, SCOUT_ROTATION_SPEED);
 		
 		world.AddThrusterComponent(id, 2);
+		world.AddThruster(id, 0, m_scoutThrusterModel.animationDef, SCOUT_THRUSTER_ACCELERATION, SCOUT_THRUSTER_FUEL_PER_SECOND, { SCOUT_THRUSTER_OFFSET_X,  SCOUT_THRUSTER_SPREAD_Y });
+		world.AddThruster(id, 1, m_scoutThrusterModel.animationDef, SCOUT_THRUSTER_ACCELERATION, SCOUT_THRUSTER_FUEL_PER_SECOND, { SCOUT_THRUSTER_OFFSET_X, -SCOUT_THRUSTER_SPREAD_Y });
 		
-		world.AddThruster(id, 0, m_scoutThrusterModel.animationDef, SCOUT_THRUSTER_ACCELERATION, { SCOUT_THRUSTER_OFFSET_X,  SCOUT_THRUSTER_SPREAD_Y });
-		world.AddThruster(id, 1, m_scoutThrusterModel.animationDef, SCOUT_THRUSTER_ACCELERATION, { SCOUT_THRUSTER_OFFSET_X, -SCOUT_THRUSTER_SPREAD_Y });
-		
+		world.AddFuelComponent(id, SCOUT_MAX_FUEL, SCOUT_MAX_FUEL);
+		world.AddBoosterComponent(id, SCOUT_BOOST_FACTOR, BOOST_SECONDS, BOOST_COOLDOWN_SECONDS);
+
 		world.AddBrakeComponent(id, SCOUT_BRAKE_DECELERATION);
 			
 		// Bullets
-		world.AddProjectileLauncherComponent(id, 3, false);
+		world.AddProjectileLauncherComponent(id, 1, false);
 		world.AddProjectileLauncher(id, 0, m_bulletDef, { SCOUT_PROJECTILE_OFFSET_X, 0.0f }, SCOUT_CANON_IMPULSE, SCOUT_CANON_INTERVAL, false, false);
-		world.AddProjectileLauncher(id, 1, m_bulletDef, { SCOUT_PROJECTILE_OFFSET_X,  SCOUT_PROJECTILE_SPREAD_Y }, SCOUT_CANON_IMPULSE, SCOUT_CANON_INTERVAL, false, false);
-		world.AddProjectileLauncher(id, 2, m_bulletDef, { SCOUT_PROJECTILE_OFFSET_X, -SCOUT_PROJECTILE_SPREAD_Y }, SCOUT_CANON_IMPULSE, SCOUT_CANON_INTERVAL, false, false);
+		//world.AddProjectileLauncher(id, 1, m_bulletDef, { SCOUT_PROJECTILE_OFFSET_X,  SCOUT_PROJECTILE_SPREAD_Y }, SCOUT_CANON_IMPULSE, SCOUT_CANON_INTERVAL, false, false);
+		//world.AddProjectileLauncher(id, 2, m_bulletDef, { SCOUT_PROJECTILE_OFFSET_X, -SCOUT_PROJECTILE_SPREAD_Y }, SCOUT_CANON_IMPULSE, SCOUT_CANON_INTERVAL, false, false);
 
 		world.AddHealthComponent(id, SCOUT_HP);
 		world.AddParticleExplosionOnDeathComponent(id, PARTICLE_EXPLOSION_RELATIVE_SIZE,
@@ -347,24 +358,27 @@ namespace Space
 			SCOUT_PARTICLE_LIFETIME, PARTICLE_EXPLOSION_FADEIN, SCOUT_PARTICLE_FADEOUT);
 		return id;
 	}
-	WorldID Game::CreateBlaster(World& world, const b2Vec2& position, float angle, bool activate)
+	WorldID Game::CreateBlaster(World& world, const InstanceDef& def)
 	{
 		WorldID id;
 		{
 			b2Vec2 size{ BLASTER_HEIGHT * m_blasterTexture.GetWidthToHeightRatio(), BLASTER_HEIGHT };
-			id = m_world.NewEntityID(size, SHIP_DRAW_LAYER, activate);
+			id = m_world.NewEntityID(size, SHIP_DRAW_LAYER, def.activate);
 		}
-		world.AddPhysicsComponent(id, b2_dynamicBody, position, angle);
+		world.AddPhysicsComponent(id, b2_dynamicBody, def);
 		world.AddShapes(id, m_blasterModel.name, SHIP_MATERIAL, SHIP_FILTER);
 		world.AddDrawAnimationComponent(id, m_blasterModel.animationDef);
 		world.AddRotatorComponent(id, BLASTER_ROTATION_SPEED);
 
 		world.AddThrusterComponent(id, 4);
-		world.AddThruster(id, 0, m_blasterThrusterModel.animationDef, BLASTER_THRUSTER_ACCELERATION, { BLASTER_THRUSTER_OFFSET_X,  BLASTER_THRUSTER_INNER_SPREAD_Y });
-		world.AddThruster(id, 1, m_blasterThrusterModel.animationDef, BLASTER_THRUSTER_ACCELERATION, { BLASTER_THRUSTER_OFFSET_X, -BLASTER_THRUSTER_INNER_SPREAD_Y });
-		world.AddThruster(id, 2, m_blasterThrusterModel.animationDef, BLASTER_THRUSTER_ACCELERATION, { BLASTER_THRUSTER_OFFSET_X,  BLASTER_THRUSTER_OUTER_SPREAD_Y });
-		world.AddThruster(id, 3, m_blasterThrusterModel.animationDef, BLASTER_THRUSTER_ACCELERATION, { BLASTER_THRUSTER_OFFSET_X, -BLASTER_THRUSTER_OUTER_SPREAD_Y });
+		world.AddThruster(id, 0, m_blasterThrusterModel.animationDef, BLASTER_THRUSTER_ACCELERATION, BLASTER_THRUSTER_FUEL_PER_SECOND, { BLASTER_THRUSTER_OFFSET_X,  BLASTER_THRUSTER_INNER_SPREAD_Y });
+		world.AddThruster(id, 1, m_blasterThrusterModel.animationDef, BLASTER_THRUSTER_ACCELERATION, BLASTER_THRUSTER_FUEL_PER_SECOND, { BLASTER_THRUSTER_OFFSET_X, -BLASTER_THRUSTER_INNER_SPREAD_Y });
+		world.AddThruster(id, 2, m_blasterThrusterModel.animationDef, BLASTER_THRUSTER_ACCELERATION, BLASTER_THRUSTER_FUEL_PER_SECOND, { BLASTER_THRUSTER_OFFSET_X,  BLASTER_THRUSTER_OUTER_SPREAD_Y });
+		world.AddThruster(id, 3, m_blasterThrusterModel.animationDef, BLASTER_THRUSTER_ACCELERATION, BLASTER_THRUSTER_FUEL_PER_SECOND, { BLASTER_THRUSTER_OFFSET_X, -BLASTER_THRUSTER_OUTER_SPREAD_Y });
 		
+		world.AddFuelComponent(id, BLASTER_MAX_FUEL, BLASTER_MAX_FUEL);
+		world.AddBoosterComponent(id, BLASTER_BOOST_FACTOR, BOOST_SECONDS, BOOST_COOLDOWN_SECONDS);
+
 		world.AddBrakeComponent(id, BLASTER_BRAKE_DECELERATION);
 			
 		// Bullets
@@ -390,17 +404,16 @@ namespace Space
 			BLASTER_PARTICLE_LIFETIME, PARTICLE_EXPLOSION_FADEIN, BLASTER_PARTICLE_FADEOUT);
 		return id;
 	}
-	WorldID Game::CreateXLargeAsteroid(World& world, unsigned modelIndex, bool isRock,
-		const b2Vec2& position, float angle, const b2Vec2& velocity, float angularVelocity, bool activate)
+	WorldID Game::CreateXLargeAsteroid(World& world, unsigned modelIndex, bool isRock, const InstanceDef& def)
 	{
 		d2Assert(modelIndex < NUM_XLARGE_ASTEROID_MODELS);
 		WorldID id;
 		{
 			float height{ XLARGE_ASTEROID_HEIGHT * XLARGE_ASTEROID_RELATIVE_HEIGHTS[modelIndex] };
 			b2Vec2 size{ height * m_asteroidXLargeTextures[modelIndex].GetWidthToHeightRatio(), height };
-			id = m_world.NewEntityID(size, ASTEROID_DRAW_LAYER, activate);
+			id = m_world.NewEntityID(size, ASTEROID_DRAW_LAYER, def.activate);
 		}
-		world.AddPhysicsComponent(id, b2_dynamicBody,	position, angle, velocity, angularVelocity);
+		world.AddPhysicsComponent(id, b2_dynamicBody, def);
 		world.AddShapes(id, m_asteroidXLargeModels[modelIndex].name, ASTEROID_MATERIAL, ASTEROID_FILTER);
 		world.AddDrawAnimationComponent(id, isRock ? m_rockXLargeModels[modelIndex].animationDef : m_asteroidXLargeModels[modelIndex].animationDef);
 		world.AddHealthComponent(id, XLARGE_ASTEROID_HP);
@@ -410,17 +423,16 @@ namespace Space
 			XLARGE_ASTEROID_PARTICLE_LIFETIME, PARTICLE_EXPLOSION_FADEIN, XLARGE_ASTEROID_PARTICLE_FADEOUT);
 		return id;
 	}
-	WorldID Game::CreateLargeAsteroid(World& world, unsigned modelIndex, bool isRock,
-		const b2Vec2& position, float angle, const b2Vec2& velocity, float angularVelocity, bool activate)
+	WorldID Game::CreateLargeAsteroid(World& world, unsigned modelIndex, bool isRock, const InstanceDef& def)
 	{
 		d2Assert(modelIndex < NUM_LARGE_ASTEROID_MODELS);
 		WorldID id;
 		{
 			float height{ LARGE_ASTEROID_HEIGHT * LARGE_ASTEROID_RELATIVE_HEIGHTS[modelIndex] };
 			b2Vec2 size{ height * m_asteroidLargeTextures[modelIndex].GetWidthToHeightRatio(), height };
-			id = m_world.NewEntityID(size, ASTEROID_DRAW_LAYER, activate);
+			id = m_world.NewEntityID(size, ASTEROID_DRAW_LAYER, def.activate);
 		}
-		world.AddPhysicsComponent(id, b2_dynamicBody, position, angle, velocity, angularVelocity);
+		world.AddPhysicsComponent(id, b2_dynamicBody, def);
 		world.AddShapes(id, m_asteroidLargeModels[modelIndex].name, ASTEROID_MATERIAL, ASTEROID_FILTER);
 		world.AddDrawAnimationComponent(id, isRock ? m_rockLargeModels[modelIndex].animationDef : m_asteroidLargeModels[modelIndex].animationDef);
 		world.AddHealthComponent(id, LARGE_ASTEROID_HP);
@@ -430,17 +442,16 @@ namespace Space
 			LARGE_ASTEROID_PARTICLE_LIFETIME, PARTICLE_EXPLOSION_FADEIN, LARGE_ASTEROID_PARTICLE_FADEOUT);
 		return id;
 	}
-	WorldID Game::CreateMediumAsteroid(World& world, unsigned modelIndex, bool isRock,
-		const b2Vec2& position, float angle, const b2Vec2& velocity, float angularVelocity, bool activate)
+	WorldID Game::CreateMediumAsteroid(World& world, unsigned modelIndex, bool isRock, const InstanceDef& def)
 	{
 		d2Assert(modelIndex < NUM_MEDIUM_ASTEROID_MODELS);
 		WorldID id;
 		{
 			float height{ MEDIUM_ASTEROID_HEIGHT * MEDIUM_ASTEROID_RELATIVE_HEIGHTS[modelIndex] };
 			b2Vec2 size{ height * m_asteroidMediumTextures[modelIndex].GetWidthToHeightRatio(), height };
-			id = m_world.NewEntityID(size, ASTEROID_DRAW_LAYER, activate);
+			id = m_world.NewEntityID(size, ASTEROID_DRAW_LAYER, def.activate);
 		}
-		world.AddPhysicsComponent(id, b2_dynamicBody, position, angle, velocity, angularVelocity);
+		world.AddPhysicsComponent(id, b2_dynamicBody, def);
 		world.AddShapes(id, m_asteroidMediumModels[modelIndex].name, ASTEROID_MATERIAL, ASTEROID_FILTER);
 		world.AddDrawAnimationComponent(id, isRock ? m_rockMediumModels[modelIndex].animationDef : m_asteroidMediumModels[modelIndex].animationDef);
 		world.AddHealthComponent(id, MEDIUM_ASTEROID_HP);
@@ -450,18 +461,16 @@ namespace Space
 			MEDIUM_ASTEROID_PARTICLE_LIFETIME, PARTICLE_EXPLOSION_FADEIN, MEDIUM_ASTEROID_PARTICLE_FADEOUT);
 		return id;
 	}
-	WorldID Game::CreateSmallAsteroid(World& world, unsigned modelIndex, bool isRock,
-		const b2Vec2& position, float angle, 
-		const b2Vec2& velocity, float angularVelocity, bool activate)
+	WorldID Game::CreateSmallAsteroid(World& world, unsigned modelIndex, bool isRock, const InstanceDef& def)
 	{
 		d2Assert(modelIndex < NUM_SMALL_ASTEROID_MODELS);
 		WorldID id;
 		{
 			float height{ SMALL_ASTEROID_HEIGHT * SMALL_ASTEROID_RELATIVE_HEIGHTS[modelIndex] };
 			b2Vec2 size{ height * m_asteroidSmallTextures[modelIndex].GetWidthToHeightRatio(), height };
-			id = m_world.NewEntityID(size, ASTEROID_DRAW_LAYER, activate);
+			id = m_world.NewEntityID(size, ASTEROID_DRAW_LAYER, def.activate);
 		}
-		world.AddPhysicsComponent(id, b2_dynamicBody, position, angle, velocity, angularVelocity);
+		world.AddPhysicsComponent(id, b2_dynamicBody, def);
 		world.AddShapes(id, m_asteroidSmallModels[modelIndex].name, ASTEROID_MATERIAL, ASTEROID_FILTER);
 		world.AddDrawAnimationComponent(id, isRock ? m_rockSmallModels[modelIndex].animationDef : m_asteroidSmallModels[modelIndex].animationDef);
 		world.AddHealthComponent(id, SMALL_ASTEROID_HP);
@@ -471,16 +480,27 @@ namespace Space
 			SMALL_ASTEROID_PARTICLE_LIFETIME, PARTICLE_EXPLOSION_FADEIN, SMALL_ASTEROID_PARTICLE_FADEOUT);
 		return id;
 	}
-	WorldID Game::CreateBumper(World& world, 
-		const b2Vec2& position, float angle, 
-		const b2Vec2& velocity, float angularVelocity, bool activate)
+	WorldID Game::CreateBumper(World& world, const InstanceDef& def)
 	{
 		WorldID id;
 		{
 			b2Vec2 size{ BUMPER_HEIGHT * m_bumperTexture.GetWidthToHeightRatio(), BUMPER_HEIGHT };
-			id = m_world.NewEntityID(size, BUMPER_DRAW_LAYER, activate);
+			id = m_world.NewEntityID(size, BUMPER_DRAW_LAYER, def.activate);
 		}
-		world.AddPhysicsComponent(id, b2_kinematicBody, position, angle, velocity, angularVelocity);
+		world.AddPhysicsComponent(id, b2_kinematicBody, def);
+		world.AddShapes(id, m_bumperModel.name, BUMPER_MATERIAL, BUMPER_FILTER);
+		world.AddDrawAnimationComponent(id, m_bumperModel.animationDef);
+
+		return id;
+	}
+	WorldID Game::CreateFuel(World& world, const InstanceDef& def)
+	{
+		WorldID id;
+		{
+			b2Vec2 size{ BUMPER_HEIGHT * m_bumperTexture.GetWidthToHeightRatio(), BUMPER_HEIGHT };
+			id = m_world.NewEntityID(size, BUMPER_DRAW_LAYER, def.activate);
+		}
+		world.AddPhysicsComponent(id, b2_dynamicBody, def);
 		world.AddShapes(id, m_bumperModel.name, BUMPER_MATERIAL, BUMPER_FILTER);
 		world.AddDrawAnimationComponent(id, m_bumperModel.animationDef);
 
@@ -569,8 +589,12 @@ namespace Space
 		float angle, float impulse, const b2Vec2& parentVelocity, WorldID parentID)
 	{
 		WorldID id{ m_world.NewEntityID(projectileDef.dimensions, m_world.GetDrawLayer(parentID) - 1, true) };
-		m_world.AddPhysicsComponent(id, b2_dynamicBody,
-			position, angle, parentVelocity, 0.0f,
+		InstanceDef def;
+		def.position = position;
+		def.angle = angle;
+		def.velocity = parentVelocity;
+		def.angularVelocity = 0.0f;
+		m_world.AddPhysicsComponent(id, b2_dynamicBody, def,
 			projectileDef.fixedRotation, projectileDef.continuousCollisionDetection);
 
 		m_world.AddShapes(id, projectileDef.model.name, projectileDef.material, projectileDef.filter);
@@ -599,7 +623,7 @@ namespace Space
 		if(projectileDef.acceleration > 0.0f && projectileDef.accelerationTime > 0.0f)
 		{
 			m_world.AddThrusterComponent(id, 1, 1.0f);
-			m_world.AddThruster(id, 0, {}, projectileDef.acceleration, b2Vec2_zero);
+			m_world.AddThruster(id, 0, {}, projectileDef.acceleration, 0.0f, b2Vec2_zero);
 			m_world.AddSetThrustFactorAfterDelayComponent(id, 0.0f, projectileDef.accelerationTime);
 		}
 		return id;
@@ -634,8 +658,31 @@ namespace Space
 			d2d::Window::SetColor(m_objectivesTextStyle.color);
 			d2d::Window::PushMatrix();
 			d2d::Window::Translate(m_objectivesPosition * resolution);
-			d2d::Window::DrawString(d2d::ToString(m_objectives[0].num), m_objectivesAlignment, m_objectivesTextStyle.size * resolution.y, m_objectivesTextStyle.font);
+			{
+				std::string objectivesString = d2d::ToString(m_objectives[0].num);
+				d2d::Window::DrawString(objectivesString, m_objectivesAlignment, m_objectivesTextStyle.size * resolution.y, m_objectivesTextStyle.font);
+			}
 			d2d::Window::PopMatrix();
+		}
+		if(m_playerSet)
+		{
+			if(m_world.HasComponents(m_playerID, COMPONENT_FUEL))
+			{
+				b2Vec2 resolution{ d2d::Window::GetScreenResolution() };
+				d2d::Window::SetCameraRect({ b2Vec2_zero, resolution });
+				d2d::Window::DisableTextures();
+				d2d::Window::EnableBlending();
+				d2d::Window::SetColor(m_fuelTextStyle.color);
+				d2d::Window::PushMatrix();
+				d2d::Window::Translate(m_fuelPosition * resolution);
+				{
+					int fuelInt = (int)(m_world.GetFuelLevel(m_playerID) + 0.5f);
+					int maxFuelInt = (int)(m_world.GetMaxFuelLevel(m_playerID) + 0.5f);
+					std::string fuelString = d2d::ToString(fuelInt) + "/" + d2d::ToString(maxFuelInt);
+					d2d::Window::DrawString(fuelString, m_fuelAlignment, m_objectivesTextStyle.size * resolution.y, m_objectivesTextStyle.font);
+				}
+				d2d::Window::PopMatrix();
+			}
 		}
 
 	}
