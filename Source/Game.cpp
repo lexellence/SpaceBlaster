@@ -208,6 +208,8 @@ namespace Space
 
 		b2Vec2 playerStartPosition{ b2Vec2_zero };
 		CreatePlayer(m_world, playerStartPosition, d2d::PI_OVER_TWO);
+		CreateBumper(m_world, { -5.0f, -12.0f }, 0.0f, b2Vec2_zero, 0.0f);
+		CreateBumper(m_world, { 5.0f, -12.0f }, d2d::PI, b2Vec2_zero, 0.0f);
 
 		Objective destroyAsteroidsObjective;
 		destroyAsteroidsObjective.type = ObjectiveType::DESTROY;
@@ -254,7 +256,6 @@ namespace Space
 			else
 				++numFailed;
 		}
-
 		//minBoundingRadiiGap = MEDIUM_ASTEROID_HEIGHT * 0.25f;
 		//for(unsigned i = 0; i < 40; ++i)
 		//{
@@ -318,15 +319,17 @@ namespace Space
 	{
 		WorldID id;
 		{
-			b2Vec2 size{ SCOUT_HEIGHT * m_scoutTexture.GetWidthToHeightRatio(), SCOUT_HEIGHT };
+			b2Vec2 size{ SCOUT_HEIGHT * m_scoutModel.texture.GetWidthToHeightRatio(), SCOUT_HEIGHT };
 			id = m_world.NewEntityID(size, SHIP_DRAW_LAYER, activate);
 		}
 		world.AddPhysicsComponent(id, b2_dynamicBody, position, angle);
-		world.AddShapes(id, m_scoutModel, SHIP_MATERIAL, SHIP_FILTER);
-		world.AddDrawAnimationComponent(id, m_scoutAnimationDef);
+		world.AddShapes(id, m_scoutModel.name, SHIP_MATERIAL, SHIP_FILTER);
+		d2d::AnimationDef animationDef{ d2d::AnimationFrame{ &m_scoutModel.texture } };
+		world.AddDrawAnimationComponent(id, &animationDef);
 		world.AddRotatorComponent(id, SCOUT_ROTATION_SPEED);
 		
 		world.AddThrusterComponent(id, 2);
+		
 		world.AddThruster(id, 0, &m_scoutThrusterAnimationDef, SCOUT_THRUSTER_ACCELERATION, { SCOUT_THRUSTER_OFFSET_X,  SCOUT_THRUSTER_SPREAD_Y });
 		world.AddThruster(id, 1, &m_scoutThrusterAnimationDef, SCOUT_THRUSTER_ACCELERATION, { SCOUT_THRUSTER_OFFSET_X, -SCOUT_THRUSTER_SPREAD_Y });
 		
@@ -349,12 +352,13 @@ namespace Space
 	{
 		WorldID id;
 		{
-			b2Vec2 size{ BLASTER_HEIGHT * m_blasterTexture.GetWidthToHeightRatio(), BLASTER_HEIGHT };
+			b2Vec2 size{ BLASTER_HEIGHT * m_blasterModel.texture.GetWidthToHeightRatio(), BLASTER_HEIGHT };
 			id = m_world.NewEntityID(size, SHIP_DRAW_LAYER, activate);
 		}
 		world.AddPhysicsComponent(id, b2_dynamicBody, position, angle);
-		world.AddShapes(id, m_blasterModel, SHIP_MATERIAL, SHIP_FILTER);
-		world.AddDrawAnimationComponent(id, m_blasterAnimationDef);
+		world.AddShapes(id, m_blasterModel.name, SHIP_MATERIAL, SHIP_FILTER);
+		d2d::AnimationDef animationDef{ d2d::AnimationFrame{ &m_blasterModel.texture } };
+		world.AddDrawAnimationComponent(id, &animationDef);
 		world.AddRotatorComponent(id, BLASTER_ROTATION_SPEED);
 
 		world.AddThrusterComponent(id, 4);
@@ -400,7 +404,7 @@ namespace Space
 		}
 		world.AddPhysicsComponent(id, b2_dynamicBody,	position, angle, velocity, angularVelocity);
 		world.AddShapes(id, m_asteroidXLargeModelNames[modelIndex], ASTEROID_MATERIAL, ASTEROID_FILTER);
-		world.AddDrawAnimationComponent(id, isRock ? m_rockXLargeAnimationDefs[modelIndex] : m_asteroidXLargeAnimationDefs[modelIndex]);
+		world.AddDrawAnimationComponent(id, isRock ? &m_rockXLargeAnimationDefs[modelIndex] : &m_asteroidXLargeAnimationDefs[modelIndex]);
 		world.AddHealthComponent(id, XLARGE_ASTEROID_HP);
 		world.AddParticleExplosionOnDeathComponent(id, PARTICLE_EXPLOSION_RELATIVE_SIZE,
 			XLARGE_ASTEROID_NUM_PARTICLES, ASTEROID_PARTICLE_SPEED_RANGE, DAMAGE_BASED_SPEED_INCREASE_FACTOR,
@@ -420,7 +424,7 @@ namespace Space
 		}
 		world.AddPhysicsComponent(id, b2_dynamicBody, position, angle, velocity, angularVelocity);
 		world.AddShapes(id, m_asteroidLargeModelNames[modelIndex], ASTEROID_MATERIAL, ASTEROID_FILTER);
-		world.AddDrawAnimationComponent(id, isRock ? m_rockLargeAnimationDefs[modelIndex] : m_asteroidLargeAnimationDefs[modelIndex]);
+		world.AddDrawAnimationComponent(id, isRock ? &m_rockLargeAnimationDefs[modelIndex] : &m_asteroidLargeAnimationDefs[modelIndex]);
 		world.AddHealthComponent(id, LARGE_ASTEROID_HP);
 		world.AddParticleExplosionOnDeathComponent(id, PARTICLE_EXPLOSION_RELATIVE_SIZE,
 			LARGE_ASTEROID_NUM_PARTICLES, ASTEROID_PARTICLE_SPEED_RANGE, DAMAGE_BASED_SPEED_INCREASE_FACTOR,
@@ -440,7 +444,7 @@ namespace Space
 		}
 		world.AddPhysicsComponent(id, b2_dynamicBody, position, angle, velocity, angularVelocity);
 		world.AddShapes(id, m_asteroidMediumModelNames[modelIndex], ASTEROID_MATERIAL, ASTEROID_FILTER);
-		world.AddDrawAnimationComponent(id, isRock ? m_rockMediumAnimationDefs[modelIndex] : m_asteroidMediumAnimationDefs[modelIndex]);
+		world.AddDrawAnimationComponent(id, isRock ? &m_rockMediumAnimationDefs[modelIndex] : &m_asteroidMediumAnimationDefs[modelIndex]);
 		world.AddHealthComponent(id, MEDIUM_ASTEROID_HP);
 		world.AddParticleExplosionOnDeathComponent(id, PARTICLE_EXPLOSION_RELATIVE_SIZE,
 			MEDIUM_ASTEROID_NUM_PARTICLES, ASTEROID_PARTICLE_SPEED_RANGE, DAMAGE_BASED_SPEED_INCREASE_FACTOR,
@@ -449,7 +453,8 @@ namespace Space
 		return id;
 	}
 	WorldID Game::CreateSmallAsteroid(World& world, unsigned modelIndex, bool isRock,
-		const b2Vec2& position, float angle, const b2Vec2& velocity, float angularVelocity, bool activate)
+		const b2Vec2& position, float angle, 
+		const b2Vec2& velocity, float angularVelocity, bool activate)
 	{
 		d2Assert(modelIndex < NUM_SMALL_ASTEROID_MODELS);
 		WorldID id;
@@ -460,7 +465,7 @@ namespace Space
 		}
 		world.AddPhysicsComponent(id, b2_dynamicBody, position, angle, velocity, angularVelocity);
 		world.AddShapes(id, m_asteroidSmallModelNames[modelIndex], ASTEROID_MATERIAL, ASTEROID_FILTER);
-		world.AddDrawAnimationComponent(id, isRock ? m_rockSmallAnimationDefs[modelIndex] : m_asteroidSmallAnimationDefs[modelIndex]);
+		world.AddDrawAnimationComponent(id, isRock ? &m_rockSmallAnimationDefs[modelIndex] : &m_asteroidSmallAnimationDefs[modelIndex]);
 		world.AddHealthComponent(id, SMALL_ASTEROID_HP);
 		world.AddParticleExplosionOnDeathComponent(id, PARTICLE_EXPLOSION_RELATIVE_SIZE,
 			SMALL_ASTEROID_NUM_PARTICLES, ASTEROID_PARTICLE_SPEED_RANGE, DAMAGE_BASED_SPEED_INCREASE_FACTOR,
@@ -468,6 +473,24 @@ namespace Space
 			SMALL_ASTEROID_PARTICLE_LIFETIME, PARTICLE_EXPLOSION_FADEIN, SMALL_ASTEROID_PARTICLE_FADEOUT);
 		return id;
 	}
+	WorldID Game::CreateBumper(World& world, 
+		const b2Vec2& position, float angle, 
+		const b2Vec2& velocity, float angularVelocity, bool activate)
+	{
+		WorldID id;
+		{
+			b2Vec2 size{ BUMPER_HEIGHT * m_bumperModel.texture.GetWidthToHeightRatio(), BUMPER_HEIGHT };
+			id = m_world.NewEntityID(size, BUMPER_DRAW_LAYER, activate);
+		}
+		world.AddPhysicsComponent(id, b2_kinematicBody, position, angle, velocity, angularVelocity);
+		world.AddShapes(id, m_bumperModel.name, BUMPER_MATERIAL, BUMPER_FILTER);
+		d2d::AnimationDef animationDef{ d2d::AnimationFrame{ &m_bumperModel.texture } };
+		world.AddDrawAnimationComponent(id, &animationDef);
+
+		return id;
+	}
+
+
 	//+-------------\---------------------------------------------
 	//|	  Update    |
 	//\-------------/---------------------------------------------
@@ -564,7 +587,7 @@ namespace Space
 			m_world.ApplyLinearImpulseToCenter(id, impulse * unitDirectionVector);
 		}
 
-		m_world.AddDrawAnimationComponent(id, projectileDef.animationDef);
+		m_world.AddDrawAnimationComponent(id, projectileDef.animationDefPtr);
 
 		if(projectileDef.destructionDelay)
 			m_world.AddDestructionDelayComponent(id, projectileDef.destructionDelayTime);

@@ -3670,6 +3670,39 @@
 				</fixtureGroup>
 			</fixtureGroups>
 		</body>
+		<body name="repulser1" width="29.000" height="43.000">
+			<fixtureGroups>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="6.500" y="-20.500"/>
+							<point x="6.500" y="17.500"/>
+							<point x="-13.500" y="4.500"/>
+							<point x="-13.500" y="-4.500"/>
+							<point x="-10.500" y="-11.500"/>
+							<point x="-4.500" y="-17.500"/>
+							<point x="3.500" y="-20.500"/>
+						</polygon>
+            <polygon>
+							<point x="6.500" y="20.500"/>
+							<point x="3.500" y="20.500"/>
+							<point x="-4.500" y="17.500"/>
+							<point x="-10.500" y="11.500"/>
+							<point x="-13.500" y="4.500"/>
+							<point x="6.500" y="17.500"/>
+						</polygon>
+            <polygon>
+							<point x="10.500" y="17.500"/>
+							<point x="6.500" y="17.500"/>
+							<point x="6.500" y="-17.500"/>
+							<point x="10.500" y="-17.500"/>
+							<point x="13.500" y="-14.500"/>
+							<point x="13.500" y="14.500"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+			</fixtureGroups>
+		</body>
 	</bodies>
 	<metadata>
 		<format>1</format>

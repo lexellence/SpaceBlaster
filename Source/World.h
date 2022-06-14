@@ -41,7 +41,7 @@ namespace Space
 	};
 	struct ProjectileDef
 	{
-		d2d::AnimationDef animationDef;
+		d2d::AnimationDef* animationDefPtr;
 		std::string modelName;
 		d2d::Material material;
 		b2Vec2 dimensions;
@@ -175,7 +175,7 @@ namespace Space
 		// Visual
 		void AddDrawRadarComponent(WorldID entityID, const DrawRadarComponent& radarComponent);
 		void AddDrawFixturesComponent(WorldID entityID, const DrawFixturesComponent& fixturesComponent);
-		void AddDrawAnimationComponent(WorldID entityID, const d2d::AnimationDef& animationDef);
+		void AddDrawAnimationComponent(WorldID entityID, d2d::AnimationDef* animationDefPtr);
 		void SetAnimationLayer(WorldID entityID, int layer);
 
 		// Life and Death
@@ -199,7 +199,7 @@ namespace Space
 
 		// Getting around
 		void AddThrusterComponent(WorldID entityID, unsigned numSlots, float initialFactor = 0.0f);
-		void AddThruster(WorldID entityID, unsigned slot, d2d::AnimationDef const* animationDefPtr,
+		void AddThruster(WorldID entityID, unsigned slot, d2d::AnimationDef* animationDefPtr,
 			float acceleration, const b2Vec2& localRelativePosition);
 		void RemoveThruster(WorldID entityID, unsigned slot);
 		bool IsValidThrusterSlot(WorldID entityID, unsigned slot) const;
