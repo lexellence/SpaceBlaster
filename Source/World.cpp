@@ -390,15 +390,16 @@ namespace Space
 			thrusterComponent.thrusters[i].enabled = false;
 	}
 	void World::AddThruster(WorldID entityID, unsigned slot, const d2d::AnimationDef& animationDef,
-		float acceleration, const b2Vec2& localRelativePosition)
+		float acceleration, const b2Vec2& localRelativePosition, bool temporarilyDisabled)
 	{
 		d2Assert(entityID < WORLD_MAX_ENTITIES);
 		d2Assert(IsValidThrusterSlot(entityID, slot));
 		m_thrusterComponents[entityID].thrusters[slot].enabled = true;
-		m_thrusterComponents[entityID].thrusters[slot].temporarilyDisabled = false;
+		m_thrusterComponents[entityID].thrusters[slot].temporarilyDisabled = temporarilyDisabled;
 		m_thrusterComponents[entityID].thrusters[slot].animation.Init(animationDef);
 		m_thrusterComponents[entityID].thrusters[slot].acceleration = acceleration;
 		m_thrusterComponents[entityID].thrusters[slot].localRelativePosition = localRelativePosition;
+		m_thrusterComponents[entityID].thrusters[slot].fuelPerSecond = 2.0f;
 	}
 	void World::RemoveThruster(WorldID entityID, unsigned slot)
 	{
@@ -418,6 +419,13 @@ namespace Space
 		m_componentBits[entityID] |= COMPONENT_SET_THRUST_AFTER_DELAY;
 		m_setThrustFactorAfterDelayComponents[entityID].factor = thrustFactor;
 		m_setThrustFactorAfterDelayComponents[entityID].delay = delay;
+	}
+	void World::AddFuelComponent(WorldID entityID, float level, float max)
+	{
+		d2Assert(entityID < WORLD_MAX_ENTITIES);
+		m_componentBits[entityID] |= COMPONENT_FUEL;
+		m_fuelComponents[entityID].max = max;
+		m_fuelComponents[entityID].level = level;
 	}
 	void World::AddRotatorComponent(WorldID entityID, float rotationSpeed)
 	{

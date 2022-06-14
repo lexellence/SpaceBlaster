@@ -126,7 +126,33 @@ namespace Space
 				}
 
 				if(HasComponents(id, COMPONENT_THRUSTER))
-					m_thrusterComponents[id].factor = playerController.thrustFactor;
+				{
+					ThrusterComponent& thrusterComponent{ m_thrusterComponents[id] };
+					thrusterComponent.factor = playerController.thrustFactor;
+
+					if(playerController.boost)
+						thrusterComponent.boost = true;
+
+					if(thrusterComponent.numSlots >= 4)
+					{
+						Thruster& thruster3{ thrusterComponent.thrusters[2] };
+						Thruster& thruster4{ thrusterComponent.thrusters[3] };
+
+						if(thruster3.enabled && thruster3.temporarilyDisabled)
+							if(playerController.boost)
+								thruster3.temporarilyDisabled = false;
+						if(thruster3.enabled && !thruster3.temporarilyDisabled)
+							if(!playerController.boost)
+								thruster3.temporarilyDisabled = true;
+
+						if(thruster4.enabled && thruster4.temporarilyDisabled)
+							if(playerController.boost)
+								thruster4.temporarilyDisabled = false;
+						if(thruster4.enabled && !thruster4.temporarilyDisabled)
+							if(!playerController.boost)
+								thruster4.temporarilyDisabled = true;
+					}
+				}
 
 				if(HasComponents(id, COMPONENT_BRAKE))
 					m_brakeComponents[id].factor = playerController.brakeFactor;
@@ -148,6 +174,14 @@ namespace Space
 					m_physicsComponents[id].mainBody.b2BodyPtr->SetAngularVelocity(m_rotatorComponents[id].factor * m_rotatorComponents[id].rotationSpeed);
 			}
 	}
+	void World::ApplyThrust(WorldID id, float acceleration, float fuelRequired)
+	{
+		// Apply force
+		float angle{ m_physicsComponents[id].mainBody.b2BodyPtr->GetAngle() };
+		float inputAdjustedForce{ m_physicsComponents[id].mainBody.b2BodyPtr->GetMass() * acceleration * m_thrusterComponents[id].factor };
+		b2Vec2 forceVec{ inputAdjustedForce * cosf(angle), inputAdjustedForce * sinf(angle) };
+		ApplyForceToCenter(id, forceVec);
+	}
 	void World::UpdateThrusterComponents(float dt)
 	{
 		BitMask requiredComponents{ COMPONENT_THRUSTER | COMPONENT_PHYSICS };
@@ -155,17 +189,34 @@ namespace Space
 			if(HasComponents(id, requiredComponents) && IsActive(id))
 				if(m_thrusterComponents[id].factor > 0.0f)
 				{
-					// Calculate and apply thrust force
-					float sumAccelerations{ 0.0f };
 					d2Assert(m_thrusterComponents[id].numSlots <= WORLD_MAX_THRUSTER_SLOTS);
+
+					// Calculate acceleration of ship's total thruster system
+					float sumAccelerations{ 0.0f };
+					float fuelRequired{ 0.0f };
 					for(unsigned i = 0; i < m_thrusterComponents[id].numSlots; ++i)
 						if(m_thrusterComponents[id].thrusters[i].enabled && !m_thrusterComponents[id].thrusters[i].temporarilyDisabled)
+						{
 							sumAccelerations += m_thrusterComponents[id].thrusters[i].acceleration;
-					
-					float angle{ m_physicsComponents[id].mainBody.b2BodyPtr->GetAngle() };
-					float inputAdjustedForce{ m_physicsComponents[id].mainBody.b2BodyPtr->GetMass() * sumAccelerations * m_thrusterComponents[id].factor };
-					b2Vec2 forceVec{ inputAdjustedForce * cosf(angle), inputAdjustedForce * sinf(angle) };
-					ApplyForceToCenter(id, forceVec);
+							fuelRequired += dt * m_thrusterComponents[id].thrusters[i].fuelPerSecond;
+						}
+
+					// Boost
+					if(m_thrusterComponents[id].boost)
+						sumAccelerations *= 2.0f;
+
+					// Fuel
+					if(fuelRequired > 0.0f && HasComponents(id, COMPONENT_FUEL))
+					{
+						float fuelFactor = m_fuelComponents[id].level / fuelRequired;
+						if(fuelFactor < 1.0f)						
+							sumAccelerations *= fuelFactor;
+						m_fuelComponents[id].level -= fuelRequired;
+						d2d::ClampLow(m_fuelComponents[id].level, 0.0f);
+					}
+
+					// Thrust
+					ApplyThrust(id, sumAccelerations, fuelRequired);
 
 					// Update thruster animations
 					for (unsigned i = 0; i < m_thrusterComponents[id].numSlots; ++i)

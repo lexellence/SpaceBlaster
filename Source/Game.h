@@ -24,8 +24,10 @@ namespace Space
 	constexpr float BLASTER_ROTATION_SPEED{ 6.0f };
 	constexpr float SCOUT_ROTATION_SPEED{ 6.0f };
 
-	constexpr float BLASTER_THRUSTER_ACCELERATION{ 4.0f };
+	constexpr float BLASTER_THRUSTER_ACCELERATION{ 8.0f };
 	constexpr float SCOUT_THRUSTER_ACCELERATION{ 20.0f };
+	constexpr float BLASTER_MAX_FUEL{ 100.0f };
+	constexpr float SCOUT_MAX_FUEL{ 25.0f };
 
 	constexpr float BLASTER_THRUSTER_OFFSET_X	{ -0.44f };
 	constexpr float SCOUT_THRUSTER_OFFSET_X		{ -0.9f };
@@ -210,15 +212,25 @@ namespace Space
 		std::vector<Objective> m_objectives;
 
 		// Fonts
-		d2d::FontReference m_orbitronLightFont{ "Fonts\\OrbitronLight.otf" };
+		d2d::FontReference m_hudFont{ "Fonts\\OrbitronLight.otf" };
+		float m_hudFontSize{ 0.05f };
 
-		// Objectives
+		// HUD Objectives
 		const b2Vec2 m_objectivesPosition{ 0.90f, 0.90f };
 		const d2d::Alignment m_objectivesAlignment{ d2d::Alignment::RIGHT_TOP };
 		const d2d::TextStyle m_objectivesTextStyle{
-			m_orbitronLightFont,
-			{ 1.0f, 0.7f, 0.7f, 1.0f },
-			0.05f
+			m_hudFont,
+			{ 0.5f, 0.3f, 0.8f, 1.0f },
+			m_hudFontSize
+		};
+
+		// HUD Fuel
+		const b2Vec2 m_fuelPosition{ 0.10f, 0.10f };
+		const d2d::Alignment m_fuelAlignment{ d2d::Alignment::LEFT_BOTTOM };
+		const d2d::TextStyle m_fuelTextStyle{
+			m_hudFont,
+			{ 1.0f, 0.2f, 0.2f, 1.0f },
+			m_hudFontSize
 		};
 
 		//+---------------------------\-------------------------------

@@ -21,22 +21,7 @@ namespace Space
 		m_paused = false;
 		m_showFPS = true;
 
-		m_gamepadZoomEngaged = false;
-		m_gamepadZoomOutFactor = 0.0f;
-		m_gamepadTurnFactor = 0.0f;
-		m_gamepadThrustFactor = 0.0f;
-		m_gamepadBrakeFactor = 0.0f;
-		m_primaryFireFactor = 0.0f;
-		m_secondaryFireFactor = 0.0f;
-
-		m_zoomInKeyPressed = false;
-		m_zoomOutKeyPressed = false;
-		m_turnLeftKeyPressed = false;
-		m_turnRightKeyPressed = false;
-		m_thrustKeyPressed = false;
-		m_brakeKeyPressed = false;
-		m_primaryFireKeyPressed = false;
-		m_secondaryFireKeyPressed = false;
+		ResetController();
 	}
 	void GameState::ProcessEvent(const SDL_Event& event)
 	{
@@ -99,99 +84,85 @@ namespace Space
 		if(m_paused)
 			m_paused = false;
 	}
-	void GameState::LessMissiles()
-	{
-		if(m_playerController.numMissiles > 1)
-			--m_playerController.numMissiles;
-	}
-	void GameState::MoreMissiles()
-	{
-		if(m_playerController.numMissiles < 5)
-			++m_playerController.numMissiles;
-	}
 	void GameState::ProcessButtonDown(Uint8 button)
 	{
-		if(button == m_pauseButton)						PauseGame();
-		else if(button == m_zoomButton)					m_gamepadZoomEngaged = true;
+		if(button == m_gamepad.map.pauseButton)						PauseGame();
+		else if(button == m_gamepad.map.zoomInButton)				m_gamepad.zoomIn = true;
+		else if(button == m_gamepad.map.zoomOutButton)				m_gamepad.zoomOut = true;
 		//else if(button == m_morphButton)				m_playerController.doMorphOnce = true;
-		else if(button == m_previousMissileTypeButton)	
-			LessMissiles();
-		else if(button == m_nextMissileTypeButton)	
-			MoreMissiles();
+		else if(button == m_gamepad.map.previousMissileTypeButton)	{}
+		else if(button == m_gamepad.map.nextMissileTypeButton)		{}
+		else if(button == m_gamepad.map.boostButton)				m_gamepad.boost = true;
 	}
 	void GameState::ProcessButtonUp(Uint8 button)
 	{
-		if(button == m_zoomButton)		m_gamepadZoomEngaged = false;
+		if(button == m_gamepad.map.zoomInButton)		m_gamepad.zoomIn = false;
+		else if(button == m_gamepad.map.zoomOutButton)	m_gamepad.zoomOut = false;
+		else if(button == m_gamepad.map.boostButton)	m_gamepad.boost = false;
 	}
 	void GameState::ProcessKeyDown(SDL_Keycode key)
 	{
-		if(key == m_pauseKey)					PauseGame();
-		else if(key == m_fpsToggleKey)			m_showFPS = !m_showFPS;
-		else if(key == m_zoomInKey)				m_zoomInKeyPressed = true;
-		else if(key == m_zoomOutKey)			m_zoomOutKeyPressed = true;
-		else if(key == m_turnLeftKey)			m_turnLeftKeyPressed = true;
-		else if(key == m_turnRightKey)			m_turnRightKeyPressed = true;
-		else if(key == m_thrustKey)				m_thrustKeyPressed = true;
-		else if(key == m_brakeKey)				m_brakeKeyPressed = true;
-		else if(key == m_primaryFireKey)		m_primaryFireKeyPressed = true;
-		else if(key == m_secondaryFireKey)		m_secondaryFireKeyPressed = true;
-		//else if(key == m_morphKey)			m_playerController.doMorphOnce = true;
-		else if(key == m_previousMissileKey)	LessMissiles();
-		else if(key == m_nextMissileKey)		MoreMissiles();
+		if(key == m_keyboard.map.pauseKey)					PauseGame();
+		else if(key == m_keyboard.map.fpsToggleKey)			m_showFPS = !m_showFPS;
+		else if(key == m_keyboard.map.zoomInKey)			m_keyboard.zoomIn = true;
+		else if(key == m_keyboard.map.zoomOutKey)			m_keyboard.zoomOut = true;
+		else if(key == m_keyboard.map.turnLeftKey)			m_keyboard.turnLeft = true;
+		else if(key == m_keyboard.map.turnRightKey)			m_keyboard.turnRight = true;
+		else if(key == m_keyboard.map.thrustKey)			m_keyboard.thrust = true;
+		else if(key == m_keyboard.map.brakeKey)				m_keyboard.brake = true;
+		else if(key == m_keyboard.map.boostKey)				m_keyboard.boost = true;
+		else if(key == m_keyboard.map.primaryFireKey)		m_keyboard.primaryFire = true;
+		else if(key == m_keyboard.map.secondaryFireKey)		m_keyboard.secondaryFire = true;
+		//else if(key == m_keyboard.map.morphKey)			m_playerController.doMorphOnce = true;
+		else if(key == m_keyboard.map.previousMissileKey)	{}
+		else if(key == m_keyboard.map.nextMissileKey)		{}
 	}
 	void GameState::ProcessKeyUp(SDL_Keycode key)
 	{
-		if(key == m_zoomInKey)				m_zoomInKeyPressed = false;
-		else if(key == m_zoomOutKey)		m_zoomOutKeyPressed = false;
-		else if(key == m_turnLeftKey)		m_turnLeftKeyPressed = false;
-		else if(key == m_turnRightKey)		m_turnRightKeyPressed = false;
-		else if(key == m_thrustKey)			m_thrustKeyPressed = false;
-		else if(key == m_brakeKey)			m_brakeKeyPressed = false;
-		else if(key == m_primaryFireKey)	m_primaryFireKeyPressed = false;
-		else if(key == m_secondaryFireKey)	m_secondaryFireKeyPressed = false;
+		if(key == m_keyboard.map.zoomInKey)				m_keyboard.zoomIn = false;
+		else if(key == m_keyboard.map.zoomOutKey)		m_keyboard.zoomOut = false;
+		else if(key == m_keyboard.map.turnLeftKey)		m_keyboard.turnLeft = false;
+		else if(key == m_keyboard.map.turnRightKey)		m_keyboard.turnRight = false;
+		else if(key == m_keyboard.map.thrustKey)		m_keyboard.thrust = false;
+		else if(key == m_keyboard.map.brakeKey)			m_keyboard.brake = false;
+		else if(key == m_keyboard.map.boostKey)			m_keyboard.boost = false;
+		else if(key == m_keyboard.map.primaryFireKey)	m_keyboard.primaryFire = false;
+		else if(key == m_keyboard.map.secondaryFireKey)	m_keyboard.secondaryFire = false;
 	}
 	void GameState::ProcessAxisMotion(Uint8 axis, Sint16 value)
 	{
 		// Convert to percentage factor
 		float axisFactor;
 		if(axis == SDL_CONTROLLER_AXIS_TRIGGERRIGHT || axis == SDL_CONTROLLER_AXIS_TRIGGERLEFT) 
-			axisFactor = d2d::AxisToUnit(value, m_gamepadTriggerDeadZone, m_gamepadTriggerAliveZone);
+			axisFactor = d2d::AxisToUnit(value, m_gamepad.triggerDeadZone, m_gamepad.triggerAliveZone);
 		else 
-			axisFactor = d2d::AxisToUnit(value, m_gamepadStickDeadZone, m_gamepadStickAliveZone);
-
-		// Zooming
-		if(axis == m_zoomAxis)
-			m_gamepadZoomOutFactor = axisFactor;
-
-		// Turning
-		else if(axis == m_turnAxis)
-			m_gamepadTurnFactor = -axisFactor;
-
-		// Thrusting
-		else if(axis == m_thrustAxis)
+			axisFactor = d2d::AxisToUnit(value, m_gamepad.stickDeadZone, m_gamepad.stickAliveZone);
+		if(axis == m_gamepad.map.turnAxis)
+			m_gamepad.turnFactor = -axisFactor;
+		else if(axis == m_gamepad.map.thrustAxis)
 		{
 			// If left stick down, brake
 			if(axisFactor > 0.0f)
 			{
-				m_gamepadThrustFactor = 0.0f;
-				m_gamepadBrakeFactor = axisFactor;
+				m_gamepad.thrustFactor = 0.0f;
+				m_gamepad.brakeFactor = axisFactor;
 			}
 			// If left stick up, thrust
 			else if(axisFactor < 0.0f)
 			{
-				m_gamepadThrustFactor = -axisFactor;
-				m_gamepadBrakeFactor = 0.0f;
+				m_gamepad.thrustFactor = -axisFactor;
+				m_gamepad.brakeFactor = 0.0f;
 			}
 			else
 			{
-				m_gamepadThrustFactor = 0.0f;
-				m_gamepadBrakeFactor = 0.0f;
+				m_gamepad.thrustFactor = 0.0f;
+				m_gamepad.brakeFactor = 0.0f;
 			}
 		}
-		else if(axis == m_primaryFireAxis)
-			m_primaryFireFactor = axisFactor;
-		else if(axis == m_secondaryFireAxis)
-			m_secondaryFireFactor = axisFactor;
+		else if(axis == m_gamepad.map.primaryFireAxis)
+			m_gamepad.primaryFireFactor = axisFactor;
+		else if(axis == m_gamepad.map.secondaryFireAxis)
+			m_gamepad.secondaryFireFactor = axisFactor;
 	}
 	void GameState::ProcessControllerRemoved()
 	{
@@ -200,65 +171,56 @@ namespace Space
 	}
 	void GameState::ResetController()
 	{
-		m_gamepadZoomEngaged = false;
-		m_gamepadZoomOutFactor = 0.0f;
-		m_gamepadTurnFactor = 0.0f;
-		m_gamepadThrustFactor = 0.0f;
-		m_gamepadBrakeFactor = 0.0f;
-		m_primaryFireFactor = 0.0f;
-		m_secondaryFireFactor = 0.0f;
+		m_gamepad.zoomIn = false;
+		m_gamepad.zoomOut = false;
+		m_gamepad.turnFactor = 0.0f;
+		m_gamepad.thrustFactor = 0.0f;
+		m_gamepad.brakeFactor = 0.0f;
+		m_gamepad.boost = false;
+		m_gamepad.primaryFireFactor = 0.0f;
+		m_gamepad.secondaryFireFactor = 0.0f;
 
-		m_zoomInKeyPressed = false;
-		m_zoomOutKeyPressed = false;
-		m_turnLeftKeyPressed = false;
-		m_turnRightKeyPressed = false;
-		m_thrustKeyPressed = false;
-		m_brakeKeyPressed = false;
-		m_primaryFireKeyPressed = false;
-		m_secondaryFireKeyPressed = false;
+		m_keyboard.zoomIn = false;
+		m_keyboard.zoomOut = false;
+		m_keyboard.turnLeft = false;
+		m_keyboard.turnRight = false;
+		m_keyboard.thrust = false;
+		m_keyboard.brake = false;
+		m_keyboard.primaryFire = false;
+		m_keyboard.secondaryFire = false;
 	}
 	void GameState::UpdatePlayerController()
 	{
 		// Zooming
-		if(m_zoomInKeyPressed && !m_zoomOutKeyPressed)
+		bool zoomIn = m_gamepad.zoomIn || m_keyboard.zoomIn;
+		bool zoomOut = m_gamepad.zoomOut || m_keyboard.zoomOut;
+		if(zoomIn && !zoomOut)
 			m_playerController.zoomOutFactor = -1.0f;
-		else if(!m_zoomInKeyPressed && m_zoomOutKeyPressed)
+		else if(!zoomIn && zoomOut)
 			m_playerController.zoomOutFactor = 1.0f;
-		else if(m_gamepadZoomEngaged)
-			m_playerController.zoomOutFactor = m_gamepadZoomOutFactor;
 		else
 			m_playerController.zoomOutFactor = 0.0f;
 
 		// Turning
-		if(m_turnLeftKeyPressed && !m_turnRightKeyPressed)
+		if(m_keyboard.turnLeft && !m_keyboard.turnRight)
 			m_playerController.turnFactor = 1.0f;
-		else if(!m_turnLeftKeyPressed && m_turnRightKeyPressed)
+		else if(!m_keyboard.turnLeft && m_keyboard.turnRight)
 			m_playerController.turnFactor = -1.0f;
 		else
-			m_playerController.turnFactor = m_gamepadTurnFactor;
+			m_playerController.turnFactor = m_gamepad.turnFactor;
 
 		// Thrusting
-		if(m_thrustKeyPressed)
-			m_playerController.thrustFactor = 1.0f;
-		else
-			m_playerController.thrustFactor = m_gamepadThrustFactor;
+		m_playerController.thrustFactor = m_keyboard.thrust ? 1.0f : m_gamepad.thrustFactor;
 
 		// Braking
-		if(m_brakeKeyPressed)
-			m_playerController.brakeFactor = 1.0f;
-		else
-			m_playerController.brakeFactor = m_gamepadBrakeFactor;
+		m_playerController.brakeFactor = m_keyboard.brake ? 1.0f : m_gamepad.brakeFactor;
+
+		// Boosting
+		m_playerController.boost = m_keyboard.boost || m_gamepad.boost;
 
 		// Firing
-		if(m_primaryFireKeyPressed)
-			m_playerController.primaryFireFactor = 1.0f;
-		else
-			m_playerController.primaryFireFactor = m_primaryFireFactor;
-
-		if(m_secondaryFireKeyPressed)
-			m_playerController.secondaryFireFactor = 1.0f;
-		else
-			m_playerController.secondaryFireFactor = m_secondaryFireFactor;
+		m_playerController.primaryFireFactor = m_keyboard.primaryFire ? 1.0f : m_gamepad.primaryFireFactor;
+		m_playerController.secondaryFireFactor = m_keyboard.secondaryFire ? 1.0f : m_gamepad.secondaryFireFactor;
 	}
 	void GameState::Draw()
 	{

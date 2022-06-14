@@ -138,6 +138,14 @@ namespace Space
 		else
 			return 0;
 	}
+	float World::GetFuelLevel(WorldID entityID) const
+	{
+		return m_fuelComponents[entityID].level;
+	}
+	float World::GetMaxFuelLevel(WorldID entityID) const
+	{
+		return m_fuelComponents[entityID].max;
+	}
 	//+-------------------------\---------------------------------------------
 	//|	 GetSmoothedTransform	| 
 	//\-------------------------/

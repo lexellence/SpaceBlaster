@@ -328,17 +328,18 @@ namespace Space
 		world.AddRotatorComponent(id, SCOUT_ROTATION_SPEED);
 		
 		world.AddThrusterComponent(id, 2);
-		
 		world.AddThruster(id, 0, m_scoutThrusterModel.animationDef, SCOUT_THRUSTER_ACCELERATION, { SCOUT_THRUSTER_OFFSET_X,  SCOUT_THRUSTER_SPREAD_Y });
 		world.AddThruster(id, 1, m_scoutThrusterModel.animationDef, SCOUT_THRUSTER_ACCELERATION, { SCOUT_THRUSTER_OFFSET_X, -SCOUT_THRUSTER_SPREAD_Y });
 		
+		world.AddFuelComponent(id, SCOUT_MAX_FUEL, SCOUT_MAX_FUEL);
+
 		world.AddBrakeComponent(id, SCOUT_BRAKE_DECELERATION);
 			
 		// Bullets
-		world.AddProjectileLauncherComponent(id, 3, false);
+		world.AddProjectileLauncherComponent(id, 1, false);
 		world.AddProjectileLauncher(id, 0, m_bulletDef, { SCOUT_PROJECTILE_OFFSET_X, 0.0f }, SCOUT_CANON_IMPULSE, SCOUT_CANON_INTERVAL, false, false);
-		world.AddProjectileLauncher(id, 1, m_bulletDef, { SCOUT_PROJECTILE_OFFSET_X,  SCOUT_PROJECTILE_SPREAD_Y }, SCOUT_CANON_IMPULSE, SCOUT_CANON_INTERVAL, false, false);
-		world.AddProjectileLauncher(id, 2, m_bulletDef, { SCOUT_PROJECTILE_OFFSET_X, -SCOUT_PROJECTILE_SPREAD_Y }, SCOUT_CANON_IMPULSE, SCOUT_CANON_INTERVAL, false, false);
+		//world.AddProjectileLauncher(id, 1, m_bulletDef, { SCOUT_PROJECTILE_OFFSET_X,  SCOUT_PROJECTILE_SPREAD_Y }, SCOUT_CANON_IMPULSE, SCOUT_CANON_INTERVAL, false, false);
+		//world.AddProjectileLauncher(id, 2, m_bulletDef, { SCOUT_PROJECTILE_OFFSET_X, -SCOUT_PROJECTILE_SPREAD_Y }, SCOUT_CANON_IMPULSE, SCOUT_CANON_INTERVAL, false, false);
 
 		world.AddHealthComponent(id, SCOUT_HP);
 		world.AddParticleExplosionOnDeathComponent(id, PARTICLE_EXPLOSION_RELATIVE_SIZE,
@@ -360,11 +361,13 @@ namespace Space
 		world.AddRotatorComponent(id, BLASTER_ROTATION_SPEED);
 
 		world.AddThrusterComponent(id, 4);
-		world.AddThruster(id, 0, m_blasterThrusterModel.animationDef, BLASTER_THRUSTER_ACCELERATION, { BLASTER_THRUSTER_OFFSET_X,  BLASTER_THRUSTER_INNER_SPREAD_Y });
-		world.AddThruster(id, 1, m_blasterThrusterModel.animationDef, BLASTER_THRUSTER_ACCELERATION, { BLASTER_THRUSTER_OFFSET_X, -BLASTER_THRUSTER_INNER_SPREAD_Y });
-		world.AddThruster(id, 2, m_blasterThrusterModel.animationDef, BLASTER_THRUSTER_ACCELERATION, { BLASTER_THRUSTER_OFFSET_X,  BLASTER_THRUSTER_OUTER_SPREAD_Y });
-		world.AddThruster(id, 3, m_blasterThrusterModel.animationDef, BLASTER_THRUSTER_ACCELERATION, { BLASTER_THRUSTER_OFFSET_X, -BLASTER_THRUSTER_OUTER_SPREAD_Y });
+		world.AddThruster(id, 0, m_blasterThrusterModel.animationDef, BLASTER_THRUSTER_ACCELERATION, { BLASTER_THRUSTER_OFFSET_X,  BLASTER_THRUSTER_INNER_SPREAD_Y }, false);
+		world.AddThruster(id, 1, m_blasterThrusterModel.animationDef, BLASTER_THRUSTER_ACCELERATION, { BLASTER_THRUSTER_OFFSET_X, -BLASTER_THRUSTER_INNER_SPREAD_Y }, false);
+		world.AddThruster(id, 2, m_blasterThrusterModel.animationDef, BLASTER_THRUSTER_ACCELERATION, { BLASTER_THRUSTER_OFFSET_X,  BLASTER_THRUSTER_OUTER_SPREAD_Y }, true);
+		world.AddThruster(id, 3, m_blasterThrusterModel.animationDef, BLASTER_THRUSTER_ACCELERATION, { BLASTER_THRUSTER_OFFSET_X, -BLASTER_THRUSTER_OUTER_SPREAD_Y }, true);
 		
+		world.AddFuelComponent(id, BLASTER_MAX_FUEL, BLASTER_MAX_FUEL);
+
 		world.AddBrakeComponent(id, BLASTER_BRAKE_DECELERATION);
 			
 		// Bullets
@@ -634,8 +637,29 @@ namespace Space
 			d2d::Window::SetColor(m_objectivesTextStyle.color);
 			d2d::Window::PushMatrix();
 			d2d::Window::Translate(m_objectivesPosition * resolution);
-			d2d::Window::DrawString(d2d::ToString(m_objectives[0].num), m_objectivesAlignment, m_objectivesTextStyle.size * resolution.y, m_objectivesTextStyle.font);
+			{
+				std::string objectivesString = d2d::ToString(m_objectives[0].num);
+				d2d::Window::DrawString(objectivesString, m_objectivesAlignment, m_objectivesTextStyle.size * resolution.y, m_objectivesTextStyle.font);
+			}
 			d2d::Window::PopMatrix();
+		}
+		if(m_playerSet)
+		{
+			if(m_world.HasComponents(m_playerID, COMPONENT_FUEL))
+			{
+				b2Vec2 resolution{ d2d::Window::GetScreenResolution() };
+				d2d::Window::SetCameraRect({ b2Vec2_zero, resolution });
+				d2d::Window::DisableTextures();
+				d2d::Window::EnableBlending();
+				d2d::Window::SetColor(m_fuelTextStyle.color);
+				d2d::Window::PushMatrix();
+				d2d::Window::Translate(m_fuelPosition * resolution);
+				{
+					std::string fuelString = d2d::ToString(m_world.GetFuelLevel(m_playerID)) + "/" + d2d::ToString(m_world.GetMaxFuelLevel(m_playerID));
+					d2d::Window::DrawString(fuelString, m_fuelAlignment, m_objectivesTextStyle.size * resolution.y, m_objectivesTextStyle.font);
+				}
+				d2d::Window::PopMatrix();
+			}
 		}
 
 	}

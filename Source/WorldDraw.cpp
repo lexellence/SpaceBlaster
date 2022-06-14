@@ -78,10 +78,17 @@ namespace Space
 				if(HasComponents(id, requiredComponents) && HasSize2D(id) && IsActive(id))
 					if(m_thrusterComponents[id].factor > 0.0f)
 					{
-						float angle{ m_smoothedTransforms[id].q.GetAngle() };
-						DrawThrusterComponent(m_thrusterComponents[id], m_sizeComponents[id], m_smoothedTransforms[id].p, angle);
-						for(const CloneBody& cloneBody : m_physicsComponents[id].cloneBodyList)
-							DrawThrusterComponent(m_thrusterComponents[id], m_sizeComponents[id], m_smoothedTransforms[id].p + GetCloneOffset(cloneBody.section), angle);
+						bool draw{ true };
+						if(HasComponents(id, COMPONENT_FUEL))
+							if(m_fuelComponents[id].level <= 0.0f)
+								draw = false;
+						if(draw)
+						{
+							float angle{ m_smoothedTransforms[id].q.GetAngle() };
+							DrawThrusterComponent(m_thrusterComponents[id], m_sizeComponents[id], m_smoothedTransforms[id].p, angle);
+							for(const CloneBody& cloneBody : m_physicsComponents[id].cloneBodyList)
+								DrawThrusterComponent(m_thrusterComponents[id], m_sizeComponents[id], m_smoothedTransforms[id].p + GetCloneOffset(cloneBody.section), angle);
+						}
 					}
 	}
 	void World::DrawThrusterComponent(const ThrusterComponent& thrusterComponent, const b2Vec2& entitySize,	

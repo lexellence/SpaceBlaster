@@ -72,6 +72,7 @@ namespace Space
 		float turnFactor{};
 		float thrustFactor{};
 		float brakeFactor{};
+		bool boost{ false };
 		float zoomOutFactor{};
 		//bool doMorphOnce{ false };
 		int numMissiles{};
@@ -125,6 +126,7 @@ namespace Space
 		COMPONENT_BRAKE 								= 1 << 13,
 		COMPONENT_PRIMARY_PROJECTILE_LAUNCHER			= 1 << 14,
 		COMPONENT_SECONDARY_PROJECTILE_LAUNCHER			= 1 << 15,
+		COMPONENT_FUEL									= 1 << 16
 		//COMPONENT_LEVEL_TAG								= 1 << 16
 		//COMPONENT_MORPH_INTO_ENTITY_ID					= 1 << 16
 	};
@@ -204,10 +206,11 @@ namespace Space
 		// Getting around
 		void AddThrusterComponent(WorldID entityID, unsigned numSlots, float initialFactor = 0.0f);
 		void AddThruster(WorldID entityID, unsigned slot, const d2d::AnimationDef& animationDef,
-			float acceleration, const b2Vec2& localRelativePosition);
+			float acceleration, const b2Vec2& localRelativePosition, bool temporarilyDisabled = false);
 		void RemoveThruster(WorldID entityID, unsigned slot);
 		bool IsValidThrusterSlot(WorldID entityID, unsigned slot) const;
 		void AddSetThrustFactorAfterDelayComponent(WorldID entityID, float thrustFactor, float delay);
+		void AddFuelComponent(WorldID entityID, float level, float max);
 		void AddRotatorComponent(WorldID entityID, float rotationSpeed);
 		void AddBrakeComponent(WorldID entityID, float deceleration);
 
@@ -225,6 +228,8 @@ namespace Space
 		bool GetClosestPhysicalEntity(const b2Vec2& position, float boudingRadius,
 			WorldID& entityIDOut, float& boundingRadiiGapOut) const;
 		int GetDrawLayer(WorldID entityID) const;
+		float GetFuelLevel(WorldID entityID) const;
+		float GetMaxFuelLevel(WorldID entityID) const;
 
 		// Callers of the following must ensure entity has a physics component
 		const b2Transform& GetSmoothedTransform(WorldID entityID) const;
@@ -308,17 +313,24 @@ namespace Space
 			d2d::Animation animation;
 			float acceleration;
 			b2Vec2 localRelativePosition;
+			float fuelPerSecond;
 		};
 		struct ThrusterComponent
 		{
 			float factor;
 			unsigned numSlots;
 			Thruster thrusters[WORLD_MAX_THRUSTER_SLOTS];
+			bool boost;
 		};
 		struct SetThrustFactorAfterDelayComponent
 		{
 			float factor;
 			float delay;
+		};
+		struct FuelComponent
+		{
+			float level;
+			float max;
 		};
 		struct BrakeComponent
 		{
@@ -375,6 +387,7 @@ namespace Space
 		void UpdatePlayerControllerComponents(float dt, PlayerController& playerController);
 		void UpdateRotatorComponents();
 		void UpdateSetThrustFactorAfterDelayComponents(float dt);
+		void ApplyThrust(WorldID id, float acceleration, float fuelRequired);
 		void UpdateThrusterComponents(float dt);
 		void UpdateBrakeComponents();
 		void UpdateProjectileLauncherComponents(float dt, bool secondaryLaunchers);
@@ -456,6 +469,7 @@ namespace Space
 		ComponentArray< RotatorComponent > m_rotatorComponents;
 		ComponentArray< SetThrustFactorAfterDelayComponent > m_setThrustFactorAfterDelayComponents;
 		ComponentArray< ThrusterComponent > m_thrusterComponents;
+		ComponentArray< FuelComponent > m_fuelComponents;
 		ComponentArray< BrakeComponent > m_brakeComponents;
 		ComponentArray< ProjectileLauncherComponent > m_primaryProjectileLauncherComponents;
 		ComponentArray< ProjectileLauncherComponent > m_secondaryProjectileLauncherComponents;
