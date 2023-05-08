@@ -2,7 +2,7 @@
   firstLevel: LEVEL0
   // Both width and height will be restricted  
   // to this range regardless of aspect ratio.
-  cameraDimensionRange: [ 75, 300 ]
+  cameraDimensionRange: [ 75.0, 300.0 ]
   cameraZoomSpeed: 1.2
   cameraInitialZoomOutPercent: 0.5
   starfield: 
@@ -12,8 +12,8 @@
     speedFactorRange: [ 0.001, 0.20 ]
     pointSizeIndexRange: [ 0, 7 ]
     maxPointSizeIndexVariation: 2
-    colorMin: [ 1, 1, 1, 0.3 ]
-    colorMax: [ 1, 1, 1, 0.95 ]
+    colorMin: [ 1.0, 1.0, 1.0, 0.3 ]
+    colorMax: [ 1.0, 1.0, 1.0, 0.95 ]
     maxAlphaVariation: 0.2
   }
 //   constants: 

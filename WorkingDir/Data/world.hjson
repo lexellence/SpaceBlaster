@@ -3,7 +3,7 @@
   drawFixturesLineWidth: 1.5
   debugDrawFixtures: false
   drawLayerRange: [ -3, 3 ]
-  stepsPerSecond: 120
+  stepsPerSecond: 120.0
   maxUpdateTime: 1.0
   velocityIterationsPerStep: 5
   positionIterationsPerStep: 2
@@ -19,8 +19,8 @@
     damagedThreshold: 0.6667
     badlyDamagedThreshold: 0.3333
     backgroundColor:	  [ 0.6, 0.6, 0.6, 0.3 ]
-    hardlyDamagedColor: [   0,   1,   0,   1 ]
-    damagedColor:		    [   1, 0.55,  0,   1 ]
-    badlyDamagedColor:  [ 0.55,  0,   0,   1 ]
+    hardlyDamagedColor: [   0.0,   1.0,   0.0,   1.0 ]
+    damagedColor:		    [   1.0, 0.55,  0.0,   1.0 ]
+    badlyDamagedColor:  [ 0.55,  0.0,   0.0,   1.0 ]
   }
 }

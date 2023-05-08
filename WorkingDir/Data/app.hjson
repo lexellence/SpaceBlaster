@@ -1,10 +1,10 @@
 {
   gamepads: {
     controllerDBFilePath: "Controllers\\gamecontrollerdb.txt"
-    deadZoneStick: 6700
-    deadZoneTrigger: 1000
-    aliveZoneStick: 2000
-    aliveZoneTrigger: 2000
+    deadZoneStick: 6700.0
+    deadZoneTrigger: 1000.0
+    aliveZoneStick: 2000.0
+    aliveZoneTrigger: 2000.0
   }
   window: {
     title: "Space Blaster"
@@ -15,8 +15,8 @@
     doubleBuffer: true
     antiAliasingSamples: 4  // 1 disables AA, 2-16 enables AA
     colorChannelBits: [ 8, 8, 8, 8 ]
-    clearColor: [ 0, 0, 0, 1 ]
-    fpsUpdatesPerSecond: 2
+    clearColor: [ 0.0, 0.0, 0.0, 1.0 ]
+    fpsUpdatesPerSecond: 2.0
     imageExtensions: [ "png", "jpg", "tif", "webp" ]
     glVersion: [ 2, 1 ]
     pointSmoothing: true
