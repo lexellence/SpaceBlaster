@@ -29,7 +29,7 @@ namespace Space
 	}
 	void Game::Init()
 	{
-		m_settings.LoadFrom("Data\\game.hjson");
+		m_settings.LoadFrom("Data/game.hjson");
 		InitLevel(m_settings.firstLevel);
 	}
 	void Game::InitLevel(const std::string& level)

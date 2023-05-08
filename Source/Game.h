@@ -216,7 +216,7 @@ namespace Space
 		std::vector<Objective> m_objectives;
 
 		// Fonts
-		d2d::FontReference m_hudFont{ "Fonts\\OrbitronLight.otf" };
+		d2d::FontReference m_hudFont{ "Fonts/OrbitronLight.otf" };
 		float m_hudFontSize{ 0.05f };
 
 		// HUD Objectives
@@ -240,38 +240,59 @@ namespace Space
 		//+---------------------------\-------------------------------
 		//|		    Textures		  |
 		//\---------------------------/-------------------------------
-		d2d::TextureReference m_blasterTexture{ "Textures\\BigShips\\ship001.png" };
-		d2d::TextureReference m_scoutTexture{ "Textures\\BigShips\\ship002.png" };
-		d2d::TextureReference m_thrusterTexture{ "Textures\\Effects\\thruster1.png" };
-		d2d::TextureReference m_bumperTexture{ "Textures\\Items\\repulser1.png" };
+		d2d::TextureReference m_blasterTexture{ "Textures/BigShips/ship001.png" };
+		d2d::TextureReference m_scoutTexture{ "Textures/BigShips/ship002.png" };
+		d2d::TextureReference m_thrusterTexture{ "Textures/Effects/thruster1.png" };
+		d2d::TextureReference m_bumperTexture{ "Textures/Items/repulser1.png" };
+		d2d::TextureReference m_sodaTexture{ "Textures/Items/sodacan.png" };
+		d2d::TextureReference m_melonTexture{ "Textures/Items/watermelon.png" };
+		d2d::TextureReference m_appleTexture{ "Textures/Items/apple.png" };
+
+		// Icons
+		std::array<d2d::TextureReference, NUM_ICON_MODELS>
+			m_iconTextures{ "Textures/Icons/Solitaire.png"s, "Textures/Icons/RegistryDocument.png"s,
+			"Textures/Icons/OutlookExpress.png"s, "Textures/Icons/NetworkSetup.png"s,
+			"Textures/Icons/MyDocuments.png"s, "Textures/Icons/MyComputer.png"s,
+			"Textures/Icons/Mouse.png"s, "Textures/Icons/MediaCenterFile.png"s,
+			"Textures/Icons/GenericVideo.png"s, "Textures/Icons/MediaCenterFile.png"s,
+			"Textures/Icons/GenericTextDocument.png"s, "Textures/Icons/GenericMedia.png"s,
+			"Textures/Icons/GenericDocument.png"s, "Textures/Icons/GenericAudio.png"s,
+			"Textures/Icons/GameController.png"s, "Textures/Icons/Font.png"s,
+			"Textures/Icons/FolderClosed.png"s, "Textures/Icons/FloppyDisk.png"s,
+			"Textures/Icons/EntireNetwork.png"s, "Textures/Icons/DVD-RW.png"s,
+			"Textures/Icons/DLL.png"s, "Textures/Icons/DiskDefragmenter.png"s,
+			"Textures/Icons/CommandPrompt.png"s, "Textures/Icons/ChangeOrRemovePrograms.png"s,
+			"Textures/Icons/Calculator.png"s, "Textures/Icons/BluetoothDevices.png"s,
+			"Textures/Icons/BAT.png"s,
+			"Textures/Icons/IE6.png"s, "Textures/Icons/GIF.png"s };
 		// XLarge
 		std::array<d2d::TextureReference, NUM_XLARGE_ASTEROID_MODELS>
-			m_asteroidXLargeTextures{ "Textures\\Asteroids\\asteroidxlarge1.png"s, "Textures\\Asteroids\\asteroidxlarge2.png"s,
-									  "Textures\\Asteroids\\asteroidxlarge3.png"s, "Textures\\Asteroids\\asteroidxlarge4.png"s };
+			m_asteroidXLargeTextures{ "Textures/Asteroids/asteroidxlarge1.png"s, "Textures/Asteroids/asteroidxlarge2.png"s,
+			"Textures/Asteroids/asteroidxlarge3.png"s, "Textures/Asteroids/asteroidxlarge4.png"s };
 		std::array<d2d::TextureReference, NUM_XLARGE_ASTEROID_MODELS>
-			m_rockXLargeTextures{ "Textures\\Asteroids\\rockxlarge1.png"s, "Textures\\Asteroids\\rockxlarge2.png"s,
-								  "Textures\\Asteroids\\rockxlarge3.png"s, "Textures\\Asteroids\\rockxlarge4.png"s };
+			m_rockXLargeTextures{ "Textures/Asteroids/rockxlarge1.png"s, "Textures/Asteroids/rockxlarge2.png"s,
+			"Textures/Asteroids/rockxlarge3.png"s, "Textures/Asteroids/rockxlarge4.png"s };
 		// Large
 		std::array<d2d::TextureReference, NUM_LARGE_ASTEROID_MODELS>
-			m_asteroidLargeTextures{ "Textures\\Asteroids\\asteroidlarge1.png"s, "Textures\\Asteroids\\asteroidlarge2.png"s };
+			m_asteroidLargeTextures{ "Textures/Asteroids/asteroidlarge1.png"s, "Textures/Asteroids/asteroidlarge2.png"s };
 		std::array<d2d::TextureReference, NUM_LARGE_ASTEROID_MODELS>
-			m_rockLargeTextures{ "Textures\\Asteroids\\rocklarge1.png"s, "Textures\\Asteroids\\rocklarge2.png"s };
+			m_rockLargeTextures{ "Textures/Asteroids/rocklarge1.png"s, "Textures/Asteroids/rocklarge2.png"s };
 		// Medium
 		std::array<d2d::TextureReference, NUM_MEDIUM_ASTEROID_MODELS>
-			m_asteroidMediumTextures{ "Textures\\Asteroids\\asteroidmedium1.png"s, "Textures\\Asteroids\\asteroidmedium2.png"s };
+			m_asteroidMediumTextures{ "Textures/Asteroids/asteroidmedium1.png"s, "Textures/Asteroids/asteroidmedium2.png"s };
 		std::array<d2d::TextureReference, NUM_MEDIUM_ASTEROID_MODELS>
-			m_rockMediumTextures{ "Textures\\Asteroids\\rockmedium1.png"s, "Textures\\Asteroids\\rockmedium2.png"s };
+			m_rockMediumTextures{ "Textures/Asteroids/rockmedium1.png"s, "Textures/Asteroids/rockmedium2.png"s };
 		// Small
 		std::array<d2d::TextureReference, NUM_SMALL_ASTEROID_MODELS>
-			m_asteroidSmallTextures{ "Textures\\Asteroids\\asteroidsmall1.png"s, "Textures\\Asteroids\\asteroidsmall2.png"s };
+			m_asteroidSmallTextures{ "Textures/Asteroids/asteroidsmall1.png"s, "Textures/Asteroids/asteroidsmall2.png"s };
 		std::array<d2d::TextureReference, NUM_SMALL_ASTEROID_MODELS>
-			m_rockSmallTextures{ "Textures\\Asteroids\\rocksmall1.png"s, "Textures\\Asteroids\\rocksmall2.png"s };
+			m_rockSmallTextures{ "Textures/Asteroids/rocksmall1.png"s, "Textures/Asteroids/rocksmall2.png"s };
 		// Projectiles
-		d2d::TextureReference m_bulletTexture{ "Textures\\Projectiles\\fireball1.png" };
+		d2d::TextureReference m_bulletTexture{ "Textures/Projectiles/fireball1.png" };
 		std::array<d2d::TextureReference, 2>
-			m_missileTextures{ "Textures\\Projectiles\\rocket005a.png"s, "Textures\\Projectiles\\rocket005b.png"s };
+			m_missileTextures{ "Textures/Projectiles/rocket005a.png"s, "Textures/Projectiles/rocket005b.png"s };
 		std::array<d2d::TextureReference, 2>
-			m_fatMissileTextures{ "Textures\\Projectiles\\rocket006a.png"s, "Textures\\Projectiles\\rocket006b.png"s };
+			m_fatMissileTextures{ "Textures/Projectiles/rocket006a.png"s, "Textures/Projectiles/rocket006b.png"s };
 
 		//+---------------------------\-------------------------------
 		//|			 Models 		  |

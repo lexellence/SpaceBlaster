@@ -107,7 +107,7 @@ namespace Space
 			bool secondaryFire;
 		} m_keyboard;
 
-		d2d::FontReference m_orbitronLightFont{ "Fonts\\OrbitronLight.otf"s };
+		d2d::FontReference m_orbitronLightFont{ "Fonts/OrbitronLight.otf"s };
 
 		// Pause menu button text
 		std::string m_resumeString{ "RESUME" };

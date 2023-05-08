@@ -36,7 +36,7 @@ namespace Space
 		d2d::Init(d2LogSeverityTrace, "SpaceLog.txt");
 		{
 			AppDef settings;
-			settings.LoadFrom("Data\\app.hjson");
+			settings.LoadFrom("Data/app.hjson");
 
 			d2d::InitGamepads(settings.gamepads);
 			d2d::Window::Init(settings.window);

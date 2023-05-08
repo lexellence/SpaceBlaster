@@ -26,7 +26,7 @@ namespace Space
 	}
 	void World::Init(const d2d::Rect& rect)
 	{
-		m_settings.LoadFrom("Data\\world.hjson");
+		m_settings.LoadFrom("Data/world.hjson");
 
 		// Destroy any existing Box2D physics world
 		m_timestepAccumulator = 0.0f;

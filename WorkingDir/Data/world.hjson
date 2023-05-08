@@ -1,5 +1,5 @@
 {
-  shapeFilePath: "Shapes\\sprites-d2d.xml"
+  shapeFilePath: "Shapes/sprites-d2d.xml"
   drawFixturesLineWidth: 1.5
   debugDrawFixtures: false
   drawLayerRange: [ -3, 3 ]

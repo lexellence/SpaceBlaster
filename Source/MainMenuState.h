@@ -21,7 +21,7 @@ namespace Space
 		void Draw() override;
 
 	private:
-		d2d::FontReference m_orbitronLightFont{ "Fonts\\OrbitronLight.otf" };
+		d2d::FontReference m_orbitronLightFont{ "Fonts/OrbitronLight.otf" };
 		
 		const std::string m_newGameString{ "NEW GAME" };
 		const std::string m_quitString{ "QUIT" };

@@ -1,6 +1,6 @@
 {
   gamepads: {
-    controllerDBFilePath: "Controllers\\gamecontrollerdb.txt"
+    controllerDBFilePath: "Controllers/gamecontrollerdb.txt"
     deadZoneStick: 6700.0
     deadZoneTrigger: 1000.0
     aliveZoneStick: 2000.0

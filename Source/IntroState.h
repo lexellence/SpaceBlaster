@@ -21,8 +21,8 @@ namespace Space
 		void Draw() override;
 
 	private:
-		d2d::FontReference m_alexBrushFont{ "Fonts\\AlexBrush.otf" };
-		d2d::FontReference m_orbitronLightFont{ "Fonts\\OrbitronLight.otf" };
+		d2d::FontReference m_alexBrushFont{ "Fonts/AlexBrush.otf" };
+		d2d::FontReference m_orbitronLightFont{ "Fonts/OrbitronLight.otf" };
 
 		const std::string m_title{ "Space Blaster" };
 		const d2d::Alignment m_titleAlignment{ d2d::Alignment::CENTER_BOTTOM };
