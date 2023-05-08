@@ -3751,6 +3751,20 @@
 				</fixtureGroup>
 			</fixtureGroups>
 		</body>
+		<body name="icon" width="1024.000" height="1024.000">
+			<fixtureGroups>
+				<fixtureGroup type="POLYGON">
+					<polygons>
+            <polygon>
+							<point x="-512.000" y="512.000"/>
+							<point x="-512.000" y="-512.000"/>
+							<point x="512.000" y="-512.000"/>
+							<point x="512.000" y="512.000"/>
+						</polygon>
+					</polygons>
+				</fixtureGroup>
+			</fixtureGroups>
+		</body>
 	</bodies>
 	<metadata>
 		<format>1</format>

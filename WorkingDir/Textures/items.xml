@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with TexturePacker https://www.codeandweb.com/texturepacker -->
-<!-- $TexturePacker:SmartUpdate:ba11adadf2b8c91fcbd8ecda13f87148:53aac833b695f6214ad3e9e86b4a642f:91e51333c99e7367fd34b842dd254a45$ -->
+<!-- $TexturePacker:SmartUpdate:250c432ef04888e06f1f3ec930c7a023:e9061981599c309f06a486f20622c9e6:91e51333c99e7367fd34b842dd254a45$ -->
 <!--Format:
 n  => name of the sprite
 x  => sprite x pos in texture
@@ -19,14 +19,17 @@ vertices   => points in sprite coordinate system (x0,y0,x1,y1,x2,y2, ...)
 verticesUV => points in sheet coordinate system (x0,y0,x1,y1,x2,y2, ...)
 triangles  => sprite triangulation, 3 vertex indices per triangle
 -->
-<TextureAtlas imagePath="items.png" width="114" height="63">
-    <sprite n="capsule1half.png" x="46" y="43" w="25" h="19" pX="0.5" pY="0.5"/>
-    <sprite n="capsule1lit.png" x="73" y="37" w="19" h="25" pX="0.5" pY="0.5" r="y"/>
-    <sprite n="capsule1unlit.png" x="94" y="37" w="19" h="25" pX="0.5" pY="0.5" r="y"/>
-    <sprite n="capsule2.png" x="72" y="1" w="32" h="34" pX="0.5" pY="0.5" r="y"/>
-    <sprite n="quadcanister1.png" x="32" y="1" w="38" h="40" pX="0.5" pY="0.5"/>
+<TextureAtlas imagePath="items.png" width="128" height="128">
+    <sprite n="apple.png" x="32" y="1" w="24" h="26" pX="0.5" pY="0.5"/>
+    <sprite n="capsule1half.png" x="41" y="45" w="19" h="25" pX="0.5" pY="0.5" r="y"/>
+    <sprite n="capsule1lit.png" x="58" y="1" w="19" h="25" pX="0.5" pY="0.5" r="y"/>
+    <sprite n="capsule1unlit.png" x="55" y="88" w="19" h="25" pX="0.5" pY="0.5" r="y"/>
+    <sprite n="capsule2.png" x="1" y="88" w="32" h="34" pX="0.5" pY="0.5" r="y"/>
+    <sprite n="quadcanister1.png" x="1" y="46" w="38" h="40" pX="0.5" pY="0.5"/>
     <sprite n="repulser1.png" x="1" y="1" w="29" h="43" pX="0.5" pY="0.5"/>
-    <sprite n="spaceman1-0.png" x="1" y="46" w="13" h="14" pX="0.5" pY="0.5"/>
-    <sprite n="spaceman1-1.png" x="16" y="46" w="13" h="14" pX="0.5" pY="0.5"/>
-    <sprite n="spaceman1-2.png" x="31" y="46" w="13" h="14" pX="0.5" pY="0.5"/>
+    <sprite n="sodacan.png" x="79" y="1" w="22" h="16" pX="0.5" pY="0.5" r="y"/>
+    <sprite n="spaceman1-0.png" x="32" y="29" w="13" h="14" pX="0.5" pY="0.5"/>
+    <sprite n="spaceman1-1.png" x="47" y="29" w="13" h="14" pX="0.5" pY="0.5"/>
+    <sprite n="spaceman1-2.png" x="41" y="72" w="13" h="14" pX="0.5" pY="0.5"/>
+    <sprite n="watermelon.png" x="35" y="88" w="18" h="30" pX="0.5" pY="0.5" r="y"/>
 </TextureAtlas>

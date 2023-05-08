@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with TexturePacker https://www.codeandweb.com/texturepacker -->
-<!-- $TexturePacker:SmartUpdate:ad56961e8960140c0b3c4bb9b3eb91dc:e1decc7b8c2a03516e965aca88399c9a:0dbeed7acf6c3264861a2e70e992bcae$ -->
+<!-- $TexturePacker:SmartUpdate:aef523a7e54f51d2991a2f28694b1d9b:e1decc7b8c2a03516e965aca88399c9a:0dbeed7acf6c3264861a2e70e992bcae$ -->
 <!--Format:
 n  => name of the sprite
 x  => sprite x pos in texture
@@ -19,9 +19,9 @@ vertices   => points in sprite coordinate system (x0,y0,x1,y1,x2,y2, ...)
 verticesUV => points in sheet coordinate system (x0,y0,x1,y1,x2,y2, ...)
 triangles  => sprite triangulation, 3 vertex indices per triangle
 -->
-<TextureAtlas imagePath="ui.png" width="276" height="244">
+<TextureAtlas imagePath="ui.png" width="256" height="512">
     <sprite n="radar1.png" x="1" y="1" w="242" h="242" pX="0.5" pY="0.5" oX="7" oY="7" oW="256" oH="256"/>
-    <sprite n="shield_gold.png" x="245" y="65" w="30" h="30" pX="0.5" pY="0.5"/>
-    <sprite n="shieldBronze.png" x="245" y="1" w="30" h="30" pX="0.5" pY="0.5"/>
-    <sprite n="shieldSilver.png" x="245" y="33" w="30" h="30" pX="0.5" pY="0.5"/>
+    <sprite n="shield_gold.png" x="65" y="245" w="30" h="30" pX="0.5" pY="0.5"/>
+    <sprite n="shieldBronze.png" x="1" y="245" w="30" h="30" pX="0.5" pY="0.5"/>
+    <sprite n="shieldSilver.png" x="33" y="245" w="30" h="30" pX="0.5" pY="0.5"/>
 </TextureAtlas>

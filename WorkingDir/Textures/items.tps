@@ -6,7 +6,7 @@
         <key>texturePackerVersion</key>
         <string>4.6.3</string>
         <key>fileName</key>
-        <string>D:/Development/Projects/Space/SpaceOutput/Textures/items.tps</string>
+        <string>C:/Development/Projects/Space/repo/WorkingDir/Textures/items.tps</string>
         <key>autoSDSettings</key>
         <array>
             <struct type="AutoSDSettings">
@@ -108,7 +108,7 @@
             <key>freeSizeMode</key>
             <enum type="AlgorithmSettings::AlgorithmFreeSizeMode">Best</enum>
             <key>sizeConstraints</key>
-            <enum type="AlgorithmSettings::SizeConstraints">AnySize</enum>
+            <enum type="AlgorithmSettings::SizeConstraints">POT</enum>
             <key>forceSquared</key>
             <false/>
             <key>maxRects</key>
@@ -183,6 +183,19 @@
         </struct>
         <key>individualSpriteSettings</key>
         <map type="IndividualSpriteSettingsMap">
+            <key type="filename">Items/apple.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>6,7,12,13</rect>
+                <key>scale9Paddings</key>
+                <rect>6,7,12,13</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
             <key type="filename">Items/capsule1half.png</key>
             <key type="filename">Items/capsule1lit.png</key>
             <key type="filename">Items/capsule1unlit.png</key>
@@ -237,6 +250,19 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
+            <key type="filename">Items/sodacan.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>4,6,8,11</rect>
+                <key>scale9Paddings</key>
+                <rect>4,6,8,11</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
             <key type="filename">Items/spaceman1-0.png</key>
             <key type="filename">Items/spaceman1-1.png</key>
             <key type="filename">Items/spaceman1-2.png</key>
@@ -249,6 +275,19 @@
                 <rect>3,4,7,7</rect>
                 <key>scale9Paddings</key>
                 <rect>3,4,7,7</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">Items/watermelon.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>8,5,15,9</rect>
+                <key>scale9Paddings</key>
+                <rect>8,5,15,9</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
