@@ -69,7 +69,7 @@ namespace Space
 				{
 					m_destructionDelayComponents[id] -= dt;
 					if(m_destructionDelayComponents[id] <= 0.0f)
-						m_destroyBuffer.push(id);
+						Destroy(id);
 				}
 	}
 	//+------------------------\----------------------------------
@@ -156,7 +156,7 @@ namespace Space
 					ApplyThrust(id, sumAccelerations);
 
 					// Update thruster animations
-					for (unsigned i = 0; i < m_thrusterComponents[id].numSlots; ++i)
+					for(unsigned i = 0; i < m_thrusterComponents[id].numSlots; ++i)
 						m_thrusterComponents[id].thrusters[i].animation.Update(dt);
 				}
 	}
@@ -256,7 +256,7 @@ namespace Space
 								b2Vec2 localBulletPosition{ launcher.localRelativePosition * m_sizeComponents[id] };
 								b2Vec2 globalBulletPosition{ b2Mul(transform, localBulletPosition) };
 								if(m_projectileLauncherCallbackPtr)
-									m_projectileLauncherCallbackPtr->LaunchProjectile(launcher.projectileDef, 
+									m_projectileLauncherCallbackPtr->LaunchProjectile(launcher.projectileDef,
 										globalBulletPosition, transform.q.GetAngle(), launcher.impulse,
 										b2BodyPtr->GetLinearVelocity(), id);
 								launcher.intervalAccumulator = 0.0f;
@@ -277,7 +277,7 @@ namespace Space
 				m_drawAnimationComponents[id].animation.Update(dt);
 				//bool notAnimated{ m_drawAnimationComponents[id].type == d2d::AnimationType::NOT_ANIMATED };
 				if(!m_drawAnimationComponents[id].animation.IsAnimated() && HasFlags(id, FLAG_DESTRUCTION_ON_ANIMATION_COMPLETION))
-					m_destroyBuffer.push(id);
+					Destroy(id);
 			}
 	}
 	//+-------------\---------------------------------------------
@@ -285,6 +285,7 @@ namespace Space
 	//\-------------/---------------------------------------------
 	void World::UpdatePhysics(float dt)
 	{
+		ProcessDestroyBuffer();
 		SaveVelocities();
 		ResetSmoothStates();
 		SyncClones();
@@ -376,14 +377,14 @@ namespace Space
 
 					cloneSyncData.positionNeedsSync = NeedsSync(cloneBody.b2BodyPtr->GetPosition(), mainB2BodyPtr->GetPosition() + GetCloneOffset(cloneBody.section));
 					cloneSyncData.velocityNeedsSync = NeedsSync(cloneBody.b2BodyPtr->GetLinearVelocity(), mainB2BodyPtr->GetLinearVelocity());
-					cloneSyncData.angleNeedsSync	= NeedsSync(cloneBody.b2BodyPtr->GetAngle(), angle);
+					cloneSyncData.angleNeedsSync = NeedsSync(cloneBody.b2BodyPtr->GetAngle(), angle);
 					cloneSyncData.angularVelocityNeedsSync = NeedsSync(cloneBody.b2BodyPtr->GetAngularVelocity(), angularVelocity);
 
 					cloneSyncData.needsReactivation = (cloneSyncData.positionNeedsSync || cloneSyncData.angleNeedsSync);
 					if(cloneSyncData.needsReactivation)
 						cloneBody.b2BodyPtr->SetEnabled(false);
 				}
-					
+
 			}
 		EmptyPhysicsStep();
 
@@ -420,7 +421,7 @@ namespace Space
 	bool World::NeedsSync(const b2Vec2& actualValue, const b2Vec2& perfectValue) const
 	{
 		return NeedsSync(actualValue.x, perfectValue.x) ||
-			   NeedsSync(actualValue.y, perfectValue.y);
+			NeedsSync(actualValue.y, perfectValue.y);
 	}
 	void World::ProcessDestroyBuffer()
 	{
@@ -529,7 +530,7 @@ namespace Space
 			for(WorldID id = 0; id < WORLD_MAX_ENTITIES; ++id)
 				if(HasPhysics(id) && IsActive(id))
 					if(m_physicsWrapDatas[id].requiresManualWrapping)
-							m_physicsComponents[id].mainBody.b2BodyPtr->SetEnabled(false);
+						m_physicsComponents[id].mainBody.b2BodyPtr->SetEnabled(false);
 			EmptyPhysicsStep();
 
 			// Manual wraps
@@ -583,33 +584,33 @@ namespace Space
 	//		to the clone section that the entity wandered into and returns true.
 	//	Otherwise, return false to indicate no wrap is needed.
 	//+-----------------------------------------------------------------------
-	 bool World::GetCloneSectionFromWrapData(const PhysicsWrapData& wrapData, CloneSection& cloneSectionOut) const
+	bool World::GetCloneSectionFromWrapData(const PhysicsWrapData& wrapData, CloneSection& cloneSectionOut) const
 	{
-		 if(wrapData.crossedLeftBound)
-		 {
-			 if(wrapData.crossedLowerBound)
-				 cloneSectionOut = CloneSection::BOTTOM_LEFT;
-			 else if(wrapData.crossedUpperBound)
-				 cloneSectionOut = CloneSection::TOP_LEFT;
-			 else
-				 cloneSectionOut = CloneSection::LEFT;
-		 }
-		 else if(wrapData.crossedRightBound)
-		 {
-			 if(wrapData.crossedLowerBound)
-				 cloneSectionOut = CloneSection::BOTTOM_RIGHT;
-			 else if(wrapData.crossedUpperBound)
-				 cloneSectionOut = CloneSection::TOP_RIGHT;
-			 else
-				 cloneSectionOut = CloneSection::RIGHT;
-		 }
-		 else if(wrapData.crossedLowerBound)
-			 cloneSectionOut = CloneSection::BOTTOM;
-		 else if(wrapData.crossedUpperBound)
-			 cloneSectionOut = CloneSection::TOP;
-		 else
-			 return false;
-		 return true;
+		if(wrapData.crossedLeftBound)
+		{
+			if(wrapData.crossedLowerBound)
+				cloneSectionOut = CloneSection::BOTTOM_LEFT;
+			else if(wrapData.crossedUpperBound)
+				cloneSectionOut = CloneSection::TOP_LEFT;
+			else
+				cloneSectionOut = CloneSection::LEFT;
+		}
+		else if(wrapData.crossedRightBound)
+		{
+			if(wrapData.crossedLowerBound)
+				cloneSectionOut = CloneSection::BOTTOM_RIGHT;
+			else if(wrapData.crossedUpperBound)
+				cloneSectionOut = CloneSection::TOP_RIGHT;
+			else
+				cloneSectionOut = CloneSection::RIGHT;
+		}
+		else if(wrapData.crossedLowerBound)
+			cloneSectionOut = CloneSection::BOTTOM;
+		else if(wrapData.crossedUpperBound)
+			cloneSectionOut = CloneSection::TOP;
+		else
+			return false;
+		return true;
 	}
 	//+---------------------------------\-------------------------------------
 	//|     GetOpposingCloneSection     | (private)
@@ -655,19 +656,13 @@ namespace Space
 	//\------------------------/----------------------------------
 	bool World::ShouldCollide(b2Fixture* fixturePtr1, b2Fixture* fixturePtr2)
 	{
-		d2Assert(fixturePtr1 && fixturePtr2 && "Box2D Bug");
-
-		b2Body* b2BodyPtr1{ fixturePtr1->GetBody() };
-		b2Body* b2BodyPtr2{ fixturePtr2->GetBody() };
-		d2Assert(b2BodyPtr1 && b2BodyPtr2 && "Box2D Bug");
-
-		Body* bodyPtr1{ GetUserBodyPtr(b2BodyPtr1) };
-		Body* bodyPtr2{ GetUserBodyPtr(b2BodyPtr2) };
+		Body* bodyPtr1 = GetUserBodyFromFixture(fixturePtr1);
+		Body* bodyPtr2 = GetUserBodyFromFixture(fixturePtr2);
 		d2Assert(bodyPtr1 && bodyPtr2);
 		d2Assert(bodyPtr1->b2BodyPtr && bodyPtr2->b2BodyPtr);
 
 		// Ignore disabled collisions
-		if(m_physicsComponents[bodyPtr1->entityID].disableCollisions || 
+		if(m_physicsComponents[bodyPtr1->entityID].disableCollisions ||
 			m_physicsComponents[bodyPtr2->entityID].disableCollisions)
 			return false;
 
@@ -676,9 +671,13 @@ namespace Space
 			if(bodyPtr1->isClone && bodyPtr2->isClone)
 				return false;
 
-		// Ignore collisions with parents (if flag is set)
+		// Collisions with exit
 		WorldID id1{ bodyPtr1->entityID };
 		WorldID id2{ bodyPtr2->entityID };
+		PreSolveExit(id1, id2);
+		PreSolveExit(id2, id1);
+
+		// Ignore collisions with parents (if flag is set)
 		bool entity1IsParentOf2{ HasComponents(id2, COMPONENT_PARENT) && m_parentComponents[id2] == id1 };
 		bool entity2IsParentOf1{ HasComponents(id1, COMPONENT_PARENT) && m_parentComponents[id1] == id2 };
 		if((entity2IsParentOf1 && HasFlags(id1, FLAG_IGNORE_PARENT_COLLISIONS_UNTIL_FIRST_CONTACT_END)) ||
@@ -693,88 +692,141 @@ namespace Space
 			return filter1.groupIndex > 0;
 		else
 			return (filter1.maskBits & filter2.categoryBits) != 0 &&
-					(filter1.categoryBits & filter2.maskBits) != 0;
+			(filter1.categoryBits & filter2.maskBits) != 0;
 	}
 	void World::BeginContact(b2Contact* contactPtr)
 	{	}
 	void World::PreSolve(b2Contact* contactPtr, const b2Manifold* oldManifoldPtr)
-	{	}
+	{
+		d2Assert(contactPtr && oldManifoldPtr && "Box2D Bug");
+		Body* bodyPtr1 = GetUserBodyFromFixture(contactPtr->GetFixtureA());
+		Body* bodyPtr2 = GetUserBodyFromFixture(contactPtr->GetFixtureB());
+
+		if(bodyPtr1 && bodyPtr2)
+		{
+			WorldID id1 = bodyPtr1->entityID;
+			WorldID id2 = bodyPtr2->entityID;
+
+			PreSolveIconCollector(id1, id2, contactPtr);
+			PreSolveIconCollector(id2, id1, contactPtr);
+		}
+	}
+	void World::PreSolveExit(WorldID id1, WorldID id2)
+	{
+		if(HasFlags(id1, FLAG_EXIT))
+			Exit(id2);
+	}
+	void World::Exit(WorldID id)
+	{
+		// Turn off all components except graphics
+		BitMask componentsToKeep = COMPONENT_NONE;
+		if(HasComponents(id, COMPONENT_DRAW_ANIMATION))
+			componentsToKeep |= COMPONENT_DRAW_ANIMATION;
+		if(HasComponents(id, COMPONENT_DRAW_FIXTURES))
+			componentsToKeep |= COMPONENT_DRAW_FIXTURES;
+		RemoveAllComponentsExcept(id, componentsToKeep);
+	}
+	void World::PreSolveIconCollector(WorldID id1, WorldID id2, b2Contact* contactPtr)
+	{
+		bool isCollector1 = HasComponents(id1, COMPONENT_ICON_COLLECTOR);
+		bool isIcon2 = HasComponents(id2, COMPONENT_POWERUP) && m_powerUpComponents[id2].type == PowerUpType::ICON;
+
+		if(isCollector1 && isIcon2)
+		{
+			m_iconCollectorComponents[id1].iconsCollected += m_powerUpComponents[id2].value.f;
+			m_powerUpComponents[id2].value.f = 0.0f;
+			contactPtr->SetEnabled(false);
+			Destroy(id2);
+		}
+	}
 	void World::PostSolve(b2Contact* contactPtr, const b2ContactImpulse* impulsePtr)
 	{
 		d2Assert(contactPtr && impulsePtr && "Box2D Bug");
 
-		b2Fixture* fixturePtr1{ contactPtr->GetFixtureA() };
-		b2Fixture* fixturePtr2{ contactPtr->GetFixtureB() };
-		d2Assert(fixturePtr1 && fixturePtr2 && "Box2D Bug");
-
-		b2Body* b2BodyPtr1{ fixturePtr1->GetBody() };
-		b2Body* b2BodyPtr2{ fixturePtr2->GetBody() };
-		d2Assert(b2BodyPtr1 && b2BodyPtr2 && "Box2D Bug");
-
-		Body* bodyPtr1{ GetUserBodyPtr(b2BodyPtr1) };
-		Body* bodyPtr2{ GetUserBodyPtr(b2BodyPtr2) };
-		d2Assert(bodyPtr1 && bodyPtr2);
-		d2Assert(bodyPtr1->b2BodyPtr && bodyPtr2->b2BodyPtr);
+		// Get user bodies
+		Body* bodyPtr1 = GetUserBodyFromFixture(contactPtr->GetFixtureA());
+		Body* bodyPtr2 = GetUserBodyFromFixture(contactPtr->GetFixtureB());
+		if(!bodyPtr1 || !bodyPtr2)
+			return;
 		if(bodyPtr1->isClone && bodyPtr2->isClone)
 			return;
+		if(!bodyPtr1->b2BodyPtr || !bodyPtr2->b2BodyPtr)
+			return;
 
+		// Get manifold
 		b2Manifold* manifoldPtr{ contactPtr->GetManifold() };
 		d2Assert(manifoldPtr && "Box2D Bug");
-
 		int numManifoldPoints{ manifoldPtr->pointCount };
 		d2Assert(numManifoldPoints >= 0 && numManifoldPoints <= b2_maxManifoldPoints && "Box2D Bug");
 
+		// Impulse damage
+		ApplyImpulseDamage(bodyPtr1, bodyPtr2, impulsePtr->normalImpulses, numManifoldPoints);
+	}
+	void World::ApplyImpulseDamage(Body* bodyPtr1, Body* bodyPtr2, const float* normalImpulses, unsigned numImpulses)
+	{
+		// Get impulse
 		std::stringstream damageLog;
-		if(m_settings.damageLogging)
-			damageLog << "PostSolve: Impulses(" << numManifoldPoints << "): ";
-
-		float impulse{ 0.0f };
-		for(int i = 0; i < numManifoldPoints; ++i)
+		float totalDamage{ 0.0f };
 		{
-			if(m_settings.addImpulsesForDamages)
-				impulse += impulsePtr->normalImpulses[i];
-			else
-				impulse = std::max(impulse, impulsePtr->normalImpulses[i]);
+			float impulse{ 0.0f };
 			if(m_settings.damageLogging)
-				damageLog << impulsePtr->normalImpulses[i] << ' ';
-		}
-		if(m_settings.damageLogging)
-		{
-			if(m_settings.addImpulsesForDamages)
-				damageLog << "Total Impulse: " << impulse;
-			else
-				damageLog << "Max Impulse: " << impulse;
-			
-			damageLog << "     IDs: " << bodyPtr1->entityID;
-			if(bodyPtr1->isClone)
-				damageLog << "(clone)";
-			damageLog << " and " << bodyPtr2->entityID;
-			if(bodyPtr2->isClone)
-				damageLog << "(clone)";
-			damageLog << '\n';
+				damageLog << "PostSolve: Impulses(" << numImpulses << "): ";
+
+			// Calculate final impulse
+			for(unsigned i = 0; i < numImpulses; ++i)
+			{
+				if(m_settings.addImpulsesForDamages)
+					impulse += normalImpulses[i];
+				else
+					impulse = std::max(impulse, normalImpulses[i]);
+				if(m_settings.damageLogging)
+					damageLog << normalImpulses[i] << ' ';
+			}
+			if(m_settings.damageLogging)
+			{
+				if(m_settings.addImpulsesForDamages)
+					damageLog << "Total Impulse: " << impulse;
+				else
+					damageLog << "Max Impulse: " << impulse;
+
+				damageLog << "     IDs: " << bodyPtr1->entityID;
+				if(bodyPtr1->isClone)
+					damageLog << "(clone)";
+				damageLog << " and " << bodyPtr2->entityID;
+				if(bodyPtr2->isClone)
+					damageLog << "(clone)";
+				damageLog << '\n';
+			}
+
+			// Get total damage
+			totalDamage = impulse * m_settings.damageToImpulseRatio;
 		}
 
-		float totalDamage{ impulse * m_settings.damageToImpulseRatio };
+		// If collision big enough to be worth it
 		if(totalDamage >= m_settings.minTotalCollisionDamage)
 		{
+			// Calculate individual damages
 			if(m_settings.damageLogging)
 				damageLog << "     Total Damage: " << std::setw(8) << totalDamage;
 			float damage1, damage2;
 			damage1 = damage2 = 0.5f * totalDamage;
+
+			// Apply damage 1
 			if(!bodyPtr1->isClone)
 			{
 				AdjustHealth(bodyPtr1->entityID, -damage1);
 				if(m_settings.damageLogging)
 					damageLog << " Damage: " << damage1 << " on entity " << bodyPtr1->entityID;
 			}
+
+			// Apply damage 2
 			if(!bodyPtr2->isClone)
 			{
 				AdjustHealth(bodyPtr2->entityID, -damage2);
 				if(m_settings.damageLogging)
 					damageLog << " Damage: " << damage2 << " on entity " << bodyPtr2->entityID;
 			}
-			if(m_settings.damageLogging)
-				damageLog << '\n';
+			if(m_settings.damageLogging) damageLog << '\n';
 		}
 		if(m_settings.damageLogging)
 			d2LogInfo << damageLog.str();
@@ -783,9 +835,9 @@ namespace Space
 	{
 		// Establish the pair of bodies in contact
 		d2Assert(contactPtr && "Box2D Bug");
-		std::array<Body*, 2> bodyPtrs{ 
-			GetUserBodyPtr(contactPtr->GetFixtureA()->GetBody()),
-			GetUserBodyPtr(contactPtr->GetFixtureB()->GetBody()) };
+		std::array<Body*, 2> bodyPtrs{
+			GetUserBodyFromFixture(contactPtr->GetFixtureA()),
+			GetUserBodyFromFixture(contactPtr->GetFixtureB()) };
 		d2Assert(bodyPtrs[0] && bodyPtrs[1]);
 
 		// COMPONENT_DESTRUCTION_DELAY_ON_CONTACT
@@ -800,14 +852,14 @@ namespace Space
 		for(Body* bodyPtr : bodyPtrs)
 			if(!bodyPtr->isClone && HasComponents(bodyPtr->entityID, COMPONENT_DESTRUCTION_CHANCE_ON_CONTACT))
 				if(d2d::RandomFloatPercent() <= m_destructionChanceOnContactComponents[bodyPtr->entityID])
-					m_destroyBuffer.push(bodyPtr->entityID);
+					Destroy(bodyPtr->entityID);
 
 		// FLAG_IGNORE_PARENT_COLLISIONS_UNTIL_FIRST_CONTACT_END
 		WorldID id1{ bodyPtrs[0]->entityID };
 		WorldID id2{ bodyPtrs[1]->entityID };
 		bool entity1IsParentOf2{ HasComponents(id2, COMPONENT_PARENT) && m_parentComponents[id2] == id1 };
 		bool entity2IsParentOf1{ HasComponents(id1, COMPONENT_PARENT) && m_parentComponents[id1] == id2 };
-		if(entity2IsParentOf1 && HasFlags(id1, FLAG_IGNORE_PARENT_COLLISIONS_UNTIL_FIRST_CONTACT_END)) 
+		if(entity2IsParentOf1 && HasFlags(id1, FLAG_IGNORE_PARENT_COLLISIONS_UNTIL_FIRST_CONTACT_END))
 			SetFlags(id1, FLAG_IGNORE_PARENT_COLLISIONS_UNTIL_FIRST_CONTACT_END, false);
 		if(entity1IsParentOf2 && HasFlags(id2, FLAG_IGNORE_PARENT_COLLISIONS_UNTIL_FIRST_CONTACT_END))
 			SetFlags(id2, FLAG_IGNORE_PARENT_COLLISIONS_UNTIL_FIRST_CONTACT_END, false);
@@ -831,7 +883,7 @@ namespace Space
 				m_healthComponents[entityID].deathDamage = m_healthComponents[entityID].hp;
 				m_healthComponents[entityID].hp = 0.0f;
 			}
-			m_destroyBuffer.push(entityID);
+			Destroy(entityID);
 		}
 	}
 	void World::CreateExplosionFromEntity(WorldID entityID, const ParticleExplosionComponent& particleExplosion)
@@ -898,7 +950,7 @@ namespace Space
 			randomUnitVector.Set(cosf(randomAngle), sinf(randomAngle));
 			m_particleSystem.physics[i].velocity = randomSpeedFluctuationFactor * speed * randomUnitVector + explosionVelocity;
 		}
-			
+
 		// Layers
 		for(ParticleID i = firstIndex; i < m_particleSystem.firstUnusedIndex; ++i)
 		{
@@ -910,7 +962,7 @@ namespace Space
 
 		// Colors
 		for(ParticleID i = firstIndex; i < m_particleSystem.firstUnusedIndex; ++i)
-			m_particleSystem.colors[i] = particleExplosion.colorRange.Lerp( d2d::RandomFloatPercent() );
+			m_particleSystem.colors[i] = particleExplosion.colorRange.Lerp(d2d::RandomFloatPercent());
 	}
 	//+------------------------\----------------------------------
 	//|	   Box2D user data     |
@@ -920,6 +972,18 @@ namespace Space
 		if(b2BodyPtr)
 			return reinterpret_cast<Body*>(b2BodyPtr->GetUserData().pointer);
 		return nullptr;
+	}
+	World::Body* World::GetUserBodyFromFixture(b2Fixture* fixturePtr)
+	{
+		d2Assert(fixturePtr && "Box2D Bug");
+
+		b2Body* b2BodyPtr{ fixturePtr->GetBody() };
+		d2Assert(b2BodyPtr && "Box2D Bug");
+
+		Body* bodyPtr{ GetUserBodyPtr(b2BodyPtr) };
+		d2Assert(bodyPtr);
+		d2Assert(bodyPtr->b2BodyPtr);
+		return bodyPtr;
 	}
 	void World::SetB2BodyPtr(Body* bodyPtr, b2Body* b2BodyPtr)
 	{
@@ -934,7 +998,7 @@ namespace Space
 	}
 	void World::SwapB2Bodies(Body& body1, Body& body2)
 	{
-
+		// ************************     TODO     ***********************************
 	}
 	//+------------------------\----------------------------------
 	//|	 Clone-aware modifiers |
@@ -969,7 +1033,6 @@ namespace Space
 	}
 	void World::Activate(WorldID entityID)
 	{
-		//std::cout << "Activate: " << entityID << " HasPhysics: " << HasPhysics(entityID) << std::endl;
 		SetFlags(entityID, FLAG_ACTIVE, true);
 		if(HasPhysics(entityID))
 		{
@@ -977,11 +1040,9 @@ namespace Space
 			for(const CloneBody& cloneBody : m_physicsComponents[entityID].cloneBodyList)
 				cloneBody.b2BodyPtr->SetEnabled(true);
 		}
-		//std::cout << "Activate done: " << entityID << std::endl;
 	}
 	void World::Deactivate(WorldID entityID)
 	{
-		//std::cout << "Deactivate: " << entityID << std::endl;
 		SetFlags(entityID, FLAG_ACTIVE, false);
 		if(HasPhysics(entityID))
 		{
@@ -989,7 +1050,6 @@ namespace Space
 			for(const CloneBody& cloneBody : m_physicsComponents[entityID].cloneBodyList)
 				cloneBody.b2BodyPtr->SetEnabled(false);
 		}
-		//std::cout << "Deactivate done: " << entityID << std::endl;
 	}
 	void World::ApplyForceToCenter(WorldID entityID, const b2Vec2& force)
 	{
@@ -1065,4 +1125,43 @@ namespace Space
 				cloneBody.b2BodyPtr->ApplyAngularImpulse(impulse, true);
 		}
 	}
+	//+----------------------\------------------------------------
+	//|		   Joints		 |
+	//\----------------------/------------------------------------
+	//b2PrismaticJoint* World::ApplyPrismaticJoint(WorldID id1, WorldID id2, const b2Vec2& localAxis1,
+	//	const b2Vec2& localAnchor1, const b2Vec2& localAnchor2, float referenceAngle,
+	//	bool enableLimit, const d2d::Range<float>& translationRange)
+	//{
+	//	if(HasPhysics(id1) && HasPhysics(id2))
+	//	{
+	//		b2PrismaticJointDef prismaticJointDef;
+	//		prismaticJointDef.bodyA = m_physicsComponents[id1].mainBody.b2BodyPtr;
+	//		prismaticJointDef.bodyB = m_physicsComponents[id2].mainBody.b2BodyPtr;
+	//		prismaticJointDef.collideConnected = false;
+
+	//		//local axis, relative to bodyA
+	//		prismaticJointDef.localAxisA = localAxis1;
+
+	//		//anchor points
+	//		prismaticJointDef.localAnchorA = localAnchor1;
+	//		prismaticJointDef.localAnchorB = localAnchor2;
+
+	//		prismaticJointDef.referenceAngle = referenceAngle;
+
+	//		//limits
+	//		prismaticJointDef.enableLimit = enableLimit;
+	//		prismaticJointDef.lowerTranslation = translationRange.GetMin();
+	//		prismaticJointDef.upperTranslation = translationRange.GetMax();
+
+	//		//motor
+	//		prismaticJointDef.enableMotor = true;
+	//		prismaticJointDef.maxMotorForce = 500;
+	//		prismaticJointDef.motorSpeed = 0;
+
+	//		if(m_b2WorldPtr)
+	//			return (b2PrismaticJoint*)m_b2WorldPtr->CreateJoint(&prismaticJointDef);
+	//	}
+	//	return nullptr;
+	//}
+
 }

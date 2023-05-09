@@ -37,7 +37,7 @@ namespace Space
 		}
 		while(!m_destroyBuffer.empty())
 			m_destroyBuffer.pop();
-		
+
 		// Clear components and flags
 		for(WorldID i = 0; i < WORLD_MAX_ENTITIES; ++i)
 			m_componentBits[i] = COMPONENT_NONE;
@@ -86,7 +86,7 @@ namespace Space
 			{
 				m_sizeComponents[entityID] = size;
 				m_boundingRadiusComponents[entityID] = size.Length() * 0.5f;
-			
+
 				if(activate)
 					Activate(entityID);
 
@@ -94,6 +94,10 @@ namespace Space
 				return entityID;
 			}
 		throw GameException{ "World ran out of entities" };
+	}
+	void World::Destroy(WorldID id)
+	{
+		m_destroyBuffer.push(id);
 	}
 	void World::SetFlags(WorldID entityID, FlagBits flagBits, bool enable)
 	{
@@ -103,10 +107,16 @@ namespace Space
 		else
 			m_flagBits[entityID] &= ~flagBits;
 	}
-	void World::RemoveComponents(WorldID entityID, ComponentBits componentBits)
+	void World::RemoveComponents(WorldID entityID, BitMask componentBits)
 	{
 		d2Assert(entityID < WORLD_MAX_ENTITIES);
 		m_componentBits[entityID] &= ~componentBits;
+	}
+	void World::RemoveAllComponentsExcept(WorldID entityID, BitMask componentBits)
+	{
+		d2Assert(entityID < WORLD_MAX_ENTITIES);
+		m_componentBits[entityID] = 0;
+		m_componentBits[entityID] |= componentBits;
 	}
 	//+------------------------\----------------------------------
 	//|	  Physics Components   |
@@ -134,7 +144,7 @@ namespace Space
 		return acceptablePositionFound;
 	}
 	void World::AddPhysicsComponent(WorldID entityID, b2BodyType type,
-		const InstanceDef& def,	bool fixedRotation, bool continuousCollisionDetection)
+		const InstanceDef& def, bool fixedRotation, bool continuousCollisionDetection)
 	{
 		d2Assert(entityID < WORLD_MAX_ENTITIES);
 		m_componentBits[entityID] |= COMPONENT_PHYSICS;
@@ -151,8 +161,8 @@ namespace Space
 		bodyDef.bullet = continuousCollisionDetection;
 		m_physicsComponents[entityID].mainBody.entityID = entityID;
 		m_physicsComponents[entityID].mainBody.isClone = false;
-		SetB2BodyPtr(&m_physicsComponents[entityID].mainBody, m_b2WorldPtr->CreateBody(&bodyDef));		
-		
+		SetB2BodyPtr(&m_physicsComponents[entityID].mainBody, m_b2WorldPtr->CreateBody(&bodyDef));
+
 		// Create clones
 		CloneSectionList cloneLocationList{ GetCloneSectionList(*m_physicsComponents[entityID].mainBody.b2BodyPtr) };
 		unsigned i{ 0 };
@@ -254,12 +264,27 @@ namespace Space
 		d2Assert(entityID < WORLD_MAX_ENTITIES);
 		m_componentBits[entityID] |= COMPONENT_DRAW_ANIMATION;
 		m_drawAnimationComponents[entityID].animation.Init(animationDef);
-	}	
+	}
 	void World::SetAnimationLayer(WorldID entityID, int layer)
 	{
 		d2Assert(entityID < WORLD_MAX_ENTITIES);
 		d2d::Clamp(layer, m_settings.drawLayerRange);
 		m_drawAnimationComponents[entityID].layer = layer;
+	}
+	//+------------------------\----------------------------------
+	//|		  Power-ups		   |
+	//\------------------------/----------------------------------
+	void World::AddPowerUpComponent(WorldID entityID, const PowerUpComponent& powerUp)
+	{
+		d2Assert(entityID < WORLD_MAX_ENTITIES);
+		m_componentBits[entityID] |= COMPONENT_POWERUP;
+		m_powerUpComponents[entityID] = powerUp;
+	}
+	void World::AddIconCollectorComponent(WorldID entityID, float iconsCollected)
+	{
+		d2Assert(entityID < WORLD_MAX_ENTITIES);
+		m_componentBits[entityID] |= COMPONENT_ICON_COLLECTOR;
+		m_iconCollectorComponents[entityID].iconsCollected = iconsCollected;
 	}
 	//+--------------------\--------------------------------------
 	//|	  Life and Death   |
@@ -279,7 +304,7 @@ namespace Space
 		m_parentComponents[entityID] = parentID;
 	}
 	void World::AddParticleExplosionOnDeathComponent(WorldID entityID, float relativeSize,
-		unsigned numParticles, const d2d::Range<float>& speedRange, float damageBasedSpeedIncreaseFactor, 
+		unsigned numParticles, const d2d::Range<float>& speedRange, float damageBasedSpeedIncreaseFactor,
 		const d2d::Range<int>& sizeIndexRange, const d2d::ColorRange& colorRange,
 		float lifetime, float fadeIn, float fadeOut)
 	{
@@ -359,7 +384,7 @@ namespace Space
 		d2Assert(entityID < WORLD_MAX_ENTITIES);
 		if(IsValidProjectileLauncherSlot(entityID, slot, secondaryLaunchers))
 		{
-			ProjectileLauncherComponent* launcherComponentPtr{ 
+			ProjectileLauncherComponent* launcherComponentPtr{
 				secondaryLaunchers ? &m_secondaryProjectileLauncherComponents[entityID] : &m_primaryProjectileLauncherComponents[entityID] };
 			launcherComponentPtr->projectileLaunchers[slot].enabled = false;
 		}
@@ -453,15 +478,4 @@ namespace Space
 		m_brakeComponents[entityID].factor = 0.0f;
 		m_brakeComponents[entityID].deceleration = deceleration;
 	}
-	//void World::SetLevelTag(WorldID entityID, int levelTag)
-	//{
-	//	d2Assert(entityID < WORLD_MAX_ENTITIES);
-	//	m_componentBits[entityID] |= COMPONENT_LEVEL_TAG;
-	//	m_levelTagComponents[entityID] = levelTag;
-	//}
-	//void World::RemoveLevelTag(WorldID entityID)
-	//{
-	//	RemoveComponents(entityID, COMPONENT_LEVEL_TAG);
-	//}
-
 }

@@ -70,18 +70,18 @@ namespace Space
 	//\----------------------/------------------------------------
 	bool World::HasSize(WorldID entityID) const
 	{
-		return EntityExists(entityID) && 
+		return EntityExists(entityID) &&
 			(m_sizeComponents[entityID].x > 0.0f ||
-			m_sizeComponents[entityID].y > 0.0f);
+				m_sizeComponents[entityID].y > 0.0f);
 	}
 	//+----------------------\------------------------------------
 	//|		 HasSize2D		 |
 	//\----------------------/------------------------------------
 	bool World::HasSize2D(WorldID entityID) const
 	{
-		return EntityExists(entityID) && 
+		return EntityExists(entityID) &&
 			(m_sizeComponents[entityID].x > 0.0f &&
-			m_sizeComponents[entityID].y > 0.0f);
+				m_sizeComponents[entityID].y > 0.0f);
 	}
 	//+----------------------\------------------------------------
 	//|		 HasPhysics		 |
@@ -97,7 +97,7 @@ namespace Space
 	//	returns true and sets entityIDOut and relativePositionOut to
 	//	the closest entity (relativePosition may point to clone body)
 	//+-----------------------------------------------------------
-	bool World::GetClosestPhysicalEntity(const b2Vec2& position, float boudingRadius, 
+	bool World::GetClosestPhysicalEntity(const b2Vec2& position, float boudingRadius,
 		WorldID& entityIDOut, float& boundingRadiiGapOut) const
 	{
 		b2Body* b2BodyPtr = m_b2WorldPtr->GetBodyList();
@@ -106,7 +106,7 @@ namespace Space
 
 		WorldID closestEntityID;
 		float closestGap{ FLT_MAX };
-		while(b2BodyPtr) 
+		while(b2BodyPtr)
 		{
 			Body* bodyPtr = GetUserBodyPtr(b2BodyPtr);
 			if(bodyPtr)
@@ -146,6 +146,10 @@ namespace Space
 	{
 		return m_fuelComponents[entityID].max;
 	}
+	float World::GetIconsCollected(WorldID entityID) const
+	{
+		return m_iconCollectorComponents[entityID].iconsCollected;
+	}
 	float World::GetTotalThrusterAcceleration(WorldID id) const
 	{
 		float totalAcceleration{ 0.0f };
@@ -163,7 +167,7 @@ namespace Space
 	}
 	float World::GetTotalThrusterFuelRequired(WorldID id, float dt) const
 	{
-		float totalFuelRequired { 0.0f };
+		float totalFuelRequired{ 0.0f };
 		if(HasComponents(id, COMPONENT_THRUSTER) && IsActive(id))
 		{
 			for(unsigned i = 0; i < m_thrusterComponents[id].numSlots; ++i)
@@ -175,7 +179,7 @@ namespace Space
 					totalFuelRequired *= m_boosterComponents[id].factor * WORLD_BOOST_FUEL_USE_PENALTY_FACTOR;
 
 		}
-		std::cout << "totalFuelRequired = " << totalFuelRequired << std::endl;
+		//std::cout << "totalFuelRequired = " << totalFuelRequired << std::endl;
 		return totalFuelRequired;
 	}
 
@@ -188,7 +192,7 @@ namespace Space
 	{
 		d2Assert(HasPhysics(entityID));
 		return m_smoothedTransforms[entityID];
-	}	
+	}
 	//+-------------------------\---------------------------------------------
 	//|	  GetLinearVelocity		| 
 	//\-------------------------/
@@ -271,7 +275,7 @@ namespace Space
 	//\---------------------/-------------------------------------------------
 	b2Vec2 World::GetCloneOffset(CloneSection cloneSection) const
 	{
-		switch (cloneSection)
+		switch(cloneSection)
 		{
 		case CloneSection::TOP_LEFT:		return { -m_worldDimensions.x,  m_worldDimensions.y };
 		case CloneSection::TOP:				return { 0.0f,  m_worldDimensions.y };

@@ -1,8 +1,8 @@
 /**************************************************************************************\
 ** File: GameDef.h
-** Project: 
+** Project:
 ** Author: David Leksen
-** Date: 
+** Date:
 **
 ** Header file for the GameDef struct
 **
@@ -22,7 +22,7 @@ namespace Space
 	};
 	enum class ObjectiveType
 	{
-		DESTROY
+		DESTROY, COLLECT
 	};
 	struct Objective
 	{

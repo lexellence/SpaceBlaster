@@ -1,8 +1,8 @@
 /**************************************************************************************\
 ** File: World.h
-** Project: 
+** Project:
 ** Author: David Leksen
-** Date: 
+** Date:
 **
 ** Header file for the World class
 **
@@ -32,6 +32,10 @@ namespace Space
 		b2Vec2 velocity{ b2Vec2_zero };
 		float angularVelocity{ 0.0f };
 		bool activate{ true };
+	};
+	struct IconCollectorComponent
+	{
+		float iconsCollected{ 0.0f };
 	};
 	struct DrawFixturesComponent
 	{
@@ -87,17 +91,17 @@ namespace Space
 		int numMissiles{};
 	};
 	class DestroyListener
-	{	
-		public: virtual void SayGoodbye(WorldID entityID) = 0;
+	{
+	public: virtual void SayGoodbye(WorldID entityID) = 0;
 	};
-	class WrapListener 
-	{	
-		public:	virtual void EntityWrapped(WorldID entityID, const b2Vec2& translation) = 0;
+	class WrapListener
+	{
+	public:	virtual void EntityWrapped(WorldID entityID, const b2Vec2& translation) = 0;
 	};
 	class ProjectileLauncherCallback
 	{
-		public:	virtual WorldID LaunchProjectile(const ProjectileDef& projectileDef, const b2Vec2& position,
-			float angle, float impulse, const b2Vec2& parentVelocity, WorldID parentID) = 0;
+	public:	virtual WorldID LaunchProjectile(const ProjectileDef& projectileDef, const b2Vec2& position,
+		float angle, float impulse, const b2Vec2& parentVelocity, WorldID parentID) = 0;
 	};
 	//class MorphListener
 	//{
@@ -113,43 +117,58 @@ namespace Space
 		d2d::ColorRange colorRange;
 		float lifetime, fadeIn, fadeOut;
 	};
+	enum class PowerUpType
+	{
+		FUEL, ICON
+	};
+	struct PowerUpComponent
+	{
+		PowerUpType type;
+		union
+		{
+			float f;
+			int i;
+		} value;
+	};
 
 	// Components have other associated data while flags do not
 	typedef long long BitMask;
 	enum ComponentBits : BitMask
 	{
-		COMPONENT_NONE									= 0,
-		COMPONENT_PHYSICS								= 1 << 0,
-		COMPONENT_DRAW_ON_RADAR 						= 1 << 1,
-		COMPONENT_DRAW_ANIMATION  						= 1 << 2,
-		COMPONENT_DRAW_FIXTURES							= 1 << 3,
-		COMPONENT_HEALTH								= 1 << 4,
-		COMPONENT_PARENT								= 1 << 5,
-		COMPONENT_PARTICLE_EXPLOSION					= 1 << 6,
-		COMPONENT_DESTRUCTION_DELAY						= 1 << 7,
-		COMPONENT_DESTRUCTION_DELAY_ON_CONTACT			= 1 << 8,
-		COMPONENT_DESTRUCTION_CHANCE_ON_CONTACT			= 1 << 9,
-		COMPONENT_ROTATOR 								= 1 << 10,
-		COMPONENT_THRUSTER 								= 1 << 11,
-		COMPONENT_SET_THRUST_AFTER_DELAY				= 1 << 12,
-		COMPONENT_BRAKE 								= 1 << 13,
-		COMPONENT_PRIMARY_PROJECTILE_LAUNCHER			= 1 << 14,
-		COMPONENT_SECONDARY_PROJECTILE_LAUNCHER			= 1 << 15,
-		COMPONENT_FUEL									= 1 << 16,
-		COMPONENT_BOOSTER								= 1 << 17
-		//COMPONENT_LEVEL_TAG								= 1 << 16
+		COMPONENT_NONE = 0,
+		COMPONENT_PHYSICS = 1 << 0,
+		COMPONENT_DRAW_ON_RADAR = 1 << 1,
+		COMPONENT_DRAW_ANIMATION = 1 << 2,
+		COMPONENT_DRAW_FIXTURES = 1 << 3,
+		COMPONENT_HEALTH = 1 << 4,
+		COMPONENT_PARENT = 1 << 5,
+		COMPONENT_PARTICLE_EXPLOSION = 1 << 6,
+		COMPONENT_DESTRUCTION_DELAY = 1 << 7,
+		COMPONENT_DESTRUCTION_DELAY_ON_CONTACT = 1 << 8,
+		COMPONENT_DESTRUCTION_CHANCE_ON_CONTACT = 1 << 9,
+		COMPONENT_ROTATOR = 1 << 10,
+		COMPONENT_THRUSTER = 1 << 11,
+		COMPONENT_SET_THRUST_AFTER_DELAY = 1 << 12,
+		COMPONENT_BRAKE = 1 << 13,
+		COMPONENT_PRIMARY_PROJECTILE_LAUNCHER = 1 << 14,
+		COMPONENT_SECONDARY_PROJECTILE_LAUNCHER = 1 << 15,
+		COMPONENT_FUEL = 1 << 16,
+		COMPONENT_BOOSTER = 1 << 17,
+		COMPONENT_ICON_COLLECTOR = 1 << 18,
+		COMPONENT_POWERUP = 1 << 19
 		//COMPONENT_MORPH_INTO_ENTITY_ID					= 1 << 16
 	};
 	// Unlike components, flags have no associated data
 	enum FlagBits : BitMask
 	{
-		FLAG_NONE									= 0,
-		FLAG_ACTIVE									= 1 << 0,
-		FLAG_PLAYER_CONTROLLED						= 1 << 1,
-		FLAG_IGNORE_PARENT_COLLISIONS_UNTIL_FIRST_CONTACT_END	= 1 << 2,
-		FLAG_DISABLE_COLLISIONS_ON_CONTACT_END		= 1 << 3,
-		FLAG_DESTRUCTION_ON_ANIMATION_COMPLETION	= 1 << 4
-	};	
+		FLAG_NONE = 0,
+		FLAG_ACTIVE = 1 << 0,
+		FLAG_PLAYER_CONTROLLED = 1 << 1,
+		FLAG_IGNORE_PARENT_COLLISIONS_UNTIL_FIRST_CONTACT_END = 1 << 2,
+		FLAG_DISABLE_COLLISIONS_ON_CONTACT_END = 1 << 3,
+		FLAG_DESTRUCTION_ON_ANIMATION_COMPLETION = 1 << 4,
+		FLAG_EXIT = 1 << 5
+	};
 	//+---------------------------------------------\
 	//|  World: b2World wrapper and entity manager  |
 	//\---------------------------------------------/
@@ -170,14 +189,16 @@ namespace Space
 
 		// Creating entities
 		WorldID NewEntityID(const b2Vec2& size, int drawLayer = 0, bool activate = true);
-		void SetFlags(WorldID entityID, FlagBits flagBits, bool enable=true);
-		void RemoveComponents(WorldID entityID, ComponentBits componentBitMask);
+		void Destroy(WorldID id);
+		void SetFlags(WorldID entityID, FlagBits flagBits, bool enable = true);
+		void RemoveComponents(WorldID entityID, BitMask componentBitMask);
+		void RemoveAllComponentsExcept(WorldID entityID, BitMask componentBitMask);
 
 		// Physics
 		bool GetRandomPositionAwayFromExistingEntities(float newBoundingRadius,
 			float minDistanceToClosestEntity, unsigned maxAttempts, b2Vec2& relativePositionOut) const;
 		void AddPhysicsComponent(WorldID entityID, b2BodyType type,
-			const InstanceDef& def,	bool fixedRotation = false, bool continuousCollisionDetection = false);
+			const InstanceDef& def, bool fixedRotation = false, bool continuousCollisionDetection = false);
 		void AddCircleShape(WorldID entityID, const d2d::Material& material, const d2d::Filter& filter,
 			float sizeRelativeToWidth = 1.0f, const b2Vec2& position = b2Vec2_zero, bool isSensor = false);
 		void AddRectShape(WorldID entityID, const d2d::Material& material, const d2d::Filter& filter,
@@ -192,6 +213,10 @@ namespace Space
 		void AddDrawFixturesComponent(WorldID entityID, const DrawFixturesComponent& fixturesComponent);
 		void AddDrawAnimationComponent(WorldID entityID, const d2d::AnimationDef& animationDef);
 		void SetAnimationLayer(WorldID entityID, int layer);
+
+		// Power-ups
+		void AddPowerUpComponent(WorldID entityID, const PowerUpComponent& powerUp = {});
+		void AddIconCollectorComponent(WorldID entityID, float iconsCollected = 0.0f);
 
 		// Life and Death
 		void AddHealthComponent(WorldID entityID, float maxHP);
@@ -240,9 +265,9 @@ namespace Space
 		int GetDrawLayer(WorldID entityID) const;
 		float GetFuelLevel(WorldID entityID) const;
 		float GetMaxFuelLevel(WorldID entityID) const;
+		float GetIconsCollected(WorldID entityID) const;
 		float GetTotalThrusterAcceleration(WorldID id) const;
 		float GetTotalThrusterFuelRequired(WorldID id, float dt) const;
-
 
 		// Callers of the following must ensure entity has a physics component
 		const b2Transform& GetSmoothedTransform(WorldID entityID) const;
@@ -255,6 +280,9 @@ namespace Space
 		bool ShouldCollide(b2Fixture* fixturePtr1, b2Fixture* fixturePtr2) override;
 		void BeginContact(b2Contact* contactPtr) override;
 		void PreSolve(b2Contact* contactPtr, const b2Manifold* oldManifoldPtr) override;
+		void PreSolveExit(WorldID id1, WorldID id2);
+		void Exit(WorldID id);
+		void PreSolveIconCollector(WorldID id1, WorldID id2, b2Contact* contactPtr);
 		void PostSolve(b2Contact* contactPtr, const b2ContactImpulse* impulsePtr) override;
 		void EndContact(b2Contact* contactPtr) override;
 
@@ -276,6 +304,9 @@ namespace Space
 		void ApplyLinearImpulseToLocalPoint(WorldID entityID, const b2Vec2& impulse, const b2Vec2& localPoint);
 		void ApplyLinearImpulseToWorldPoint(WorldID entityID, const b2Vec2& impulse, const b2Vec2& worldPoint);
 		void ApplyAngularImpulse(WorldID entityID, float impulse);
+		//b2PrismaticJoint* ApplyPrismaticJoint(WorldID id1, WorldID id2, const b2Vec2& localAxis1,
+		//	const b2Vec2& localAnchor1, const b2Vec2& localAnchor2, float referenceAngle = 0.0f,
+		//	bool enableLimit = false, const d2d::Range<float>& translationRange = { 0.0f, 0.0f });
 
 		//// For external use
 		//void SetLevelTag(WorldID entityID, int levelTag);
@@ -394,7 +425,7 @@ namespace Space
 			WorldID entityID;
 			b2Vec2 position;
 		};
-		template<class T> class ComponentArray 
+		template<class T> class ComponentArray
 			: public std::array<T, WORLD_MAX_ENTITIES>{};
 		typedef std::array<CloneSyncData, WORLD_NUM_CLONES> CloneSyncDataArray;
 
@@ -414,6 +445,7 @@ namespace Space
 		void UpdateBrakeComponents();
 		void UpdateProjectileLauncherComponents(float dt, bool secondaryLaunchers);
 		void UpdateDrawAnimationComponents(float dt);
+		void ApplyImpulseDamage(Body* bodyPtr1, Body* bodyPtr2, const float* normalImpulses, unsigned numImpulses);
 
 		// Physics
 		void UpdatePhysics(float dt);
@@ -435,9 +467,10 @@ namespace Space
 		void ProcessDestroyBuffer();
 		bool ShouldCollideDefaultFiltering(const b2Filter& filter1, const b2Filter& filter2) const;
 		void CreateExplosionFromEntity(WorldID entityID, const ParticleExplosionComponent& particleExplosion);
-		
+
 		// Box2D user data
 		Body* GetUserBodyPtr(b2Body* b2BodyPtr) const;
+		Body* GetUserBodyFromFixture(b2Fixture* fixturePtr);
 		void SetB2BodyPtr(Body* bodyPtr, b2Body* b2BodyPtr);
 		void SwapB2Bodies(Body& body1, Body& body2);
 
@@ -510,7 +543,10 @@ namespace Space
 		ComponentArray< DrawAnimationComponent > m_drawAnimationComponents;
 		ComponentArray< DrawFixturesComponent > m_drawFixtureComponents;
 		ComponentArray< DrawRadarComponent > m_drawRadarComponents;
-		
+		ComponentArray< PowerUpComponent > m_powerUpComponents;
+		ComponentArray< IconCollectorComponent > m_iconCollectorComponents;
+		//ComponentArray< ExitComponent > m_exitComponents;
+
 		d2d::ShapeFactory m_shapeFactory;
 	};
 }

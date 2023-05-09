@@ -24,8 +24,8 @@ namespace Space
 	private:
 		void PauseGame();
 		void UnpauseGame();
-		void LessMissiles();
-		void MoreMissiles();
+		//void LessMissiles();
+		//void MoreMissiles();
 		void ProcessKeyDown(SDL_Keycode key);
 		void ProcessKeyUp(SDL_Keycode key);
 		void ProcessButtonDown(Uint8 button);
@@ -117,7 +117,7 @@ namespace Space
 		const d2d::TextStyle m_buttonTextStyle{
 			m_orbitronLightFont,
 			{ 0.0f, 0.5f, 0.8f, 1.0f },
-			0.035f
+				0.035f
 		};
 
 		// Pause menu title text
@@ -125,7 +125,7 @@ namespace Space
 		const d2d::TextStyle m_titleTextStyle{
 			m_orbitronLightFont,
 			{ 0.8f, 0.8f, 0.8f, 0.8f },
-			0.045f
+				0.045f
 		};
 
 		// Pause menu button colors
@@ -136,7 +136,7 @@ namespace Space
 
 		d2d::Menu m_pauseMenu{ m_buttonTextList, m_buttonTextStyle,
 			m_title, m_titleTextStyle,
-			m_buttonColor, m_buttonHighlightColor, 
+			m_buttonColor, m_buttonHighlightColor,
 			m_buttonBorderColor, m_backgroundColor };
 
 		// FPS display
@@ -145,7 +145,7 @@ namespace Space
 		const d2d::TextStyle m_fpsTextStyle{
 			m_orbitronLightFont,
 			{ 1.0f, 1.0f, 0.0f, 1.0f },
-			0.05f
+				0.05f
 		};
 	};
 }
