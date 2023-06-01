@@ -33,7 +33,7 @@ namespace Space
 	void App::Init()
 	{
 		// Init d2d
-		d2d::Init(d2LogSeverityTrace, "SpaceLog.txt");
+		d2d::Init(d2LogSeverityTrace, "Space.log");
 		{
 			AppDef settings;
 			settings.LoadFrom("Data/app.hjson");
