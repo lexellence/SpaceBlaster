@@ -92,6 +92,8 @@ namespace Space
 		try
 		{
 			GetStatePtr(m_currentState)->Init();
+			d2d::Window::StartScene();
+			d2d::Window::EndScene();
 		}
 		catch(const GameException& e)
 		{
