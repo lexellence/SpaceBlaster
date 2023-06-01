@@ -261,120 +261,152 @@ namespace Space
 		//+---------------------------\-------------------------------
 		//|		    Textures		  |
 		//\---------------------------/-------------------------------
-		d2d::TextureReference m_blasterTexture{"Textures/BigShips/ship001.png"};
-		d2d::TextureReference m_scoutTexture{"Textures/BigShips/ship002.png"};
-		d2d::TextureReference m_thrusterTexture{"Textures/Effects/thruster1.png"};
-		d2d::TextureReference m_bumperTexture{"Textures/Items/repulser1.png"};
-		d2d::TextureReference m_sodaTexture{"Textures/Items/sodacan.png"};
-		d2d::TextureReference m_melonTexture{"Textures/Items/watermelon.png"};
-		d2d::TextureReference m_appleTexture{"Textures/Items/apple.png"};
+		// Ships
+		d2d::TextureAtlas m_bigShipTextureAtlas{ "Textures/bigships.png"s, "Textures/bigships.xml"s};
+		d2d::TextureFromAtlas m_blasterTexture{ m_bigShipTextureAtlas, "ship001"s};
+		d2d::TextureFromAtlas m_scoutTexture{ m_bigShipTextureAtlas, "ship002"s};
+
+		// Effects
+		d2d::TextureAtlas m_effectTextureAtlas{ "Textures/effects.png"s, "Textures/effects.xml"s};
+		d2d::TextureFromAtlas m_thrusterTexture{ m_effectTextureAtlas, "thruster1"s};
+
+		// Items
+		d2d::TextureAtlas m_itemTextureAtlas{ "Textures/items.png"s, "Textures/items.xml"s};
+		d2d::TextureFromAtlas m_appleTexture{ m_itemTextureAtlas, "apple"s};
+		d2d::TextureFromAtlas m_bumperTexture{ m_itemTextureAtlas, "repulser1"s};
+		d2d::TextureFromAtlas m_sodaTexture{ m_itemTextureAtlas, "sodacan"s};
+		d2d::TextureFromAtlas m_melonTexture{ m_itemTextureAtlas, "watermelon"s};
 
 		// Icons
-		std::array<d2d::TextureReference, NUM_ICON_MODELS>
-			m_iconTextures{"Textures/Icons/Solitaire.png"s, "Textures/Icons/RegistryDocument.png"s,
-						   "Textures/Icons/OutlookExpress.png"s, "Textures/Icons/NetworkSetup.png"s,
-						   "Textures/Icons/MyDocuments.png"s, "Textures/Icons/MyComputer.png"s,
-						   "Textures/Icons/Mouse.png"s, "Textures/Icons/MediaCenterFile.png"s,
-						   "Textures/Icons/GenericVideo.png"s, "Textures/Icons/MediaCenterFile.png"s,
-						   "Textures/Icons/GenericTextDocument.png"s, "Textures/Icons/GenericMedia.png"s,
-						   "Textures/Icons/GenericDocument.png"s, "Textures/Icons/GenericAudio.png"s,
-						   "Textures/Icons/GameController.png"s, "Textures/Icons/Font.png"s,
-						   "Textures/Icons/FolderClosed.png"s, "Textures/Icons/FloppyDisk.png"s,
-						   "Textures/Icons/EntireNetwork.png"s, "Textures/Icons/DVD-RW.png"s,
-						   "Textures/Icons/DLL.png"s, "Textures/Icons/DiskDefragmenter.png"s,
-						   "Textures/Icons/CommandPrompt.png"s, "Textures/Icons/ChangeOrRemovePrograms.png"s,
-						   "Textures/Icons/Calculator.png"s, "Textures/Icons/BluetoothDevices.png"s,
-						   "Textures/Icons/BAT.png"s,
-						   "Textures/Icons/IE6.png"s, "Textures/Icons/GIF.png"s};
-		// XLarge
-		std::array<d2d::TextureReference, NUM_XLARGE_ASTEROID_MODELS>
-			m_asteroidXLargeTextures{"Textures/Asteroids/asteroidxlarge1.png"s, "Textures/Asteroids/asteroidxlarge2.png"s,
-									 "Textures/Asteroids/asteroidxlarge3.png"s, "Textures/Asteroids/asteroidxlarge4.png"s};
-		std::array<d2d::TextureReference, NUM_XLARGE_ASTEROID_MODELS>
-			m_rockXLargeTextures{"Textures/Asteroids/rockxlarge1.png"s, "Textures/Asteroids/rockxlarge2.png"s,
-								 "Textures/Asteroids/rockxlarge3.png"s, "Textures/Asteroids/rockxlarge4.png"s};
-		// Large
-		std::array<d2d::TextureReference, NUM_LARGE_ASTEROID_MODELS>
-			m_asteroidLargeTextures{"Textures/Asteroids/asteroidlarge1.png"s, "Textures/Asteroids/asteroidlarge2.png"s};
-		std::array<d2d::TextureReference, NUM_LARGE_ASTEROID_MODELS>
-			m_rockLargeTextures{"Textures/Asteroids/rocklarge1.png"s, "Textures/Asteroids/rocklarge2.png"s};
-		// Medium
-		std::array<d2d::TextureReference, NUM_MEDIUM_ASTEROID_MODELS>
-			m_asteroidMediumTextures{"Textures/Asteroids/asteroidmedium1.png"s, "Textures/Asteroids/asteroidmedium2.png"s};
-		std::array<d2d::TextureReference, NUM_MEDIUM_ASTEROID_MODELS>
-			m_rockMediumTextures{"Textures/Asteroids/rockmedium1.png"s, "Textures/Asteroids/rockmedium2.png"s};
-		// Small
-		std::array<d2d::TextureReference, NUM_SMALL_ASTEROID_MODELS>
-			m_asteroidSmallTextures{"Textures/Asteroids/asteroidsmall1.png"s, "Textures/Asteroids/asteroidsmall2.png"s};
-		std::array<d2d::TextureReference, NUM_SMALL_ASTEROID_MODELS>
-			m_rockSmallTextures{"Textures/Asteroids/rocksmall1.png"s, "Textures/Asteroids/rocksmall2.png"s};
+		d2d::TextureAtlas m_iconTextureAtlas{ "Textures/icons.png"s, "Textures/icons.xml"s };
+		std::array<d2d::TextureFromAtlas, NUM_ICON_MODELS> m_iconTextures{{
+			{ m_iconTextureAtlas, "Solitaire"s },
+			{ m_iconTextureAtlas, "RegistryDocument"s },
+			{ m_iconTextureAtlas, "OutlookExpress"s },
+			{ m_iconTextureAtlas, "NetworkSetup"s },
+			{ m_iconTextureAtlas, "MyDocuments"s },
+			{ m_iconTextureAtlas, "MyComputer"s },
+			{ m_iconTextureAtlas, "Mouse"s },
+			{ m_iconTextureAtlas, "MediaCenterFile"s },
+			{ m_iconTextureAtlas, "GenericVideo"s },
+			{ m_iconTextureAtlas, "GenericTextDocument"s },
+			{ m_iconTextureAtlas, "GenericMedia"s },
+			{ m_iconTextureAtlas, "GenericDocument"s },
+			{ m_iconTextureAtlas, "GenericAudio"s },
+			{ m_iconTextureAtlas, "GameController"s },
+			{ m_iconTextureAtlas, "Font"s },
+			{ m_iconTextureAtlas, "FolderClosed"s },
+			{ m_iconTextureAtlas, "FloppyDisk"s },
+			{ m_iconTextureAtlas, "EntireNetwork"s },
+			{ m_iconTextureAtlas, "DVD-RW"s },
+			{ m_iconTextureAtlas, "DLL"s },
+			{ m_iconTextureAtlas, "DiskDefragmenter"s },
+			{ m_iconTextureAtlas, "CommandPrompt"s },
+			{ m_iconTextureAtlas, "ChangeOrRemovePrograms"s },
+			{ m_iconTextureAtlas, "Calculator"s },
+			{ m_iconTextureAtlas, "BluetoothDevices"s },
+			{ m_iconTextureAtlas, "BAT"s },
+			{ m_iconTextureAtlas, "IE6"s },
+			{ m_iconTextureAtlas, "GIF"s }
+		}};
+
+		// Asteroids
+		d2d::TextureAtlas m_asteroidTextureAtlas{ "Textures/asteroids.png"s, "Textures/asteroids.xml"s };
+		std::array<d2d::TextureFromAtlas, NUM_XLARGE_ASTEROID_MODELS> m_asteroidXLargeTextures{{
+			{ m_asteroidTextureAtlas, "asteroidxlarge1"s },
+			{ m_asteroidTextureAtlas, "asteroidxlarge2"s },
+			{ m_asteroidTextureAtlas, "asteroidxlarge3"s },
+			{ m_asteroidTextureAtlas, "asteroidxlarge4"s } }};
+		std::array<d2d::TextureFromAtlas, NUM_XLARGE_ASTEROID_MODELS> m_rockXLargeTextures{{
+				{ m_asteroidTextureAtlas, "rockxlarge1"s },
+				{ m_asteroidTextureAtlas, "rockxlarge2"s },
+				{ m_asteroidTextureAtlas, "rockxlarge3"s },
+				{ m_asteroidTextureAtlas, "rockxlarge4"s } }};
+		std::array<d2d::TextureFromAtlas, NUM_LARGE_ASTEROID_MODELS> m_asteroidLargeTextures{{
+				{ m_asteroidTextureAtlas, "asteroidlarge1"s },
+				{ m_asteroidTextureAtlas, "asteroidlarge2"s } }};
+		std::array<d2d::TextureFromAtlas, NUM_LARGE_ASTEROID_MODELS> m_rockLargeTextures{{
+				{ m_asteroidTextureAtlas, "rocklarge1"s },
+				{ m_asteroidTextureAtlas, "rocklarge2"s } }};
+		std::array<d2d::TextureFromAtlas, NUM_MEDIUM_ASTEROID_MODELS> m_asteroidMediumTextures{{
+				{ m_asteroidTextureAtlas, "asteroidmedium1"s },
+				{ m_asteroidTextureAtlas, "asteroidmedium2"s } }};
+		std::array<d2d::TextureFromAtlas, NUM_MEDIUM_ASTEROID_MODELS> m_rockMediumTextures{{
+				{ m_asteroidTextureAtlas, "rockmedium1"s },
+				{ m_asteroidTextureAtlas, "rockmedium2"s } }};
+		std::array<d2d::TextureFromAtlas, NUM_SMALL_ASTEROID_MODELS> m_asteroidSmallTextures{{
+				{ m_asteroidTextureAtlas, "asteroidsmall1"s },
+				{ m_asteroidTextureAtlas, "asteroidsmall2"s } }};
+		std::array<d2d::TextureFromAtlas, NUM_SMALL_ASTEROID_MODELS> m_rockSmallTextures{{
+				{ m_asteroidTextureAtlas, "rocksmall1"s },
+				{ m_asteroidTextureAtlas, "rocksmall2"s } }};
+
 		// Projectiles
-		d2d::TextureReference m_bulletTexture{"Textures/Projectiles/fireball1.png"};
-		std::array<d2d::TextureReference, 2>
-			m_missileTextures{"Textures/Projectiles/rocket005a.png"s, "Textures/Projectiles/rocket005b.png"s};
-		std::array<d2d::TextureReference, 2>
-			m_fatMissileTextures{"Textures/Projectiles/rocket006a.png"s, "Textures/Projectiles/rocket006b.png"s};
+		d2d::TextureAtlas m_projectileTextureAtlas{ "Textures/projectiles.png"s, "Textures/projectiles.xml"s };
+		d2d::TextureFromAtlas m_bulletTexture{ m_projectileTextureAtlas, "fireball1"s};
+		std::array<d2d::TextureFromAtlas, 2> m_missileTextures{{
+				{ m_projectileTextureAtlas, "rocket005a"s },
+				{ m_projectileTextureAtlas, "rocket005b"s } }};
+		std::array<d2d::TextureFromAtlas, 2> m_fatMissileTextures{{
+				{ m_projectileTextureAtlas, "rocket006a"s },
+				{ m_projectileTextureAtlas, "rocket006b"s } }};
 
 		//+---------------------------\-------------------------------
 		//|			 Models 		  |
 		//\---------------------------/-------------------------------
-		Model m_blasterModel{"ship001", {&m_blasterTexture}};
-		Model m_scoutModel{"ship002", {&m_scoutTexture}};
-		Model m_blasterThrusterModel{"thruster1", {{&m_thrusterTexture, 0.0f, d2d::WHITE_OPAQUE, BLASTER_THRUSTER_RELATIVE_SIZE}}};
-		Model m_scoutThrusterModel{"thruster1", {{&m_thrusterTexture, 0.0f, d2d::WHITE_OPAQUE, SCOUT_THRUSTER_RELATIVE_SIZE}}};
-		Model m_bumperModel{"repulser1", {&m_bumperTexture}};
-		Model m_sodaModel{"sodacan", {&m_sodaTexture}};
-		Model m_melonModel{"watermelon", {&m_melonTexture}};
-		Model m_appleModel{"apple", {&m_appleTexture}};
+		Model m_blasterModel{"ship001", {m_blasterTexture}};
+		Model m_scoutModel{"ship002", {m_scoutTexture}};
+		Model m_blasterThrusterModel{"thruster1", {{m_thrusterTexture, 0.0f, d2d::WHITE_OPAQUE, BLASTER_THRUSTER_RELATIVE_SIZE}}};
+		Model m_scoutThrusterModel{"thruster1", {{m_thrusterTexture, 0.0f, d2d::WHITE_OPAQUE, SCOUT_THRUSTER_RELATIVE_SIZE}}};
+		Model m_bumperModel{"repulser1", {m_bumperTexture}};
+		Model m_sodaModel{"sodacan", {m_sodaTexture}};
+		Model m_melonModel{"watermelon", {m_melonTexture}};
+		Model m_appleModel{"apple", {m_appleTexture}};
 
 		// XLarge
 		std::array<Model, NUM_XLARGE_ASTEROID_MODELS>
 			m_asteroidXLargeModels{
-				Model{"asteroidxlarge1", {&m_asteroidXLargeTextures.at(0)}},
-				Model{"asteroidxlarge2", {&m_asteroidXLargeTextures.at(1)}},
-				Model{"asteroidxlarge3", {&m_asteroidXLargeTextures.at(2)}},
-				Model{"asteroidxlarge4", {&m_asteroidXLargeTextures.at(3)}}};
+				Model{"asteroidxlarge1", {m_asteroidXLargeTextures.at(0)}},
+				Model{"asteroidxlarge2", {m_asteroidXLargeTextures.at(1)}},
+				Model{"asteroidxlarge3", {m_asteroidXLargeTextures.at(2)}},
+				Model{"asteroidxlarge4", {m_asteroidXLargeTextures.at(3)}}};
 		std::array<Model, NUM_XLARGE_ASTEROID_MODELS>
 			m_rockXLargeModels{
-				Model{"asteroidxlarge1", {&m_rockXLargeTextures.at(0)}},
-				Model{"asteroidxlarge2", {&m_rockXLargeTextures.at(1)}},
-				Model{"asteroidxlarge3", {&m_rockXLargeTextures.at(2)}},
-				Model{"asteroidxlarge4", {&m_rockXLargeTextures.at(3)}}};
+				Model{"asteroidxlarge1", {m_rockXLargeTextures.at(0)}},
+				Model{"asteroidxlarge2", {m_rockXLargeTextures.at(1)}},
+				Model{"asteroidxlarge3", {m_rockXLargeTextures.at(2)}},
+				Model{"asteroidxlarge4", {m_rockXLargeTextures.at(3)}}};
 		// Large
 		std::array<Model, NUM_LARGE_ASTEROID_MODELS>
-			m_asteroidLargeModels{Model{"asteroidlarge1", {&m_asteroidLargeTextures.at(0)}},
-								  Model{"asteroidlarge2", {&m_asteroidLargeTextures.at(1)}}};
+			m_asteroidLargeModels{Model{"asteroidlarge1", {m_asteroidLargeTextures.at(0)}},
+								  Model{"asteroidlarge2", {m_asteroidLargeTextures.at(1)}}};
 		std::array<Model, NUM_LARGE_ASTEROID_MODELS>
-			m_rockLargeModels{Model{"asteroidlarge1", {&m_rockLargeTextures.at(0)}},
-							  Model{"asteroidlarge2", {&m_rockLargeTextures.at(1)}}};
+			m_rockLargeModels{Model{"asteroidlarge1", {m_rockLargeTextures.at(0)}},
+							  Model{"asteroidlarge2", {m_rockLargeTextures.at(1)}}};
 		// Medium
 		std::array<Model, NUM_MEDIUM_ASTEROID_MODELS>
-			m_asteroidMediumModels{Model{"asteroidmedium1", {&m_asteroidMediumTextures.at(0)}},
-								   Model{"asteroidmedium2", {&m_asteroidMediumTextures.at(1)}}};
+			m_asteroidMediumModels{Model{"asteroidmedium1", {m_asteroidMediumTextures.at(0)}},
+								   Model{"asteroidmedium2", {m_asteroidMediumTextures.at(1)}}};
 		std::array<Model, NUM_MEDIUM_ASTEROID_MODELS>
-			m_rockMediumModels{Model{"asteroidmedium1", {&m_rockMediumTextures.at(0)}},
-							   Model{"asteroidmedium2", {&m_rockMediumTextures.at(1)}}};
+			m_rockMediumModels{Model{"asteroidmedium1", {m_rockMediumTextures.at(0)}},
+							   Model{"asteroidmedium2", {m_rockMediumTextures.at(1)}}};
 		// Small
 		std::array<Model, NUM_SMALL_ASTEROID_MODELS>
-			m_asteroidSmallModels{Model{"asteroidsmall1", {&m_asteroidSmallTextures.at(0)}},
-								  Model{"asteroidsmall2", {&m_asteroidSmallTextures.at(1)}}};
+			m_asteroidSmallModels{Model{"asteroidsmall1", {m_asteroidSmallTextures.at(0)}},
+								  Model{"asteroidsmall2", {m_asteroidSmallTextures.at(1)}}};
 		std::array<Model, NUM_SMALL_ASTEROID_MODELS>
-			m_rockSmallModels{Model{"asteroidsmall1", {&m_rockSmallTextures.at(0)}},
-							  Model{"asteroidsmall2", {&m_rockSmallTextures.at(1)}}};
+			m_rockSmallModels{Model{"asteroidsmall1", {m_rockSmallTextures.at(0)}},
+							  Model{"asteroidsmall2", {m_rockSmallTextures.at(1)}}};
 		// Projectiles
-		Model m_bulletModel{"fireball1", {&m_bulletTexture}};
+		Model m_bulletModel{"fireball1", {m_bulletTexture}};
 		Model m_missileModel{"rocket005",
-							 {{d2d::AnimationFrame{&m_missileTextures.at(0), MISSILE_TIME_PER_FRAME},
-							   d2d::AnimationFrame{&m_missileTextures.at(1), MISSILE_TIME_PER_FRAME}},
-							  d2d::AnimationType::LOOP,
-							  0,
-							  true}};
+			{{d2d::AnimationFrame{m_missileTextures.at(0), MISSILE_TIME_PER_FRAME},
+			  d2d::AnimationFrame{m_missileTextures.at(1), MISSILE_TIME_PER_FRAME}},
+			d2d::AnimationType::LOOP, 0, true}};
 		Model m_fatMissileModel{"rocket006",
-								{{d2d::AnimationFrame{&m_fatMissileTextures.at(0), MISSILE_TIME_PER_FRAME},
-								  d2d::AnimationFrame{&m_fatMissileTextures.at(1), MISSILE_TIME_PER_FRAME}},
-								 d2d::AnimationType::LOOP,
-								 0,
-								 true}};
+			{{d2d::AnimationFrame{m_fatMissileTextures.at(0), MISSILE_TIME_PER_FRAME},
+			  d2d::AnimationFrame{m_fatMissileTextures.at(1), MISSILE_TIME_PER_FRAME}},
+			d2d::AnimationType::LOOP, 0, true}};
 
 		//+---------------------------\-------------------------------
 		//|		  Projectiles		  |

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with TexturePacker https://www.codeandweb.com/texturepacker -->
+<!-- $TexturePacker:SmartUpdate:e71f80061b9c5b2e25fd3d2799af084a:afc4ad7089497ba64c451821b5ae9fb9:90a68ccae83e65ad8ceeb861f0a8529d$ -->
+<!--Format:
+n  => name of the sprite
+x  => sprite x pos in texture
+y  => sprite y pos in texture
+w  => sprite width (may be trimmed)
+h  => sprite height (may be trimmed)
+pX => x pos of the pivot point (relative to sprite width)
+pY => y pos of the pivot point (relative to sprite height)
+oX => sprite's x-corner offset (only available if trimmed)
+oY => sprite's y-corner offset (only available if trimmed)
+oW => sprite's original width (only available if trimmed)
+oH => sprite's original height (only available if trimmed)
+r => 'y' only set if sprite is rotated
+with polygon mode enabled:
+vertices   => points in sprite coordinate system (x0,y0,x1,y1,x2,y2, ...)
+verticesUV => points in sheet coordinate system (x0,y0,x1,y1,x2,y2, ...)
+triangles  => sprite triangulation, 3 vertex indices per triangle
+-->
+<TextureAtlas imagePath="icons.png" width="1024" height="2048">
+    <sprite n="BAT" x="0" y="0" w="256" h="256" pX="0.5" pY="0.5"/>
+    <sprite n="BluetoothDevices" x="256" y="0" w="256" h="256" pX="0.5" pY="0.5"/>
+    <sprite n="Calculator" x="512" y="0" w="256" h="256" pX="0.5" pY="0.5"/>
+    <sprite n="ChangeOrRemovePrograms" x="768" y="0" w="256" h="256" pX="0.5" pY="0.5"/>
+    <sprite n="CommandPrompt" x="0" y="256" w="256" h="256" pX="0.5" pY="0.5"/>
+    <sprite n="DiskDefragmenter" x="768" y="256" w="256" h="256" pX="0.5" pY="0.5"/>
+    <sprite n="DLL" x="256" y="256" w="256" h="256" pX="0.5" pY="0.5"/>
+    <sprite n="DVD-RW" x="512" y="256" w="256" h="256" pX="0.5" pY="0.5"/>
+    <sprite n="EntireNetwork" x="0" y="512" w="256" h="256" pX="0.5" pY="0.5"/>
+    <sprite n="FloppyDisk" x="256" y="512" w="256" h="256" pX="0.5" pY="0.5"/>
+    <sprite n="FolderClosed" x="512" y="512" w="256" h="256" pX="0.5" pY="0.5"/>
+    <sprite n="Font" x="768" y="512" w="256" h="256" pX="0.5" pY="0.5"/>
+    <sprite n="GameController" x="256" y="768" w="256" h="256" pX="0.5" pY="0.5"/>
+    <sprite n="GenericAudio" x="512" y="768" w="256" h="256" pX="0.5" pY="0.5"/>
+    <sprite n="GenericDocument" x="768" y="768" w="256" h="256" pX="0.5" pY="0.5"/>
+    <sprite n="GenericMedia" x="0" y="1024" w="256" h="256" pX="0.5" pY="0.5"/>
+    <sprite n="GenericTextDocument" x="0" y="1280" w="256" h="256" pX="0.5" pY="0.5"/>
+    <sprite n="GenericVideo" x="0" y="1536" w="256" h="256" pX="0.5" pY="0.5"/>
+    <sprite n="GIF" x="0" y="768" w="256" h="256" pX="0.5" pY="0.5"/>
+    <sprite n="IE6" x="0" y="1792" w="256" h="256" pX="0.5" pY="0.5"/>
+    <sprite n="MediaCenterFile" x="256" y="1024" w="256" h="256" pX="0.5" pY="0.5"/>
+    <sprite n="Mouse" x="512" y="1024" w="256" h="256" pX="0.5" pY="0.5"/>
+    <sprite n="MyComputer" x="768" y="1024" w="256" h="256" pX="0.5" pY="0.5"/>
+    <sprite n="MyDocuments" x="256" y="1280" w="256" h="256" pX="0.5" pY="0.5"/>
+    <sprite n="NetworkSetup" x="256" y="1536" w="256" h="256" pX="0.5" pY="0.5"/>
+    <sprite n="OutlookExpress" x="256" y="1792" w="256" h="256" pX="0.5" pY="0.5"/>
+    <sprite n="RegistryDocument" x="512" y="1280" w="256" h="256" pX="0.5" pY="0.5"/>
+    <sprite n="Solitaire" x="768" y="1280" w="256" h="256" pX="0.5" pY="0.5"/>
+</TextureAtlas>

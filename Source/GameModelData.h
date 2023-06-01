@@ -14,7 +14,7 @@ namespace Space
 	constexpr unsigned NUM_LARGE_ASTEROID_MODELS{2};
 	constexpr unsigned NUM_MEDIUM_ASTEROID_MODELS{2};
 	constexpr unsigned NUM_SMALL_ASTEROID_MODELS{2};
-	constexpr unsigned NUM_ICON_MODELS{29};
+	constexpr unsigned NUM_ICON_MODELS{28};
 
 	constexpr std::array<float, NUM_XLARGE_ASTEROID_MODELS>
 		XLARGE_ASTEROID_RELATIVE_HEIGHTS{84.0f / 90.0f, 98.0f / 90.0f, 82.0f / 90.0f, 96.0f / 90.0f};

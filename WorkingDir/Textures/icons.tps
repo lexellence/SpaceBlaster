@@ -6,12 +6,12 @@
         <key>texturePackerVersion</key>
         <string>4.6.3</string>
         <key>fileName</key>
-        <string>/home/dleksen/MEGA/dev/projects/Space/repo/WorkingDir/Textures/asteroids.tps</string>
+        <string>/home/dleksen/MEGA/dev/projects/Space/repo/WorkingDir/Textures/icons.tps</string>
         <key>autoSDSettings</key>
         <array>
             <struct type="AutoSDSettings">
                 <key>scale</key>
-                <double>1</double>
+                <double>0.25</double>
                 <key>extension</key>
                 <string></string>
                 <key>spriteFilter</key>
@@ -36,7 +36,7 @@
         <key>dataFormat</key>
         <string>xml</string>
         <key>textureFileName</key>
-        <filename>asteroids.png</filename>
+        <filename>icons.png</filename>
         <key>flipPVR</key>
         <false/>
         <key>pvrCompressionQuality</key>
@@ -72,7 +72,7 @@
             </struct>
         </struct>
         <key>shapePadding</key>
-        <uint>2</uint>
+        <uint>0</uint>
         <key>jpgQuality</key>
         <uint>80</uint>
         <key>pngOptimizationLevel</key>
@@ -86,7 +86,7 @@
         <key>textureFormat</key>
         <enum type="SettingsBase::TextureFormat">png</enum>
         <key>borderPadding</key>
-        <uint>2</uint>
+        <uint>0</uint>
         <key>maxTextureSize</key>
         <QSize>
             <key>width</key>
@@ -134,7 +134,7 @@
             <key>data</key>
             <struct type="DataFile">
                 <key>name</key>
-                <filename>asteroids.xml</filename>
+                <filename>icons.xml</filename>
             </struct>
         </map>
         <key>multiPack</key>
@@ -165,7 +165,7 @@
             <key>scaleMode</key>
             <enum type="ScaleMode">Smooth</enum>
             <key>extrude</key>
-            <uint>1</uint>
+            <uint>0</uint>
             <key>trimThreshold</key>
             <uint>1</uint>
             <key>trimMargin</key>
@@ -183,150 +183,50 @@
         </struct>
         <key>individualSpriteSettings</key>
         <map type="IndividualSpriteSettingsMap">
-            <key type="filename">Asteroids/asteroidlarge1.png</key>
-            <key type="filename">Asteroids/rocklarge1.png</key>
+            <key type="filename">Icons/BAT.png</key>
+            <key type="filename">Icons/BluetoothDevices.png</key>
+            <key type="filename">Icons/Calculator.png</key>
+            <key type="filename">Icons/ChangeOrRemovePrograms.png</key>
+            <key type="filename">Icons/CommandPrompt.png</key>
+            <key type="filename">Icons/DLL.png</key>
+            <key type="filename">Icons/DVD-RW.png</key>
+            <key type="filename">Icons/DiskDefragmenter.png</key>
+            <key type="filename">Icons/EntireNetwork.png</key>
+            <key type="filename">Icons/FloppyDisk.png</key>
+            <key type="filename">Icons/FolderClosed.png</key>
+            <key type="filename">Icons/Font.png</key>
+            <key type="filename">Icons/GIF.png</key>
+            <key type="filename">Icons/GameController.png</key>
+            <key type="filename">Icons/GenericAudio.png</key>
+            <key type="filename">Icons/GenericDocument.png</key>
+            <key type="filename">Icons/GenericMedia.png</key>
+            <key type="filename">Icons/GenericTextDocument.png</key>
+            <key type="filename">Icons/GenericVideo.png</key>
+            <key type="filename">Icons/IE6.png</key>
+            <key type="filename">Icons/MediaCenterFile.png</key>
+            <key type="filename">Icons/Mouse.png</key>
+            <key type="filename">Icons/MyComputer.png</key>
+            <key type="filename">Icons/MyDocuments.png</key>
+            <key type="filename">Icons/NetworkSetup.png</key>
+            <key type="filename">Icons/OutlookExpress.png</key>
+            <key type="filename">Icons/RegistryDocument.png</key>
+            <key type="filename">Icons/Solitaire.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
                 <key>scale9Enabled</key>
                 <false/>
                 <key>scale9Borders</key>
-                <rect>11,11,23,23</rect>
+                <rect>256,256,512,512</rect>
                 <key>scale9Paddings</key>
-                <rect>11,11,23,23</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
-            <key type="filename">Asteroids/asteroidlarge2.png</key>
-            <key type="filename">Asteroids/rocklarge2.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>12,11,23,21</rect>
-                <key>scale9Paddings</key>
-                <rect>12,11,23,21</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
-            <key type="filename">Asteroids/asteroidmedium1.png</key>
-            <key type="filename">Asteroids/rockmedium1.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>8,8,15,15</rect>
-                <key>scale9Paddings</key>
-                <rect>8,8,15,15</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
-            <key type="filename">Asteroids/asteroidmedium2.png</key>
-            <key type="filename">Asteroids/rockmedium2.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>8,7,15,14</rect>
-                <key>scale9Paddings</key>
-                <rect>8,7,15,14</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
-            <key type="filename">Asteroids/asteroidsmall1.png</key>
-            <key type="filename">Asteroids/rocksmall1.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>5,5,10,10</rect>
-                <key>scale9Paddings</key>
-                <rect>5,5,10,10</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
-            <key type="filename">Asteroids/asteroidsmall2.png</key>
-            <key type="filename">Asteroids/rocksmall2.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>5,4,9,9</rect>
-                <key>scale9Paddings</key>
-                <rect>5,4,9,9</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
-            <key type="filename">Asteroids/asteroidxlarge1.png</key>
-            <key type="filename">Asteroids/rockxlarge1.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>26,21,51,42</rect>
-                <key>scale9Paddings</key>
-                <rect>26,21,51,42</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
-            <key type="filename">Asteroids/asteroidxlarge2.png</key>
-            <key type="filename">Asteroids/rockxlarge2.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>31,25,61,50</rect>
-                <key>scale9Paddings</key>
-                <rect>31,25,61,50</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
-            <key type="filename">Asteroids/asteroidxlarge3.png</key>
-            <key type="filename">Asteroids/rockxlarge3.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>23,21,45,42</rect>
-                <key>scale9Paddings</key>
-                <rect>23,21,45,42</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
-            <key type="filename">Asteroids/asteroidxlarge4.png</key>
-            <key type="filename">Asteroids/rockxlarge4.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>25,25,50,49</rect>
-                <key>scale9Paddings</key>
-                <rect>25,25,50,49</rect>
+                <rect>256,256,512,512</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
         </map>
         <key>fileList</key>
         <array>
-            <filename>Asteroids</filename>
+            <filename>Icons</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>
@@ -349,6 +249,17 @@
         <key>normalMapSheetFileName</key>
         <filename></filename>
         <key>exporterProperties</key>
-        <map type="ExporterProperties"/>
+        <map type="ExporterProperties">
+            <key>plain::bool-property</key>
+            <struct type="ExporterProperty">
+                <key>value</key>
+                <string>false</string>
+            </struct>
+            <key>plain::string-property</key>
+            <struct type="ExporterProperty">
+                <key>value</key>
+                <string>hello world</string>
+            </struct>
+        </map>
     </struct>
 </data>

@@ -1,0 +1,11 @@
+Trim sprite names
+PNG-32
+RGBA8888
+MaxRects
+Allow Rotation
+Max 2048x2048
+Constrain POT (Power of 2), don't force square
+No trimming
+extrude 1
+border padding 2
+shape padding 2
