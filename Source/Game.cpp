@@ -206,11 +206,11 @@ namespace Space
 
 		tempDef.position.x -= 10.0f;
 		tempDef.angle = 0.0f;
-		WorldID id1 = CreateBumper(world, tempDef);
+		CreateBumper(world, tempDef);
 
 		tempDef.position.x += 20.0f;
 		tempDef.angle = d2d::PI;
-		WorldID id2 = CreateBumper(world, tempDef);
+		CreateBumper(world, tempDef);
 
 		tempDef.position = def.position;
 		tempDef.angle = 0.0f;
@@ -218,7 +218,7 @@ namespace Space
 
 		return id3;
 	}
-	//+---------------------------\------------------------------
+	//+---------------------------\-------------------------------
 	//|	  Level Exit Components   |
 	//\---------------------------/-------------------------------
 	WorldID Game::CreateExitSensor(World& world, const InstanceDef& def)
