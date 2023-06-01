@@ -91,7 +91,7 @@ namespace Space
 		return HasComponents(entityID, COMPONENT_PHYSICS);
 	}
 	//+------------------------------\----------------------------
-	//|   GetClosestPhysicalEntity	 | 
+	//|   GetClosestPhysicalEntity	 |
 	//\------------------------------/
 	//	Returns false if no physical entities exist, otherwise
 	//	returns true and sets entityIDOut and relativePositionOut to
@@ -184,7 +184,7 @@ namespace Space
 	}
 
 	//+-------------------------\---------------------------------------------
-	//|	 GetSmoothedTransform	| 
+	//|	 GetSmoothedTransform	|
 	//\-------------------------/
 	//	Failure to ensure entity has a physics component will result in undefined behavior
 	//+-----------------------------------------------------------------------
@@ -194,7 +194,7 @@ namespace Space
 		return m_smoothedTransforms[entityID];
 	}
 	//+-------------------------\---------------------------------------------
-	//|	  GetLinearVelocity		| 
+	//|	  GetLinearVelocity		|
 	//\-------------------------/
 	//	Failure to ensure entity has a physics component will result in undefined behavior
 	//+-----------------------------------------------------------------------
@@ -204,7 +204,7 @@ namespace Space
 		return m_physicsComponents[entityID].mainBody.b2BodyPtr->GetLinearVelocity();
 	}
 	//+-------------------------\---------------------------------------------
-	//|	  GetAngularVelocity	| 
+	//|	  GetAngularVelocity	|
 	//\-------------------------/
 	//	Failure to ensure entity has a physics component will result in undefined behavior
 	//+-----------------------------------------------------------------------
@@ -214,7 +214,7 @@ namespace Space
 		return m_physicsComponents[entityID].mainBody.b2BodyPtr->GetAngularVelocity();
 	}
 	//+-------------------------\---------------------------------------------
-	//|	 GetLocalCenterOfMass	| 
+	//|	 GetLocalCenterOfMass	|
 	//\-------------------------/
 	//	Failure to ensure entity has a physics component will result in undefined behavior
 	//+-----------------------------------------------------------------------
@@ -225,7 +225,7 @@ namespace Space
 		return m_physicsComponents[entityID].mainBody.b2BodyPtr->GetLocalCenter();
 	}
 	//+---------------------\-------------------------------------------------
-	//|	   GetWorldCenter	| 
+	//|	   GetWorldCenter	|
 	//\---------------------/
 	//	Failure to ensure entity has a physics component will result in undefined behavior
 	//+-----------------------------------------------------------------------

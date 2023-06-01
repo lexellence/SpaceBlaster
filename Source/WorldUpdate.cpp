@@ -116,7 +116,7 @@ namespace Space
 				if(m_rotatorComponents[id].lastFactor != 0.0f && m_rotatorComponents[id].factor == 0.0f)
 					m_physicsComponents[id].mainBody.b2BodyPtr->SetAngularVelocity(0.0f);
 
-				// If entity is turning, tell it's body to rotate 
+				// If entity is turning, tell it's body to rotate
 				if(m_rotatorComponents[id].factor != 0.0f)
 					m_physicsComponents[id].mainBody.b2BodyPtr->SetAngularVelocity(m_rotatorComponents[id].factor * m_rotatorComponents[id].rotationSpeed);
 			}
@@ -318,8 +318,8 @@ namespace Space
 	}
 	void World::SyncClones()
 	{
-		// For each entity, use quadrant to determine which clones it should have. 
-		// Then replace old clones with new ones at correct locations while retaining  
+		// For each entity, use quadrant to determine which clones it should have.
+		// Then replace old clones with new ones at correct locations while retaining
 		// existing ones which are already at the correct location.
 		for(WorldID id = 0; id < WORLD_MAX_ENTITIES; ++id)
 			if(HasPhysics(id) && IsActive(id))
@@ -471,8 +471,8 @@ namespace Space
 				m_physicsWrapDatas[id].crossedUpperBound = (currentPosition.y > m_worldRect.upperBound.y);
 
 				// Figure out if we can simply switch Box2D bodies or if we have to wrap manually
-				// (we should be able to switch unless an object is going super fast such that  
-				// the corresponding clone section is not found among the existing clones) 
+				// (we should be able to switch unless an object is going super fast such that
+				// the corresponding clone section is not found among the existing clones)
 				CloneSection newCloneSectionAfterSwitch;
 				bool wrapNeeded{ GetCloneSectionFromWrapData(m_physicsWrapDatas[id], newCloneSectionAfterSwitch) };
 				if(!wrapNeeded)
@@ -556,7 +556,7 @@ namespace Space
 
 						if(translation != b2Vec2_zero)
 						{
-							// Wrap entity 
+							// Wrap entity
 							b2Vec2 wrappedPosition{ m_physicsComponents[id].mainBody.b2BodyPtr->GetPosition() + translation };
 							m_physicsComponents[id].mainBody.b2BodyPtr->SetTransform(wrappedPosition, currentTransform.q.GetAngle());
 
@@ -580,7 +580,7 @@ namespace Space
 	//|  GetCloneSectionFromWrapData	| (private)
 	//\---------------------------------/
 	//	Called by WrapEntities().
-	//	If wrap data shows at least one boundary crossed, sets cloneSectionOut 
+	//	If wrap data shows at least one boundary crossed, sets cloneSectionOut
 	//		to the clone section that the entity wandered into and returns true.
 	//	Otherwise, return false to indicate no wrap is needed.
 	//+-----------------------------------------------------------------------

@@ -1,8 +1,8 @@
 /**************************************************************************************\
 ** File: EntityFactory.h
-** Project: 
+** Project:
 ** Author: David Leksen
-** Date: 
+** Date:
 **
 ** Header file for the EntityFactory class
 **

@@ -65,7 +65,7 @@ namespace Space
 			if(m_nextState != m_currentState)
 			{
 				m_currentState = m_nextState;
-				InitCurrentState();			
+				InitCurrentState();
 			}
 			else
 				if(m_hasFocus)
@@ -145,7 +145,7 @@ namespace Space
 				m_nextState = AppStateID::QUIT;
 			}
 		}
-	}	
+	}
 	void App::DrawCurrentState()
 	{
 		std::shared_ptr<AppState> currentStatePtr{ GetStatePtr(m_currentState) };

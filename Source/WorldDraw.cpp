@@ -4,7 +4,7 @@
 ** Author: David Leksen
 ** Date:
 **
-** Source code file for draw functions of the World class 
+** Source code file for draw functions of the World class
 **
 \**************************************************************************************/
 #include "pch.h"
@@ -26,8 +26,8 @@ namespace Space
 		d2d::Window::SetColor({ 1.0f, 0.0f, 1.0f, 1.0f });
 		d2d::Window::DrawRect(m_worldRect, false);
 
-		std::array<CloneSection, 4> cloneLocations{ 
-			CloneSection::TOP, CloneSection::RIGHT, 
+		std::array<CloneSection, 4> cloneLocations{
+			CloneSection::TOP, CloneSection::RIGHT,
 			CloneSection::BOTTOM, CloneSection::LEFT };
 		for(auto cloneLocation : cloneLocations)
 		{
@@ -98,7 +98,7 @@ namespace Space
 						}
 					}
 	}
-	void World::DrawThrusterComponent(const ThrusterComponent& thrusterComponent, const b2Vec2& entitySize,	
+	void World::DrawThrusterComponent(const ThrusterComponent& thrusterComponent, const b2Vec2& entitySize,
 							 const b2Vec2& position, float angle)
 	{
 		d2d::Window::PushMatrix();

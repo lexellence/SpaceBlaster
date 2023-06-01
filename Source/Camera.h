@@ -1,8 +1,8 @@
 /**************************************************************************************\
 ** File: Camera.h
-** Project: 
+** Project:
 ** Author: David Leksen
-** Date: 
+** Date:
 **
 ** Header file for the Camera class
 **

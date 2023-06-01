@@ -1,8 +1,8 @@
 /**************************************************************************************\
 ** File: ParticleSystem.h
-** Project: 
+** Project:
 ** Author: David Leksen
-** Date: 
+** Date:
 **
 ** Header file for the ParticleSystem class
 **

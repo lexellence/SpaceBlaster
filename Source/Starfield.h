@@ -1,8 +1,8 @@
 /**************************************************************************************\
 ** File: Starfield.h
-** Project: 
+** Project:
 ** Author: David Leksen
-** Date: 
+** Date:
 **
 ** Header file for the Starfield class
 **

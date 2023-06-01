@@ -1,8 +1,8 @@
 /**************************************************************************************\
 ** File: App.h
-** Project: 
+** Project:
 ** Author: David Leksen
-** Date: 
+** Date:
 **
 ** Header file for the App class
 **
@@ -35,7 +35,7 @@ namespace Space
 
 		std::shared_ptr<IntroState> m_introStatePtr;
 		std::shared_ptr<MainMenuState> m_mainMenuStatePtr;
-		std::shared_ptr<GameState> m_gameStatePtr;	
+		std::shared_ptr<GameState> m_gameStatePtr;
 
 		AppStateID m_currentState{ FIRST_APP_STATE };
 		AppStateID m_nextState{ FIRST_APP_STATE };

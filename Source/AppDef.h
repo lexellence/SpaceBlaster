@@ -1,8 +1,8 @@
 /**************************************************************************************\
 ** File: AppDef.h
-** Project: 
+** Project:
 ** Author: David Leksen
-** Date: 
+** Date:
 **
 ** Header file for the AppDef struct
 **
