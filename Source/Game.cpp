@@ -30,59 +30,39 @@ namespace Space
 	void Game::Init()
 	{
 		m_settings.LoadFrom("Data/game.hjson");
-		InitLevel();
+		StartCurrentLevel();
 	}
-	void Game::InitLevel()
+	void Game::StartCurrentLevel()
 	{
-		ClearLevel();
+		ClearLevel({ 500.0f, 500.0f });
 		SpawnPlayer();
 		SpawnExit();
 
-
 		unsigned numFailed{ 0 };
+		{
+			unsigned numToCreate = 8;
+			numFailed += numToCreate - SpawnRandomIcons(numToCreate);
 
-		// Start objectives
-//		m_objectives.clear();
+			numToCreate = 20;
+			numFailed += numToCreate - SpawnRandomXLargeAsteroids(numToCreate);
+			numToCreate = 30;
+			numFailed += numToCreate - SpawnRandomLargeAsteroids(numToCreate);
+			numToCreate = 40;
+			numFailed += numToCreate - SpawnRandomMediumAsteroids(numToCreate);
+			numToCreate = 50;
+			numFailed += numToCreate - SpawnRandomMediumAsteroids(numToCreate);
 
-		// Collect Icons
-//		Objective collectIconsObjective;
-//		collectIconsObjective.type = ObjectiveType::DESTROY;
-//		collectIconsObjective.text = "Collect the icons";
-//		collectIconsObjective.num = 0;
+			if(numFailed > 0)
+				d2LogInfo << "Game::LoadLevel0: Entity creation attempt limit reached " << numFailed << " times";
+		}
 
-		unsigned numToCreate = 8;
-		numFailed += numToCreate - SpawnRandomIcons(numToCreate);
-
-		// Apply objective
-//		m_objectives.push_back(collectIconsObjective);
-
-		// Destroy Asteroids
-//		Objective destroyAsteroidsObjective;
-//		destroyAsteroidsObjective.type = ObjectiveType::DESTROY;
-//		destroyAsteroidsObjective.text = "Destroy all the biggest asteroids";
-//		destroyAsteroidsObjective.num = 0;
-
-		numToCreate = 20;
-		numFailed += numToCreate - SpawnRandomXLargeAsteroids(numToCreate);
-		numToCreate = 30;
-		numFailed += numToCreate - SpawnRandomLargeAsteroids(numToCreate);
-		numToCreate = 40;
-		numFailed += numToCreate - SpawnRandomMediumAsteroids(numToCreate);
-		numToCreate = 50;
-		numFailed += numToCreate - SpawnRandomMediumAsteroids(numToCreate);
-
-		// Apply objective
-//		m_objectives.push_back(destroyAsteroidsObjective);
-
-		if(numFailed > 0)
-			d2LogInfo << "Game::LoadLevel0: Entity creation attempt limit reached " << numFailed << " times";
-
-		VerifyWorldDimensions();
+		ValidateWorldDimensions();
 	}
+
 	//+-----------------\-----------------------------------------
 	//|	   ClearLevel   |
 	//\-----------------/-----------------------------------------
-	void Game::ClearLevel()
+	void Game::ClearLevel(const b2Vec2& newWorldDimensions)
 	{
 		m_camera.Init(m_settings.cameraDimensionRange, m_settings.cameraZoomSpeed, m_settings.cameraInitialZoomOutPercent);
 		m_cameraFollowingEntity = false;
@@ -90,12 +70,11 @@ namespace Space
 		m_playerSet = false;
 		m_delayedLevelChange = false;
 
-		b2Vec2 center{ b2Vec2_zero };
-		b2Vec2 size{ 500.0f, 500.0f };
 		d2d::Rect worldRect;
-		worldRect.SetCenter(center, size);
+		worldRect.SetCenter(b2Vec2_zero, newWorldDimensions);
 		m_world.Init(worldRect);
 	}
+
 	//+-----------------\-----------------------------------------
 	//|	  SpawnPlayer   |
 	//\-----------------/-----------------------------------------
@@ -105,6 +84,7 @@ namespace Space
 		InstanceDef def{ .position{ b2Vec2_zero }, .angle{ d2d::PI_OVER_TWO } };
 		CreatePlayer(m_world, def);
 	}
+
 	//+-----------------\-----------------------------------------
 	//|	   SpawnExit    |
 	//\-----------------/-----------------------------------------
@@ -113,6 +93,7 @@ namespace Space
 		InstanceDef def{ .position{ -5.0f, -12.0f } };
 		CreateExit(m_world, def);
 	}
+
 	//+--------------------------------\--------------------------
 	//|	      SpawnRandomIcons         |
 	//\--------------------------------/--------------------------
@@ -144,6 +125,7 @@ namespace Space
 		}
 		return numCreated;
 	}
+
 	//+--------------------------------\--------------------------
 	//|	  SpawnRandomXLargeAsteroids   |
 	//\--------------------------------/--------------------------
@@ -266,7 +248,11 @@ namespace Space
 		return numCreated;
 	}
 
-	void Game::VerifyWorldDimensions() const
+	//+--------------------------------\--------------------------
+	//|	   ValidateWorldDimensions     |
+	//\--------------------------------/--------------------------
+	// Make sure world is not too small
+	void Game::ValidateWorldDimensions() const
 	{
 		// Limit world dimensions relative to maximum camera dimensions
 		float width = m_world.GetWorldRect().GetWidth();
@@ -574,14 +560,14 @@ namespace Space
 			{
 				m_delayedLevelChange = false;
 				m_currentLevel++;
-				InitLevel();
+				StartCurrentLevel();
 			}
 		}
 
 		// Update
 		m_world.Update(dt, playerController);
 		UpdateCamera(dt, playerController);
-		UpdateObjectives();
+//		UpdateObjectives();
 	}
 	void Game::StartDelayedLevelChange(float delay)
 	{
@@ -597,10 +583,10 @@ namespace Space
 					m_world.GetLocalCenterOfMass(m_cameraFollowEntityID)));
 		m_camera.Update(dt, playerController.zoomOutFactor);
 	}
-	void Game::UpdateObjectives()
-	{
+//	void Game::UpdateObjectives()
+//	{
 
-	}
+//	}
 
 	//+--------------------------\--------------------------------
 	//|	       SayGoodbye        | override (DestroyListener)

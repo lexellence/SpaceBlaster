@@ -185,8 +185,8 @@ namespace Space
 		// void MorphedIntoEntity(WorldID replacedEntityID, WorldID newEntityID) override;
 
 	private:
-		void InitLevel();
-		void ClearLevel();
+		void StartCurrentLevel();
+		void ClearLevel(const b2Vec2& newWorldDimensions);
 		void SpawnPlayer();
 		void SpawnExit();
 		unsigned SpawnRandomIcons(unsigned count);
@@ -194,11 +194,11 @@ namespace Space
 		unsigned SpawnRandomLargeAsteroids(unsigned count);
 		unsigned SpawnRandomMediumAsteroids(unsigned count);
 		unsigned SpawnRandomSmallAsteroids(unsigned count);
-		void VerifyWorldDimensions() const;
+		void ValidateWorldDimensions() const;
 
 		void StartDelayedLevelChange(float delay);
 		void UpdateCamera(float dt, const PlayerController &playerController);
-		void UpdateObjectives();
+//		void UpdateObjectives();
 		void SetPlayer(WorldID entityID);
 		void FollowEntity(WorldID entityID);
 

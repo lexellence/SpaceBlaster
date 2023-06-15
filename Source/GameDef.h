@@ -12,38 +12,38 @@
 #include "World.h"
 namespace Space
 {
-	struct EntityDef
-	{
+//	struct EntityDef
+//	{
 
-	};
-	struct EntityInstance
-	{
+//	};
+//	struct EntityInstance
+//	{
 
-	};
-	enum class ObjectiveType
-	{
-		DESTROY, COLLECT
-	};
-	struct Objective
-	{
-		ObjectiveType type;
-		std::string text;
-		std::vector<WorldID> entityIDs;
-		int num;
-	};
-	struct Quest
-	{
-		std::vector<Objective> objectiveList;
-	};
-	struct QuestSequence
-	{
-		std::vector<Quest> questList;
-	};
-	struct LevelDef
-	{
-		std::vector<EntityInstance> entityList;
-		std::vector<QuestSequence> missionSequenceList;
-	};
+//	};
+//	enum class ObjectiveType
+//	{
+//		DESTROY, COLLECT
+//	};
+//	struct Objective
+//	{
+//		ObjectiveType type;
+//		std::string text;
+//		std::vector<WorldID> entityIDs;
+//		int num;
+//	};
+//	struct Quest
+//	{
+//		std::vector<Objective> objectiveList;
+//	};
+//	struct QuestSequence
+//	{
+//		std::vector<Quest> questList;
+//	};
+//	struct LevelDef
+//	{
+//		std::vector<EntityInstance> entityList;
+////		std::vector<QuestSequence> missionSequenceList;
+//	};
 	struct GameDef
 	{
 		void LoadFrom(const std::string& filePath);
@@ -56,7 +56,7 @@ namespace Space
 		float cameraInitialZoomOutPercent;
 
 		StarfieldDef starfield;
-		std::map<std::string, EntityDef> entityDefMap;
-		std::map<std::string, LevelDef> levelDefMap;
+//		std::map<std::string, EntityDef> entityDefMap;
+//		std::map<std::string, LevelDef> levelDefMap;
 	};
 }
