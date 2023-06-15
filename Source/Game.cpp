@@ -585,7 +585,7 @@ namespace Space
 		WorldID id = CreateBasicObject(world, size, DEFAULT_DRAW_LAYER, m_sodaModel, FUEL_MATERIAL, FUEL_FILTER, b2_dynamicBody, def);
 		PowerUpComponent powerUp;
 		powerUp.type = PowerUpType::FUEL;
-		powerUp.value.f = 10.0f;
+		powerUp.value = 10;
 		m_world.AddPowerUpComponent(id, powerUp);
 		return id;
 	}
@@ -595,7 +595,7 @@ namespace Space
 		WorldID id = CreateBasicObject(world, size, DEFAULT_DRAW_LAYER, m_melonModel, FUEL_MATERIAL, FUEL_FILTER, b2_dynamicBody, def);
 		PowerUpComponent powerUp;
 		powerUp.type = PowerUpType::FUEL;
-		powerUp.value.f = 20.0f;
+		powerUp.value = 20;
 		m_world.AddPowerUpComponent(id, powerUp);
 		return id;
 	}
@@ -606,7 +606,7 @@ namespace Space
 		WorldID id = CreateBasicObject(world, size, DEFAULT_DRAW_LAYER, m_appleModel, FUEL_MATERIAL, FUEL_FILTER, b2_dynamicBody, def);
 		PowerUpComponent powerUp;
 		powerUp.type = PowerUpType::FUEL;
-		powerUp.value.f = 5.0f;
+		powerUp.value = 5;
 		m_world.AddPowerUpComponent(id, powerUp);
 		return id;
 	}
@@ -618,7 +618,7 @@ namespace Space
 		WorldID id = CreateBasicObject(world, size, DEFAULT_DRAW_LAYER, model, ICON_MATERIAL, ICON_FILTER, b2_dynamicBody, def);
 		PowerUpComponent powerUp;
 		powerUp.type = PowerUpType::ICON;
-		powerUp.value.f = 1.0f;
+		powerUp.value = 1;
 		m_world.AddPowerUpComponent(id, powerUp);
 		return id;
 	}

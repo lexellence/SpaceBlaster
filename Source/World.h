@@ -9,7 +9,6 @@
 \**************************************************************************************/
 #pragma once
 #include "ParticleSystem.h"
-#include "Exceptions.h"
 #include "WorldDef.h"
 
 namespace Space
@@ -35,7 +34,7 @@ namespace Space
 	};
 	struct IconCollectorComponent
 	{
-		float iconsCollected{ 0.0f };
+		unsigned iconsCollected{ 0 };
 	};
 	struct DrawFixturesComponent
 	{
@@ -124,11 +123,7 @@ namespace Space
 	struct PowerUpComponent
 	{
 		PowerUpType type;
-		union
-		{
-			float f;
-			int i;
-		} value;
+		int value;
 	};
 
 	// Components have other associated data while flags do not

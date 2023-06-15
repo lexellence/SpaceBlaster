@@ -733,8 +733,8 @@ namespace Space
 
 		if(isCollector1 && isIcon2)
 		{
-			m_iconCollectorComponents[id1].iconsCollected += m_powerUpComponents[id2].value.f;
-			m_powerUpComponents[id2].value.f = 0.0f;
+			m_iconCollectorComponents[id1].iconsCollected += m_powerUpComponents[id2].value;
+			m_powerUpComponents[id2].value = 0;
 			contactPtr->SetEnabled(false);
 			Destroy(id2);
 		}
