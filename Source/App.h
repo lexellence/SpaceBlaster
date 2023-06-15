@@ -16,8 +16,8 @@
 #include "Exceptions.h"
 namespace Space
 {
-	const AppStateID FIRST_APP_STATE{ AppStateID::INTRO };
-	const float MAX_APP_STEP{ 1.0f };
+	const AppStateID FIRST_APP_STATE = AppStateID::INTRO;
+	const float MAX_APP_STEP = 1.0f;
 	class App
 	{
 	public:

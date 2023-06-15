@@ -11,7 +11,7 @@
 namespace Space
 {
 	using StarID = unsigned;
-	const StarID STARFIELD_MAX_STARS{ 50000 };
+	const StarID STARFIELD_MAX_STARS = 50000;
 	struct StarfieldDef
 	{
 		float maxCameraDimension;

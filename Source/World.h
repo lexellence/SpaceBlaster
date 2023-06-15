@@ -14,15 +14,15 @@
 namespace Space
 {
 	using WorldID = size_t;
-	const WorldID WORLD_MAX_ENTITIES{ 10000 };
-	const unsigned WORLD_MAX_PROJECTILE_LAUNCHER_SLOTS{ 5 };
-	const unsigned WORLD_MAX_THRUSTER_SLOTS{ 5 };
-	const unsigned WORLD_NUM_CLONES{ 3 };
-	const float WORLD_CLONE_SYNC_TOLERANCE_FLT_EPSILONS{ 4.0f * FLT_EPSILON };
+	const WorldID WORLD_MAX_ENTITIES = 10000;
+	const unsigned WORLD_MAX_PROJECTILE_LAUNCHER_SLOTS = 5;
+	const unsigned WORLD_MAX_THRUSTER_SLOTS = 5;
+	const unsigned WORLD_NUM_CLONES = 3;
+	const float WORLD_CLONE_SYNC_TOLERANCE_FLT_EPSILONS = 4.0f * FLT_EPSILON;
 	const d2d::Color WORLD_DEBUG_DRAW_FIXTURES_COLOR{ d2d::WHITE_OPAQUE };
-	const unsigned WORLD_MAX_ANIMATION_FRAMES{ 5 };
-	const bool WORLD_IGNORE_CLONE_VS_CLONE_COLLISIONS{ false };
-	const float WORLD_BOOST_FUEL_USE_PENALTY_FACTOR{ 2.0f };
+	const unsigned WORLD_MAX_ANIMATION_FRAMES = 5;
+	const bool WORLD_IGNORE_CLONE_VS_CLONE_COLLISIONS = false;
+	const float WORLD_BOOST_FUEL_USE_PENALTY_FACTOR = 2.0f;
 
 	struct InstanceDef
 	{
