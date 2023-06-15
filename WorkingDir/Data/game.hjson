@@ -1,5 +1,4 @@
 {
-  firstLevel: LEVEL0
   // Both width and height will be restricted  
   // to this range regardless of aspect ratio.
   cameraDimensionRange: [ 75.0, 300.0 ]

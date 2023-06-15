@@ -123,6 +123,11 @@ namespace Space
 	const float APPLE_HEIGHT = 2.0f;
 	const float ICON_HEIGHT = 4.0f;
 
+	// Random entity placement
+	const float MIN_BOUNDING_RADII_GAP_RELATIVE_TO_HEIGHT_ICONS = 2.0f;
+	const float MIN_BOUNDING_RADII_GAP_RELATIVE_TO_HEIGHT = 0.25f;
+	const unsigned MAX_ATTEMPTS_PER_ENTITY = 500;
+
 	const float PARTICLE_EXPLOSION_RELATIVE_SIZE = 1.0f;
 	const unsigned BLASTER_NUM_PARTICLES = 600;
 	const unsigned SCOUT_NUM_PARTICLES = 600;
@@ -180,14 +185,20 @@ namespace Space
 		// void MorphedIntoEntity(WorldID replacedEntityID, WorldID newEntityID) override;
 
 	private:
-		void InitLevel(const std::string &level);
-		void StartDelayedLevelChange(const std::string &level, float delay);
+		void InitLevel();
+		void ClearLevel();
+		void SpawnPlayer();
+		void SpawnExit();
+		unsigned SpawnRandomIcons(unsigned count);
+		unsigned SpawnRandomXLargeAsteroids(unsigned count);
+		unsigned SpawnRandomLargeAsteroids(unsigned count);
+		unsigned SpawnRandomMediumAsteroids(unsigned count);
+		unsigned SpawnRandomSmallAsteroids(unsigned count);
+		void VerifyWorldDimensions() const;
+
+		void StartDelayedLevelChange(float delay);
 		void UpdateCamera(float dt, const PlayerController &playerController);
 		void UpdateObjectives();
-		void LoadTest0();
-		void LoadTest1();
-		void LoadTest2();
-		void LoadLevel0();
 		void SetPlayer(WorldID entityID);
 		void FollowEntity(WorldID entityID);
 
@@ -215,31 +226,29 @@ namespace Space
 		Starfield m_starfield;
 
 		Camera m_camera;
-		bool m_cameraFollowingEntity{false};
+		bool m_cameraFollowingEntity{ false };
 		WorldID m_cameraFollowEntityID;
 
 		bool m_playerSet{false};
 		WorldID m_playerID;
 
-		bool m_startOver{false};
-		std::string m_currentLevel;
-		bool m_delayedLevelChange{false};
-		std::string m_delayedLevel;
+		unsigned m_currentLevel{ 0 };
+		bool m_delayedLevelChange{ false };
 		float m_levelChangeDelayTime;
 		float m_levelChangeDelayTimeAccumulator;
-		std::vector<Objective> m_objectives;
+//		std::vector<Objective> m_objectives;
 
 		// Fonts
 		d2d::FontReference m_hudFont{"Fonts/OrbitronLight.otf"};
 		float m_hudFontSize{0.05f};
 
 		// HUD Objectives
-		const b2Vec2 m_objectivesPosition{0.90f, 0.90f};
-		const d2d::Alignment m_objectivesAlignment{d2d::Alignment::RIGHT_TOP};
-		const d2d::TextStyle m_objectivesTextStyle{
-			m_hudFont,
-			{0.5f, 0.3f, 0.8f, 1.0f},
-			m_hudFontSize};
+//		const b2Vec2 m_objectivesPosition{0.90f, 0.90f};
+//		const d2d::Alignment m_objectivesAlignment{d2d::Alignment::RIGHT_TOP};
+//		const d2d::TextStyle m_objectivesTextStyle{
+//			m_hudFont,
+//			{0.5f, 0.3f, 0.8f, 1.0f},
+//			m_hudFontSize};
 
 		// HUD Fuel
 		const b2Vec2 m_fuelPosition{0.10f, 0.10f};

@@ -49,8 +49,6 @@ namespace Space
 		void LoadFrom(const std::string& filePath);
 		void Validate() const;
 
-		std::string firstLevel;
-
 		// Both width and height will be restricted
 		//	to this range regardless of aspect ratio.
 		d2d::Range<float> cameraDimensionRange;

@@ -30,29 +30,244 @@ namespace Space
 	void Game::Init()
 	{
 		m_settings.LoadFrom("Data/game.hjson");
-		InitLevel(m_settings.firstLevel);
+		InitLevel();
 	}
-	void Game::InitLevel(const std::string& level)
+	void Game::InitLevel()
+	{
+		ClearLevel();
+		SpawnPlayer();
+		SpawnExit();
+
+
+		unsigned numFailed{ 0 };
+
+		// Start objectives
+//		m_objectives.clear();
+
+		// Collect Icons
+//		Objective collectIconsObjective;
+//		collectIconsObjective.type = ObjectiveType::DESTROY;
+//		collectIconsObjective.text = "Collect the icons";
+//		collectIconsObjective.num = 0;
+
+		unsigned numToCreate = 8;
+		numFailed += numToCreate - SpawnRandomIcons(numToCreate);
+
+		// Apply objective
+//		m_objectives.push_back(collectIconsObjective);
+
+		// Destroy Asteroids
+//		Objective destroyAsteroidsObjective;
+//		destroyAsteroidsObjective.type = ObjectiveType::DESTROY;
+//		destroyAsteroidsObjective.text = "Destroy all the biggest asteroids";
+//		destroyAsteroidsObjective.num = 0;
+
+		numToCreate = 20;
+		numFailed += numToCreate - SpawnRandomXLargeAsteroids(numToCreate);
+		numToCreate = 30;
+		numFailed += numToCreate - SpawnRandomLargeAsteroids(numToCreate);
+		numToCreate = 40;
+		numFailed += numToCreate - SpawnRandomMediumAsteroids(numToCreate);
+		numToCreate = 50;
+		numFailed += numToCreate - SpawnRandomMediumAsteroids(numToCreate);
+
+		// Apply objective
+//		m_objectives.push_back(destroyAsteroidsObjective);
+
+		if(numFailed > 0)
+			d2LogInfo << "Game::LoadLevel0: Entity creation attempt limit reached " << numFailed << " times";
+
+		VerifyWorldDimensions();
+	}
+	//+-----------------\-----------------------------------------
+	//|	   ClearLevel   |
+	//\-----------------/-----------------------------------------
+	void Game::ClearLevel()
 	{
 		m_camera.Init(m_settings.cameraDimensionRange, m_settings.cameraZoomSpeed, m_settings.cameraInitialZoomOutPercent);
 		m_cameraFollowingEntity = false;
 		m_starfield.Init(m_settings.starfield);
 		m_playerSet = false;
-		m_startOver = false;
-		m_currentLevel = level;
 		m_delayedLevelChange = false;
 
-		if(level == "TEST0")
-			LoadTest0();
-		else if(level == "TEST1")
-			LoadTest1();
-		else if(level == "TEST2")
-			LoadTest2();
-		else if(level == "LEVEL0")
-			LoadLevel0();
-		else
-			throw GameException{ "Invalid level name: " + level };
+		b2Vec2 center{ b2Vec2_zero };
+		b2Vec2 size{ 500.0f, 500.0f };
+		d2d::Rect worldRect;
+		worldRect.SetCenter(center, size);
+		m_world.Init(worldRect);
+	}
+	//+-----------------\-----------------------------------------
+	//|	  SpawnPlayer   |
+	//\-----------------/-----------------------------------------
+	void Game::SpawnPlayer()
+	{
+		// Player
+		InstanceDef def{ .position{ b2Vec2_zero }, .angle{ d2d::PI_OVER_TWO } };
+		CreatePlayer(m_world, def);
+	}
+	//+-----------------\-----------------------------------------
+	//|	   SpawnExit    |
+	//\-----------------/-----------------------------------------
+	void Game::SpawnExit()
+	{
+		InstanceDef def{ .position{ -5.0f, -12.0f } };
+		CreateExit(m_world, def);
+	}
+	//+--------------------------------\--------------------------
+	//|	      SpawnRandomIcons         |
+	//\--------------------------------/--------------------------
+	// returns number of entities created
+	unsigned Game::SpawnRandomIcons(unsigned count)
+	{
+		const float minGap = MIN_BOUNDING_RADII_GAP_RELATIVE_TO_HEIGHT_ICONS * ICON_HEIGHT;
+		unsigned numCreated = 0;
+		for(unsigned i = 0; i < count; ++i)
+		{
+			int model{ d2d::RandomInt({0, NUM_ICON_MODELS - 1}) };
+			b2Vec2 size;
+			size.y = ICON_HEIGHT;
+			size.x = size.y * m_iconTextures[model].GetWidthToHeightRatio();
+			float boundingRadius = size.Length() * 0.5f;
 
+			InstanceDef def;
+			bool positionFound =
+					m_world.GetRandomPositionAwayFromExistingEntities(
+						boundingRadius, minGap, MAX_ATTEMPTS_PER_ENTITY, def.position);
+			if(positionFound)
+			{
+				def.angle = 0.0f;
+				CreateIcon(m_world, model, def);
+//				collectIconsObjective.entityIDs.push_back(id);
+//				collectIconsObjective.num++;
+				numCreated++;
+			}
+		}
+		return numCreated;
+	}
+	//+--------------------------------\--------------------------
+	//|	  SpawnRandomXLargeAsteroids   |
+	//\--------------------------------/--------------------------
+	// returns number of entities created
+	unsigned Game::SpawnRandomXLargeAsteroids(unsigned count)
+	{
+		unsigned numCreated = 0;
+		const float minGap = XLARGE_ASTEROID_HEIGHT * MIN_BOUNDING_RADII_GAP_RELATIVE_TO_HEIGHT;
+		for(unsigned i = 0; i < count; ++i)
+		{
+			int model = d2d::RandomInt({0, NUM_XLARGE_ASTEROID_MODELS - 1});
+			b2Vec2 size;
+			size.y = XLARGE_ASTEROID_HEIGHT * XLARGE_ASTEROID_RELATIVE_HEIGHTS[model];
+			size.x = size.y * m_asteroidXLargeTextures[model].GetWidthToHeightRatio();
+			float boundingRadius = size.Length() * 0.5f;
+
+			InstanceDef def;
+			bool positionFound =
+					m_world.GetRandomPositionAwayFromExistingEntities(
+						boundingRadius, minGap, MAX_ATTEMPTS_PER_ENTITY, def.position);
+			if(positionFound)
+			{
+				def.angle = d2d::RandomFloat({ 0.0f, d2d::TWO_PI });
+				CreateXLargeAsteroid(m_world, model, d2d::RandomBool(), def);
+//				destroyAsteroidsObjective.entityIDs.push_back(id);
+//				destroyAsteroidsObjective.num++;
+				numCreated++;
+			}
+		}
+		return numCreated;
+	}
+
+	//+--------------------------------\--------------------------
+	//|	  SpawnRandomLargeAsteroids    |
+	//\--------------------------------/--------------------------
+	// returns number of entities created
+	unsigned Game::SpawnRandomLargeAsteroids(unsigned count)
+	{
+		unsigned numCreated = 0;
+		const float minGap = LARGE_ASTEROID_HEIGHT * MIN_BOUNDING_RADII_GAP_RELATIVE_TO_HEIGHT;
+		for(unsigned i = 0; i < count; ++i)
+		{
+			int model = d2d::RandomInt({0, NUM_LARGE_ASTEROID_MODELS - 1});
+			b2Vec2 size;
+			size.y = LARGE_ASTEROID_HEIGHT * LARGE_ASTEROID_RELATIVE_HEIGHTS[model];
+			size.x = size.y * m_asteroidLargeTextures[model].GetWidthToHeightRatio();
+			float boundingRadius = size.Length() * 0.5f;
+
+			InstanceDef def;
+			bool positionFound =
+					m_world.GetRandomPositionAwayFromExistingEntities(
+						boundingRadius, minGap, MAX_ATTEMPTS_PER_ENTITY, def.position);
+			if(positionFound)
+			{
+				def.angle = d2d::RandomFloat({ 0.0f, d2d::TWO_PI });
+				CreateLargeAsteroid(m_world, model, d2d::RandomBool(), def);
+				numCreated++;
+			}
+		}
+		return numCreated;
+	}
+
+	//+--------------------------------\--------------------------
+	//|	  SpawnRandomMediumAsteroids   |
+	//\--------------------------------/--------------------------
+	// returns number of entities created
+	unsigned Game::SpawnRandomMediumAsteroids(unsigned count)
+	{
+		unsigned numCreated = 0;
+		const float minGap = MEDIUM_ASTEROID_HEIGHT * MIN_BOUNDING_RADII_GAP_RELATIVE_TO_HEIGHT;
+		for(unsigned i = 0; i < count; ++i)
+		{
+			int model = d2d::RandomInt({0, NUM_MEDIUM_ASTEROID_MODELS - 1});
+			b2Vec2 size;
+			size.y = MEDIUM_ASTEROID_HEIGHT * MEDIUM_ASTEROID_RELATIVE_HEIGHTS[model];
+			size.x = size.y * m_asteroidMediumTextures[model].GetWidthToHeightRatio();
+			float boundingRadius = size.Length() * 0.5f;
+
+			InstanceDef def;
+			bool positionFound =
+					m_world.GetRandomPositionAwayFromExistingEntities(
+						boundingRadius, minGap, MAX_ATTEMPTS_PER_ENTITY, def.position);
+			if(positionFound)
+			{
+				def.angle = d2d::RandomFloat({ 0.0f, d2d::TWO_PI });
+				CreateMediumAsteroid(m_world, model, d2d::RandomBool(), def);
+				numCreated++;
+			}
+		}
+		return numCreated;
+	}
+
+	//+--------------------------------\--------------------------
+	//|	  SpawnRandomSmallAsteroids    |
+	//\--------------------------------/--------------------------
+	// returns number of entities created
+	unsigned Game::SpawnRandomSmallAsteroids(unsigned count)
+	{
+		unsigned numCreated = 0;
+		const float minGap = SMALL_ASTEROID_HEIGHT * MIN_BOUNDING_RADII_GAP_RELATIVE_TO_HEIGHT;
+		for(unsigned i = 0; i < count; ++i)
+		{
+			int model = d2d::RandomInt({0, NUM_SMALL_ASTEROID_MODELS - 1});
+			b2Vec2 size;
+			size.y = SMALL_ASTEROID_HEIGHT * SMALL_ASTEROID_RELATIVE_HEIGHTS[model];
+			size.x = size.y * m_asteroidSmallTextures[model].GetWidthToHeightRatio();
+			float boundingRadius = size.Length() * 0.5f;
+
+			InstanceDef def;
+			bool positionFound =
+					m_world.GetRandomPositionAwayFromExistingEntities(
+						boundingRadius, minGap, MAX_ATTEMPTS_PER_ENTITY, def.position);
+			if(positionFound)
+			{
+				def.angle = d2d::RandomFloat({ 0.0f, d2d::TWO_PI });
+				CreateSmallAsteroid(m_world, model, d2d::RandomBool(), def);
+				numCreated++;
+			}
+		}
+		return numCreated;
+	}
+
+	void Game::VerifyWorldDimensions() const
+	{
 		// Limit world dimensions relative to maximum camera dimensions
 		float width = m_world.GetWorldRect().GetWidth();
 		float height = m_world.GetWorldRect().GetHeight();
@@ -61,7 +276,6 @@ namespace Space
 			throw GameException{ "World width(" + d2d::ToString(width) + ") too small compared to max camera width(" + d2d::ToString(max) };
 		if(height < max * MIN_WORLD_TO_CAMERA_RATIO)
 			throw GameException{ "World height(" + d2d::ToString(height) + ") too small compared to max camera height(" + d2d::ToString(max) };
-
 	}
 	void Game::SetPlayer(WorldID entityID)
 	{
@@ -81,122 +295,6 @@ namespace Space
 	{
 		m_cameraFollowingEntity = true;
 		m_cameraFollowEntityID = entityID;
-	}
-	void Game::LoadTest0()
-	{
-		//b2Vec2 center{ b2Vec2_zero };
-		//b2Vec2 size{ 100.0f, 100.0f };
-		//d2d::Rect worldRect;
-		//worldRect.SetCenter(center, size);
-		//m_world.Init(worldRect);
-		//b2Vec2 playerStartPosition{ b2Vec2_zero };
-		//float playerStartRotationPercent{ 0.25f };
-		//CreatePlayer(m_world, playerStartPosition, playerStartRotationPercent * d2d::TWO_PI);
-		//CreateXLargeAsteroid(m_world, 0, false, playerStartPosition + b2Vec2{ 0.0f, 10.0f }, 0.0f, b2Vec2_zero, 0.0f);
-	}
-	void Game::LoadTest1()
-	{
-		//b2Vec2 center{ b2Vec2_zero };
-		//b2Vec2 size{ 500.0f, 500.0f };
-		//d2d::Rect worldRect;
-		//worldRect.SetCenter(center, size);
-		//m_world.Init(worldRect);
-
-		//b2Vec2 playerStartPosition{ b2Vec2_zero };
-		//CreatePlayer(m_world, playerStartPosition, d2d::PI_OVER_TWO);
-
-		//float minBoundingRadiiGap{ XLARGE_ASTEROID_HEIGHT * 0.25f };
-		//unsigned maxAttempts{ 500 };
-		//unsigned numFailed{ 0 };
-		//for(unsigned i = 0; i < 20; ++i)
-		//{
-		//	int model{ d2d::RandomInt({0, NUM_XLARGE_ASTEROID_MODELS - 1}) };
-		//	b2Vec2 size;
-		//	size.y = XLARGE_ASTEROID_HEIGHT * XLARGE_ASTEROID_RELATIVE_HEIGHTS[model];
-		//	size.x = size.y * m_asteroidXLargeTextures[model].GetWidthToHeightRatio();
-		//	float boundingRadius{ size.Length() * 0.5f };
-		//	b2Vec2 position;
-		//	bool positionFound{ m_world.GetRandomPositionAwayFromExistingEntities(boundingRadius, minBoundingRadiiGap, maxAttempts, position) };
-		//	if(positionFound)
-		//		CreateXLargeAsteroid(m_world, model, d2d::RandomBool(), position,
-		//			d2d::RandomFloat({ 0.0f, d2d::TWO_PI }), b2Vec2_zero, 0.0f);
-		//	else
-		//		++numFailed;
-		//}
-		//minBoundingRadiiGap = LARGE_ASTEROID_HEIGHT * 0.25f;
-		//for(unsigned i = 0; i < 30; ++i)
-		//{
-		//	int model{ d2d::RandomInt({0, NUM_LARGE_ASTEROID_MODELS - 1}) };
-		//	b2Vec2 size;
-		//	size.y = LARGE_ASTEROID_HEIGHT * LARGE_ASTEROID_RELATIVE_HEIGHTS[model];
-		//	size.x = size.y * m_asteroidLargeTextures[model].GetWidthToHeightRatio();
-		//	float boundingRadius{ size.Length() * 0.5f };
-		//	b2Vec2 position;
-		//	bool positionFound{ m_world.GetRandomPositionAwayFromExistingEntities(boundingRadius, minBoundingRadiiGap, maxAttempts, position) };
-		//	if(positionFound)
-		//		CreateLargeAsteroid(m_world, model, d2d::RandomBool(), position,
-		//			d2d::RandomFloat({ 0.0f, d2d::TWO_PI }), b2Vec2_zero, 0.0f);
-		//	else
-		//		++numFailed;
-		//}
-		//minBoundingRadiiGap = MEDIUM_ASTEROID_HEIGHT * 0.25f;
-		//for(unsigned i = 0; i < 40; ++i)
-		//{
-		//	int model{ d2d::RandomInt({0, NUM_MEDIUM_ASTEROID_MODELS - 1}) };
-		//	b2Vec2 size;
-		//	size.y = MEDIUM_ASTEROID_HEIGHT * MEDIUM_ASTEROID_RELATIVE_HEIGHTS[model];
-		//	size.x = size.y * m_asteroidMediumTextures[model].GetWidthToHeightRatio();
-		//	float boundingRadius{ size.Length() * 0.5f };
-		//	b2Vec2 position;
-		//	bool positionFound{ m_world.GetRandomPositionAwayFromExistingEntities(boundingRadius, minBoundingRadiiGap, maxAttempts, position) };
-		//	if(positionFound)
-		//		CreateMediumAsteroid(m_world, model, d2d::RandomBool(), position,
-		//			d2d::RandomFloat({ 0.0f, d2d::TWO_PI }), b2Vec2_zero, 0.0f);
-		//	else
-		//		++numFailed;
-		//}
-		//minBoundingRadiiGap = SMALL_ASTEROID_HEIGHT * 0.25f;
-		//for(unsigned i = 0; i < 100; ++i)
-		//{
-		//	int model{ d2d::RandomInt({0, NUM_SMALL_ASTEROID_MODELS - 1}) };
-		//	b2Vec2 size;
-		//	size.y = SMALL_ASTEROID_HEIGHT * SMALL_ASTEROID_RELATIVE_HEIGHTS[model];
-		//	size.x = size.y * m_asteroidSmallTextures[model].GetWidthToHeightRatio();
-		//	float boundingRadius{ size.Length() * 0.5f };
-		//	b2Vec2 position;
-		//	bool positionFound{ m_world.GetRandomPositionAwayFromExistingEntities(boundingRadius, minBoundingRadiiGap, maxAttempts, position) };
-		//	if(positionFound)
-		//		CreateSmallAsteroid(m_world, model, d2d::RandomBool(), position,
-		//			d2d::RandomFloat({ 0.0f, d2d::TWO_PI }), b2Vec2_zero, 0.0f);
-		//	else
-		//		++numFailed;
-		//}
-
-		//if(numFailed > 0)
-		//	d2LogInfo << "Game::LoadTest1: Entity creation attempt limit reached " << numFailed << " times";
-	}
-	void Game::LoadTest2()
-	{
-		//b2Vec2 center{ b2Vec2_zero };
-		//b2Vec2 size{ 1000.0f, 1000.0f };
-		//d2d::Rect worldRect;
-		//worldRect.SetCenter(center, size);
-		//m_world.Init(worldRect);
-
-		//b2Vec2 playerStartPosition{ b2Vec2_zero };
-		//CreatePlayer(m_world, playerStartPosition, d2d::PI_OVER_TWO);
-		//for(unsigned j = 0; j < 2; ++j)
-		//{
-		//	bool isRock{ (bool)j };
-		//	for(unsigned model = 0; model < NUM_XLARGE_ASTEROID_MODELS; ++model)
-		//		CreateXLargeAsteroid(m_world, model, isRock, playerStartPosition + b2Vec2{ j * 75.0f, (model + 1) * 20.0f }, 0.0f, b2Vec2_zero, 0.0f);
-		//	for(unsigned model = 0; model < NUM_LARGE_ASTEROID_MODELS; ++model)
-		//		CreateLargeAsteroid(m_world, model, isRock, playerStartPosition + b2Vec2{ 8.0f + j * 75.0f, (model + 1) * 20.0f }, 0.0f, b2Vec2_zero, 0.0f);
-		//	for(unsigned model = 0; model < NUM_MEDIUM_ASTEROID_MODELS; ++model)
-		//		CreateMediumAsteroid(m_world, model, isRock, playerStartPosition + b2Vec2{ 16.0f + j * 75.0f, (model + 1) * 20.0f }, 0.0f, b2Vec2_zero, 0.0f);
-		//	for(unsigned model = 0; model < NUM_SMALL_ASTEROID_MODELS; ++model)
-		//		CreateSmallAsteroid(m_world, model, isRock, playerStartPosition + b2Vec2{ 24.0f + j * 75.0f, (model + 1) * 20.0f }, 0.0f, b2Vec2_zero, 0.0f);
-		//}
 	}
 	WorldID Game::CreateExit(World& world, const InstanceDef& def)
 	{
@@ -264,166 +362,6 @@ namespace Space
 		world.SetFlags(id, FLAG_EXIT, true);
 
 		return id;
-	}
-	void Game::LoadLevel0()
-	{
-		b2Vec2 center{ b2Vec2_zero };
-		b2Vec2 size{ 500.0f, 500.0f };
-		d2d::Rect worldRect;
-		worldRect.SetCenter(center, size);
-		m_world.Init(worldRect);
-
-		b2Vec2 playerStartPosition{ b2Vec2_zero };
-		{
-			InstanceDef def{ playerStartPosition, d2d::PI_OVER_TWO };
-			CreatePlayer(m_world, def);
-
-			def.position.Set(-5.0f, -12.0f);
-			def.angle = 0.0f;
-			CreateExit(m_world, def);
-
-			def.position.Set(-5.0f, 15.0f);
-			def.angle = 0.0f;
-			// CreateSoda(m_world, def);
-
-			def.position.Set(10.0f, 15.0f);
-			def.angle = 0.0f;
-			// CreateMelon(m_world, def);
-
-			def.position.Set(0.0f, 15.0f);
-			def.angle = 0.0f;
-			CreateApple(m_world, def);
-		}
-
-		// How many times to try a random placement
-		float minBoundingRadiiGap{ 0.0f };
-		unsigned numFailed{ 0 };
-		const unsigned maxAttempts{ 500 };
-
-		// Start objectives
-		m_objectives.clear();
-
-		// Collect Icons
-		Objective collectIconsObjective;
-		collectIconsObjective.type = ObjectiveType::DESTROY;
-		collectIconsObjective.text = "Collect the icons";
-		collectIconsObjective.num = 0;
-
-		// Create icons
-		for(unsigned i = 0; i < 8; ++i)
-		{
-			int model{ d2d::RandomInt({0, NUM_ICON_MODELS - 1}) };
-			b2Vec2 size;
-			size.y = ICON_HEIGHT;
-			size.x = size.y * m_iconTextures[model].GetWidthToHeightRatio();
-			float boundingRadius{ size.Length() * 0.5f };
-
-			InstanceDef def;
-			bool positionFound = m_world.GetRandomPositionAwayFromExistingEntities(boundingRadius, minBoundingRadiiGap, maxAttempts, def.position);
-			if(positionFound)
-			{
-				def.angle = 0.0f;
-				WorldID id = CreateIcon(m_world, model, def);
-				collectIconsObjective.entityIDs.push_back(id);
-				collectIconsObjective.num++;
-			}
-			else
-				++numFailed;
-		}
-
-		// Apply objective
-		m_objectives.push_back(collectIconsObjective);
-
-		// Destroy Asteroids
-		Objective destroyAsteroidsObjective;
-		destroyAsteroidsObjective.type = ObjectiveType::DESTROY;
-		destroyAsteroidsObjective.text = "Destroy all the biggest asteroids";
-		destroyAsteroidsObjective.num = 0;
-
-		// Create x-large asteroids
-		minBoundingRadiiGap = XLARGE_ASTEROID_HEIGHT * 0.25f;
-		for(unsigned i = 0; i < 40; ++i)
-		{
-			int model{ d2d::RandomInt({0, NUM_XLARGE_ASTEROID_MODELS - 1}) };
-			b2Vec2 size;
-			size.y = XLARGE_ASTEROID_HEIGHT * XLARGE_ASTEROID_RELATIVE_HEIGHTS[model];
-			size.x = size.y * m_asteroidXLargeTextures[model].GetWidthToHeightRatio();
-			float boundingRadius{ size.Length() * 0.5f };
-
-			InstanceDef def;
-			bool positionFound = m_world.GetRandomPositionAwayFromExistingEntities(boundingRadius, minBoundingRadiiGap, maxAttempts, def.position);
-			if(positionFound)
-			{
-				def.angle = d2d::RandomFloat({ 0.0f, d2d::TWO_PI });
-				WorldID id = CreateXLargeAsteroid(m_world, model, d2d::RandomBool(), def);
-				destroyAsteroidsObjective.entityIDs.push_back(id);
-				destroyAsteroidsObjective.num++;
-			}
-			else
-				++numFailed;
-		}
-
-		// Create large asteroids
-		minBoundingRadiiGap = LARGE_ASTEROID_HEIGHT * 0.25f;
-		for(unsigned i = 0; i < 30; ++i)
-		{
-			int model{ d2d::RandomInt({0, NUM_LARGE_ASTEROID_MODELS - 1}) };
-			b2Vec2 size;
-			size.y = LARGE_ASTEROID_HEIGHT * LARGE_ASTEROID_RELATIVE_HEIGHTS[model];
-			size.x = size.y * m_asteroidLargeTextures[model].GetWidthToHeightRatio();
-			float boundingRadius{ size.Length() * 0.5f };
-			b2Vec2 position;
-
-			InstanceDef def;
-			bool positionFound = m_world.GetRandomPositionAwayFromExistingEntities(boundingRadius, minBoundingRadiiGap, maxAttempts, def.position);
-			if(positionFound)
-			{
-				def.angle = d2d::RandomFloat({ 0.0f, d2d::TWO_PI });
-				CreateLargeAsteroid(m_world, model, d2d::RandomBool(), def);
-			}
-			else
-				++numFailed;
-		}
-		// Create medium asteroids
-		//minBoundingRadiiGap = MEDIUM_ASTEROID_HEIGHT * 0.25f;
-		//for(unsigned i = 0; i < 40; ++i)
-		//{
-		//	int model{ d2d::RandomInt({0, NUM_MEDIUM_ASTEROID_MODELS - 1}) };
-		//	b2Vec2 size;
-		//	size.y = MEDIUM_ASTEROID_HEIGHT * MEDIUM_ASTEROID_RELATIVE_HEIGHTS[model];
-		//	size.x = size.y * m_asteroidMediumTextures[model].GetWidthToHeightRatio();
-		//	float boundingRadius{ size.Length() * 0.5f };
-		//	b2Vec2 position;
-		//	bool positionFound{ m_world.GetRandomPositionAwayFromExistingEntities(boundingRadius, minBoundingRadiiGap, maxAttempts, position) };
-		//	if(positionFound)
-		//		CreateMediumAsteroid(m_world, model, d2d::RandomBool(), position,
-		//			d2d::RandomFloat({ 0.0f, d2d::TWO_PI }), b2Vec2_zero, 0.0f);
-		//	else
-		//		++numFailed;
-		//}
-
-		// Create small asteroids
-		//minBoundingRadiiGap = SMALL_ASTEROID_HEIGHT * 0.25f;
-		//for(unsigned i = 0; i < 100; ++i)
-		//{
-		//	int model{ d2d::RandomInt({0, NUM_SMALL_ASTEROID_MODELS - 1}) };
-		//	b2Vec2 size;
-		//	size.y = SMALL_ASTEROID_HEIGHT * SMALL_ASTEROID_RELATIVE_HEIGHTS[model];
-		//	size.x = size.y * m_asteroidSmallTextures[model].GetWidthToHeightRatio();
-		//	float boundingRadius{ size.Length() * 0.5f };
-		//	b2Vec2 position;
-		//	bool positionFound{ m_world.GetRandomPositionAwayFromExistingEntities(boundingRadius, minBoundingRadiiGap, maxAttempts, position) };
-		//	if(positionFound)
-		//		CreateSmallAsteroid(m_world, model, d2d::RandomBool(), position,
-		//			d2d::RandomFloat({ 0.0f, d2d::TWO_PI }), b2Vec2_zero, 0.0f);
-		//	else
-		//		++numFailed;
-		//}
-
-		// Apply objective
-		m_objectives.push_back(destroyAsteroidsObjective);
-		if(numFailed > 0)
-			d2LogInfo << "Game::LoadLevel0: Entity creation attempt limit reached " << numFailed << " times";
 	}
 
 	//+-------------\---------------------------------------------
@@ -634,8 +572,9 @@ namespace Space
 			m_levelChangeDelayTimeAccumulator += dt;
 			if(m_levelChangeDelayTimeAccumulator >= m_levelChangeDelayTime)
 			{
-				dt = m_levelChangeDelayTimeAccumulator - m_levelChangeDelayTime;
-				InitLevel(m_delayedLevel);
+				m_delayedLevelChange = false;
+				m_currentLevel++;
+				InitLevel();
 			}
 		}
 
@@ -644,10 +583,9 @@ namespace Space
 		UpdateCamera(dt, playerController);
 		UpdateObjectives();
 	}
-	void Game::StartDelayedLevelChange(const std::string& level, float delay)
+	void Game::StartDelayedLevelChange(float delay)
 	{
 		m_delayedLevelChange = true;
-		m_delayedLevel = level;
 		m_levelChangeDelayTime = delay;
 		m_levelChangeDelayTimeAccumulator = 0.0f;
 	}
@@ -669,23 +607,23 @@ namespace Space
 	//\--------------------------/--------------------------------
 	void Game::SayGoodbye(WorldID entityID)
 	{
-		for(Objective& obj : m_objectives)
-			if(obj.type == ObjectiveType::DESTROY)
-			{
-				auto foundElementIterator = std::find(obj.entityIDs.begin(), obj.entityIDs.end(), entityID);
-				if(foundElementIterator != obj.entityIDs.end())
-				{
-					obj.entityIDs.erase(foundElementIterator);
-					obj.num--;
-				}
-			}
+//		for(Objective& obj : m_objectives)
+//			if(obj.type == ObjectiveType::DESTROY)
+//			{
+//				auto foundElementIterator = std::find(obj.entityIDs.begin(), obj.entityIDs.end(), entityID);
+//				if(foundElementIterator != obj.entityIDs.end())
+//				{
+//					obj.entityIDs.erase(foundElementIterator);
+//					obj.num--;
+//				}
+//			}
 
 		if(m_cameraFollowingEntity && entityID == m_cameraFollowEntityID)
 			m_cameraFollowingEntity = false;
 
 		if(m_playerSet && entityID == m_playerID)
 		{
-			StartDelayedLevelChange(m_currentLevel, 3.0f);
+			StartDelayedLevelChange(3.0f);
 			m_playerSet = false;
 		}
 	}
@@ -772,17 +710,17 @@ namespace Space
 		d2d::Window::EnableBlending();
 
 		// Draw objectives
-		d2d::Window::SetColor(m_objectivesTextStyle.color);
-		for(int i = 0; i < m_objectives.size(); i++)
-		{
-			d2d::Window::PushMatrix();
-			d2d::Window::Translate((m_objectivesPosition + b2Vec2{ 0.0f, -0.08f * i })* resolution);
-			{
-				std::string objectivesString = d2d::ToString(m_objectives[i].num);
-				d2d::Window::DrawString(objectivesString, m_objectivesAlignment, m_objectivesTextStyle.size * resolution.y, m_objectivesTextStyle.font);
-			}
-			d2d::Window::PopMatrix();
-		}
+//		d2d::Window::SetColor(m_objectivesTextStyle.color);
+//		for(int i = 0; i < m_objectives.size(); i++)
+//		{
+//			d2d::Window::PushMatrix();
+//			d2d::Window::Translate((m_objectivesPosition + b2Vec2{ 0.0f, -0.08f * i })* resolution);
+//			{
+//				std::string objectivesString = d2d::ToString(m_objectives[i].num);
+//				d2d::Window::DrawString(objectivesString, m_objectivesAlignment, m_objectivesTextStyle.size * resolution.y, m_objectivesTextStyle.font);
+//			}
+//			d2d::Window::PopMatrix();
+//		}
 		if(m_playerSet)
 		{
 			// Draw fuel

@@ -28,7 +28,6 @@ namespace Space
 		//d2d::HjsonValue entityDefsData;
 		//d2d::HjsonValue levelsData;
 		try {
-			firstLevel = d2d::GetString(data, "firstLevel");
 			cameraDimensionRange.Set(d2d::GetVectorFloat(data, "cameraDimensionRange", 0),
 				d2d::GetVectorFloat(data, "cameraDimensionRange", 1));
 			cameraZoomSpeed = d2d::GetFloat(data, "cameraZoomSpeed");
@@ -77,7 +76,6 @@ namespace Space
 	}
 	void GameDef::Validate() const
 	{
-		if(firstLevel.empty()) throw SettingOutOfRangeException{ "firstLevel" };
 		if(cameraDimensionRange.GetMin() <= 0.0f) throw SettingOutOfRangeException{ "cameraDimensionRange[0]" };
 		if(cameraZoomSpeed < 0.0f) throw SettingOutOfRangeException{ "cameraZoomSpeed" };
 		if(!d2d::VALID_PERCENT_RANGE.Contains(cameraInitialZoomOutPercent)) throw SettingOutOfRangeException{ "cameraInitialZoomOutPercent" };
