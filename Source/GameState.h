@@ -91,7 +91,6 @@ namespace Space
 				const SDL_Keycode boostKey{ SDLK_LCTRL };
 				const SDL_Keycode primaryFireKey{ SDLK_SPACE };
 				const SDL_Keycode secondaryFireKey{ SDLK_LSHIFT };
-				//const SDL_Keycode morphKey{ SDLK_TAB };
 				const SDL_Keycode previousMissileKey{ SDLK_q };
 				const SDL_Keycode nextMissileKey{ SDLK_e };
 			} map;

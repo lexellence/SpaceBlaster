@@ -89,7 +89,6 @@ namespace Space
 		if(button == m_gamepad.map.pauseButton)						PauseGame();
 		else if(button == m_gamepad.map.zoomInButton)				m_gamepad.zoomIn = true;
 		else if(button == m_gamepad.map.zoomOutButton)				m_gamepad.zoomOut = true;
-		//else if(button == m_morphButton)				m_playerController.doMorphOnce = true;
 		else if(button == m_gamepad.map.previousMissileTypeButton)	{}
 		else if(button == m_gamepad.map.nextMissileTypeButton)		{}
 		else if(button == m_gamepad.map.boostButton)				m_gamepad.boost = true;

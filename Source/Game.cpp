@@ -21,7 +21,6 @@ namespace Space
 		m_world.SetDestructionListener(this);
 		m_world.SetWrapListener(this);
 		m_world.SetProjectileLauncherCallback(this);
-		//m_world.SetMorphListener(this);
 	}
 	void Game::Init()
 	{
@@ -362,8 +361,6 @@ namespace Space
 	void Game::CreatePlayer(World& world, const InstanceDef& def)
 	{
 		WorldID blasterID = CreateBlaster(world, def);
-		//world.AddMorphIntoEntityID(blasterID, scoutID);
-		//world.AddMorphIntoEntityID(scoutID, blasterID);
 		world.AddIconCollectorComponent(blasterID);
 		SetPlayer(blasterID);
 		FollowEntity(blasterID);
@@ -663,16 +660,6 @@ namespace Space
 		}
 		return id;
 	}
-	//+--------------------------\--------------------------------
-	//|	   MorphedIntoEntity     | override (MorphListener)
-	//\--------------------------/--------------------------------
-	//void Game::MorphedIntoEntity(WorldID replacedEntityID, WorldID newEntityID)
-	//{
-	//	if(m_playerSet && replacedEntityID == m_playerID)
-	//		SetPlayer(newEntityID);
-	//	if(m_cameraFollowingEntity && replacedEntityID == m_cameraFollowEntityID)
-	//		FollowEntity(newEntityID);
-	//}
 	//+-------------\---------------------------------------------
 	//|	   Draw     |
 	//\-------------/---------------------------------------------
