@@ -50,7 +50,6 @@ namespace Space
 
 		void StartDelayedLevelChange(float delay);
 		void UpdateCamera(float dt, const PlayerController &playerController);
-//		void UpdateObjectives();
 		void SetPlayer(WorldID entityID);
 		void FollowEntity(WorldID entityID);
 
@@ -89,19 +88,10 @@ namespace Space
 		bool m_delayedLevelChange{ false };
 		float m_levelChangeDelayTime;
 		float m_levelChangeDelayTimeAccumulator;
-//		std::vector<Objective> m_objectives;
 
 		// Fonts
 		d2d::FontReference m_hudFont{"Fonts/OrbitronLight.otf"};
 		float m_hudFontSize{0.05f};
-
-		// HUD Objectives
-//		const b2Vec2 m_objectivesPosition{0.90f, 0.90f};
-//		const d2d::Alignment m_objectivesAlignment{d2d::Alignment::RIGHT_TOP};
-//		const d2d::TextStyle m_objectivesTextStyle{
-//			m_hudFont,
-//			{0.5f, 0.3f, 0.8f, 1.0f},
-//			m_hudFontSize};
 
 		// HUD Fuel
 		const b2Vec2 m_fuelPosition{0.10f, 0.10f};

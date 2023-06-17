@@ -113,8 +113,6 @@ namespace Space
 			{
 				def.angle = 0.0f;
 				CreateIcon(m_world, model, def);
-//				collectIconsObjective.entityIDs.push_back(id);
-//				collectIconsObjective.num++;
 				numCreated++;
 			}
 		}
@@ -145,8 +143,6 @@ namespace Space
 			{
 				def.angle = d2d::RandomFloat({ 0.0f, d2d::TWO_PI });
 				CreateXLargeAsteroid(m_world, model, d2d::RandomBool(), def);
-//				destroyAsteroidsObjective.entityIDs.push_back(id);
-//				destroyAsteroidsObjective.num++;
 				numCreated++;
 			}
 		}
@@ -560,7 +556,6 @@ namespace Space
 		// Update
 		m_world.Update(dt, playerController);
 		UpdateCamera(dt, playerController);
-//		UpdateObjectives();
 	}
 	void Game::StartDelayedLevelChange(float delay)
 	{
@@ -576,27 +571,12 @@ namespace Space
 					m_world.GetLocalCenterOfMass(m_cameraFollowEntityID)));
 		m_camera.Update(dt, playerController.zoomOutFactor);
 	}
-//	void Game::UpdateObjectives()
-//	{
-
-//	}
 
 	//+--------------------------\--------------------------------
 	//|	 EntityWillBeDestroyed   | override (DestroyListener)
 	//\--------------------------/--------------------------------
 	void Game::EntityWillBeDestroyed(WorldID entityID)
 	{
-//		for(Objective& obj : m_objectives)
-//			if(obj.type == ObjectiveType::DESTROY)
-//			{
-//				auto foundElementIterator = std::find(obj.entityIDs.begin(), obj.entityIDs.end(), entityID);
-//				if(foundElementIterator != obj.entityIDs.end())
-//				{
-//					obj.entityIDs.erase(foundElementIterator);
-//					obj.num--;
-//				}
-//			}
-
 		if(m_cameraFollowingEntity && entityID == m_cameraFollowEntityID)
 			m_cameraFollowingEntity = false;
 
@@ -678,18 +658,6 @@ namespace Space
 		d2d::Window::DisableTextures();
 		d2d::Window::EnableBlending();
 
-		// Draw objectives
-//		d2d::Window::SetColor(m_objectivesTextStyle.color);
-//		for(int i = 0; i < m_objectives.size(); i++)
-//		{
-//			d2d::Window::PushMatrix();
-//			d2d::Window::Translate((m_objectivesPosition + b2Vec2{ 0.0f, -0.08f * i })* resolution);
-//			{
-//				std::string objectivesString = d2d::ToString(m_objectives[i].num);
-//				d2d::Window::DrawString(objectivesString, m_objectivesAlignment, m_objectivesTextStyle.size * resolution.y, m_objectivesTextStyle.font);
-//			}
-//			d2d::Window::PopMatrix();
-//		}
 		if(m_playerSet)
 		{
 			// Draw fuel

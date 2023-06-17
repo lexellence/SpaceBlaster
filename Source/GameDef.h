@@ -20,25 +20,6 @@ namespace Space
 //	{
 
 //	};
-//	enum class ObjectiveType
-//	{
-//		DESTROY, COLLECT
-//	};
-//	struct Objective
-//	{
-//		ObjectiveType type;
-//		std::string text;
-//		std::vector<WorldID> entityIDs;
-//		int num;
-//	};
-//	struct Quest
-//	{
-//		std::vector<Objective> objectiveList;
-//	};
-//	struct QuestSequence
-//	{
-//		std::vector<Quest> questList;
-//	};
 //	struct LevelDef
 //	{
 //		std::vector<EntityInstance> entityList;
