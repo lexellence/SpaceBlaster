@@ -49,7 +49,7 @@ namespace Space
 		for(ParticleID i = 0; i < firstUnusedIndex; ++i)
 			smoothedPositions[i] = d2d::Lerp(physics[i].lastPosition, physics[i].position, timestepAlpha);
 	}
-	float ParticleSystem::CalculateFadedAlpha(ParticleID index)
+	float ParticleSystem::CalculateFadedAlpha(ParticleID index) const
 	{
 		// Partial alpha during fade-in or fade-out stages
 		if(timers[index].age < timers[index].fadeIn)

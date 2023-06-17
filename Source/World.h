@@ -173,7 +173,7 @@ namespace Space
 		void SetWrapListener(WrapListener* listenerPtr);
 		void SetProjectileLauncherCallback(ProjectileLauncherListener* callbackPtr);
 		void Update(float dt, PlayerController& playerController);
-		void Draw();
+		void Draw() const;
 
 		// Creating entities
 		WorldID NewEntityID(const b2Vec2& size, int drawLayer = 0, bool activate = true);
@@ -464,19 +464,19 @@ namespace Space
 		void SwapB2Bodies(Body& body1, Body& body2);
 
 		// Graphics
-		void DrawWorldEdge();
-		void DrawLayer(int layer);
-		void DrawParticleSystem(int layer);
-		void DrawAllThrusterComponents(int layer);
+		void DrawWorldEdge() const;
+		void DrawLayer(int layer) const;
+		void DrawParticleSystem(int layer) const;
+		void DrawAllThrusterComponents(int layer) const;
 		void DrawThrusterComponent(const ThrusterComponent& thrusterComponent, const b2Vec2& entitySize,
-			const b2Vec2& position, float angle);
-		void DrawAllAnimationComponents(int layer);
-		void DrawAnimation(const d2d::Animation& animation, const b2Vec2& size, const b2Vec2& position, float angle);
-		void DrawAllFixturesComponents(int layer);
-		void DrawFixtureList(b2Fixture* fixturePtr, const b2Vec2& position, float angle, bool fill);
-		void DrawAllHealthMeters();
-		void DrawHealthMeter(float hp, float hpMax, const b2Vec2& position);
-		void DrawRadar();
+			const b2Vec2& position, float angle) const;
+		void DrawAllAnimationComponents(int layer) const;
+		void DrawAnimation(const d2d::Animation& animation, const b2Vec2& size, const b2Vec2& position, float angle) const;
+		void DrawAllFixturesComponents(int layer) const;
+		void DrawFixtureList(b2Fixture* fixturePtr, const b2Vec2& position, float angle, bool fill) const;
+		void DrawAllHealthMeters() const;
+		void DrawHealthMeter(float hp, float hpMax, const b2Vec2& position) const;
+		void DrawRadar() const;
 
 		//+---------------------------------------\
 		//|			    Private Data	          |

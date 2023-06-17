@@ -36,7 +36,7 @@ namespace Space
 		void Init();
 		void Update(float dt);
 		void SmoothStates(float timestepAlpha);
-		float CalculateFadedAlpha(ParticleID index);
+		float CalculateFadedAlpha(ParticleID index) const;
 
 	private:
 		// If you add more components, add it to CopyParticle()

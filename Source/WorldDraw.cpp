@@ -13,7 +13,7 @@
 
 namespace Space
 {
-	void World::Draw()
+	void World::Draw() const
 	{
 		DrawWorldEdge();
 		for(int i = m_settings.drawLayerRange.GetMin(); i <= m_settings.drawLayerRange.GetMax(); ++i)
@@ -21,7 +21,7 @@ namespace Space
 		DrawAllHealthMeters();
 		DrawRadar();
 	}
-	void World::DrawWorldEdge()
+	void World::DrawWorldEdge() const
 	{
 		d2d::Window::SetColor({ 1.0f, 0.0f, 1.0f, 1.0f });
 		d2d::Window::DrawRect(m_worldRect, false);
@@ -38,14 +38,14 @@ namespace Space
 			d2d::Window::PopMatrix();
 		}
 	}
-	void World::DrawLayer(int layer)
+	void World::DrawLayer(int layer) const
 	{
 		DrawParticleSystem(layer);
 		DrawAllThrusterComponents(layer);
 		DrawAllAnimationComponents(layer);
 		DrawAllFixturesComponents(layer);
 	}
-	void World::DrawParticleSystem(int layer)
+	void World::DrawParticleSystem(int layer) const
 	{
 		// One glPointSize call and one whole iteration through particle list for each point relativeSize
 		d2d::Window::DisableTextures();
@@ -68,7 +68,7 @@ namespace Space
 					}
 		}
 	}
-	void World::DrawAllThrusterComponents(int layer)
+	void World::DrawAllThrusterComponents(int layer) const
 	{
 		d2d::Window::EnableTextures();
 		d2d::Window::EnableBlending();
@@ -99,7 +99,7 @@ namespace Space
 					}
 	}
 	void World::DrawThrusterComponent(const ThrusterComponent& thrusterComponent, const b2Vec2& entitySize,
-							 const b2Vec2& position, float angle)
+							 const b2Vec2& position, float angle) const
 	{
 		d2d::Window::PushMatrix();
 		d2d::Window::Translate(position);
@@ -115,7 +115,7 @@ namespace Space
 		}
 		d2d::Window::PopMatrix();
 	}
-	void World::DrawAllAnimationComponents(int layer)
+	void World::DrawAllAnimationComponents(int layer) const
 	{
 		d2d::Window::EnableTextures();
 		d2d::Window::EnableBlending();
@@ -134,7 +134,7 @@ namespace Space
 						DrawAnimation(m_drawAnimationComponents[id].animation, m_sizeComponents[id], m_smoothedTransforms[id].p + GetCloneOffset(cloneBody.section), angle);
 				}
 	}
-	void World::DrawAnimation(const d2d::Animation& animation, const b2Vec2& size, const b2Vec2& position, float angle)
+	void World::DrawAnimation(const d2d::Animation& animation, const b2Vec2& size, const b2Vec2& position, float angle) const
 	{
 		d2d::Window::PushMatrix();
 		d2d::Window::Translate(position);
@@ -142,7 +142,7 @@ namespace Space
 		animation.Draw(size);
 		d2d::Window::PopMatrix();
 	}
-	void World::DrawAllFixturesComponents(int layer)
+	void World::DrawAllFixturesComponents(int layer) const
 	{
 		d2d::Window::DisableTextures();
 		d2d::Window::EnableBlending();
@@ -175,7 +175,7 @@ namespace Space
 				}
 			}
 	}
-	void World::DrawFixtureList(b2Fixture* fixturePtr, const b2Vec2& position, float angle, bool fill)
+	void World::DrawFixtureList(b2Fixture* fixturePtr, const b2Vec2& position, float angle, bool fill) const
 	{
 		d2d::Window::PushMatrix();
 		d2d::Window::Translate(position);
@@ -210,7 +210,7 @@ namespace Space
 		}
 		d2d::Window::PopMatrix();
 	}
-	void World::DrawAllHealthMeters()
+	void World::DrawAllHealthMeters() const
 	{
 		d2d::Window::DisableTextures();
 		d2d::Window::EnableBlending();
@@ -227,7 +227,7 @@ namespace Space
 						DrawHealthMeter(m_healthComponents[id].hp, m_healthComponents[id].hpMax, meterPosition + GetCloneOffset(cloneBody.section));
 				}
 	}
-	void World::DrawHealthMeter(float hp, float hpMax, const b2Vec2& position)
+	void World::DrawHealthMeter(float hp, float hpMax, const b2Vec2& position) const
 	{
 		d2d::Window::PushMatrix();
 		d2d::Window::Translate(position);
@@ -253,7 +253,7 @@ namespace Space
 		d2d::Window::DrawRect(meterRect, true);
 		d2d::Window::PopMatrix();
 	}
-	void World::DrawRadar()
+	void World::DrawRadar() const
 	{
 
 	}
