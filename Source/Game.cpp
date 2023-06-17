@@ -63,7 +63,7 @@ namespace Space
 		m_cameraFollowingEntity = false;
 		m_starfield.Init(m_settings.starfield);
 		m_player.isSet = false;
-		m_delayedLevelChange = false;
+		m_delayedGameActions.clear();
 
 		d2d::Rect worldRect;
 		worldRect.SetCenter(b2Vec2_zero, newWorldDimensions);
@@ -107,8 +107,8 @@ namespace Space
 
 			InstanceDef def;
 			bool positionFound =
-					m_world.GetRandomPositionAwayFromExistingEntities(
-						boundingRadius, minGap, MAX_ATTEMPTS_PER_ENTITY, def.position);
+				m_world.GetRandomPositionAwayFromExistingEntities(
+					boundingRadius, minGap, MAX_ATTEMPTS_PER_ENTITY, def.position);
 			if(positionFound)
 			{
 				def.angle = 0.0f;
@@ -129,7 +129,7 @@ namespace Space
 		const float minGap = XLARGE_ASTEROID_HEIGHT * MIN_BOUNDING_RADII_GAP_RELATIVE_TO_HEIGHT;
 		for(unsigned i = 0; i < count; ++i)
 		{
-			int model = d2d::RandomInt({0, NUM_XLARGE_ASTEROID_MODELS - 1});
+			int model = d2d::RandomInt({ 0, NUM_XLARGE_ASTEROID_MODELS - 1 });
 			b2Vec2 size;
 			size.y = XLARGE_ASTEROID_HEIGHT * XLARGE_ASTEROID_RELATIVE_HEIGHTS[model];
 			size.x = size.y * m_models.textures.asteroidsXLarge[model].GetWidthToHeightRatio();
@@ -137,8 +137,8 @@ namespace Space
 
 			InstanceDef def;
 			bool positionFound =
-					m_world.GetRandomPositionAwayFromExistingEntities(
-						boundingRadius, minGap, MAX_ATTEMPTS_PER_ENTITY, def.position);
+				m_world.GetRandomPositionAwayFromExistingEntities(
+					boundingRadius, minGap, MAX_ATTEMPTS_PER_ENTITY, def.position);
 			if(positionFound)
 			{
 				def.angle = d2d::RandomFloat({ 0.0f, d2d::TWO_PI });
@@ -159,7 +159,7 @@ namespace Space
 		const float minGap = LARGE_ASTEROID_HEIGHT * MIN_BOUNDING_RADII_GAP_RELATIVE_TO_HEIGHT;
 		for(unsigned i = 0; i < count; ++i)
 		{
-			int model = d2d::RandomInt({0, NUM_LARGE_ASTEROID_MODELS - 1});
+			int model = d2d::RandomInt({ 0, NUM_LARGE_ASTEROID_MODELS - 1 });
 			b2Vec2 size;
 			size.y = LARGE_ASTEROID_HEIGHT * LARGE_ASTEROID_RELATIVE_HEIGHTS[model];
 			size.x = size.y * m_models.textures.asteroidsLarge[model].GetWidthToHeightRatio();
@@ -167,8 +167,8 @@ namespace Space
 
 			InstanceDef def;
 			bool positionFound =
-					m_world.GetRandomPositionAwayFromExistingEntities(
-						boundingRadius, minGap, MAX_ATTEMPTS_PER_ENTITY, def.position);
+				m_world.GetRandomPositionAwayFromExistingEntities(
+					boundingRadius, minGap, MAX_ATTEMPTS_PER_ENTITY, def.position);
 			if(positionFound)
 			{
 				def.angle = d2d::RandomFloat({ 0.0f, d2d::TWO_PI });
@@ -189,7 +189,7 @@ namespace Space
 		const float minGap = MEDIUM_ASTEROID_HEIGHT * MIN_BOUNDING_RADII_GAP_RELATIVE_TO_HEIGHT;
 		for(unsigned i = 0; i < count; ++i)
 		{
-			int model = d2d::RandomInt({0, NUM_MEDIUM_ASTEROID_MODELS - 1});
+			int model = d2d::RandomInt({ 0, NUM_MEDIUM_ASTEROID_MODELS - 1 });
 			b2Vec2 size;
 			size.y = MEDIUM_ASTEROID_HEIGHT * MEDIUM_ASTEROID_RELATIVE_HEIGHTS[model];
 			size.x = size.y * m_models.textures.asteroidsMedium[model].GetWidthToHeightRatio();
@@ -197,8 +197,8 @@ namespace Space
 
 			InstanceDef def;
 			bool positionFound =
-					m_world.GetRandomPositionAwayFromExistingEntities(
-						boundingRadius, minGap, MAX_ATTEMPTS_PER_ENTITY, def.position);
+				m_world.GetRandomPositionAwayFromExistingEntities(
+					boundingRadius, minGap, MAX_ATTEMPTS_PER_ENTITY, def.position);
 			if(positionFound)
 			{
 				def.angle = d2d::RandomFloat({ 0.0f, d2d::TWO_PI });
@@ -219,7 +219,7 @@ namespace Space
 		const float minGap = SMALL_ASTEROID_HEIGHT * MIN_BOUNDING_RADII_GAP_RELATIVE_TO_HEIGHT;
 		for(unsigned i = 0; i < count; ++i)
 		{
-			int model = d2d::RandomInt({0, NUM_SMALL_ASTEROID_MODELS - 1});
+			int model = d2d::RandomInt({ 0, NUM_SMALL_ASTEROID_MODELS - 1 });
 			b2Vec2 size;
 			size.y = SMALL_ASTEROID_HEIGHT * SMALL_ASTEROID_RELATIVE_HEIGHTS[model];
 			size.x = size.y * m_models.textures.asteroidsSmall[model].GetWidthToHeightRatio();
@@ -227,8 +227,8 @@ namespace Space
 
 			InstanceDef def;
 			bool positionFound =
-					m_world.GetRandomPositionAwayFromExistingEntities(
-						boundingRadius, minGap, MAX_ATTEMPTS_PER_ENTITY, def.position);
+				m_world.GetRandomPositionAwayFromExistingEntities(
+					boundingRadius, minGap, MAX_ATTEMPTS_PER_ENTITY, def.position);
 			if(positionFound)
 			{
 				def.angle = d2d::RandomFloat({ 0.0f, d2d::TWO_PI });
@@ -267,6 +267,10 @@ namespace Space
 			m_player.id = entityID;
 			m_player.isSet = true;
 		}
+	}
+	bool Game::IsPlayer(WorldID entityID) const
+	{
+		return (m_player.isSet && entityID == m_player.id);
 	}
 	void Game::FollowEntity(WorldID entityID)
 	{
@@ -510,27 +514,36 @@ namespace Space
 	//\-------------/---------------------------------------------
 	void Game::Update(float dt, PlayerController& playerController)
 	{
-		// Delayed level change
-		if(m_delayedLevelChange)
-		{
-			m_levelChangeDelayTimeAccumulator += dt;
-			if(m_levelChangeDelayTimeAccumulator >= m_levelChangeDelayTime)
-			{
-				m_delayedLevelChange = false;
-				m_currentLevel++;
-				StartCurrentLevel();
-			}
-		}
-
-		// Update
 		m_world.Update(dt, playerController);
 		UpdateCamera(dt, playerController);
+		UpdateDelayedActions(dt);
 	}
-	void Game::StartDelayedLevelChange(float delay)
+	void Game::UpdateDelayedActions(float dt)
 	{
-		m_delayedLevelChange = true;
-		m_levelChangeDelayTime = delay;
-		m_levelChangeDelayTimeAccumulator = 0.0f;
+		for(DelayedGameAction d : m_delayedGameActions)
+			d.timeElapsed += dt;
+
+		bool startLevel = false;
+		for(auto it = m_delayedGameActions.begin(); it != m_delayedGameActions.end(); it++)
+		{
+			it->timeElapsed += dt;
+			if(it->timeElapsed >= it->delay)
+			{
+				switch(it->action)
+				{
+				case GameAction::NEXT_LEVEL:
+					m_currentLevel++;
+					startLevel = true;
+					break;
+				case GameAction::RESTART_LEVEL:
+					startLevel = true;
+					break;
+				}
+				it = m_delayedGameActions.erase(it);
+			}
+		}
+		if(startLevel)
+			StartCurrentLevel();
 	}
 	void Game::UpdateCamera(float dt, const PlayerController& playerController)
 	{
@@ -549,9 +562,19 @@ namespace Space
 		if(m_cameraFollowingEntity && entityID == m_cameraFollowEntityID)
 			m_cameraFollowingEntity = false;
 
-		if(m_player.isSet && entityID == m_player.id)
+		if(IsPlayer(entityID))
 		{
-			StartDelayedLevelChange(3.0f);
+			if(m_world.HasFlags(entityID, FLAG_EXITED))
+			{
+				if(m_world.HasComponents(entityID, COMPONENT_ICON_COLLECTOR))
+					m_player.credits += (float)m_world.GetIconsCollected(entityID);
+				m_delayedGameActions.push_back({ .action{ GameAction::NEXT_LEVEL }, .delay{ LEVEL_CHANGE_DELAY } });
+			}
+			else
+			{
+				m_player.credits -= DEATH_PENALTY_CREDITS;
+				m_delayedGameActions.push_back({ .action{ GameAction::RESTART_LEVEL }, .delay{ LEVEL_CHANGE_DELAY } });
+			}
 			m_player.isSet = false;
 		}
 	}

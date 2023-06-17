@@ -16,8 +16,17 @@
 #include "GameModels.h"
 namespace Space
 {
-	const int DEFAULT_DRAW_LAYER = 0;
-	const float MIN_WORLD_TO_CAMERA_RATIO = 1.5f;
+	enum class GameAction
+	{
+		NEXT_LEVEL,
+		RESTART_LEVEL
+	};
+	struct DelayedGameAction
+	{
+		GameAction action;
+		float delay{};
+		float timeElapsed{};
+	};
 
 	class Game
 		: public DestroyListener,
@@ -28,6 +37,7 @@ namespace Space
 		Game();
 		void Init();
 		void Update(float dt, PlayerController &playerController);
+		void UpdateDelayedActions(float dt);
 		void Draw();
 		void DrawHUD();
 
@@ -49,9 +59,9 @@ namespace Space
 		unsigned SpawnRandomSmallAsteroids(unsigned count);
 		void ValidateWorldDimensions() const;
 
-		void StartDelayedLevelChange(float delay);
 		void UpdateCamera(float dt, const PlayerController &playerController);
 		void SetPlayer(WorldID entityID);
+		bool IsPlayer(WorldID entityID) const;
 		void FollowEntity(WorldID entityID);
 
 		WorldID CreateBasicObject(World &world, const b2Vec2 &size, int drawLayer,
@@ -90,9 +100,7 @@ namespace Space
 		} m_player;
 		
 		unsigned m_currentLevel{ 0 };
-		bool m_delayedLevelChange{ false };
-		float m_levelChangeDelayTime;
-		float m_levelChangeDelayTimeAccumulator;
+		std::list<DelayedGameAction> m_delayedGameActions;
 
 		// Fonts
 		d2d::FontReference m_hudFont{"Fonts/OrbitronLight.otf"};

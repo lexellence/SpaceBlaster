@@ -10,6 +10,12 @@
 #pragma once
 namespace Space
 {
+	// General
+	const int DEFAULT_DRAW_LAYER = 0;
+	const float MIN_WORLD_TO_CAMERA_RATIO = 1.5f;
+	const float LEVEL_CHANGE_DELAY = 3.0f;
+	const float DEATH_PENALTY_CREDITS = 5.0f;
+
 	// Relative entity heights
 	const float SCOUT_TO_BLASTER_HEIGHT_RATIO = 58.0f / 109.0f;
 	const float FAT_MISSILE_TO_MISSILE_HEIGHT_RATIO = 8.0f / 7.0f;
