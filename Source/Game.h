@@ -29,6 +29,7 @@ namespace Space
 		void Init();
 		void Update(float dt, PlayerController &playerController);
 		void Draw();
+		void DrawHUD();
 
 		// World callbacks
 		void EntityWillBeDestroyed(WorldID entityID) override;
