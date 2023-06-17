@@ -17,7 +17,7 @@
     colorChannelBits: [ 8, 8, 8, 8 ]
     clearColor: [ 0.0, 0.0, 0.0, 1.0 ]
     fpsUpdatesPerSecond: 2.0
-    imageExtensions: [ "png", "jpg", "tif", "webp" ]
+    imageExtensions: [ "png", "jpg" ]
     glVersion: [ 2, 1 ]
     pointSmoothing: true
     lineSmoothing: false
