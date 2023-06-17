@@ -81,9 +81,12 @@ namespace Space
 		bool m_cameraFollowingEntity{ false };
 		WorldID m_cameraFollowEntityID;
 
-		bool m_playerSet{false};
-		WorldID m_playerID;
-
+		struct
+		{
+			bool isSet{ false };
+			WorldID id;
+		} m_player;
+		
 		unsigned m_currentLevel{ 0 };
 		bool m_delayedLevelChange{ false };
 		float m_levelChangeDelayTime;

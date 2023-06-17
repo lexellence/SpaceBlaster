@@ -62,7 +62,7 @@ namespace Space
 		m_camera.Init(m_settings.cameraDimensionRange, m_settings.cameraZoomSpeed, m_settings.cameraInitialZoomOutPercent);
 		m_cameraFollowingEntity = false;
 		m_starfield.Init(m_settings.starfield);
-		m_playerSet = false;
+		m_player.isSet = false;
 		m_delayedLevelChange = false;
 
 		d2d::Rect worldRect;
@@ -259,13 +259,13 @@ namespace Space
 		if(m_world.EntityExists(entityID))
 		{
 			// Remove player controller from existing player entity
-			if(m_playerSet)
-				m_world.SetFlags(m_playerID, FLAG_PLAYER_CONTROLLED, false);
+			if(m_player.isSet)
+				m_world.SetFlags(m_player.id, FLAG_PLAYER_CONTROLLED, false);
 
 			// Set new player
 			m_world.SetFlags(entityID, FLAG_PLAYER_CONTROLLED, true);
-			m_playerID = entityID;
-			m_playerSet = true;
+			m_player.id = entityID;
+			m_player.isSet = true;
 		}
 	}
 	void Game::FollowEntity(WorldID entityID)
@@ -549,10 +549,10 @@ namespace Space
 		if(m_cameraFollowingEntity && entityID == m_cameraFollowEntityID)
 			m_cameraFollowingEntity = false;
 
-		if(m_playerSet && entityID == m_playerID)
+		if(m_player.isSet && entityID == m_player.id)
 		{
 			StartDelayedLevelChange(3.0f);
-			m_playerSet = false;
+			m_player.isSet = false;
 		}
 	}
 	//+--------------------------\--------------------------------
@@ -627,30 +627,30 @@ namespace Space
 		d2d::Window::DisableTextures();
 		d2d::Window::EnableBlending();
 
-		if(m_playerSet)
+		if(m_player.isSet)
 		{
 			// Draw fuel
-			if(m_world.HasComponents(m_playerID, COMPONENT_FUEL))
+			if(m_world.HasComponents(m_player.id, COMPONENT_FUEL))
 			{
 				d2d::Window::SetColor(m_fuelTextStyle.color);
 				d2d::Window::PushMatrix();
 				d2d::Window::Translate(m_fuelPosition * resolution);
 				{
-					int fuelInt = (int)(m_world.GetFuelLevel(m_playerID) + 0.5f);
-					int maxFuelInt = (int)(m_world.GetMaxFuelLevel(m_playerID) + 0.5f);
+					int fuelInt = (int)(m_world.GetFuelLevel(m_player.id) + 0.5f);
+					int maxFuelInt = (int)(m_world.GetMaxFuelLevel(m_player.id) + 0.5f);
 					std::string fuelString = d2d::ToString(fuelInt) + "/" + d2d::ToString(maxFuelInt);
 					d2d::Window::DrawString(fuelString, m_fuelAlignment, m_fuelTextStyle.size * resolution.y, m_fuelTextStyle.font);
 				}
 				d2d::Window::PopMatrix();
 			}
 			// Draw icons collected
-			if(m_world.HasComponents(m_playerID, COMPONENT_ICON_COLLECTOR))
+			if(m_world.HasComponents(m_player.id, COMPONENT_ICON_COLLECTOR))
 			{
 				d2d::Window::SetColor(m_iconsTextStyle.color);
 				d2d::Window::PushMatrix();
 				d2d::Window::Translate(m_iconsPosition * resolution);
 				{
-					unsigned icons = m_world.GetIconsCollected(m_playerID);
+					unsigned icons = m_world.GetIconsCollected(m_player.id);
 					std::string iconsString = d2d::ToString(icons);
 					d2d::Window::DrawString(iconsString, m_iconsAlignment, m_iconsTextStyle.size * resolution.y, m_iconsTextStyle.font);
 				}
