@@ -423,10 +423,8 @@ namespace Space
 	}
 	void World::ProcessDestroyBuffer()
 	{
-		while(!m_destroyBuffer.empty())
+		for(WorldID id : m_destroyBuffer)
 		{
-			WorldID id{ m_destroyBuffer.front() };
-			{
 				// Send notification to Game
 				if(m_destructionListenerPtr)
 					m_destructionListenerPtr->EntityWillBeDestroyed(id);
@@ -451,9 +449,8 @@ namespace Space
 				m_componentBits[id] = COMPONENT_NONE;
 				m_flagBits[id] = FLAG_NONE;
 			}
-			m_destroyBuffer.pop();
+		m_destroyBuffer.clear();
 		}
-	}
 	void World::WrapEntities()
 	{
 		bool doManualWrapping{ false };

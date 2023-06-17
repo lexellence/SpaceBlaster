@@ -487,7 +487,7 @@ namespace Space
 
 		float m_timestepAccumulator{ 0.0f };
 		b2World* m_b2WorldPtr{ nullptr };
-		std::queue< WorldID > m_destroyBuffer;
+		std::set< WorldID > m_destroyBuffer;
 		std::list< DamageData > m_damageDataList;
 		b2Vec2 m_worldDimensions;
 		b2Vec2 m_worldCenter;

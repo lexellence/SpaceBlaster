@@ -35,8 +35,7 @@ namespace Space
 			delete m_b2WorldPtr;
 			m_b2WorldPtr = nullptr;
 		}
-		while(!m_destroyBuffer.empty())
-			m_destroyBuffer.pop();
+		m_destroyBuffer.clear();
 
 		// Clear components and flags
 		for(WorldID i = 0; i < WORLD_MAX_ENTITIES; ++i)
@@ -93,7 +92,7 @@ namespace Space
 	}
 	void World::Destroy(WorldID id)
 	{
-		m_destroyBuffer.push(id);
+		m_destroyBuffer.insert(id);
 	}
 	void World::SetFlags(WorldID entityID, FlagBits flagBits, bool enable)
 	{
