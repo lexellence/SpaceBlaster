@@ -298,38 +298,8 @@ namespace Space
 	//\---------------------------/-------------------------------
 	WorldID Game::CreateExitSensor(World& world, const InstanceDef& def)
 	{
-		//d2Assert(entityID < WORLD_MAX_ENTITIES);
-		//d2Assert(bumperID1 < WORLD_MAX_ENTITIES);
-		//d2Assert(bumperID2 < WORLD_MAX_ENTITIES);
-		//b2Vec2 sensorSize;
-		//b2Transform transform1 = GetSmoothedTransform(bumperID1);
-		//b2Transform transform2 = GetSmoothedTransform(bumperID2);
-		//b2Vec2 position1 = transform1.p;
-		//b2Vec2 position2 = transform2.p;
-		//b2Vec2 midPoint = 0.5f * (position1 + position2);
-		//float height = 2.0f;
-		//float width = (position2 - position1).Length();
-
-		//b2BodyDef bodyDef;
-		//bodyDef.type = b2_dynamicBody;
-		//bodyDef.position = midPoint;
-		//b2Body* exitBodyPtr = m_b2WorldPtr->CreateBody(&bodyDef);
-
-		//b2PolygonShape exitShape;
-		//exitShape.SetAsBox(width, height);
-		//b2Fixture* exitFixturePtr = exitBodyPtr->CreateFixture(&exitShape, 1.0f);
-
-
-
-		//m_componentBits[entityID] |= COMPONENT_EXIT;
-		//m_exitComponents[entityID].bumperID1 = bumperID1;
-		//m_exitComponents[entityID].bumperID2 = bumperID2;
-		//m_exitComponents[entityID].bodyPtr = exitBodyPtr;
-		//m_exitComponents[entityID].fixturePtr = exitFixturePtr;
-			//world.ApplyPrismaticJoint(id1, id2, { 1.0f, 0.0f }, b2Vec2_zero, b2Vec2_zero, d2d::PI, true, { 4.0f, 14.0f });
 		b2Vec2 size = { 15.0f, 1.5f };
 		WorldID id = world.NewEntityID(size, 0, def.activate);
-		//def.angle = 0.0f;
 		world.AddPhysicsComponent(id, b2_kinematicBody, def);
 		world.AddRectShape(id, BUMPER_MATERIAL, BUMPER_FILTER, { 1.0f, 1.0f }, true);
 		DrawFixturesComponent drawFixtures;
@@ -337,7 +307,6 @@ namespace Space
 		drawFixtures.fill = true;
 		world.AddDrawFixturesComponent(id, drawFixtures);
 		world.SetFlags(id, FLAG_EXIT, true);
-
 		return id;
 	}
 

@@ -530,7 +530,6 @@ namespace Space
 		ComponentArray< DrawRadarComponent > m_drawRadarComponents;
 		ComponentArray< PowerUpComponent > m_powerUpComponents;
 		ComponentArray< IconCollectorComponent > m_iconCollectorComponents;
-		//ComponentArray< ExitComponent > m_exitComponents;
 
 		d2d::ShapeFactory m_shapeFactory;
 	};
