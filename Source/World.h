@@ -91,7 +91,7 @@ namespace Space
 	};
 	class DestroyListener
 	{
-	public: virtual void SayGoodbye(WorldID entityID) = 0;
+	public: virtual void EntityWillBeDestroyed(WorldID entityID) = 0;
 	};
 	class WrapListener
 	{

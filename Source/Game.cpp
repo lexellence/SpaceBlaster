@@ -585,9 +585,9 @@ namespace Space
 //	}
 
 	//+--------------------------\--------------------------------
-	//|	       SayGoodbye        | override (DestroyListener)
+	//|	 EntityWillBeDestroyed   | override (DestroyListener)
 	//\--------------------------/--------------------------------
-	void Game::SayGoodbye(WorldID entityID)
+	void Game::EntityWillBeDestroyed(WorldID entityID)
 	{
 //		for(Objective& obj : m_objectives)
 //			if(obj.type == ObjectiveType::DESTROY)

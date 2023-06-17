@@ -431,7 +431,7 @@ namespace Space
 			{
 				// Send notification to Game
 				if(m_destructionListenerPtr)
-					m_destructionListenerPtr->SayGoodbye(id);
+					m_destructionListenerPtr->EntityWillBeDestroyed(id);
 
 				// Particle explosion
 				if(HasComponents(id, COMPONENT_PARTICLE_EXPLOSION | COMPONENT_PHYSICS) && IsActive(id))

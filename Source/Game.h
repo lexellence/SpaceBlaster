@@ -32,7 +32,7 @@ namespace Space
 		void Draw();
 
 		// World callbacks
-		void SayGoodbye(WorldID entityID) override;
+		void EntityWillBeDestroyed(WorldID entityID) override;
 		void EntityWrapped(WorldID entityID, const b2Vec2 &translation) override;
 		WorldID LaunchProjectile(const ProjectileDef &projectileDef, const b2Vec2 &position,
 								 float angle, float impulse, const b2Vec2 &parentVelocity, WorldID parentID) override;
