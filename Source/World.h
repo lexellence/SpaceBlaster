@@ -211,7 +211,7 @@ namespace Space
 
 		// Power-ups
 		void AddPowerUpComponent(WorldID entityID, const PowerUpComponent& powerUp = {});
-		void AddIconCollectorComponent(WorldID entityID, float iconsCollected = 0.0f);
+		void AddIconCollectorComponent(WorldID entityID, unsigned iconsCollected = 0.0f);
 
 		// Life and Death
 		void AddHealthComponent(WorldID entityID, float maxHP);
@@ -260,7 +260,7 @@ namespace Space
 		int GetDrawLayer(WorldID entityID) const;
 		float GetFuelLevel(WorldID entityID) const;
 		float GetMaxFuelLevel(WorldID entityID) const;
-		float GetIconsCollected(WorldID entityID) const;
+		unsigned GetIconsCollected(WorldID entityID) const;
 		float GetTotalThrusterAcceleration(WorldID id) const;
 		float GetTotalThrusterFuelRequired(WorldID id, float dt) const;
 

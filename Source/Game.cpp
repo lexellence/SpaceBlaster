@@ -730,7 +730,7 @@ namespace Space
 				d2d::Window::PushMatrix();
 				d2d::Window::Translate(m_iconsPosition * resolution);
 				{
-					float icons = m_world.GetIconsCollected(m_playerID);
+					unsigned icons = m_world.GetIconsCollected(m_playerID);
 					std::string iconsString = d2d::ToString(icons);
 					d2d::Window::DrawString(iconsString, m_iconsAlignment, m_iconsTextStyle.size * resolution.y, m_iconsTextStyle.font);
 				}

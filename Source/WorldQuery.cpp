@@ -146,7 +146,7 @@ namespace Space
 	{
 		return m_fuelComponents[entityID].max;
 	}
-	float World::GetIconsCollected(WorldID entityID) const
+	unsigned World::GetIconsCollected(WorldID entityID) const
 	{
 		return m_iconCollectorComponents[entityID].iconsCollected;
 	}

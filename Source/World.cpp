@@ -280,7 +280,7 @@ namespace Space
 		m_componentBits[entityID] |= COMPONENT_POWERUP;
 		m_powerUpComponents[entityID] = powerUp;
 	}
-	void World::AddIconCollectorComponent(WorldID entityID, float iconsCollected)
+	void World::AddIconCollectorComponent(WorldID entityID, unsigned iconsCollected)
 	{
 		d2Assert(entityID < WORLD_MAX_ENTITIES);
 		m_componentBits[entityID] |= COMPONENT_ICON_COLLECTOR;
