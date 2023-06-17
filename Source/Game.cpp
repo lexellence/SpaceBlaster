@@ -587,51 +587,10 @@ namespace Space
 			m_starfield.Translate(translation);
 	}
 	//+--------------------------\--------------------------------
-	//|	    LaunchProjectile     | override (ProjectileLauncherCallback)
+	//|	   ProjectileLaunched    | override (ProjectileLauncherListener)
 	//\--------------------------/--------------------------------
-	WorldID Game::LaunchProjectile(const ProjectileDef& projectileDef, const b2Vec2& position,
-		float angle, float impulse, const b2Vec2& parentVelocity, WorldID parentID)
-	{
-		WorldID id{ m_world.NewEntityID(projectileDef.dimensions, m_world.GetDrawLayer(parentID) - 1, true) };
-		InstanceDef def;
-		def.position = position;
-		def.angle = angle;
-		def.velocity = parentVelocity;
-		def.angularVelocity = 0.0f;
-		m_world.AddPhysicsComponent(id, b2_dynamicBody, def,
-			projectileDef.fixedRotation, projectileDef.continuousCollisionDetection);
-
-		m_world.AddShapes(id, projectileDef.model.name, projectileDef.material, projectileDef.filter);
-
-		if(impulse > 0.0f)
-		{
-			b2Vec2 unitDirectionVector{ cos(angle), sin(angle) };
-			m_world.ApplyLinearImpulseToCenter(id, impulse * unitDirectionVector);
-		}
-
-		m_world.AddDrawAnimationComponent(id, projectileDef.model.animationDef);
-
-		if(projectileDef.destructionDelay)
-			m_world.AddDestructionDelayComponent(id, projectileDef.destructionDelayTime);
-
-		if(projectileDef.destructionDelayOnContact)
-			m_world.AddDestructionDelayOnContactComponent(id, projectileDef.destructionDelayOnContactTime);
-
-		if(projectileDef.destructionChanceOnContact)
-			m_world.AddDestructionChanceOnContactComponent(id, projectileDef.destructionChance);
-
-		m_world.AddParentComponent(id, parentID);
-		if(projectileDef.ignoreParentCollisionsUntilFirstContactEnd)
-			m_world.SetFlags(id, FLAG_IGNORE_PARENT_COLLISIONS_UNTIL_FIRST_CONTACT_END);
-
-		if(projectileDef.acceleration > 0.0f && projectileDef.accelerationTime > 0.0f)
-		{
-			m_world.AddThrusterComponent(id, 1, 1.0f);
-			m_world.AddThruster(id, 0, {}, projectileDef.acceleration, 0.0f, b2Vec2_zero);
-			m_world.AddSetThrustFactorAfterDelayComponent(id, 0.0f, projectileDef.accelerationTime);
-		}
-		return id;
-	}
+	void Game::ProjectileLaunched(const ProjectileDef& projectileDef, WorldID parentID)
+	{}
 	//+-------------\---------------------------------------------
 	//|	   Draw     |
 	//\-------------/---------------------------------------------

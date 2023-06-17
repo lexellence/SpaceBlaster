@@ -67,9 +67,9 @@ namespace Space
 	{
 		m_wrappedEntityListenerPtr = listenerPtr;
 	}
-	void World::SetProjectileLauncherCallback(ProjectileLauncherCallback* callbackPtr)
+	void World::SetProjectileLauncherCallback(ProjectileLauncherListener* callbackPtr)
 	{
-		m_projectileLauncherCallbackPtr = callbackPtr;
+		m_projectileLauncherListenerPtr = callbackPtr;
 	}
 	//+------------------------\----------------------------------
 	//|	  Creating Entities    |
@@ -385,7 +385,57 @@ namespace Space
 		ComponentBits component{ secondaryLaunchers ? COMPONENT_SECONDARY_PROJECTILE_LAUNCHER : COMPONENT_PRIMARY_PROJECTILE_LAUNCHER };
 		return HasComponents(entityID, component) && slot < launcherComponentPtr->numSlots;
 	}
+	//+--------------------------\--------------------------------
+	//|	    LaunchProjectile     | override (ProjectileLauncherCallback)
+	//\--------------------------/--------------------------------
+	WorldID World::LaunchProjectile(const ProjectileDef& projectileDef, const b2Vec2& position,
+		float angle, float impulse, const b2Vec2& parentVelocity, WorldID parentID)
+	{
+		WorldID id{ NewEntityID(projectileDef.dimensions, GetDrawLayer(parentID) - 1, true) };
+		InstanceDef def;
+		def.position = position;
+		def.angle = angle;
+		def.velocity = parentVelocity;
+		def.angularVelocity = 0.0f;
+		AddPhysicsComponent(id, b2_dynamicBody, def,
+			projectileDef.fixedRotation, projectileDef.continuousCollisionDetection);
 
+		AddShapes(id, projectileDef.model.name, projectileDef.material, projectileDef.filter);
+
+		if(impulse > 0.0f)
+		{
+			b2Vec2 unitDirectionVector{ cos(angle), sin(angle) };
+			ApplyLinearImpulseToCenter(id, impulse * unitDirectionVector);
+		}
+
+		AddDrawAnimationComponent(id, projectileDef.model.animationDef);
+
+		if(projectileDef.destructionDelay)
+			AddDestructionDelayComponent(id, projectileDef.destructionDelayTime);
+
+		if(projectileDef.destructionDelayOnContact)
+			AddDestructionDelayOnContactComponent(id, projectileDef.destructionDelayOnContactTime);
+
+		if(projectileDef.destructionChanceOnContact)
+			AddDestructionChanceOnContactComponent(id, projectileDef.destructionChance);
+
+		AddParentComponent(id, parentID);
+		if(projectileDef.ignoreParentCollisionsUntilFirstContactEnd)
+			SetFlags(id, FLAG_IGNORE_PARENT_COLLISIONS_UNTIL_FIRST_CONTACT_END);
+
+		if(projectileDef.acceleration > 0.0f && projectileDef.accelerationTime > 0.0f)
+		{
+			AddThrusterComponent(id, 1, 1.0f);
+			AddThruster(id, 0, {}, projectileDef.acceleration, 0.0f, b2Vec2_zero);
+			AddSetThrustFactorAfterDelayComponent(id, 0.0f, projectileDef.accelerationTime);
+		}
+
+		// Notify listener
+		if(m_projectileLauncherListenerPtr)
+			m_projectileLauncherListenerPtr->ProjectileLaunched(projectileDef, parentID);
+
+		return id;
+	}
 	//+----------------------\------------------------------------
 	//|	   Getting around	 |
 	//\----------------------/------------------------------------

@@ -96,10 +96,9 @@ namespace Space
 	{
 	public:	virtual void EntityWrapped(WorldID entityID, const b2Vec2& translation) = 0;
 	};
-	class ProjectileLauncherCallback
+	class ProjectileLauncherListener
 	{
-	public:	virtual WorldID LaunchProjectile(const ProjectileDef& projectileDef, const b2Vec2& position,
-		float angle, float impulse, const b2Vec2& parentVelocity, WorldID parentID) = 0;
+	public:	virtual void ProjectileLaunched(const ProjectileDef& projectileDef, WorldID parentID) = 0;
 	};
 	struct ParticleExplosionComponent
 	{
@@ -172,7 +171,7 @@ namespace Space
 		void Init(const d2d::Rect& rect);
 		void SetDestructionListener(DestroyListener* listenerPtr);
 		void SetWrapListener(WrapListener* listenerPtr);
-		void SetProjectileLauncherCallback(ProjectileLauncherCallback* callbackPtr);
+		void SetProjectileLauncherCallback(ProjectileLauncherListener* callbackPtr);
 		void Update(float dt, PlayerController& playerController);
 		void Draw();
 
@@ -224,6 +223,8 @@ namespace Space
 			const b2Vec2& localRelativePosition, float impulse, float interval, bool temporarilyDisabled, bool secondaryLaunchers);
 		void RemoveProjectileLauncher(WorldID entityID, unsigned slot, bool secondaryLaunchers);
 		bool IsValidProjectileLauncherSlot(WorldID entityID, unsigned slot, bool secondaryLaunchers) const;
+		WorldID LaunchProjectile(const ProjectileDef& projectileDef, const b2Vec2& position,
+			float angle, float impulse, const b2Vec2& parentVelocity, WorldID parentID);
 
 		// Getting around
 		void AddThrusterComponent(WorldID entityID, unsigned numSlots, float initialFactor = 0.0f);
@@ -484,7 +485,7 @@ namespace Space
 		WorldID m_highestActiveEntityCount{ 0 };
 		DestroyListener* m_destructionListenerPtr{ nullptr };
 		WrapListener* m_wrappedEntityListenerPtr{ nullptr };
-		ProjectileLauncherCallback* m_projectileLauncherCallbackPtr{ nullptr };
+		ProjectileLauncherListener* m_projectileLauncherListenerPtr{ nullptr };
 
 		float m_timestepAccumulator{ 0.0f };
 		b2World* m_b2WorldPtr{ nullptr };

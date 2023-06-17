@@ -31,7 +31,7 @@ namespace Space
 	class Game
 		: public DestroyListener,
 		  public WrapListener,
-		  public ProjectileLauncherCallback
+		  public ProjectileLauncherListener
 	{
 	public:
 		Game();
@@ -44,8 +44,7 @@ namespace Space
 		// World callbacks
 		void EntityWillBeDestroyed(WorldID entityID) override;
 		void EntityWrapped(WorldID entityID, const b2Vec2 &translation) override;
-		WorldID LaunchProjectile(const ProjectileDef &projectileDef, const b2Vec2 &position,
-								 float angle, float impulse, const b2Vec2 &parentVelocity, WorldID parentID) override;
+		void ProjectileLaunched(const ProjectileDef& projectileDef, WorldID parentID) override;
 
 	private:
 		void StartCurrentLevel();

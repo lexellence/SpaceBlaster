@@ -255,10 +255,9 @@ namespace Space
 								const b2Transform& transform{ b2BodyPtr->GetTransform() };
 								b2Vec2 localBulletPosition{ launcher.localRelativePosition * m_sizeComponents[id] };
 								b2Vec2 globalBulletPosition{ b2Mul(transform, localBulletPosition) };
-								if(m_projectileLauncherCallbackPtr)
-									m_projectileLauncherCallbackPtr->LaunchProjectile(launcher.projectileDef,
-										globalBulletPosition, transform.q.GetAngle(), launcher.impulse,
-										b2BodyPtr->GetLinearVelocity(), id);
+								LaunchProjectile(launcher.projectileDef,
+									globalBulletPosition, transform.q.GetAngle(), launcher.impulse,
+									b2BodyPtr->GetLinearVelocity(), id);
 								launcher.intervalAccumulator = 0.0f;
 							}
 						}
