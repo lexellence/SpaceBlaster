@@ -425,32 +425,33 @@ namespace Space
 	{
 		for(WorldID id : m_destroyBuffer)
 		{
-				// Send notification to Game
-				if(m_destructionListenerPtr)
-					m_destructionListenerPtr->EntityWillBeDestroyed(id);
+			// Send notification to Game
+			if(m_destructionListenerPtr)
+				m_destructionListenerPtr->EntityWillBeDestroyed(id);
 
-				// Particle explosion
+			// Particle explosion
+			if(!HasFlags(id, FLAG_EXITED))
 				if(HasComponents(id, COMPONENT_PARTICLE_EXPLOSION | COMPONENT_PHYSICS) && IsActive(id))
 					CreateExplosionFromEntity(id, m_particleExplosionComponents[id]);
 
-				// Destroy Box2D bodies
-				if(HasPhysics(id))
+			// Destroy Box2D bodies
+			if(HasPhysics(id))
+			{
+				m_b2WorldPtr->DestroyBody(m_physicsComponents[id].mainBody.b2BodyPtr);
+				m_physicsComponents[id].mainBody.b2BodyPtr = nullptr;
+				for(CloneBody& cloneBody : m_physicsComponents[id].cloneBodyList)
 				{
-					m_b2WorldPtr->DestroyBody(m_physicsComponents[id].mainBody.b2BodyPtr);
-					m_physicsComponents[id].mainBody.b2BodyPtr = nullptr;
-					for(CloneBody& cloneBody : m_physicsComponents[id].cloneBodyList)
-					{
-						m_b2WorldPtr->DestroyBody(cloneBody.b2BodyPtr);
-						cloneBody.b2BodyPtr = nullptr;
-					}
+					m_b2WorldPtr->DestroyBody(cloneBody.b2BodyPtr);
+					cloneBody.b2BodyPtr = nullptr;
 				}
-
-				// Disable all components/flags
-				m_componentBits[id] = COMPONENT_NONE;
-				m_flagBits[id] = FLAG_NONE;
 			}
-		m_destroyBuffer.clear();
+
+			// Disable all components/flags
+			m_componentBits[id] = COMPONENT_NONE;
+			m_flagBits[id] = FLAG_NONE;
 		}
+		m_destroyBuffer.clear();
+	}
 	void World::WrapEntities()
 	{
 		bool doManualWrapping{ false };
@@ -690,7 +691,7 @@ namespace Space
 			(filter1.categoryBits & filter2.maskBits) != 0;
 	}
 	void World::BeginContact(b2Contact* contactPtr)
-	{	}
+	{}
 	void World::PreSolve(b2Contact* contactPtr, const b2Manifold* oldManifoldPtr)
 	{
 		d2Assert(contactPtr && oldManifoldPtr && "Box2D Bug");
@@ -713,13 +714,16 @@ namespace Space
 	}
 	void World::Exit(WorldID id)
 	{
-		// Turn off all components except graphics
-		BitMask componentsToKeep = COMPONENT_NONE;
-		if(HasComponents(id, COMPONENT_DRAW_ANIMATION))
-			componentsToKeep |= COMPONENT_DRAW_ANIMATION;
-		if(HasComponents(id, COMPONENT_DRAW_FIXTURES))
-			componentsToKeep |= COMPONENT_DRAW_FIXTURES;
-		RemoveAllComponentsExcept(id, componentsToKeep);
+		//// Turn off all components except graphics
+		//BitMask componentsToKeep = COMPONENT_NONE;
+		//if(HasComponents(id, COMPONENT_DRAW_ANIMATION))
+		//	componentsToKeep |= COMPONENT_DRAW_ANIMATION;
+		//if(HasComponents(id, COMPONENT_DRAW_FIXTURES))
+		//	componentsToKeep |= COMPONENT_DRAW_FIXTURES;
+		//RemoveAllComponentsExcept(id, componentsToKeep);
+
+		SetFlags(id, FLAG_EXITED);
+		Destroy(id);
 	}
 	void World::PreSolveIconCollector(WorldID id1, WorldID id2, b2Contact* contactPtr)
 	{
@@ -832,7 +836,7 @@ namespace Space
 		d2Assert(contactPtr && "Box2D Bug");
 		std::array<Body*, 2> bodyPtrs{
 			GetUserBodyFromFixture(contactPtr->GetFixtureA()),
-			GetUserBodyFromFixture(contactPtr->GetFixtureB()) };
+				GetUserBodyFromFixture(contactPtr->GetFixtureB()) };
 		d2Assert(bodyPtrs[0] && bodyPtrs[1]);
 
 		// COMPONENT_DESTRUCTION_DELAY_ON_CONTACT

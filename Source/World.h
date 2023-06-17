@@ -156,7 +156,8 @@ namespace Space
 		FLAG_IGNORE_PARENT_COLLISIONS_UNTIL_FIRST_CONTACT_END = 1 << 2,
 		FLAG_DISABLE_COLLISIONS_ON_CONTACT_END = 1 << 3,
 		FLAG_DESTRUCTION_ON_ANIMATION_COMPLETION = 1 << 4,
-		FLAG_EXIT = 1 << 5
+		FLAG_EXIT = 1 << 5,
+		FLAG_EXITED = 1 << 6
 	};
 	//+---------------------------------------------\
 	//|  World: b2World wrapper and entity manager  |
@@ -180,7 +181,7 @@ namespace Space
 		void Destroy(WorldID id);
 		void SetFlags(WorldID entityID, FlagBits flagBits, bool enable = true);
 		void RemoveComponents(WorldID entityID, BitMask componentBitMask);
-		void RemoveAllComponentsExcept(WorldID entityID, BitMask componentBitMask);
+		//void RemoveAllComponentsExcept(WorldID entityID, BitMask componentBitMask);
 
 		// Physics
 		bool GetRandomPositionAwayFromExistingEntities(float newBoundingRadius,

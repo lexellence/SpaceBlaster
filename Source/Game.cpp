@@ -643,6 +643,7 @@ namespace Space
 				}
 				d2d::Window::PopMatrix();
 			}
+
 			// Draw icons collected
 			if(m_world.HasComponents(m_player.id, COMPONENT_ICON_COLLECTOR))
 			{
@@ -656,6 +657,24 @@ namespace Space
 				}
 				d2d::Window::PopMatrix();
 			}
+
+			// Draw credits
+			d2d::Window::SetColor(m_creditsTextStyle.color);
+			d2d::Window::PushMatrix();
+			d2d::Window::Translate(m_creditsPosition * resolution);
+			{
+				d2d::Window::DrawString(d2d::ToString(m_player.credits), m_creditsAlignment, m_creditsTextStyle.size * resolution.y, m_creditsTextStyle.font);
+			}
+			d2d::Window::PopMatrix();
+
+			// Draw level
+			d2d::Window::SetColor(m_levelTextStyle.color);
+			d2d::Window::PushMatrix();
+			d2d::Window::Translate(m_levelPosition * resolution);
+			{
+				d2d::Window::DrawString(d2d::ToString(m_currentLevel), m_levelAlignment, m_levelTextStyle.size * resolution.y, m_levelTextStyle.font);
+			}
+			d2d::Window::PopMatrix();
 		}
 
 	}

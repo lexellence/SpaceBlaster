@@ -107,12 +107,12 @@ namespace Space
 		d2Assert(entityID < WORLD_MAX_ENTITIES);
 		m_componentBits[entityID] &= ~componentBits;
 	}
-	void World::RemoveAllComponentsExcept(WorldID entityID, BitMask componentBits)
-	{
-		d2Assert(entityID < WORLD_MAX_ENTITIES);
-		m_componentBits[entityID] = 0;
-		m_componentBits[entityID] |= componentBits;
-	}
+	//void World::RemoveAllComponentsExcept(WorldID entityID, BitMask componentBits)
+	//{
+	//	d2Assert(entityID < WORLD_MAX_ENTITIES);
+	//	m_componentBits[entityID] = 0;
+	//	m_componentBits[entityID] |= componentBits;
+	//}
 	//+------------------------\----------------------------------
 	//|	  Physics Components   |
 	//\------------------------/----------------------------------
