@@ -273,9 +273,7 @@ namespace Space
 		for(WorldID id = 0; id < WORLD_MAX_ENTITIES; ++id)
 			if(HasComponents(id, COMPONENT_DRAW_ANIMATION) && IsActive(id))
 			{
-				//UpdateDrawAnimationComponent(m_drawAnimationComponents[id], dt);
 				m_drawAnimationComponents[id].animation.Update(dt);
-				//bool notAnimated{ m_drawAnimationComponents[id].type == d2d::AnimationType::NOT_ANIMATED };
 				if(!m_drawAnimationComponents[id].animation.IsAnimated() && HasFlags(id, FLAG_DESTRUCTION_ON_ANIMATION_COMPLETION))
 					Destroy(id);
 			}
