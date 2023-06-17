@@ -9,10 +9,6 @@
 \**************************************************************************************/
 #include "pch.h"
 #include "Game.h"
-#include "GameModelData.h"
-#include "World.h"
-#include "Camera.h"
-#include "Starfield.h"
 #include "Exceptions.h"
 
 namespace Space
@@ -107,7 +103,7 @@ namespace Space
 			int model{ d2d::RandomInt({0, NUM_ICON_MODELS - 1}) };
 			b2Vec2 size;
 			size.y = ICON_HEIGHT;
-			size.x = size.y * m_iconTextures[model].GetWidthToHeightRatio();
+			size.x = size.y * m_models.textures.icons[model].GetWidthToHeightRatio();
 			float boundingRadius = size.Length() * 0.5f;
 
 			InstanceDef def;
@@ -139,7 +135,7 @@ namespace Space
 			int model = d2d::RandomInt({0, NUM_XLARGE_ASTEROID_MODELS - 1});
 			b2Vec2 size;
 			size.y = XLARGE_ASTEROID_HEIGHT * XLARGE_ASTEROID_RELATIVE_HEIGHTS[model];
-			size.x = size.y * m_asteroidXLargeTextures[model].GetWidthToHeightRatio();
+			size.x = size.y * m_models.textures.asteroidsXLarge[model].GetWidthToHeightRatio();
 			float boundingRadius = size.Length() * 0.5f;
 
 			InstanceDef def;
@@ -171,7 +167,7 @@ namespace Space
 			int model = d2d::RandomInt({0, NUM_LARGE_ASTEROID_MODELS - 1});
 			b2Vec2 size;
 			size.y = LARGE_ASTEROID_HEIGHT * LARGE_ASTEROID_RELATIVE_HEIGHTS[model];
-			size.x = size.y * m_asteroidLargeTextures[model].GetWidthToHeightRatio();
+			size.x = size.y * m_models.textures.asteroidsLarge[model].GetWidthToHeightRatio();
 			float boundingRadius = size.Length() * 0.5f;
 
 			InstanceDef def;
@@ -201,7 +197,7 @@ namespace Space
 			int model = d2d::RandomInt({0, NUM_MEDIUM_ASTEROID_MODELS - 1});
 			b2Vec2 size;
 			size.y = MEDIUM_ASTEROID_HEIGHT * MEDIUM_ASTEROID_RELATIVE_HEIGHTS[model];
-			size.x = size.y * m_asteroidMediumTextures[model].GetWidthToHeightRatio();
+			size.x = size.y * m_models.textures.asteroidsMedium[model].GetWidthToHeightRatio();
 			float boundingRadius = size.Length() * 0.5f;
 
 			InstanceDef def;
@@ -231,7 +227,7 @@ namespace Space
 			int model = d2d::RandomInt({0, NUM_SMALL_ASTEROID_MODELS - 1});
 			b2Vec2 size;
 			size.y = SMALL_ASTEROID_HEIGHT * SMALL_ASTEROID_RELATIVE_HEIGHTS[model];
-			size.x = size.y * m_asteroidSmallTextures[model].GetWidthToHeightRatio();
+			size.x = size.y * m_models.textures.asteroidsSmall[model].GetWidthToHeightRatio();
 			float boundingRadius = size.Length() * 0.5f;
 
 			InstanceDef def;
@@ -374,13 +370,13 @@ namespace Space
 	}
 	WorldID Game::CreateScout(World& world, const InstanceDef& def)
 	{
-		b2Vec2 size{ SCOUT_HEIGHT * m_scoutTexture.GetWidthToHeightRatio(), SCOUT_HEIGHT };
-		WorldID id = CreateBasicObject(world, size, DEFAULT_DRAW_LAYER, m_scoutModel, SHIP_MATERIAL, SHIP_FILTER, b2_dynamicBody, def);
+		b2Vec2 size{ SCOUT_HEIGHT * m_models.textures.scout.GetWidthToHeightRatio(), SCOUT_HEIGHT };
+		WorldID id = CreateBasicObject(world, size, DEFAULT_DRAW_LAYER, m_models.scout, SHIP_MATERIAL, SHIP_FILTER, b2_dynamicBody, def);
 		world.AddRotatorComponent(id, SCOUT_ROTATION_SPEED);
 
 		world.AddThrusterComponent(id, 2);
-		world.AddThruster(id, 0, m_scoutThrusterModel.animationDef, SCOUT_THRUSTER_ACCELERATION, SCOUT_THRUSTER_FUEL_PER_SECOND, { SCOUT_THRUSTER_OFFSET_X,  SCOUT_THRUSTER_SPREAD_Y });
-		world.AddThruster(id, 1, m_scoutThrusterModel.animationDef, SCOUT_THRUSTER_ACCELERATION, SCOUT_THRUSTER_FUEL_PER_SECOND, { SCOUT_THRUSTER_OFFSET_X, -SCOUT_THRUSTER_SPREAD_Y });
+		world.AddThruster(id, 0, m_models.scoutThruster.animationDef, SCOUT_THRUSTER_ACCELERATION, SCOUT_THRUSTER_FUEL_PER_SECOND, { SCOUT_THRUSTER_OFFSET_X,  SCOUT_THRUSTER_SPREAD_Y });
+		world.AddThruster(id, 1, m_models.scoutThruster.animationDef, SCOUT_THRUSTER_ACCELERATION, SCOUT_THRUSTER_FUEL_PER_SECOND, { SCOUT_THRUSTER_OFFSET_X, -SCOUT_THRUSTER_SPREAD_Y });
 
 		world.AddFuelComponent(id, SCOUT_MAX_FUEL, SCOUT_MAX_FUEL);
 		world.AddBoosterComponent(id, SCOUT_BOOST_FACTOR, BOOST_SECONDS, BOOST_COOLDOWN_SECONDS);
@@ -402,15 +398,15 @@ namespace Space
 	}
 	WorldID Game::CreateBlaster(World& world, const InstanceDef& def)
 	{
-		b2Vec2 size{ BLASTER_HEIGHT * m_blasterTexture.GetWidthToHeightRatio(), BLASTER_HEIGHT };
-		WorldID id = CreateBasicObject(world, size, DEFAULT_DRAW_LAYER, m_blasterModel, SHIP_MATERIAL, SHIP_FILTER, b2_dynamicBody, def);
+		b2Vec2 size{ BLASTER_HEIGHT * m_models.textures.blaster.GetWidthToHeightRatio(), BLASTER_HEIGHT };
+		WorldID id = CreateBasicObject(world, size, DEFAULT_DRAW_LAYER, m_models.blaster, SHIP_MATERIAL, SHIP_FILTER, b2_dynamicBody, def);
 		world.AddRotatorComponent(id, BLASTER_ROTATION_SPEED);
 
 		world.AddThrusterComponent(id, 4);
-		world.AddThruster(id, 0, m_blasterThrusterModel.animationDef, BLASTER_THRUSTER_ACCELERATION, BLASTER_THRUSTER_FUEL_PER_SECOND, { BLASTER_THRUSTER_OFFSET_X,  BLASTER_THRUSTER_INNER_SPREAD_Y });
-		world.AddThruster(id, 1, m_blasterThrusterModel.animationDef, BLASTER_THRUSTER_ACCELERATION, BLASTER_THRUSTER_FUEL_PER_SECOND, { BLASTER_THRUSTER_OFFSET_X, -BLASTER_THRUSTER_INNER_SPREAD_Y });
-		world.AddThruster(id, 2, m_blasterThrusterModel.animationDef, BLASTER_THRUSTER_ACCELERATION, BLASTER_THRUSTER_FUEL_PER_SECOND, { BLASTER_THRUSTER_OFFSET_X,  BLASTER_THRUSTER_OUTER_SPREAD_Y });
-		world.AddThruster(id, 3, m_blasterThrusterModel.animationDef, BLASTER_THRUSTER_ACCELERATION, BLASTER_THRUSTER_FUEL_PER_SECOND, { BLASTER_THRUSTER_OFFSET_X, -BLASTER_THRUSTER_OUTER_SPREAD_Y });
+		world.AddThruster(id, 0, m_models.blasterThruster.animationDef, BLASTER_THRUSTER_ACCELERATION, BLASTER_THRUSTER_FUEL_PER_SECOND, { BLASTER_THRUSTER_OFFSET_X,  BLASTER_THRUSTER_INNER_SPREAD_Y });
+		world.AddThruster(id, 1, m_models.blasterThruster.animationDef, BLASTER_THRUSTER_ACCELERATION, BLASTER_THRUSTER_FUEL_PER_SECOND, { BLASTER_THRUSTER_OFFSET_X, -BLASTER_THRUSTER_INNER_SPREAD_Y });
+		world.AddThruster(id, 2, m_models.blasterThruster.animationDef, BLASTER_THRUSTER_ACCELERATION, BLASTER_THRUSTER_FUEL_PER_SECOND, { BLASTER_THRUSTER_OFFSET_X,  BLASTER_THRUSTER_OUTER_SPREAD_Y });
+		world.AddThruster(id, 3, m_models.blasterThruster.animationDef, BLASTER_THRUSTER_ACCELERATION, BLASTER_THRUSTER_FUEL_PER_SECOND, { BLASTER_THRUSTER_OFFSET_X, -BLASTER_THRUSTER_OUTER_SPREAD_Y });
 
 		world.AddFuelComponent(id, BLASTER_MAX_FUEL, BLASTER_MAX_FUEL);
 		world.AddBoosterComponent(id, BLASTER_BOOST_FACTOR, BOOST_SECONDS, BOOST_COOLDOWN_SECONDS);
@@ -444,8 +440,8 @@ namespace Space
 	{
 		d2Assert(modelIndex < NUM_XLARGE_ASTEROID_MODELS);
 		float height{ XLARGE_ASTEROID_HEIGHT * XLARGE_ASTEROID_RELATIVE_HEIGHTS[modelIndex] };
-		b2Vec2 size{ height * m_asteroidXLargeTextures[modelIndex].GetWidthToHeightRatio(), height };
-		Model& model = isRock ? m_rockXLargeModels.at(modelIndex) : m_asteroidXLargeModels.at(modelIndex);
+		b2Vec2 size{ height * m_models.textures.asteroidsXLarge[modelIndex].GetWidthToHeightRatio(), height };
+		Model& model = isRock ? m_models.rocksXLarge.at(modelIndex) : m_models.asteroidsXLarge.at(modelIndex);
 		WorldID id = CreateBasicObject(world, size, DEFAULT_DRAW_LAYER, model, ASTEROID_MATERIAL, ASTEROID_FILTER, b2_dynamicBody, def);
 		world.AddHealthComponent(id, XLARGE_ASTEROID_HP);
 		world.AddParticleExplosionOnDeathComponent(id, PARTICLE_EXPLOSION_RELATIVE_SIZE,
@@ -458,8 +454,8 @@ namespace Space
 	{
 		d2Assert(modelIndex < NUM_LARGE_ASTEROID_MODELS);
 		float height{ LARGE_ASTEROID_HEIGHT * LARGE_ASTEROID_RELATIVE_HEIGHTS[modelIndex] };
-		b2Vec2 size{ height * m_asteroidLargeTextures[modelIndex].GetWidthToHeightRatio(), height };
-		Model& model = isRock ? m_rockLargeModels.at(modelIndex) : m_asteroidLargeModels.at(modelIndex);
+		b2Vec2 size{ height * m_models.textures.asteroidsLarge[modelIndex].GetWidthToHeightRatio(), height };
+		Model& model = isRock ? m_models.rocksLarge.at(modelIndex) : m_models.asteroidsLarge.at(modelIndex);
 		WorldID id = CreateBasicObject(world, size, DEFAULT_DRAW_LAYER, model, ASTEROID_MATERIAL, ASTEROID_FILTER, b2_dynamicBody, def);
 		world.AddHealthComponent(id, LARGE_ASTEROID_HP);
 		world.AddParticleExplosionOnDeathComponent(id, PARTICLE_EXPLOSION_RELATIVE_SIZE,
@@ -472,8 +468,8 @@ namespace Space
 	{
 		d2Assert(modelIndex < NUM_MEDIUM_ASTEROID_MODELS);
 		float height{ MEDIUM_ASTEROID_HEIGHT * MEDIUM_ASTEROID_RELATIVE_HEIGHTS[modelIndex] };
-		b2Vec2 size{ height * m_asteroidMediumTextures[modelIndex].GetWidthToHeightRatio(), height };
-		Model& model = isRock ? m_rockMediumModels.at(modelIndex) : m_asteroidMediumModels.at(modelIndex);
+		b2Vec2 size{ height * m_models.textures.asteroidsMedium[modelIndex].GetWidthToHeightRatio(), height };
+		Model& model = isRock ? m_models.rocksMedium.at(modelIndex) : m_models.asteroidsMedium.at(modelIndex);
 		WorldID id = CreateBasicObject(world, size, DEFAULT_DRAW_LAYER, model, ASTEROID_MATERIAL, ASTEROID_FILTER, b2_dynamicBody, def);
 		world.AddHealthComponent(id, MEDIUM_ASTEROID_HP);
 		world.AddParticleExplosionOnDeathComponent(id, PARTICLE_EXPLOSION_RELATIVE_SIZE,
@@ -486,8 +482,8 @@ namespace Space
 	{
 		d2Assert(modelIndex < NUM_SMALL_ASTEROID_MODELS);
 		float height{ SMALL_ASTEROID_HEIGHT * SMALL_ASTEROID_RELATIVE_HEIGHTS[modelIndex] };
-		b2Vec2 size{ height * m_asteroidSmallTextures[modelIndex].GetWidthToHeightRatio(), height };
-		Model& model = isRock ? m_rockSmallModels.at(modelIndex) : m_asteroidSmallModels.at(modelIndex);
+		b2Vec2 size{ height * m_models.textures.asteroidsSmall[modelIndex].GetWidthToHeightRatio(), height };
+		Model& model = isRock ? m_models.rocksSmall.at(modelIndex) : m_models.asteroidsSmall.at(modelIndex);
 		WorldID id = CreateBasicObject(world, size, DEFAULT_DRAW_LAYER, model, ASTEROID_MATERIAL, ASTEROID_FILTER, b2_dynamicBody, def);
 		world.AddHealthComponent(id, SMALL_ASTEROID_HP);
 		world.AddParticleExplosionOnDeathComponent(id, PARTICLE_EXPLOSION_RELATIVE_SIZE,
@@ -498,15 +494,15 @@ namespace Space
 	}
 	WorldID Game::CreateBumper(World& world, const InstanceDef& def)
 	{
-		b2Vec2 size{ BUMPER_HEIGHT * m_bumperTexture.GetWidthToHeightRatio(), BUMPER_HEIGHT };
-		WorldID id = CreateBasicObject(world, size, DEFAULT_DRAW_LAYER, m_bumperModel, BUMPER_MATERIAL, BUMPER_FILTER, b2_kinematicBody, def);
+		b2Vec2 size{ BUMPER_HEIGHT * m_models.textures.bumper.GetWidthToHeightRatio(), BUMPER_HEIGHT };
+		WorldID id = CreateBasicObject(world, size, DEFAULT_DRAW_LAYER, m_models.bumper, BUMPER_MATERIAL, BUMPER_FILTER, b2_kinematicBody, def);
 		//WorldID id = CreateBasicObject(world, size, DEFAULT_DRAW_LAYER, m_bumperModel, BUMPER_MATERIAL, BUMPER_FILTER, b2_dynamicBody, def);
 		return id;
 	}
 	WorldID Game::CreateSoda(World& world, const InstanceDef& def)
 	{
-		b2Vec2 size{ SODA_HEIGHT * m_sodaTexture.GetWidthToHeightRatio(), SODA_HEIGHT };
-		WorldID id = CreateBasicObject(world, size, DEFAULT_DRAW_LAYER, m_sodaModel, FUEL_MATERIAL, FUEL_FILTER, b2_dynamicBody, def);
+		b2Vec2 size{ SODA_HEIGHT * m_models.textures.soda.GetWidthToHeightRatio(), SODA_HEIGHT };
+		WorldID id = CreateBasicObject(world, size, DEFAULT_DRAW_LAYER, m_models.soda, FUEL_MATERIAL, FUEL_FILTER, b2_dynamicBody, def);
 		PowerUpComponent powerUp;
 		powerUp.type = PowerUpType::FUEL;
 		powerUp.value = 10;
@@ -515,8 +511,8 @@ namespace Space
 	}
 	WorldID Game::CreateMelon(World& world, const InstanceDef& def)
 	{
-		b2Vec2 size{ MELON_HEIGHT * m_melonTexture.GetWidthToHeightRatio(), MELON_HEIGHT };
-		WorldID id = CreateBasicObject(world, size, DEFAULT_DRAW_LAYER, m_melonModel, FUEL_MATERIAL, FUEL_FILTER, b2_dynamicBody, def);
+		b2Vec2 size{ MELON_HEIGHT * m_models.textures.melon.GetWidthToHeightRatio(), MELON_HEIGHT };
+		WorldID id = CreateBasicObject(world, size, DEFAULT_DRAW_LAYER, m_models.melon, FUEL_MATERIAL, FUEL_FILTER, b2_dynamicBody, def);
 		PowerUpComponent powerUp;
 		powerUp.type = PowerUpType::FUEL;
 		powerUp.value = 20;
@@ -525,9 +521,9 @@ namespace Space
 	}
 	WorldID Game::CreateApple(World& world, const InstanceDef& def)
 	{
-		b2Vec2 size{ APPLE_HEIGHT * m_appleTexture.GetWidthToHeightRatio(), APPLE_HEIGHT };
+		b2Vec2 size{ APPLE_HEIGHT * m_models.textures.apple.GetWidthToHeightRatio(), APPLE_HEIGHT };
 		size = 4.0f * size;
-		WorldID id = CreateBasicObject(world, size, DEFAULT_DRAW_LAYER, m_appleModel, FUEL_MATERIAL, FUEL_FILTER, b2_dynamicBody, def);
+		WorldID id = CreateBasicObject(world, size, DEFAULT_DRAW_LAYER, m_models.apple, FUEL_MATERIAL, FUEL_FILTER, b2_dynamicBody, def);
 		PowerUpComponent powerUp;
 		powerUp.type = PowerUpType::FUEL;
 		powerUp.value = 5;
@@ -536,9 +532,9 @@ namespace Space
 	}
 	WorldID Game::CreateIcon(World& world, unsigned modelIndex, const InstanceDef& def)
 	{
-		d2Assert(modelIndex < m_iconTextures.size());
-		b2Vec2 size{ ICON_HEIGHT * m_iconTextures.at(0).GetWidthToHeightRatio(), ICON_HEIGHT };
-		Model model{ "icon", { m_iconTextures.at(modelIndex) } };
+		d2Assert(modelIndex < m_models.textures.icons.size());
+		b2Vec2 size{ ICON_HEIGHT * m_models.textures.icons.at(0).GetWidthToHeightRatio(), ICON_HEIGHT };
+		Model model{ "icon", { m_models.textures.icons.at(modelIndex) } };
 		WorldID id = CreateBasicObject(world, size, DEFAULT_DRAW_LAYER, model, ICON_MATERIAL, ICON_FILTER, b2_dynamicBody, def);
 		PowerUpComponent powerUp;
 		powerUp.type = PowerUpType::ICON;
