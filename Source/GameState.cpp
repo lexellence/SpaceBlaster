@@ -23,7 +23,7 @@ namespace Space
 	}
 	AppStateID GameState::Update(float dt)
 	{
-		if(m_mode == GameMode::PAUSED || m_mode == GameMode::SHOP)
+		if(m_mode == GameMode::PAUSED || m_mode == GameMode::POST_LEVEL)
 		{
 			// Get menu button pressed
 			std::string pressedButton;
@@ -41,45 +41,53 @@ namespace Space
 				if(pressedButton == m_resumeString)
 					UnpauseGame();
 			}
-			else if(m_mode == GameMode::SHOP)
+			else if(m_mode == GameMode::POST_LEVEL)
 			{
-				if(m_shopMode == ShopMode::MAIN)
+				if(m_postLevelMenuMode == PostLevelMenu::MAIN)
 				{
-					// Shop main
+					// Post-level main menu
 					if(pressedButton == m_nextLevelString)
 						StartActionMode(true);
+					else if(pressedButton == m_purchaseString)
+						StartPostLevelMenu(PostLevelMenu::SHOP_MAIN);
+				}
+				else if(m_postLevelMenuMode == PostLevelMenu::SHOP_MAIN)
+				{
+					// Shop main menu
+					if(pressedButton == m_backString)
+						StartPostLevelMenu(PostLevelMenu::MAIN);
 					else if(pressedButton == m_weaponsString)
-						StartShopMenu(ShopMode::WEAPONS);
+						StartPostLevelMenu(PostLevelMenu::SHOP_WEAPONS);
 					else if(pressedButton == m_protectionString)
-						StartShopMenu(ShopMode::PROTECTION);
+						StartPostLevelMenu(PostLevelMenu::SHOP_PROTECTION);
 					else if(pressedButton == m_engineString)
-						StartShopMenu(ShopMode::ENGINE);
+						StartPostLevelMenu(PostLevelMenu::SHOP_ENGINE);
 					else if(pressedButton == m_gadgetsString)
-						StartShopMenu(ShopMode::GADGETS);
+						StartPostLevelMenu(PostLevelMenu::SHOP_GADGETS);
 				}
-				else if(m_shopMode == ShopMode::WEAPONS)
+				else if(m_postLevelMenuMode == PostLevelMenu::SHOP_WEAPONS)
 				{
-					// Shop weapons
+					// Shop weapons menu
 					if(pressedButton == m_backString)
-						StartShopMenu();
+						StartPostLevelMenu(PostLevelMenu::SHOP_MAIN);
 				}
-				else if(m_shopMode == ShopMode::PROTECTION)
+				else if(m_postLevelMenuMode == PostLevelMenu::SHOP_PROTECTION)
 				{
-					// Shop protection
+					// Shop protection menu
 					if(pressedButton == m_backString)
-						StartShopMenu();
+						StartPostLevelMenu(PostLevelMenu::SHOP_MAIN);
 				}
-				else if(m_shopMode == ShopMode::ENGINE)
+				else if(m_postLevelMenuMode == PostLevelMenu::SHOP_ENGINE)
 				{
-					// Shop engine
+					// Shop engine menu
 					if(pressedButton == m_backString)
-						StartShopMenu();
+						StartPostLevelMenu(PostLevelMenu::SHOP_MAIN);
 				}
-				else if(m_shopMode == ShopMode::GADGETS)
+				else if(m_postLevelMenuMode == PostLevelMenu::SHOP_GADGETS)
 				{
-					// Shop gadgets
+					// Shop gadgets menu
 					if(pressedButton == m_backString)
-						StartShopMenu();
+						StartPostLevelMenu(PostLevelMenu::SHOP_MAIN);
 				}
 			}
 		}
@@ -87,7 +95,7 @@ namespace Space
 		{
 			UpdatePlayerController();
 			if(m_game.DidPlayerExit())
-				StartShopMenu();
+				StartPostLevelMenu(PostLevelMenu::MAIN);
 		}
 
 		// Game
@@ -109,20 +117,22 @@ namespace Space
 		m_pauseMenu.Init();
 		m_menuPtr = &m_pauseMenu;
 	}
-	void GameState::StartShopMenu(ShopMode mode)
+	void GameState::StartPostLevelMenu(PostLevelMenu mode)
 	{
-		m_mode = GameMode::SHOP;
-		m_shopMode = mode;
+		m_mode = GameMode::POST_LEVEL;
+		m_postLevelMenuMode = mode;
 
-		if(m_shopMode == ShopMode::MAIN)
+		if(m_postLevelMenuMode == PostLevelMenu::MAIN)
+			m_menuPtr = &m_postLevelMenu;
+		else if(m_postLevelMenuMode == PostLevelMenu::SHOP_MAIN)
 			m_menuPtr = &m_shopMenu;
-		else if(m_shopMode == ShopMode::WEAPONS)
+		else if(m_postLevelMenuMode == PostLevelMenu::SHOP_WEAPONS)
 			m_menuPtr = &m_weaponsMenu;
-		else if(m_shopMode == ShopMode::PROTECTION)
+		else if(m_postLevelMenuMode == PostLevelMenu::SHOP_PROTECTION)
 			m_menuPtr = &m_protectionMenu;
-		else if(m_shopMode == ShopMode::ENGINE)
+		else if(m_postLevelMenuMode == PostLevelMenu::SHOP_ENGINE)
 			m_menuPtr = &m_engineMenu;
-		else if(m_shopMode == ShopMode::GADGETS)
+		else if(m_postLevelMenuMode == PostLevelMenu::SHOP_GADGETS)
 			m_menuPtr = &m_gadgetsMenu;
 
 		d2Assert(m_menuPtr);
@@ -132,7 +142,7 @@ namespace Space
 	{
 		d2d::Window::SetShowCursor(m_mode != GameMode::ACTION);
 		m_game.Draw();
-		if(m_mode == GameMode::PAUSED || m_mode == GameMode::SHOP)
+		if(m_mode == GameMode::PAUSED || m_mode == GameMode::POST_LEVEL)
 		{
 			d2Assert(m_menuPtr);
 			m_menuPtr->Draw();
@@ -162,7 +172,7 @@ namespace Space
 
 	void GameState::ProcessEvent(const SDL_Event& event)
 	{
-		if(m_mode == GameMode::PAUSED || m_mode == GameMode::SHOP)
+		if(m_mode == GameMode::PAUSED || m_mode == GameMode::POST_LEVEL)
 		{
 			d2Assert(m_menuPtr);
 			m_menuPtr->ProcessEvent(event);
