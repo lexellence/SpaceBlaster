@@ -54,6 +54,8 @@ namespace Space
 						StartShopMenu(ShopMode::WEAPONS);
 					else if(pressedButton == m_protectionString)
 						StartShopMenu(ShopMode::PROTECTION);
+					else if(pressedButton == m_engineString)
+						StartShopMenu(ShopMode::ENGINE);
 					else if(pressedButton == m_gadgetsString)
 						StartShopMenu(ShopMode::GADGETS);
 				}
@@ -66,6 +68,12 @@ namespace Space
 				else if(m_shopMode == ShopMode::PROTECTION)
 				{
 					// Shop protection
+					if(pressedButton == m_backString)
+						StartShopMenu();
+				}
+				else if(m_shopMode == ShopMode::ENGINE)
+				{
+					// Shop engine
 					if(pressedButton == m_backString)
 						StartShopMenu();
 				}
@@ -114,6 +122,8 @@ namespace Space
 			m_menuPtr = &m_weaponsMenu;
 		else if(m_shopMode == ShopMode::PROTECTION)
 			m_menuPtr = &m_protectionMenu;
+		else if(m_shopMode == ShopMode::ENGINE)
+			m_menuPtr = &m_engineMenu;
 		else if(m_shopMode == ShopMode::GADGETS)
 			m_menuPtr = &m_gadgetsMenu;
 

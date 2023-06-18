@@ -19,7 +19,7 @@ namespace Space
 	};
 	enum class ShopMode
 	{
-		MAIN, WEAPONS, PROTECTION, GADGETS
+		MAIN, WEAPONS, PROTECTION, ENGINE, GADGETS
 	};
 
 	class GameState : public AppState
@@ -93,11 +93,13 @@ namespace Space
 		const std::string m_backString{ "Back" };
 		const std::string m_shopTitle{ "Shop" };
 		std::string m_weaponsString{ "Weapons" };
-		std::string m_protectionString{ "Protection" };
+		std::string m_protectionString{ "Hull/Shields" };
+		std::string m_engineString{ "Engine Upgrades" };
 		std::string m_gadgetsString{ "Gadgets" };
 		std::string m_nextLevelString{ "Start Next Level" };
 		const std::vector<std::string> m_shopMenuButtonTextList
-			{ m_nextLevelString, m_weaponsString, m_protectionString, m_gadgetsString, m_quitToMenuString, m_quitString };
+			{ m_nextLevelString, m_weaponsString, m_protectionString, 
+			m_engineString, m_gadgetsString, m_quitToMenuString, m_quitString };
 		d2d::Menu m_shopMenu{ m_shopMenuButtonTextList, m_buttonTextStyle, m_shopTitle, m_titleTextStyle, 
 			m_buttonColor, m_buttonHighlightColor, m_buttonBorderColor, m_shopBackgroundColor };
 
@@ -109,6 +111,11 @@ namespace Space
 		// Protection
 		const std::vector<std::string> m_protectionMenuButtonTextList{ m_backString };
 		d2d::Menu m_protectionMenu{ m_protectionMenuButtonTextList, m_buttonTextStyle, m_protectionString, m_titleTextStyle,
+			m_buttonColor, m_buttonHighlightColor, m_buttonBorderColor, m_shopBackgroundColor };
+
+		// Engine
+		const std::vector<std::string> m_engineMenuButtonTextList{ m_backString };
+		d2d::Menu m_engineMenu{ m_engineMenuButtonTextList, m_buttonTextStyle, m_engineString, m_titleTextStyle,
 			m_buttonColor, m_buttonHighlightColor, m_buttonBorderColor, m_shopBackgroundColor };
 
 		// Gadgets
