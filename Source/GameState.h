@@ -82,10 +82,9 @@ namespace Space
 
 		// Pause menu
 		const std::string m_pauseTitle{ "Paused" };
-		std::string m_resumeString{ "RESUME" };
-		std::string m_quitToMenuString{ "QUIT TO MAIN MENU" };
-		std::string m_quitString{ "QUIT TO OPERATING SYSTEM" };
-		const std::vector<std::string> m_pauseMenuButtonTextList{ m_resumeString, m_quitToMenuString, m_quitString };
+		std::string m_resumeString{ "Resume" };
+		std::string m_quitString{ "Quit" };
+		const std::vector<std::string> m_pauseMenuButtonTextList{ m_resumeString, m_quitString };
 		d2d::Menu m_pauseMenu{ m_pauseMenuButtonTextList, m_buttonTextStyle, m_pauseTitle, m_titleTextStyle,	
 			m_buttonColor, m_buttonHighlightColor, m_buttonBorderColor, m_pauseBackgroundColor };
 
@@ -99,7 +98,7 @@ namespace Space
 		std::string m_nextLevelString{ "Start Next Level" };
 		const std::vector<std::string> m_shopMenuButtonTextList
 			{ m_nextLevelString, m_weaponsString, m_protectionString, 
-			m_engineString, m_gadgetsString, m_quitToMenuString, m_quitString };
+			m_engineString, m_gadgetsString, m_quitString };
 		d2d::Menu m_shopMenu{ m_shopMenuButtonTextList, m_buttonTextStyle, m_shopTitle, m_titleTextStyle, 
 			m_buttonColor, m_buttonHighlightColor, m_buttonBorderColor, m_shopBackgroundColor };
 

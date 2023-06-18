@@ -23,8 +23,8 @@ namespace Space
 	private:
 		d2d::FontReference m_orbitronLightFont{ "Fonts/OrbitronLight.otf" };
 		
-		const std::string m_newGameString{ "NEW GAME" };
-		const std::string m_quitString{ "QUIT" };
+		const std::string m_newGameString{ "New Game" };
+		const std::string m_quitString{ "Quit" };
 		const std::vector<std::string> m_buttonTextList{ m_newGameString, m_quitString };
 		const d2d::TextStyle m_buttonTextStyle{ 
 			m_orbitronLightFont, 

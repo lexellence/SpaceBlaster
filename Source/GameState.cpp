@@ -31,11 +31,9 @@ namespace Space
 			d2Assert(m_menuPtr);
 			pressed = m_menuPtr->PollPressedButton(pressedButton);
 
-			// Quit buttons
-			if(pressedButton == m_quitToMenuString)
+			// Quit
+			if(pressedButton == m_quitString)
 				return AppStateID::MAIN_MENU;
-			else if(pressedButton == m_quitString)
-				return AppStateID::QUIT;
 
 			if(m_mode == GameMode::PAUSED)
 			{
