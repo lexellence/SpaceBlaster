@@ -21,6 +21,7 @@ namespace Space
 		const d2d::Range<float>& GetDimensionRange() const;
 		const b2Vec2& GetPosition() const;
 		void SetPosition(const b2Vec2& position);
+		d2d::Rect GetRect() const;
 
 	private:
 		d2d::Range<float> m_dimensionRange;

@@ -61,4 +61,10 @@ namespace Space
 	{
 		m_position = newPosition;
 	}
+	d2d::Rect Camera::GetRect() const
+	{
+		d2d::Rect cameraRect;
+		cameraRect.SetCenter(GetPosition(), GetDimensions(d2d::Window::GetXYAspectRatio()));
+		return cameraRect;
+	}
 }

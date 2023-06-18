@@ -692,10 +692,7 @@ namespace Space
 	//\-------------/---------------------------------------------
 	void Game::Draw()
 	{
-		d2d::Rect cameraRect;
-		cameraRect.SetCenter(m_camera.GetPosition(), m_camera.GetDimensions(d2d::Window::GetXYAspectRatio()));
-		d2d::Window::SetCameraRect(cameraRect);
-
+		d2d::Window::SetCameraRect(m_camera.GetRect());
 		m_starfield.Draw(m_camera.GetPosition());
 		m_world.Draw();
 		DrawHUD();
