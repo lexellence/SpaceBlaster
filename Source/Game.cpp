@@ -268,6 +268,10 @@ namespace Space
 		if(height < max * MIN_WORLD_TO_CAMERA_RATIO)
 			throw GameException{ "World height(" + d2d::ToString(height) + ") too small compared to max camera height(" + d2d::ToString(max) };
 	}
+
+	//+---------------------------\-------------------------------
+	//|	        SetPlayer		  |
+	//\---------------------------/-------------------------------
 	void Game::SetPlayer(WorldID entityID)
 	{
 		if(m_world.EntityExists(entityID))
@@ -282,15 +286,27 @@ namespace Space
 			m_player.isSet = true;
 		}
 	}
+
+	//+---------------------------\-------------------------------
+	//|	        IsPlayer		  |
+	//\---------------------------/-------------------------------
 	bool Game::IsPlayer(WorldID entityID) const
 	{
 		return (m_player.isSet && entityID == m_player.id);
 	}
+
+	//+---------------------------\-------------------------------
+	//|	      FollowEntity		  |
+	//\---------------------------/-------------------------------
 	void Game::FollowEntity(WorldID entityID)
 	{
 		m_cameraFollowingEntity = true;
 		m_cameraFollowEntityID = entityID;
 	}
+
+	//+---------------------------\-------------------------------
+	//|	      FollowEntity		  |
+	//\---------------------------/-------------------------------
 	WorldID Game::CreateExit(World& world, const InstanceDef& def)
 	{
 		InstanceDef tempDef;
@@ -311,8 +327,9 @@ namespace Space
 
 		return id3;
 	}
+
 	//+---------------------------\-------------------------------
-	//|	  Level Exit Components   |
+	//|	    CreateExitSensor	  |
 	//\---------------------------/-------------------------------
 	WorldID Game::CreateExitSensor(World& world, const InstanceDef& def)
 	{
@@ -328,9 +345,9 @@ namespace Space
 		return id;
 	}
 
-	//+-------------\---------------------------------------------
-	//|	 Entities   |
-	//\-------------/---------------------------------------------
+	//+---------------------------\-------------------------------
+	//|		CreateBasicObject	  |
+	//\---------------------------/-------------------------------
 	WorldID Game::CreateBasicObject(World& world, const b2Vec2& size, int drawLayer,
 		const Model& model, const d2d::Material& material, const d2d::Filter& filter,
 		b2BodyType physicsType, const InstanceDef& def)
@@ -341,6 +358,10 @@ namespace Space
 		world.AddDrawAnimationComponent(id, model.animationDef);
 		return id;
 	}
+
+	//+---------------------------\-------------------------------
+	//|		 CreatePlayer		  |
+	//\---------------------------/-------------------------------
 	void Game::CreatePlayer(World& world, const InstanceDef& def)
 	{
 		WorldID blasterID = CreateBlaster(world, def);
@@ -348,6 +369,10 @@ namespace Space
 		SetPlayer(blasterID);
 		FollowEntity(blasterID);
 	}
+
+	//+---------------------------\-------------------------------
+	//|		  CreateScout		  |
+	//\---------------------------/-------------------------------
 	WorldID Game::CreateScout(World& world, const InstanceDef& def)
 	{
 		b2Vec2 size{ SCOUT_HEIGHT * m_models.textures.scout.GetWidthToHeightRatio(), SCOUT_HEIGHT };
@@ -376,6 +401,10 @@ namespace Space
 			SCOUT_PARTICLE_LIFETIME, PARTICLE_EXPLOSION_FADEIN, SCOUT_PARTICLE_FADEOUT);
 		return id;
 	}
+
+	//+---------------------------\-------------------------------
+	//|		  CreateBlaster		  |
+	//\---------------------------/-------------------------------
 	WorldID Game::CreateBlaster(World& world, const InstanceDef& def)
 	{
 		b2Vec2 size{ BLASTER_HEIGHT * m_models.textures.blaster.GetWidthToHeightRatio(), BLASTER_HEIGHT };
@@ -416,6 +445,10 @@ namespace Space
 			BLASTER_PARTICLE_LIFETIME, PARTICLE_EXPLOSION_FADEIN, BLASTER_PARTICLE_FADEOUT);
 		return id;
 	}
+
+	//+---------------------------\-------------------------------
+	//|	   CreateXLargeAsteroid	  |
+	//\---------------------------/-------------------------------
 	WorldID Game::CreateXLargeAsteroid(World& world, unsigned modelIndex, bool isRock, const InstanceDef& def)
 	{
 		d2Assert(modelIndex < NUM_XLARGE_ASTEROID_MODELS);
@@ -430,6 +463,10 @@ namespace Space
 			XLARGE_ASTEROID_PARTICLE_LIFETIME, PARTICLE_EXPLOSION_FADEIN, XLARGE_ASTEROID_PARTICLE_FADEOUT);
 		return id;
 	}
+
+	//+---------------------------\-------------------------------
+	//|	   CreateLargeAsteroid	  |
+	//\---------------------------/-------------------------------
 	WorldID Game::CreateLargeAsteroid(World& world, unsigned modelIndex, bool isRock, const InstanceDef& def)
 	{
 		d2Assert(modelIndex < NUM_LARGE_ASTEROID_MODELS);
@@ -444,6 +481,10 @@ namespace Space
 			LARGE_ASTEROID_PARTICLE_LIFETIME, PARTICLE_EXPLOSION_FADEIN, LARGE_ASTEROID_PARTICLE_FADEOUT);
 		return id;
 	}
+
+	//+---------------------------\-------------------------------
+	//|	  CreateMediumAsteroid	  |
+	//\---------------------------/-------------------------------
 	WorldID Game::CreateMediumAsteroid(World& world, unsigned modelIndex, bool isRock, const InstanceDef& def)
 	{
 		d2Assert(modelIndex < NUM_MEDIUM_ASTEROID_MODELS);
@@ -458,6 +499,10 @@ namespace Space
 			MEDIUM_ASTEROID_PARTICLE_LIFETIME, PARTICLE_EXPLOSION_FADEIN, MEDIUM_ASTEROID_PARTICLE_FADEOUT);
 		return id;
 	}
+
+	//+---------------------------\-------------------------------
+	//|	   CreateSmallAsteroid	  |
+	//\---------------------------/-------------------------------
 	WorldID Game::CreateSmallAsteroid(World& world, unsigned modelIndex, bool isRock, const InstanceDef& def)
 	{
 		d2Assert(modelIndex < NUM_SMALL_ASTEROID_MODELS);
@@ -472,12 +517,20 @@ namespace Space
 			SMALL_ASTEROID_PARTICLE_LIFETIME, PARTICLE_EXPLOSION_FADEIN, SMALL_ASTEROID_PARTICLE_FADEOUT);
 		return id;
 	}
+
+	//+---------------------------\-------------------------------
+	//|	     CreateBumper		  |
+	//\---------------------------/-------------------------------
 	WorldID Game::CreateBumper(World& world, const InstanceDef& def)
 	{
 		b2Vec2 size{ BUMPER_HEIGHT * m_models.textures.bumper.GetWidthToHeightRatio(), BUMPER_HEIGHT };
 		WorldID id = CreateBasicObject(world, size, DEFAULT_DRAW_LAYER, m_models.bumper, BUMPER_MATERIAL, BUMPER_FILTER, b2_kinematicBody, def);
 		return id;
 	}
+
+	//+---------------------------\-------------------------------
+	//|	       CreateSoda		  |
+	//\---------------------------/-------------------------------
 	WorldID Game::CreateSoda(World& world, const InstanceDef& def)
 	{
 		b2Vec2 size{ SODA_HEIGHT * m_models.textures.soda.GetWidthToHeightRatio(), SODA_HEIGHT };
@@ -488,6 +541,10 @@ namespace Space
 		m_world.AddPowerUpComponent(id, powerUp);
 		return id;
 	}
+
+	//+---------------------------\-------------------------------
+	//|		   CreateMelon		  |
+	//\---------------------------/-------------------------------
 	WorldID Game::CreateMelon(World& world, const InstanceDef& def)
 	{
 		b2Vec2 size{ MELON_HEIGHT * m_models.textures.melon.GetWidthToHeightRatio(), MELON_HEIGHT };
@@ -498,6 +555,10 @@ namespace Space
 		m_world.AddPowerUpComponent(id, powerUp);
 		return id;
 	}
+
+	//+---------------------------\-------------------------------
+	//|		   CreateApple		  |
+	//\---------------------------/-------------------------------
 	WorldID Game::CreateApple(World& world, const InstanceDef& def)
 	{
 		b2Vec2 size{ APPLE_HEIGHT * m_models.textures.apple.GetWidthToHeightRatio(), APPLE_HEIGHT };
@@ -509,6 +570,10 @@ namespace Space
 		m_world.AddPowerUpComponent(id, powerUp);
 		return id;
 	}
+
+	//+---------------------------\-------------------------------
+	//|		   CreateIcon		  |
+	//\---------------------------/-------------------------------
 	WorldID Game::CreateIcon(World& world, unsigned modelIndex, const InstanceDef& def)
 	{
 		d2Assert(modelIndex < m_models.textures.icons.size());
@@ -568,7 +633,6 @@ namespace Space
 	//+--------------------------\--------------------------------
 	//|	      UpdateCamera		 | 
 	//\--------------------------/--------------------------------
-
 	void Game::UpdateCamera(float dt, const PlayerController& playerController)
 	{
 		if(m_cameraFollowingEntity)
