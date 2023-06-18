@@ -94,6 +94,7 @@ namespace Space
 		Camera m_camera;
 		bool m_cameraFollowingEntity{ false };
 		WorldID m_cameraFollowEntityID{};
+		b2Vec2 m_spawnAsteroidStartingDirection{};
 
 		struct
 		{

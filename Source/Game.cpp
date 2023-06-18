@@ -60,6 +60,9 @@ namespace Space
 			unsigned numToCreate = 8;
 			numFailed += numToCreate - SpawnRandomIcons(numToCreate);
 
+			float angle = d2d::RandomFloat({ 0.0f, d2d::TWO_PI });
+			m_spawnAsteroidStartingDirection = d2d::GetUnitVec2FromAngle(angle);
+
 			numToCreate = 20;
 			numFailed += numToCreate - SpawnRandomXLargeAsteroids(numToCreate);
 			numToCreate = 30;
@@ -149,8 +152,9 @@ namespace Space
 			size.x = size.y * m_models.textures.asteroidsXLarge[model].GetWidthToHeightRatio();
 			float boundingRadius = size.Length() * 0.5f;
 
-			InstanceDef def;
-			bool positionFound =
+			float speed = d2d::RandomFloat(ASTEROID_STARTING_SPEED_RANGE_XL);
+			InstanceDef def{ .velocity{speed * m_spawnAsteroidStartingDirection} };
+			bool positionFound = 
 				m_world.GetRandomPositionAwayFromExistingEntities(
 					boundingRadius, minGap, MAX_ATTEMPTS_PER_ENTITY, def.position);
 			if(positionFound)
@@ -179,7 +183,8 @@ namespace Space
 			size.x = size.y * m_models.textures.asteroidsLarge[model].GetWidthToHeightRatio();
 			float boundingRadius = size.Length() * 0.5f;
 
-			InstanceDef def;
+			float speed = d2d::RandomFloat(ASTEROID_STARTING_SPEED_RANGE_L);
+			InstanceDef def{ .velocity{speed * m_spawnAsteroidStartingDirection} };
 			bool positionFound =
 				m_world.GetRandomPositionAwayFromExistingEntities(
 					boundingRadius, minGap, MAX_ATTEMPTS_PER_ENTITY, def.position);
@@ -209,7 +214,8 @@ namespace Space
 			size.x = size.y * m_models.textures.asteroidsMedium[model].GetWidthToHeightRatio();
 			float boundingRadius = size.Length() * 0.5f;
 
-			InstanceDef def;
+			float speed = d2d::RandomFloat(ASTEROID_STARTING_SPEED_RANGE_M);
+			InstanceDef def{ .velocity{speed * m_spawnAsteroidStartingDirection} };
 			bool positionFound =
 				m_world.GetRandomPositionAwayFromExistingEntities(
 					boundingRadius, minGap, MAX_ATTEMPTS_PER_ENTITY, def.position);
@@ -239,7 +245,8 @@ namespace Space
 			size.x = size.y * m_models.textures.asteroidsSmall[model].GetWidthToHeightRatio();
 			float boundingRadius = size.Length() * 0.5f;
 
-			InstanceDef def;
+			float speed = d2d::RandomFloat(ASTEROID_STARTING_SPEED_RANGE_S);
+			InstanceDef def{ .velocity{speed * m_spawnAsteroidStartingDirection} };
 			bool positionFound =
 				m_world.GetRandomPositionAwayFromExistingEntities(
 					boundingRadius, minGap, MAX_ATTEMPTS_PER_ENTITY, def.position);

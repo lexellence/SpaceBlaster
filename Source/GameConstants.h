@@ -146,6 +146,12 @@ namespace Space
 	const float MIN_BOUNDING_RADII_GAP_RELATIVE_TO_HEIGHT = 0.25f;
 	const unsigned MAX_ATTEMPTS_PER_ENTITY = 500;
 
+	// Asteroid spawning
+	const d2d::Range<float> ASTEROID_STARTING_SPEED_RANGE_XL{ 0.1f, 1.5f };
+	const d2d::Range<float> ASTEROID_STARTING_SPEED_RANGE_L{ 0.2f, 2.5f };
+	const d2d::Range<float> ASTEROID_STARTING_SPEED_RANGE_M{ 0.3f, 3.5f };
+	const d2d::Range<float> ASTEROID_STARTING_SPEED_RANGE_S{ 0.4f, 5.0f };
+
 	// Particle explosions - general
 	const float PARTICLE_EXPLOSION_RELATIVE_SIZE = 1.0f;
 	const float DAMAGE_BASED_SPEED_INCREASE_FACTOR = 0.3f;
