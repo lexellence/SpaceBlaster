@@ -10,11 +10,17 @@
 #include "pch.h"
 #include "IntroState.h"
 #include "AppState.h"
+#include "GameDef.h"
 
 namespace Space
 {
 	void IntroState::Init()
 	{
+		GameDef gameDef;
+		gameDef.LoadFrom("Data/game.hjson");
+		m_camera.Init(gameDef.cameraDimensionRange, gameDef.cameraZoomSpeed, gameDef.cameraInitialZoomOutPercent);
+		m_starfield.Init(gameDef.starfield);
+
 		m_gotoMenu = false;
 		m_animationsComplete = false;
 		m_titleFalling = true;
@@ -23,6 +29,7 @@ namespace Space
 		m_authorFadingIn = false;
 		m_authorTextStyle.color.SetFloat(0.5f, 0.0f, 0.7f, m_authorStartAlpha);
 		m_authorFadeDelayElapsed = 0.0f;
+		m_cameraPosition = b2Vec2_zero;
 	}
 	void IntroState::ProcessEvent(const SDL_Event& event)
 	{
@@ -46,6 +53,8 @@ namespace Space
 	}
 	AppStateID IntroState::Update(float dt)
 	{
+		m_camera.SetPosition(m_camera.GetPosition() - (dt * m_starfieldVelocity));
+
 		if(m_gotoMenu)
 			return AppStateID::MAIN_MENU;
 
@@ -101,6 +110,10 @@ namespace Space
 		//d2d::Window::SetShowCursor(true);
 		d2d::Window::DisableTextures();
 		d2d::Window::EnableBlending();
+
+		// Draw stars
+		d2d::Window::SetCameraRect(m_camera.GetRect());
+		m_starfield.Draw(m_camera.GetPosition());
 
 		// Set camera to screen resolution
 		b2Vec2 resolution{ d2d::Window::GetScreenResolution() };

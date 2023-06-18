@@ -9,6 +9,8 @@
 \**************************************************************************************/
 #pragma once
 #include "AppState.h"
+#include "Starfield.h"
+#include "Camera.h"
 
 namespace Space
 {
@@ -58,5 +60,10 @@ namespace Space
 		float m_titleSpeedScreensPerSecond;
 		bool m_authorFadingIn;
 		float m_authorFadeDelayElapsed;
+
+		Camera m_camera;
+		Starfield m_starfield;
+		const b2Vec2 m_starfieldVelocity{ 10.0f, 10.0f };
+		b2Vec2 m_cameraPosition;
 	};
 }
