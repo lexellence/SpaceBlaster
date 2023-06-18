@@ -147,10 +147,15 @@ namespace Space
 	const unsigned MAX_ATTEMPTS_PER_ENTITY = 500;
 
 	// Asteroid spawning
-	const d2d::Range<float> ASTEROID_STARTING_SPEED_RANGE_XL{ 0.1f, 1.5f };
-	const d2d::Range<float> ASTEROID_STARTING_SPEED_RANGE_L{ 0.2f, 2.5f };
-	const d2d::Range<float> ASTEROID_STARTING_SPEED_RANGE_M{ 0.3f, 3.5f };
-	const d2d::Range<float> ASTEROID_STARTING_SPEED_RANGE_S{ 0.4f, 5.0f };
+	const d2d::Range<float> ASTEROID_STARTING_SPEED_RANGE_XL{ 0.1f, 3.0f };
+	const d2d::Range<float> ASTEROID_STARTING_SPEED_RANGE_L{ 0.2f, 5.5f };
+	const d2d::Range<float> ASTEROID_STARTING_SPEED_RANGE_M{ 0.3f, 8.5f };
+	const d2d::Range<float> ASTEROID_STARTING_SPEED_RANGE_S{ 0.4f, 10.0f };
+
+	const d2d::Range<float> ASTEROID_STARTING_ANG_VEL_RANGE_XL{ -0.8f, 0.8f };
+	const d2d::Range<float> ASTEROID_STARTING_ANG_VEL_RANGE_L{ -2.0f, 2.0f };
+	const d2d::Range<float> ASTEROID_STARTING_ANG_VEL_RANGE_M{ -3.25f, 3.25f };
+	const d2d::Range<float> ASTEROID_STARTING_ANG_VEL_RANGE_S{ -5.5f, 5.5f };
 
 	// Particle explosions - general
 	const float PARTICLE_EXPLOSION_RELATIVE_SIZE = 1.0f;

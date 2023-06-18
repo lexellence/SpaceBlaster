@@ -153,8 +153,11 @@ namespace Space
 			float boundingRadius = size.Length() * 0.5f;
 
 			float speed = d2d::RandomFloat(ASTEROID_STARTING_SPEED_RANGE_XL);
-			InstanceDef def{ .velocity{speed * m_spawnAsteroidStartingDirection} };
-			bool positionFound = 
+			float angularVel = d2d::RandomFloat(ASTEROID_STARTING_ANG_VEL_RANGE_XL);
+			InstanceDef def{
+				.velocity{speed* m_spawnAsteroidStartingDirection},
+				.angularVelocity{angularVel} };
+			bool positionFound =
 				m_world.GetRandomPositionAwayFromExistingEntities(
 					boundingRadius, minGap, MAX_ATTEMPTS_PER_ENTITY, def.position);
 			if(positionFound)
@@ -184,7 +187,10 @@ namespace Space
 			float boundingRadius = size.Length() * 0.5f;
 
 			float speed = d2d::RandomFloat(ASTEROID_STARTING_SPEED_RANGE_L);
-			InstanceDef def{ .velocity{speed * m_spawnAsteroidStartingDirection} };
+			float angularVel = d2d::RandomFloat(ASTEROID_STARTING_ANG_VEL_RANGE_L);
+			InstanceDef def{
+				.velocity{speed* m_spawnAsteroidStartingDirection},
+				.angularVelocity{angularVel} };
 			bool positionFound =
 				m_world.GetRandomPositionAwayFromExistingEntities(
 					boundingRadius, minGap, MAX_ATTEMPTS_PER_ENTITY, def.position);
@@ -215,7 +221,10 @@ namespace Space
 			float boundingRadius = size.Length() * 0.5f;
 
 			float speed = d2d::RandomFloat(ASTEROID_STARTING_SPEED_RANGE_M);
-			InstanceDef def{ .velocity{speed * m_spawnAsteroidStartingDirection} };
+			float angularVel = d2d::RandomFloat(ASTEROID_STARTING_ANG_VEL_RANGE_M);
+			InstanceDef def{
+				.velocity{speed* m_spawnAsteroidStartingDirection},
+				.angularVelocity{angularVel} };
 			bool positionFound =
 				m_world.GetRandomPositionAwayFromExistingEntities(
 					boundingRadius, minGap, MAX_ATTEMPTS_PER_ENTITY, def.position);
@@ -246,7 +255,10 @@ namespace Space
 			float boundingRadius = size.Length() * 0.5f;
 
 			float speed = d2d::RandomFloat(ASTEROID_STARTING_SPEED_RANGE_S);
-			InstanceDef def{ .velocity{speed * m_spawnAsteroidStartingDirection} };
+			float angularVel = d2d::RandomFloat(ASTEROID_STARTING_ANG_VEL_RANGE_S);
+			InstanceDef def{
+				.velocity{speed * m_spawnAsteroidStartingDirection},
+				.angularVelocity{angularVel} };
 			bool positionFound =
 				m_world.GetRandomPositionAwayFromExistingEntities(
 					boundingRadius, minGap, MAX_ATTEMPTS_PER_ENTITY, def.position);
