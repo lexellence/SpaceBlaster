@@ -13,20 +13,42 @@
 
 namespace Space
 {
-	//+-------------\---------------------------------------------
-	//|	  Levels    |
-	//\-------------/---------------------------------------------
 	Game::Game()
 	{
 		m_world.SetDestructionListener(this);
 		m_world.SetWrapListener(this);
-		m_world.SetProjectileLauncherCallback(this);
+		m_world.SetProjectileLauncherListener(this);
+		m_world.SetExitListener(this);
 	}
+
+	//+-----------------\-----------------------------------------
+	//|	      Init      |
+	//\-----------------/-----------------------------------------
 	void Game::Init()
 	{
 		m_settings.LoadFrom("Data/game.hjson");
-		StartCurrentLevel();
 	}
+
+	//+-----------------\-----------------------------------------
+	//|	   ClearLevel   |
+	//\-----------------/-----------------------------------------
+	void Game::ClearLevel(const b2Vec2& newWorldDimensions)
+	{
+		m_camera.Init(m_settings.cameraDimensionRange, m_settings.cameraZoomSpeed, m_settings.cameraInitialZoomOutPercent);
+		m_cameraFollowingEntity = false;
+		m_starfield.Init(m_settings.starfield);
+		m_player.isSet = false;
+		m_player.exited = false;
+		m_delayedGameActions.clear();
+
+		d2d::Rect worldRect;
+		worldRect.SetCenter(b2Vec2_zero, newWorldDimensions);
+		m_world.Init(worldRect);
+	}
+
+	//+-----------------\-----------------------------------------
+	//|	   ClearLevel   |
+	//\-----------------/-----------------------------------------
 	void Game::StartCurrentLevel()
 	{
 		ClearLevel({ 500.0f, 500.0f });
@@ -55,19 +77,11 @@ namespace Space
 	}
 
 	//+-----------------\-----------------------------------------
-	//|	   ClearLevel   |
+	//|	 DidPlayerExit  |
 	//\-----------------/-----------------------------------------
-	void Game::ClearLevel(const b2Vec2& newWorldDimensions)
+	bool Game::DidPlayerExit() const
 	{
-		m_camera.Init(m_settings.cameraDimensionRange, m_settings.cameraZoomSpeed, m_settings.cameraInitialZoomOutPercent);
-		m_cameraFollowingEntity = false;
-		m_starfield.Init(m_settings.starfield);
-		m_player.isSet = false;
-		m_delayedGameActions.clear();
-
-		d2d::Rect worldRect;
-		worldRect.SetCenter(b2Vec2_zero, newWorldDimensions);
-		m_world.Init(worldRect);
+		return m_player.exited;;
 	}
 
 	//+-----------------\-----------------------------------------
@@ -462,7 +476,6 @@ namespace Space
 	{
 		b2Vec2 size{ BUMPER_HEIGHT * m_models.textures.bumper.GetWidthToHeightRatio(), BUMPER_HEIGHT };
 		WorldID id = CreateBasicObject(world, size, DEFAULT_DRAW_LAYER, m_models.bumper, BUMPER_MATERIAL, BUMPER_FILTER, b2_kinematicBody, def);
-		//WorldID id = CreateBasicObject(world, size, DEFAULT_DRAW_LAYER, m_bumperModel, BUMPER_MATERIAL, BUMPER_FILTER, b2_dynamicBody, def);
 		return id;
 	}
 	WorldID Game::CreateSoda(World& world, const InstanceDef& def)
@@ -518,6 +531,10 @@ namespace Space
 		UpdateCamera(dt, playerController);
 		UpdateDelayedActions(dt);
 	}
+
+	//+--------------------------\--------------------------------
+	//|	  UpdateDelayedActions   | 
+	//\--------------------------/--------------------------------
 	void Game::UpdateDelayedActions(float dt)
 	{
 		for(DelayedGameAction d : m_delayedGameActions)
@@ -532,7 +549,7 @@ namespace Space
 				switch(it->action)
 				{
 				case GameAction::NEXT_LEVEL:
-					m_currentLevel++;
+					m_player.currentLevel++;
 					startLevel = true;
 					break;
 				case GameAction::RESTART_LEVEL:
@@ -543,8 +560,15 @@ namespace Space
 			}
 		}
 		if(startLevel)
+		{
 			StartCurrentLevel();
+		}
 	}
+
+	//+--------------------------\--------------------------------
+	//|	      UpdateCamera		 | 
+	//\--------------------------/--------------------------------
+
 	void Game::UpdateCamera(float dt, const PlayerController& playerController)
 	{
 		if(m_cameraFollowingEntity)
@@ -564,16 +588,10 @@ namespace Space
 
 		if(IsPlayer(entityID))
 		{
-			if(m_world.HasFlags(entityID, FLAG_EXITED))
-			{
-				if(m_world.HasComponents(entityID, COMPONENT_ICON_COLLECTOR))
-					m_player.credits += (float)m_world.GetIconsCollected(entityID);
-				m_delayedGameActions.push_back({ .action{ GameAction::NEXT_LEVEL }, .delay{ LEVEL_CHANGE_DELAY } });
-			}
-			else
+			if(!m_player.exited)
 			{
 				m_player.credits -= DEATH_PENALTY_CREDITS;
-				m_delayedGameActions.push_back({ .action{ GameAction::RESTART_LEVEL }, .delay{ LEVEL_CHANGE_DELAY } });
+				//m_delayedGameActions.push_back({ .action{ GameAction::RESTART_LEVEL }, .delay{ LEVEL_CHANGE_DELAY } });
 			}
 			m_player.isSet = false;
 		}
@@ -591,6 +609,20 @@ namespace Space
 	//\--------------------------/--------------------------------
 	void Game::ProjectileLaunched(const ProjectileDef& projectileDef, WorldID parentID)
 	{}
+	//+--------------------------\--------------------------------
+	//|	      EntityExited       | override (ExitListener)
+	//\--------------------------/--------------------------------
+	void Game::EntityExited(WorldID entityID)
+	{
+		if(IsPlayer(entityID))
+		{
+			m_player.exited = true;
+			if(m_world.HasComponents(entityID, COMPONENT_ICON_COLLECTOR))
+				m_player.credits += (float)m_world.GetIconsCollected(entityID);
+			m_player.currentLevel++;
+		}
+	}
+
 	//+-------------\---------------------------------------------
 	//|	   Draw     |
 	//\-------------/---------------------------------------------
@@ -604,6 +636,10 @@ namespace Space
 		m_world.Draw();
 		DrawHUD();
 	}
+
+	//+-------------\---------------------------------------------
+	//|	  DrawHUD   |
+	//\-------------/---------------------------------------------
 	void Game::DrawHUD()
 	{
 		// Text draw mode
@@ -657,7 +693,7 @@ namespace Space
 			d2d::Window::PushMatrix();
 			d2d::Window::Translate(m_levelPosition * resolution);
 			{
-				d2d::Window::DrawString(d2d::ToString(m_currentLevel), m_levelAlignment, m_levelTextStyle.size * resolution.y, m_levelTextStyle.font);
+				d2d::Window::DrawString(d2d::ToString(m_player.currentLevel), m_levelAlignment, m_levelTextStyle.size * resolution.y, m_levelTextStyle.font);
 			}
 			d2d::Window::PopMatrix();
 		}

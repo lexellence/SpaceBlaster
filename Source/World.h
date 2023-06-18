@@ -100,6 +100,10 @@ namespace Space
 	{
 	public:	virtual void ProjectileLaunched(const ProjectileDef& projectileDef, WorldID parentID) = 0;
 	};
+	class ExitListener
+	{
+	public:	virtual void EntityExited(WorldID entityID) = 0;
+	};
 	struct ParticleExplosionComponent
 	{
 		float relativeSize;
@@ -171,7 +175,8 @@ namespace Space
 		void Init(const d2d::Rect& rect);
 		void SetDestructionListener(DestroyListener* listenerPtr);
 		void SetWrapListener(WrapListener* listenerPtr);
-		void SetProjectileLauncherCallback(ProjectileLauncherListener* callbackPtr);
+		void SetProjectileLauncherListener(ProjectileLauncherListener* listenerPtr);
+		void SetExitListener(ExitListener* listenerPtr);
 		void Update(float dt, PlayerController& playerController);
 		void Draw() const;
 
@@ -486,6 +491,7 @@ namespace Space
 		DestroyListener* m_destructionListenerPtr{ nullptr };
 		WrapListener* m_wrappedEntityListenerPtr{ nullptr };
 		ProjectileLauncherListener* m_projectileLauncherListenerPtr{ nullptr };
+		ExitListener* m_exitListenerPtr{ nullptr };
 
 		float m_timestepAccumulator{ 0.0f };
 		b2World* m_b2WorldPtr{ nullptr };

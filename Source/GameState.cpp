@@ -16,17 +16,150 @@ namespace Space
 {
 	void GameState::Init()
 	{
-		m_game.Init();
-
-		m_paused = false;
-		m_showFPS = true;
-
+		m_showFPS = false;
 		ResetController();
+		m_game.Init();
+		StartActionMode(true);
 	}
+	AppStateID GameState::Update(float dt)
+	{
+		if(m_mode == GameMode::PAUSED || m_mode == GameMode::SHOP)
+		{
+			// Get menu button pressed
+			std::string pressedButton;
+			bool pressed;
+			d2Assert(m_menuPtr);
+			pressed = m_menuPtr->PollPressedButton(pressedButton);
+
+			// Quit buttons
+			if(pressedButton == m_quitToMenuString)
+				return AppStateID::MAIN_MENU;
+			else if(pressedButton == m_quitString)
+				return AppStateID::QUIT;
+
+			if(m_mode == GameMode::PAUSED)
+			{
+				// Pause menu
+				if(pressedButton == m_resumeString)
+					UnpauseGame();
+			}
+			else if(m_mode == GameMode::SHOP)
+			{
+				if(m_shopMode == ShopMode::MAIN)
+				{
+					// Shop main
+					if(pressedButton == m_nextLevelString)
+						StartActionMode(true);
+					else if(pressedButton == m_weaponsString)
+						StartShopMenu(ShopMode::WEAPONS);
+					else if(pressedButton == m_protectionString)
+						StartShopMenu(ShopMode::PROTECTION);
+					else if(pressedButton == m_gadgetsString)
+						StartShopMenu(ShopMode::GADGETS);
+				}
+				else if(m_shopMode == ShopMode::WEAPONS)
+				{
+					// Shop weapons
+					if(pressedButton == m_backString)
+						StartShopMenu();
+				}
+				else if(m_shopMode == ShopMode::PROTECTION)
+				{
+					// Shop protection
+					if(pressedButton == m_backString)
+						StartShopMenu();
+				}
+				else if(m_shopMode == ShopMode::GADGETS)
+				{
+					// Shop gadgets
+					if(pressedButton == m_backString)
+						StartShopMenu();
+				}
+			}
+		}
+		else if(m_mode == GameMode::ACTION)
+		{
+			UpdatePlayerController();
+			if(m_game.DidPlayerExit())
+				StartShopMenu();
+		}
+
+		// Game
+		if(m_mode != GameMode::PAUSED)
+			m_game.Update(dt, m_playerController);
+
+		return AppStateID::GAME;
+	}
+	void GameState::StartActionMode(bool startLevel)
+	{
+		m_mode = GameMode::ACTION;
+		if(startLevel)
+			m_game.StartCurrentLevel();
+		m_menuPtr = nullptr;
+	}
+	void GameState::StartPauseMenu()
+	{
+		m_mode = GameMode::PAUSED;
+		m_pauseMenu.Init();
+		m_menuPtr = &m_pauseMenu;
+	}
+	void GameState::StartShopMenu(ShopMode mode)
+	{
+		m_mode = GameMode::SHOP;
+		m_shopMode = mode;
+
+		if(m_shopMode == ShopMode::MAIN)
+			m_menuPtr = &m_shopMenu;
+		else if(m_shopMode == ShopMode::WEAPONS)
+			m_menuPtr = &m_weaponsMenu;
+		else if(m_shopMode == ShopMode::PROTECTION)
+			m_menuPtr = &m_protectionMenu;
+		else if(m_shopMode == ShopMode::GADGETS)
+			m_menuPtr = &m_gadgetsMenu;
+
+		d2Assert(m_menuPtr);
+		m_menuPtr->Init();
+	}
+	void GameState::Draw()
+	{
+		d2d::Window::SetShowCursor(m_mode != GameMode::ACTION);
+		m_game.Draw();
+		if(m_mode == GameMode::PAUSED || m_mode == GameMode::SHOP)
+		{
+			d2Assert(m_menuPtr);
+			m_menuPtr->Draw();
+		}
+		if(m_showFPS)
+			DrawFPS();
+	}
+	void GameState::DrawFPS()
+	{
+		// Set camera to screen resolution
+		b2Vec2 resolution{ d2d::Window::GetScreenResolution() };
+		d2d::Window::SetCameraRect({ b2Vec2_zero, resolution });
+		{
+			// Convert fps to string and draw
+			int fpsInt{ (int)(d2d::Window::GetFPS() + 0.5f) };
+			std::string fpsString{ d2d::ToString(fpsInt) };
+
+			d2d::Window::DisableTextures();
+			d2d::Window::EnableBlending();
+			d2d::Window::SetColor(m_fpsTextStyle.color);
+			d2d::Window::PushMatrix();
+			d2d::Window::Translate(m_fpsPosition * resolution);
+			d2d::Window::DrawString(fpsString, m_fpsAlignment, m_fpsTextStyle.size * resolution.y, m_fpsTextStyle.font);
+			d2d::Window::PopMatrix();
+		}
+	}
+
 	void GameState::ProcessEvent(const SDL_Event& event)
 	{
-		if(m_paused)
-			m_pauseMenu.ProcessEvent(event);
+		if(m_mode == GameMode::PAUSED || m_mode == GameMode::SHOP)
+		{
+			d2Assert(m_menuPtr);
+			m_menuPtr->ProcessEvent(event);
+		}
+
 		switch(event.type)
 		{
 		case SDL_WINDOWEVENT:
@@ -46,43 +179,15 @@ namespace Space
 		default: break;
 		}
 	}
-	AppStateID GameState::Update(float dt)
-	{
-		// If paused, handle any menu selections
-		if(m_paused)
-		{
-			std::string pressedButton;
-			if(m_pauseMenu.PollPressedButton(pressedButton))
-			{
-				if(pressedButton == m_resumeString)
-					UnpauseGame();
-				else if(pressedButton == m_quitToMenuString)
-					return AppStateID::MAIN_MENU;
-				else if(pressedButton == m_quitString)
-					return AppStateID::QUIT;
-			}
-		}
-
-		// If not paused, update game
-		if(!m_paused)
-		{
-			UpdatePlayerController();
-			m_game.Update(dt, m_playerController);
-		}
-		return AppStateID::GAME;
-	}
 	void GameState::PauseGame()
 	{
-		if(!m_paused)
-		{
-			m_paused = true;
-			m_pauseMenu.Init();
-		}
+		if(m_mode == GameMode::ACTION)
+			StartPauseMenu();
 	}
 	void GameState::UnpauseGame()
 	{
-		if(m_paused)
-			m_paused = false;
+		if(m_mode == GameMode::PAUSED)
+			StartActionMode();
 	}
 	void GameState::ProcessButtonDown(Uint8 button)
 	{
@@ -165,28 +270,13 @@ namespace Space
 	}
 	void GameState::ProcessControllerRemoved()
 	{
-		m_paused = true;
+		PauseGame();
 		ResetController();
 	}
 	void GameState::ResetController()
 	{
-		m_gamepad.zoomIn = false;
-		m_gamepad.zoomOut = false;
-		m_gamepad.turnFactor = 0.0f;
-		m_gamepad.thrustFactor = 0.0f;
-		m_gamepad.brakeFactor = 0.0f;
-		m_gamepad.boost = false;
-		m_gamepad.primaryFireFactor = 0.0f;
-		m_gamepad.secondaryFireFactor = 0.0f;
-
-		m_keyboard.zoomIn = false;
-		m_keyboard.zoomOut = false;
-		m_keyboard.turnLeft = false;
-		m_keyboard.turnRight = false;
-		m_keyboard.thrust = false;
-		m_keyboard.brake = false;
-		m_keyboard.primaryFire = false;
-		m_keyboard.secondaryFire = false;
+		m_gamepad.Reset();
+		m_keyboard.Reset();
 	}
 	void GameState::UpdatePlayerController()
 	{
@@ -220,33 +310,5 @@ namespace Space
 		// Firing
 		m_playerController.primaryFireFactor = m_keyboard.primaryFire ? 1.0f : m_gamepad.primaryFireFactor;
 		m_playerController.secondaryFireFactor = m_keyboard.secondaryFire ? 1.0f : m_gamepad.secondaryFireFactor;
-	}
-	void GameState::Draw()
-	{
-		//d2d::Window::SetShowCursor(m_paused);
-		m_game.Draw();
-		if(m_paused)
-			m_pauseMenu.Draw();
-		if(m_showFPS)
-			DrawFPS();
-	}
-	void GameState::DrawFPS()
-	{
-		// Set camera to screen resolution
-		b2Vec2 resolution{ d2d::Window::GetScreenResolution() };
-		d2d::Window::SetCameraRect({ b2Vec2_zero, resolution });
-		{
-			// Convert fps to string and draw
-			int fpsInt{ (int)(d2d::Window::GetFPS() + 0.5f) };
-			std::string fpsString{ d2d::ToString(fpsInt) };
-
-			d2d::Window::DisableTextures();
-			d2d::Window::EnableBlending();
-			d2d::Window::SetColor(m_fpsTextStyle.color);
-			d2d::Window::PushMatrix();
-			d2d::Window::Translate(m_fpsPosition * resolution);
-			d2d::Window::DrawString(fpsString, m_fpsAlignment, m_fpsTextStyle.size * resolution.y, m_fpsTextStyle.font);
-			d2d::Window::PopMatrix();
-		}
 	}
 }

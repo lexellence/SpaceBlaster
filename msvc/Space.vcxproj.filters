@@ -140,5 +140,8 @@
     <ClInclude Include="..\Source\GameConstants.h">
       <Filter>Source Files\Game</Filter>
     </ClInclude>
+    <ClInclude Include="..\Source\GameInput.h">
+      <Filter>Source Files\Game</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

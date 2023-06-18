@@ -10,7 +10,7 @@ int main(int argc, char *argv[])
 	}
 	catch(const std::exception& e)
 	{
-		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Fatal Exception", e.what(), nullptr);
+		d2d::Window::ShowSimpleMessageBox(d2d::MessageBoxType::D2D_ERROR, "Fatal Exception"s, e.what());
 		return EXIT_FAILURE;
 	}
 	return EXIT_SUCCESS;

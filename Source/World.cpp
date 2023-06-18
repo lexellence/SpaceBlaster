@@ -67,9 +67,13 @@ namespace Space
 	{
 		m_wrappedEntityListenerPtr = listenerPtr;
 	}
-	void World::SetProjectileLauncherCallback(ProjectileLauncherListener* callbackPtr)
+	void World::SetProjectileLauncherListener(ProjectileLauncherListener* listenerPtr)
 	{
-		m_projectileLauncherListenerPtr = callbackPtr;
+		m_projectileLauncherListenerPtr = listenerPtr;
+	}
+	void World::SetExitListener(ExitListener* listenerPtr)
+	{
+		m_exitListenerPtr = listenerPtr;
 	}
 	//+------------------------\----------------------------------
 	//|	  Creating Entities    |

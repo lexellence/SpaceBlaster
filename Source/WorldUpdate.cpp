@@ -424,7 +424,10 @@ namespace Space
 	{
 		for(WorldID id : m_destroyBuffer)
 		{
-			// Send notification to Game
+			// Send notifications to Game
+			if(HasFlags(id, FLAG_EXITED))
+				if(m_exitListenerPtr)
+					m_exitListenerPtr->EntityExited(id);
 			if(m_destructionListenerPtr)
 				m_destructionListenerPtr->EntityWillBeDestroyed(id);
 

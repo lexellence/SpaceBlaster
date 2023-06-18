@@ -31,23 +31,24 @@ namespace Space
 	class Game
 		: public DestroyListener,
 		  public WrapListener,
-		  public ProjectileLauncherListener
+		  public ProjectileLauncherListener,
+		  public ExitListener
 	{
 	public:
 		Game();
 		void Init();
 		void Update(float dt, PlayerController &playerController);
-		void UpdateDelayedActions(float dt);
 		void Draw();
-		void DrawHUD();
+		bool DidPlayerExit() const;
+		void StartCurrentLevel();
 
 		// World callbacks
 		void EntityWillBeDestroyed(WorldID entityID) override;
 		void EntityWrapped(WorldID entityID, const b2Vec2 &translation) override;
 		void ProjectileLaunched(const ProjectileDef& projectileDef, WorldID parentID) override;
+		void EntityExited(WorldID entityID) override;
 
 	private:
-		void StartCurrentLevel();
 		void ClearLevel(const b2Vec2& newWorldDimensions);
 		void SpawnPlayer();
 		void SpawnExit();
@@ -59,6 +60,7 @@ namespace Space
 		void ValidateWorldDimensions() const;
 
 		void UpdateCamera(float dt, const PlayerController &playerController);
+		void UpdateDelayedActions(float dt);
 		void SetPlayer(WorldID entityID);
 		bool IsPlayer(WorldID entityID) const;
 		void FollowEntity(WorldID entityID);
@@ -81,6 +83,8 @@ namespace Space
 		WorldID CreateExit(World &world, const InstanceDef &def);
 		WorldID CreateExitSensor(World &world, const InstanceDef &def);
 
+		void DrawHUD();
+
 	private:
 		GameDef m_settings;
 		World m_world;
@@ -89,16 +93,17 @@ namespace Space
 
 		Camera m_camera;
 		bool m_cameraFollowingEntity{ false };
-		WorldID m_cameraFollowEntityID;
+		WorldID m_cameraFollowEntityID{};
 
 		struct
 		{
-			bool isSet{ false };
-			WorldID id;
+			bool isSet{};
+			WorldID id{};
 			float credits{};
+			unsigned currentLevel{ 1 };
+			bool exited{};
 		} m_player;
 		
-		unsigned m_currentLevel{ 0 };
 		std::list<DelayedGameAction> m_delayedGameActions;
 
 		// Fonts
