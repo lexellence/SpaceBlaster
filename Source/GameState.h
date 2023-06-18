@@ -73,11 +73,12 @@ namespace Space
 				0.045f
 		};
 
-		// Pause menu button colors
+		// Menu colors
 		const d2d::Color m_buttonColor{ d2d::COLOR_ZERO };
 		const d2d::Color m_buttonHighlightColor{ 1.0f, 1.0f, 1.0f, 0.3f };
 		const d2d::Color m_buttonBorderColor{ 0.5f, 0.5f, 0.5f, 0.5f };
-		const d2d::Color m_backgroundColor{ 0.2f, 0.2f, 0.2f, 0.4f };
+		const d2d::Color m_shopBackgroundColor{ 0.1f, 0.1f, 0.1f, 0.6f };
+		const d2d::Color m_pauseBackgroundColor{ 0.5f, 0.5f, 0.5f, 0.3f };
 
 		// Pause menu
 		const std::string m_pauseTitle{ "Paused" };
@@ -86,7 +87,7 @@ namespace Space
 		std::string m_quitString{ "QUIT TO OPERATING SYSTEM" };
 		const std::vector<std::string> m_pauseMenuButtonTextList{ m_resumeString, m_quitToMenuString, m_quitString };
 		d2d::Menu m_pauseMenu{ m_pauseMenuButtonTextList, m_buttonTextStyle, m_pauseTitle, m_titleTextStyle,	
-			m_buttonColor, m_buttonHighlightColor, m_buttonBorderColor, m_backgroundColor };
+			m_buttonColor, m_buttonHighlightColor, m_buttonBorderColor, m_pauseBackgroundColor };
 
 		// Shop menu
 		const std::string m_backString{ "Back" };
@@ -98,22 +99,22 @@ namespace Space
 		const std::vector<std::string> m_shopMenuButtonTextList
 			{ m_nextLevelString, m_weaponsString, m_protectionString, m_gadgetsString, m_quitToMenuString, m_quitString };
 		d2d::Menu m_shopMenu{ m_shopMenuButtonTextList, m_buttonTextStyle, m_shopTitle, m_titleTextStyle, 
-			m_buttonColor, m_buttonHighlightColor, m_buttonBorderColor, m_backgroundColor };
+			m_buttonColor, m_buttonHighlightColor, m_buttonBorderColor, m_shopBackgroundColor };
 
 		// Weapons
 		const std::vector<std::string> m_weaponsMenuButtonTextList{ m_backString };
 		d2d::Menu m_weaponsMenu{ m_weaponsMenuButtonTextList, m_buttonTextStyle, m_weaponsString, m_titleTextStyle,
-			m_buttonColor, m_buttonHighlightColor, m_buttonBorderColor, m_backgroundColor };
+			m_buttonColor, m_buttonHighlightColor, m_buttonBorderColor, m_shopBackgroundColor };
 
 		// Protection
 		const std::vector<std::string> m_protectionMenuButtonTextList{ m_backString };
 		d2d::Menu m_protectionMenu{ m_protectionMenuButtonTextList, m_buttonTextStyle, m_protectionString, m_titleTextStyle,
-			m_buttonColor, m_buttonHighlightColor, m_buttonBorderColor, m_backgroundColor };
+			m_buttonColor, m_buttonHighlightColor, m_buttonBorderColor, m_shopBackgroundColor };
 
 		// Gadgets
 		const std::vector<std::string> m_gadgetsMenuButtonTextList{ m_backString };
 		d2d::Menu m_gadgetsMenu{ m_gadgetsMenuButtonTextList, m_buttonTextStyle, m_gadgetsString, m_titleTextStyle,
-			m_buttonColor, m_buttonHighlightColor, m_buttonBorderColor, m_backgroundColor };
+			m_buttonColor, m_buttonHighlightColor, m_buttonBorderColor, m_shopBackgroundColor };
 
 		// FPS display
 		const b2Vec2 m_fpsPosition{ 1.0f, 1.0f };
