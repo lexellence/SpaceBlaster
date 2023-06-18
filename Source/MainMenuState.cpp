@@ -13,6 +13,23 @@
 
 namespace Space
 {
+	MainMenuState::MainMenuState()
+	{
+		m_menu.SetTitle(m_title);
+		m_menu.SetTitleStyle(m_titleTextStyle);
+		m_menu.SetBackgroundColor(m_backgroundColor);
+
+		d2d::MenuButton button;
+		button.color = m_buttonColor;
+		button.highlightColor = m_buttonHighlightColor;
+		button.borderColor = m_buttonBorderColor;
+		button.textStyle = m_buttonTextStyle;
+
+		button.label = m_newGameString;
+		m_menu.AddButton(button);
+		button.label = m_quitString;
+		m_menu.AddButton(button);
+	}
 	void MainMenuState::Init()
 	{
 		m_menu.Init();
@@ -35,7 +52,6 @@ namespace Space
 	}
 	void MainMenuState::Draw()
 	{
-		//d2d::Window::SetShowCursor(true);
 		m_menu.Draw();
 	}
 }

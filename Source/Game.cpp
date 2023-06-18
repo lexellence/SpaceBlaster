@@ -740,7 +740,7 @@ namespace Space
 					int fuelInt = (int)(m_world.GetFuelLevel(m_player.id) + 0.5f);
 					int maxFuelInt = (int)(m_world.GetMaxFuelLevel(m_player.id) + 0.5f);
 					std::string fuelString = d2d::ToString(fuelInt) + "/" + d2d::ToString(maxFuelInt);
-					d2d::Window::DrawString(fuelString, m_fuelAlignment, m_fuelTextStyle.size * resolution.y, m_fuelTextStyle.font);
+					d2d::Window::DrawString(fuelString, m_fuelAlignment, m_fuelTextStyle.size * resolution.y, m_fuelTextStyle.fontPtr);
 				}
 				d2d::Window::PopMatrix();
 			}
@@ -754,7 +754,7 @@ namespace Space
 				{
 					unsigned icons = m_world.GetIconsCollected(m_player.id);
 					std::string iconsString = d2d::ToString(icons);
-					d2d::Window::DrawString(iconsString, m_iconsAlignment, m_iconsTextStyle.size * resolution.y, m_iconsTextStyle.font);
+					d2d::Window::DrawString(iconsString, m_iconsAlignment, m_iconsTextStyle.size * resolution.y, m_iconsTextStyle.fontPtr);
 				}
 				d2d::Window::PopMatrix();
 			}
@@ -764,7 +764,7 @@ namespace Space
 			d2d::Window::PushMatrix();
 			d2d::Window::Translate(m_creditsPosition * resolution);
 			{
-				d2d::Window::DrawString(d2d::ToString(m_player.credits), m_creditsAlignment, m_creditsTextStyle.size * resolution.y, m_creditsTextStyle.font);
+				d2d::Window::DrawString(d2d::ToString(m_player.credits), m_creditsAlignment, m_creditsTextStyle.size * resolution.y, m_creditsTextStyle.fontPtr);
 			}
 			d2d::Window::PopMatrix();
 
@@ -773,7 +773,7 @@ namespace Space
 			d2d::Window::PushMatrix();
 			d2d::Window::Translate(m_levelPosition * resolution);
 			{
-				d2d::Window::DrawString(d2d::ToString(m_player.currentLevel), m_levelAlignment, m_levelTextStyle.size * resolution.y, m_levelTextStyle.font);
+				d2d::Window::DrawString(d2d::ToString(m_player.currentLevel), m_levelAlignment, m_levelTextStyle.size * resolution.y, m_levelTextStyle.fontPtr);
 			}
 			d2d::Window::PopMatrix();
 		}

@@ -27,7 +27,7 @@ namespace Space
 		const std::string m_title{ "Space Blaster" };
 		const d2d::Alignment m_titleAlignment{ d2d::Alignment::CENTER_BOTTOM };
 		const d2d::TextStyle m_titleTextStyle{
-			m_orbitronLightFont,
+			&m_orbitronLightFont,
 			{ 0.0f, 1.0f, 0.0f, 1.0f },
 			0.045f
 		};
@@ -36,7 +36,7 @@ namespace Space
 		const std::string m_author{ "Lexellence Games" };
 		const d2d::Alignment m_authorAlignment{ d2d::Alignment::CENTER_TOP };
 		d2d::TextStyle m_authorTextStyle{
-			m_alexBrushFont,
+			&m_alexBrushFont,
 			d2d::Color(),
 			0.045f
 		};

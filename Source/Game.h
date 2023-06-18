@@ -114,25 +114,25 @@ namespace Space
 		// HUD Fuel
 		const b2Vec2 m_fuelPosition{0.10f, 0.10f};
 		const d2d::Alignment m_fuelAlignment{d2d::Alignment::LEFT_BOTTOM};
-		const d2d::TextStyle m_fuelTextStyle{ m_hudFont, 
+		const d2d::TextStyle m_fuelTextStyle{ &m_hudFont, 
 			{1.0f, 0.2f, 0.2f, 1.0f}, m_hudFontSize };
 
 		// HUD Icons Collected
 		const b2Vec2 m_iconsPosition{0.10f, 0.90f};
 		const d2d::Alignment m_iconsAlignment{d2d::Alignment::LEFT_TOP};
-		const d2d::TextStyle m_iconsTextStyle{ m_hudFont,
+		const d2d::TextStyle m_iconsTextStyle{ &m_hudFont,
 			{0.2f, 0.2f, 1.0f, 1.0f}, m_hudFontSize };
 
 		// HUD Credits
 		const b2Vec2 m_creditsPosition{0.90f, 0.90f};
 		const d2d::Alignment m_creditsAlignment{d2d::Alignment::RIGHT_TOP};
-		const d2d::TextStyle m_creditsTextStyle{ m_hudFont,
+		const d2d::TextStyle m_creditsTextStyle{ &m_hudFont,
 			{0.2f, 1.0f, 0.2f, 1.0f}, m_hudFontSize };
 
 		// HUD Level
 		const b2Vec2 m_levelPosition{0.90f, 0.10f};
 		const d2d::Alignment m_levelAlignment{d2d::Alignment::RIGHT_BOTTOM};
-		const d2d::TextStyle m_levelTextStyle{ m_hudFont,
+		const d2d::TextStyle m_levelTextStyle{ &m_hudFont,
 			{1.0f, 1.0f, 0.2f, 1.0f}, m_hudFontSize };
 
 		//+---------------------------\-------------------------------

@@ -16,6 +16,7 @@ namespace Space
 {
 	void GameState::Init()
 	{
+		m_menu.SetTitleStyle(m_titleTextStyle);
 		m_showFPS = false;
 		ResetController();
 		m_game.Init();
@@ -28,8 +29,7 @@ namespace Space
 			// Get menu button pressed
 			std::string pressedButton;
 			bool pressed;
-			d2Assert(m_menuPtr);
-			pressed = m_menuPtr->PollPressedButton(pressedButton);
+			pressed = m_menu.PollPressedButton(pressedButton);
 
 			// Quit
 			if(pressedButton == m_quitString)
@@ -109,44 +109,68 @@ namespace Space
 		m_mode = GameMode::ACTION;
 		if(startLevel)
 			m_game.StartCurrentLevel();
-		m_menuPtr = nullptr;
+	}
+	void GameState::SetMenuButtons(const std::vector<std::string>& labelList)
+	{
+		m_menu.RemoveAllButtons();
+		for(auto label : labelList)
+		{
+			m_newButton.label = label;
+			m_menu.AddButton(m_newButton);
+		}
 	}
 	void GameState::StartPauseMenu()
 	{
 		m_mode = GameMode::PAUSED;
-		m_pauseMenu.Init();
-		m_menuPtr = &m_pauseMenu;
+		m_menu.Init();
+		m_menu.SetTitle(m_pauseTitle);
+		m_menu.SetBackgroundColor(m_pauseBackgroundColor);
+		SetMenuButtons(m_pauseMenuLabels);
 	}
 	void GameState::StartPostLevelMenu(PostLevelMenu mode)
 	{
 		m_mode = GameMode::POST_LEVEL;
 		m_postLevelMenuMode = mode;
 
+		m_menu.Init();
+		m_menu.SetBackgroundColor(m_postLevelBackgroundColor);
 		if(m_postLevelMenuMode == PostLevelMenu::MAIN)
-			m_menuPtr = &m_postLevelMenu;
+		{
+			m_menu.SetTitle(m_postLevelTitle);
+			SetMenuButtons(m_postLevelMenuLabels);
+		}
 		else if(m_postLevelMenuMode == PostLevelMenu::SHOP_MAIN)
-			m_menuPtr = &m_shopMenu;
+		{
+			m_menu.SetTitle(m_shopTitle);
+			SetMenuButtons(m_shopMenuLabels);
+		}
 		else if(m_postLevelMenuMode == PostLevelMenu::SHOP_WEAPONS)
-			m_menuPtr = &m_weaponsMenu;
+		{
+			m_menu.SetTitle(m_weaponsString);
+			SetMenuButtons(m_weaponsMenuLabels);
+		}
 		else if(m_postLevelMenuMode == PostLevelMenu::SHOP_PROTECTION)
-			m_menuPtr = &m_protectionMenu;
+		{
+			m_menu.SetTitle(m_protectionString);
+			SetMenuButtons(m_protectionMenuLabels);
+		}
 		else if(m_postLevelMenuMode == PostLevelMenu::SHOP_ENGINE)
-			m_menuPtr = &m_engineMenu;
+		{
+			m_menu.SetTitle(m_engineString);
+			SetMenuButtons(m_engineMenuLabels);
+		}
 		else if(m_postLevelMenuMode == PostLevelMenu::SHOP_GADGETS)
-			m_menuPtr = &m_gadgetsMenu;
-
-		d2Assert(m_menuPtr);
-		m_menuPtr->Init();
+		{
+			m_menu.SetTitle(m_gadgetsString);
+			SetMenuButtons(m_gadgetsMenuLabels);
+		}
 	}
 	void GameState::Draw()
 	{
 		d2d::Window::SetShowCursor(m_mode != GameMode::ACTION);
 		m_game.Draw();
 		if(m_mode == GameMode::PAUSED || m_mode == GameMode::POST_LEVEL)
-		{
-			d2Assert(m_menuPtr);
-			m_menuPtr->Draw();
-		}
+			m_menu.Draw();
 		if(m_showFPS)
 			DrawFPS();
 	}
@@ -165,7 +189,7 @@ namespace Space
 			d2d::Window::SetColor(m_fpsTextStyle.color);
 			d2d::Window::PushMatrix();
 			d2d::Window::Translate(m_fpsPosition * resolution);
-			d2d::Window::DrawString(fpsString, m_fpsAlignment, m_fpsTextStyle.size * resolution.y, m_fpsTextStyle.font);
+			d2d::Window::DrawString(fpsString, m_fpsAlignment, m_fpsTextStyle.size * resolution.y, m_fpsTextStyle.fontPtr);
 			d2d::Window::PopMatrix();
 		}
 	}
@@ -173,10 +197,7 @@ namespace Space
 	void GameState::ProcessEvent(const SDL_Event& event)
 	{
 		if(m_mode == GameMode::PAUSED || m_mode == GameMode::POST_LEVEL)
-		{
-			d2Assert(m_menuPtr);
-			m_menuPtr->ProcessEvent(event);
-		}
+			m_menu.ProcessEvent(event);
 
 		switch(event.type)
 		{
@@ -212,8 +233,8 @@ namespace Space
 		if(button == m_gamepad.map.pauseButton)						PauseGame();
 		else if(button == m_gamepad.map.zoomInButton)				m_gamepad.zoomIn = true;
 		else if(button == m_gamepad.map.zoomOutButton)				m_gamepad.zoomOut = true;
-		else if(button == m_gamepad.map.previousMissileTypeButton)	{}
-		else if(button == m_gamepad.map.nextMissileTypeButton)		{}
+		else if(button == m_gamepad.map.previousMissileTypeButton) {}
+		else if(button == m_gamepad.map.nextMissileTypeButton) {}
 		else if(button == m_gamepad.map.boostButton)				m_gamepad.boost = true;
 	}
 	void GameState::ProcessButtonUp(Uint8 button)
@@ -236,8 +257,8 @@ namespace Space
 		else if(key == m_keyboard.map.primaryFireKey)		m_keyboard.primaryFire = true;
 		else if(key == m_keyboard.map.secondaryFireKey)		m_keyboard.secondaryFire = true;
 		//else if(key == m_keyboard.map.morphKey)			m_playerController.doMorphOnce = true;
-		else if(key == m_keyboard.map.previousMissileKey)	{}
-		else if(key == m_keyboard.map.nextMissileKey)		{}
+		else if(key == m_keyboard.map.previousMissileKey) {}
+		else if(key == m_keyboard.map.nextMissileKey) {}
 	}
 	void GameState::ProcessKeyUp(SDL_Keycode key)
 	{
@@ -255,9 +276,9 @@ namespace Space
 	{
 		// Convert to percentage factor
 		float axisFactor;
-		if(axis == SDL_CONTROLLER_AXIS_TRIGGERRIGHT || axis == SDL_CONTROLLER_AXIS_TRIGGERLEFT) 
+		if(axis == SDL_CONTROLLER_AXIS_TRIGGERRIGHT || axis == SDL_CONTROLLER_AXIS_TRIGGERLEFT)
 			axisFactor = d2d::AxisToUnit(value, m_gamepad.triggerDeadZone, m_gamepad.triggerAliveZone);
-		else 
+		else
 			axisFactor = d2d::AxisToUnit(value, m_gamepad.stickDeadZone, m_gamepad.stickAliveZone);
 		if(axis == m_gamepad.map.turnAxis)
 			m_gamepad.turnFactor = -axisFactor;
