@@ -36,7 +36,7 @@ namespace Space
 	{
 		m_camera.Init(m_settings.cameraDimensionRange, m_settings.cameraZoomSpeed, m_settings.cameraInitialZoomOutPercent);
 		m_cameraFollowingEntity = false;
-		m_starfield.Init(m_settings.starfield);
+		m_starfield.Init(m_settings.starfield, b2Vec2_zero);
 		m_player.isSet = false;
 		m_player.exited = false;
 		m_delayedGameActions.clear();
@@ -614,6 +614,7 @@ namespace Space
 		m_world.Update(dt, playerController);
 		UpdateCamera(dt, playerController);
 		UpdateDelayedActions(dt);
+		m_starfield.Update(m_camera.GetPosition());
 	}
 
 	//+--------------------------\--------------------------------
@@ -712,7 +713,7 @@ namespace Space
 	void Game::Draw()
 	{
 		d2d::Window::SetCameraRect(m_camera.GetRect());
-		m_starfield.Draw(m_camera.GetPosition());
+		m_starfield.Draw();
 		m_world.Draw();
 		DrawHUD();
 	}

@@ -19,7 +19,7 @@ namespace Space
 		GameDef gameDef;
 		gameDef.LoadFrom("Data/game.hjson");
 		m_camera.Init(gameDef.cameraDimensionRange, gameDef.cameraZoomSpeed, gameDef.cameraInitialZoomOutPercent);
-		m_starfield.Init(gameDef.starfield);
+		m_starfield.Init(gameDef.starfield, b2Vec2_zero);
 
 		m_gotoMenu = false;
 		m_animationsComplete = false;
@@ -29,7 +29,6 @@ namespace Space
 		m_authorFadingIn = false;
 		m_authorTextStyle.color.SetFloat(0.5f, 0.0f, 0.7f, m_authorStartAlpha);
 		m_authorFadeDelayElapsed = 0.0f;
-		m_cameraPosition = b2Vec2_zero;
 	}
 	void IntroState::ProcessEvent(const SDL_Event& event)
 	{
@@ -53,10 +52,12 @@ namespace Space
 	}
 	AppStateID IntroState::Update(float dt)
 	{
-		m_camera.SetPosition(m_camera.GetPosition() - (dt * m_starfieldVelocity));
-
 		if(m_gotoMenu)
 			return AppStateID::MAIN_MENU;
+
+		// Update starfield
+		m_camera.SetPosition(m_camera.GetPosition() - (dt * m_starfieldVelocity));
+		m_starfield.Update(m_camera.GetPosition());
 
 		// Update intro animations
 		if(!m_animationsComplete)
@@ -113,7 +114,7 @@ namespace Space
 
 		// Draw stars
 		d2d::Window::SetCameraRect(m_camera.GetRect());
-		m_starfield.Draw(m_camera.GetPosition());
+		m_starfield.Draw();
 
 		// Set camera to screen resolution
 		b2Vec2 resolution{ d2d::Window::GetScreenResolution() };

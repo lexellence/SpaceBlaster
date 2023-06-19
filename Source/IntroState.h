@@ -64,6 +64,5 @@ namespace Space
 		Camera m_camera;
 		Starfield m_starfield;
 		const b2Vec2 m_starfieldVelocity{ 10.0f, 10.0f };
-		b2Vec2 m_cameraPosition;
 	};
 }

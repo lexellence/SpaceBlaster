@@ -12,10 +12,9 @@
 
 namespace Space
 {
-	void Starfield::Init(const StarfieldDef& def)
+	void Starfield::Init(const StarfieldDef& def, const b2Vec2& cameraPosition)
 	{
-		m_firstDraw = true;
-		m_cameraPosition.SetZero();
+		m_cameraPosition = cameraPosition;
 		m_pointSizeIndexRange = def.pointSizeIndexRange;
 		{
 			float paddedSize{ def.maxCameraDimension * def.edgePaddingFactor };
@@ -27,7 +26,7 @@ namespace Space
 		m_numStars = d2d::GetClamped((StarID)(starfieldArea * def.density), { 0, STARFIELD_MAX_STARS });
 
 		// Random starfield
-		for (StarID i = 0; i < m_numStars; ++i)
+		for(StarID i = 0; i < m_numStars; ++i)
 		{
 			// Random position
 			m_positions[i] = d2d::RandomVec2InRect(m_boundaryRect);
@@ -37,38 +36,35 @@ namespace Space
 			float weightedRandomPercent{ powf(randomPercent, 8) };
 			m_speedFactors[i] = d2d::Lerp(def.speedFactorRange, weightedRandomPercent);
 			m_pointSizeIndices[i] = (int)(d2d::Lerp((float)def.pointSizeIndexRange.GetMin(), (float)def.pointSizeIndexRange.GetMax(), weightedRandomPercent) + 0.5f);
-			int randomPointSizeIndexVariation{ d2d::RandomInt( {-def.maxPointSizeIndexVariation, def.maxPointSizeIndexVariation} ) };
+			int randomPointSizeIndexVariation{ d2d::RandomInt({-def.maxPointSizeIndexVariation, def.maxPointSizeIndexVariation}) };
 			m_pointSizeIndices[i] = d2d::GetClamped(m_pointSizeIndices[i] + randomPointSizeIndexVariation, d2d::Window::VALID_POINT_SIZES);
 			m_colors[i] = def.colorRange.Lerp(weightedRandomPercent);
 
-			float randomAlphaVariation = d2d::RandomFloat( {-def.maxAlphaVariation, def.maxAlphaVariation } );
+			float randomAlphaVariation = d2d::RandomFloat({ -def.maxAlphaVariation, def.maxAlphaVariation });
 			m_colors[i].alpha = std::clamp(m_colors[i].alpha + randomAlphaVariation, 0.0f, 1.0f);
 		}
 	}
-	void Starfield::Draw(const b2Vec2& newCameraPosition)
+	void Starfield::Update(const b2Vec2& cameraPosition)
 	{
-		// If camera moved, update star positions
-		if(!m_firstDraw && newCameraPosition != m_cameraPosition)
+		b2Vec2 cameraChange{ cameraPosition - m_cameraPosition };
+		for(StarID i = 0; i < m_numStars; ++i)
 		{
-			b2Vec2 cameraChange{ newCameraPosition - m_cameraPosition };
-			for(StarID i = 0; i < m_numStars; ++i)
-			{
-				// Move star proportional to viewport change, then wrap around the boundary
-				m_positions[i] -= m_speedFactors[i] * cameraChange;
-				d2d::WrapVector(m_positions[i], m_boundaryRect);
-			}
-			m_cameraPosition = newCameraPosition;
+			// Move star proportional to viewport change, then wrap around the boundary
+			m_positions[i] -= m_speedFactors[i] * cameraChange;
+			d2d::WrapVector(m_positions[i], m_boundaryRect);
 		}
-
-		// Draw stars
+		m_cameraPosition = cameraPosition;
+	}
+	void Starfield::Draw() const
+	{
 		d2d::Window::PushMatrix();
 		d2d::Window::Translate(m_cameraPosition);
-		for (int sizeIndex = m_pointSizeIndexRange.GetMin(); sizeIndex <= m_pointSizeIndexRange.GetMax(); ++sizeIndex)
+		for(int sizeIndex = m_pointSizeIndexRange.GetMin(); sizeIndex <= m_pointSizeIndexRange.GetMax(); ++sizeIndex)
 		{
 			d2d::Window::SetPointSize(d2d::Window::POINT_SIZES[sizeIndex]);
-			for (StarID i = 0; i < m_numStars; ++i)
+			for(StarID i = 0; i < m_numStars; ++i)
 			{
-				if (m_pointSizeIndices[i] == sizeIndex)
+				if(m_pointSizeIndices[i] == sizeIndex)
 				{
 					d2d::Window::SetColor(m_colors[i]);
 					d2d::Window::DrawPoint(m_positions[i]);
@@ -76,7 +72,6 @@ namespace Space
 			}
 		}
 		d2d::Window::PopMatrix();
-		m_firstDraw = false;
 	}
 	void Starfield::Translate(const b2Vec2& translation)
 	{

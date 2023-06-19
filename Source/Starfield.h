@@ -26,12 +26,12 @@ namespace Space
 	class Starfield
 	{
 	public:
-		void Init(const StarfieldDef& def);
-		void Draw(const b2Vec2& newCameraPosition);
+		void Init(const StarfieldDef& def, const b2Vec2& cameraPosition);
+		void Update(const b2Vec2& cameraPosition);
+		void Draw() const;
 		void Translate(const b2Vec2& translation);
 
 	private:
-		bool m_firstDraw{ true };
 		b2Vec2 m_cameraPosition;
 		d2d::Rect m_boundaryRect;
 		StarID m_numStars{};
