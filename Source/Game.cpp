@@ -13,8 +13,12 @@
 
 namespace Space
 {
-	Game::Game()
+	Game::Game(Camera* cameraPtr, Starfield* starfieldPtr)
+		: m_cameraPtr{ cameraPtr }, m_starfieldPtr{ starfieldPtr }
 	{
+		d2Assert(m_cameraPtr);
+		d2Assert(m_starfieldPtr);
+
 		m_world.SetDestructionListener(this);
 		m_world.SetWrapListener(this);
 		m_world.SetProjectileLauncherListener(this);
@@ -22,33 +26,25 @@ namespace Space
 	}
 
 	//+-----------------\-----------------------------------------
-	//|	      Init      |
-	//\-----------------/-----------------------------------------
-	void Game::Init()
-	{
-		m_settings.LoadFrom("Data/game.hjson");
-	}
-
-	//+-----------------\-----------------------------------------
 	//|	   ClearLevel   |
 	//\-----------------/-----------------------------------------
 	void Game::ClearLevel(const b2Vec2& newWorldDimensions)
 	{
-		m_camera.Init(m_settings.cameraDimensionRange, m_settings.cameraZoomSpeed, m_settings.cameraInitialZoomOutPercent);
+		m_cameraPtr->ResetZoom();
 		m_cameraFollowingEntity = false;
-		m_starfield.Init(m_settings.starfield, b2Vec2_zero);
 		m_player.isSet = false;
 		m_player.exited = false;
 		m_delayedGameActions.clear();
+		m_firstUpdate = true;
 
 		d2d::Rect worldRect;
 		worldRect.SetCenter(b2Vec2_zero, newWorldDimensions);
 		m_world.Init(worldRect);
 	}
 
-	//+-----------------\-----------------------------------------
-	//|	   ClearLevel   |
-	//\-----------------/-----------------------------------------
+	//+--------------------------------\--------------------------
+	//|	      StartCurrentLevel        |
+	//\--------------------------------/--------------------------
 	void Game::StartCurrentLevel()
 	{
 		ClearLevel({ 500.0f, 500.0f });
@@ -84,7 +80,7 @@ namespace Space
 	//\-----------------/-----------------------------------------
 	bool Game::DidPlayerExit() const
 	{
-		return m_player.exited;;
+		return m_player.exited;
 	}
 
 	//+-----------------\-----------------------------------------
@@ -281,7 +277,7 @@ namespace Space
 		// Limit world dimensions relative to maximum camera dimensions
 		float width = m_world.GetWorldRect().GetWidth();
 		float height = m_world.GetWorldRect().GetHeight();
-		float max = m_camera.GetDimensionRange().GetMax();
+		float max = m_cameraPtr->GetDimensionRange().GetMax();
 		if(width < max * MIN_WORLD_TO_CAMERA_RATIO)
 			throw GameException{ "World width(" + d2d::ToString(width) + ") too small compared to max camera width(" + d2d::ToString(max) };
 		if(height < max * MIN_WORLD_TO_CAMERA_RATIO)
@@ -612,9 +608,15 @@ namespace Space
 	void Game::Update(float dt, PlayerController& playerController)
 	{
 		m_world.Update(dt, playerController);
+		b2Vec2 lastCameraPosition = m_cameraPtr->GetPosition();
 		UpdateCamera(dt, playerController);
+		if(m_firstUpdate)
+		{
+			m_starfieldPtr->MoveCameraWithoutMovingStars(m_cameraPtr->GetPosition() - lastCameraPosition);
+			m_firstUpdate = false;
+		}
+		m_starfieldPtr->Update(m_cameraPtr->GetPosition());
 		UpdateDelayedActions(dt);
-		m_starfield.Update(m_camera.GetPosition());
 	}
 
 	//+--------------------------\--------------------------------
@@ -657,9 +659,9 @@ namespace Space
 	{
 		if(m_cameraFollowingEntity)
 			if(m_world.HasPhysics(m_cameraFollowEntityID))
-				m_camera.SetPosition(b2Mul(m_world.GetSmoothedTransform(m_cameraFollowEntityID),
+				m_cameraPtr->SetPosition(b2Mul(m_world.GetSmoothedTransform(m_cameraFollowEntityID),
 					m_world.GetLocalCenterOfMass(m_cameraFollowEntityID)));
-		m_camera.Update(dt, playerController.zoomOutFactor);
+		m_cameraPtr->Update(dt, playerController.zoomOutFactor);
 	}
 
 	//+--------------------------\--------------------------------
@@ -686,7 +688,7 @@ namespace Space
 	void Game::EntityWrapped(WorldID entityID, const b2Vec2& translation)
 	{
 		if(m_cameraFollowingEntity && entityID == m_cameraFollowEntityID)
-			m_starfield.Translate(translation);
+			m_starfieldPtr->MoveCameraWithoutMovingStars(translation);
 	}
 	//+--------------------------\--------------------------------
 	//|	   ProjectileLaunched    | override (ProjectileLauncherListener)
@@ -712,8 +714,8 @@ namespace Space
 	//\-------------/---------------------------------------------
 	void Game::Draw()
 	{
-		d2d::Window::SetCameraRect(m_camera.GetRect());
-		m_starfield.Draw();
+		d2d::Window::SetCameraRect(m_cameraPtr->GetRect());
+		m_starfieldPtr->Draw();
 		m_world.Draw();
 		DrawHUD();
 	}

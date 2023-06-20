@@ -15,7 +15,7 @@ namespace Space
 	class MainMenuState : public AppState
 	{
 	public:
-		MainMenuState();
+		MainMenuState(Camera* cameraPtr, Starfield* starfieldPtr);
 		void Init() override;
 		void ProcessEvent(const SDL_Event& event) override;
 		AppStateID Update(float dt) override;

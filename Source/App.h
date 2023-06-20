@@ -18,6 +18,7 @@ namespace Space
 {
 	const AppStateID FIRST_APP_STATE = AppStateID::INTRO;
 	const float MAX_APP_STEP = 1.0f;
+
 	class App
 	{
 	public:
@@ -30,7 +31,7 @@ namespace Space
 		std::shared_ptr<AppState> GetStatePtr(AppStateID appState);
 		void InitCurrentState();
 		void UpdateCurrentState(float dt);
-		void DrawCurrentState();
+		void Draw();
 		void Shutdown();
 
 		std::shared_ptr<IntroState> m_introStatePtr;
@@ -41,5 +42,7 @@ namespace Space
 		AppStateID m_nextState{ FIRST_APP_STATE };
 
 		bool m_hasFocus{ false };
+		Camera m_camera;
+		Starfield m_starfield;
 	};
 }

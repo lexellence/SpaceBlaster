@@ -67,4 +67,8 @@ namespace Space
 		cameraRect.SetCenter(GetPosition(), GetDimensions(d2d::Window::GetXYAspectRatio()));
 		return cameraRect;
 	}
+	void Camera::ResetZoom()
+	{
+		m_zoomOutPercent = m_initialZoomOutPercent;
+	}
 }

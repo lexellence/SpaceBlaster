@@ -35,8 +35,8 @@ namespace Space
 		  public ExitListener
 	{
 	public:
-		Game();
-		void Init();
+		Game() = delete;
+		Game(Camera* cameraPtr, Starfield* starfieldPtr);
 		void Update(float dt, PlayerController &playerController);
 		void Draw();
 		bool DidPlayerExit() const;
@@ -86,12 +86,11 @@ namespace Space
 		void DrawHUD();
 
 	private:
-		GameDef m_settings;
 		World m_world;
-		Starfield m_starfield;
+		Camera *const m_cameraPtr;
+		Starfield *const m_starfieldPtr;
+		bool m_firstUpdate{ true };
 		GameModels m_models;
-
-		Camera m_camera;
 		bool m_cameraFollowingEntity{ false };
 		WorldID m_cameraFollowEntityID{};
 		b2Vec2 m_spawnAsteroidStartingDirection{};

@@ -11,7 +11,7 @@
 namespace Space
 {
 	const b2Vec2 STARFIELD_DEFAULT_VELOCITY{ -10.0f, -10.0f };
-	const float STARFIELD_SMALLER_STARS_WEIGHT_EXPONENT = 8.0f;
+	const int STARFIELD_SMALLER_STARS_WEIGHT_EXPONENT = 1;
 	struct StarfieldDef
 	{
 		float maxCameraDimension;
@@ -26,12 +26,15 @@ namespace Space
 	class Starfield
 	{
 	public:
-		void Init(const StarfieldDef& def, const b2Vec2& cameraPosition);
+		void Init(const StarfieldDef& def);
+		void InitCameraPosition(const b2Vec2& cameraPosition);
+		void Randomize();
 		void Update(const b2Vec2& cameraPosition);
 		void Draw() const;
-		void Translate(const b2Vec2& translation);
+		void MoveCameraWithoutMovingStars(const b2Vec2& translation);
 
 	private:
+		StarfieldDef m_def;
 		b2Vec2 m_cameraPosition;
 		d2d::Rect m_boundaryRect;
 		struct Star
@@ -42,6 +45,5 @@ namespace Space
 			d2d::Color color;
 		};
 		std::vector<Star> m_starList;
-		d2d::Range<int> m_pointSizeIndexRange;
 	};
 }

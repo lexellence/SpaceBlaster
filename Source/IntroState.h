@@ -9,14 +9,13 @@
 \**************************************************************************************/
 #pragma once
 #include "AppState.h"
-#include "Starfield.h"
-#include "Camera.h"
 
 namespace Space
 {
 	class IntroState : public AppState
 	{
 	public:
+		IntroState(Camera* cameraPtr, Starfield* starfieldPtr);
 		void Init() override;
 		void ProcessEvent(const SDL_Event& event) override;
 		AppStateID Update(float dt) override;
@@ -33,7 +32,6 @@ namespace Space
 			{ 0.0f, 1.0f, 0.0f, 1.0f },
 			0.045f
 		};
-
 
 		const std::string m_author{ "Lexellence Games" };
 		const d2d::Alignment m_authorAlignment{ d2d::Alignment::CENTER_TOP };
@@ -60,9 +58,5 @@ namespace Space
 		float m_titleSpeedScreensPerSecond;
 		bool m_authorFadingIn;
 		float m_authorFadeDelayElapsed;
-
-		Camera m_camera;
-		Starfield m_starfield;
-		const b2Vec2 m_starfieldVelocity{ 10.0f, 10.0f };
 	};
 }

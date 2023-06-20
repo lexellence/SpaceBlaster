@@ -44,10 +44,17 @@ namespace Space
 		}
 		d2d::SeedRandomNumberGenerator();
 
-		// Allocate AppState memory
-		m_introStatePtr = std::make_shared<IntroState>();
-		m_mainMenuStatePtr = std::make_shared<MainMenuState>();
-		m_gameStatePtr = std::make_shared<GameState>();
+		// Camera, starfield
+		GameDef gameDef;
+		gameDef.LoadFrom("Data/game.hjson");
+		m_camera.Init(gameDef.cameraDimensionRange, gameDef.cameraZoomSpeed, gameDef.cameraInitialZoomOutPercent);
+		d2LogDebug << "gameDef.starfield.pointSizeIndexRange " << gameDef.starfield.pointSizeIndexRange.GetMin() << " " << gameDef.starfield.pointSizeIndexRange.GetMax();
+		m_starfield.Init(gameDef.starfield);
+
+		// AppStates
+		m_introStatePtr = std::make_shared<IntroState>(&m_camera, &m_starfield);
+		m_mainMenuStatePtr = std::make_shared<MainMenuState>(&m_camera, &m_starfield);
+		m_gameStatePtr = std::make_shared<GameState>(&m_camera, &m_starfield);
 
 		// Start first app state
 		m_currentState = FIRST_APP_STATE;
@@ -69,7 +76,7 @@ namespace Space
 			}
 			else
 				if(m_hasFocus)
-					DrawCurrentState();
+					Draw();
 		}
 	}
 	App::~App()
@@ -146,7 +153,7 @@ namespace Space
 			}
 		}
 	}
-	void App::DrawCurrentState()
+	void App::Draw()
 	{
 		std::shared_ptr<AppState> currentStatePtr{ GetStatePtr(m_currentState) };
 

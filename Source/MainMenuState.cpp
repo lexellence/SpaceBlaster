@@ -10,10 +10,14 @@
 #include "pch.h"
 #include "MainMenuState.h"
 #include "AppState.h"
+#include "GameDef.h"
+#include "Starfield.h"
+#include "Camera.h"
 
 namespace Space
 {
-	MainMenuState::MainMenuState()
+	MainMenuState::MainMenuState(Camera* cameraPtr, Starfield* starfieldPtr)
+		: AppState{ cameraPtr, starfieldPtr }
 	{
 		m_menu.SetTitle(m_title);
 		m_menu.SetTitleStyle(m_titleTextStyle);
@@ -40,6 +44,11 @@ namespace Space
 	}
 	AppStateID MainMenuState::Update(float dt)
 	{
+		// Starfield
+		m_cameraPtr->SetPosition(m_cameraPtr->GetPosition() - (dt * STARFIELD_DEFAULT_VELOCITY));
+		m_starfieldPtr->Update(m_cameraPtr->GetPosition());
+
+		// Menu
 		std::string pressedButton;
 		if(m_menu.PollPressedButton(pressedButton))
 		{
@@ -52,6 +61,10 @@ namespace Space
 	}
 	void MainMenuState::Draw()
 	{
+		// Starfield
+		d2d::Window::SetCameraRect(m_cameraPtr->GetRect());
+		m_starfieldPtr->Draw();
+
 		m_menu.Draw();
 	}
 }

@@ -14,12 +14,15 @@
 
 namespace Space
 {
+	GameState::GameState(Camera* cameraPtr, Starfield* starfieldPtr)
+		: AppState{ cameraPtr, starfieldPtr },
+		  m_game{ cameraPtr, starfieldPtr }
+	{}
 	void GameState::Init()
 	{
 		m_menu.SetTitleStyle(m_titleTextStyle);
 		m_showFPS = false;
 		ResetController();
-		m_game.Init();
 		StartActionMode(true);
 	}
 	AppStateID GameState::Update(float dt)

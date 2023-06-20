@@ -11,16 +11,16 @@
 #include "IntroState.h"
 #include "AppState.h"
 #include "GameDef.h"
+#include "Starfield.h"
+#include "Camera.h"
 
 namespace Space
 {
+	IntroState::IntroState(Camera* cameraPtr, Starfield* starfieldPtr)
+		: AppState{ cameraPtr, starfieldPtr }
+	{}
 	void IntroState::Init()
 	{
-		GameDef gameDef;
-		gameDef.LoadFrom("Data/game.hjson");
-		m_camera.Init(gameDef.cameraDimensionRange, gameDef.cameraZoomSpeed, gameDef.cameraInitialZoomOutPercent);
-		m_starfield.Init(gameDef.starfield, b2Vec2_zero);
-
 		m_gotoMenu = false;
 		m_animationsComplete = false;
 		m_titleFalling = true;
@@ -55,11 +55,11 @@ namespace Space
 		if(m_gotoMenu)
 			return AppStateID::MAIN_MENU;
 
-		// Update starfield
-		m_camera.SetPosition(m_camera.GetPosition() - (dt * m_starfieldVelocity));
-		m_starfield.Update(m_camera.GetPosition());
+		// Starfield
+		m_cameraPtr->SetPosition(m_cameraPtr->GetPosition() - (dt * STARFIELD_DEFAULT_VELOCITY));
+		m_starfieldPtr->Update(m_cameraPtr->GetPosition());
 
-		// Update intro animations
+		// Intro animations
 		if(!m_animationsComplete)
 		{
 			if(m_titleFalling)
@@ -112,9 +112,9 @@ namespace Space
 		d2d::Window::DisableTextures();
 		d2d::Window::EnableBlending();
 
-		// Draw stars
-		d2d::Window::SetCameraRect(m_camera.GetRect());
-		m_starfield.Draw();
+		// Starfield
+		d2d::Window::SetCameraRect(m_cameraPtr->GetRect());
+		m_starfieldPtr->Draw();
 
 		// Set camera to screen resolution
 		b2Vec2 resolution{ d2d::Window::GetScreenResolution() };

@@ -25,6 +25,7 @@ namespace Space
 	class GameState : public AppState
 	{
 	public:
+		GameState(Camera* cameraPtr, Starfield* starfieldPtr);
 		void Init() override;
 		void ProcessEvent(const SDL_Event& event) override;
 		AppStateID Update(float dt) override;

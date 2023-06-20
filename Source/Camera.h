@@ -22,6 +22,7 @@ namespace Space
 		const b2Vec2& GetPosition() const;
 		void SetPosition(const b2Vec2& position);
 		d2d::Rect GetRect() const;
+		void ResetZoom();
 
 	private:
 		d2d::Range<float> m_dimensionRange;
