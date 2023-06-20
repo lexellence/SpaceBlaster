@@ -8,9 +8,9 @@
   {
     edgePaddingFactor: 1.3
     density: 0.01
-    speedFactorRange: [ 0.001, 0.20 ]
-    pointSizeIndexRange: [ 0, 7 ]
-    maxPointSizeIndexVariation: 2
+    speedFactorRange: [ 0.0001, 0.20 ]
+    pointSizeIndexRange: [ 5, 10 ]
+    maxPointSizeIndexVariation: 0
     colorMin: [ 1.0, 1.0, 1.0, 0.3 ]
     colorMax: [ 1.0, 1.0, 1.0, 0.95 ]
     maxAlphaVariation: 0.2
