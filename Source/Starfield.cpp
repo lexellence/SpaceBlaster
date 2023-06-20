@@ -22,36 +22,45 @@ namespace Space
 		}
 
 		// Calculate number of stars and make sure it's not too many
-		float starfieldArea{ m_boundaryRect.GetWidth() * m_boundaryRect.GetHeight() };
-		m_numStars = d2d::GetClamped((StarID)(starfieldArea * def.density), { 0, STARFIELD_MAX_STARS });
+		{
+			float starfieldArea = m_boundaryRect.GetWidth() * m_boundaryRect.GetHeight();
+			size_t numStars = starfieldArea * def.density;
+			m_starList.resize(numStars);
+		}
 
 		// Random starfield
-		for(StarID i = 0; i < m_numStars; ++i)
+		for(Star& star : m_starList)
 		{
 			// Random position
-			m_positions[i] = d2d::RandomVec2InRect(m_boundaryRect);
+			star.position = d2d::RandomVec2InRect(m_boundaryRect);
 
 			// Speed/relativeSize/color properties are proportional to each other
 			float randomPercent{ d2d::RandomFloatPercent() };
-			float weightedRandomPercent{ powf(randomPercent, 8) };
-			m_speedFactors[i] = d2d::Lerp(def.speedFactorRange, weightedRandomPercent);
-			m_pointSizeIndices[i] = (int)(d2d::Lerp((float)def.pointSizeIndexRange.GetMin(), (float)def.pointSizeIndexRange.GetMax(), weightedRandomPercent) + 0.5f);
-			int randomPointSizeIndexVariation{ d2d::RandomInt({-def.maxPointSizeIndexVariation, def.maxPointSizeIndexVariation}) };
-			m_pointSizeIndices[i] = d2d::GetClamped(m_pointSizeIndices[i] + randomPointSizeIndexVariation, d2d::Window::VALID_POINT_SIZES);
-			m_colors[i] = def.colorRange.Lerp(weightedRandomPercent);
+			float weightedRandomPercent{ powf(randomPercent, STARFIELD_SMALLER_STARS_WEIGHT_EXPONENT) };
+			star.speedFactor = d2d::Lerp(def.speedFactorRange, weightedRandomPercent);
+			{
+				int pointSizeIndex = d2d::Lerp((float)m_pointSizeIndexRange.GetMin(), (float)m_pointSizeIndexRange.GetMax(), weightedRandomPercent) + 0.5f;
+				int randomPointSizeIndexVariation{ d2d::RandomInt({-def.maxPointSizeIndexVariation, def.maxPointSizeIndexVariation}) };
+				star.pointSizeIndex = d2d::GetClamped(pointSizeIndex + randomPointSizeIndexVariation, d2d::Window::VALID_POINT_SIZES);
+			}
 
-			float randomAlphaVariation = d2d::RandomFloat({ -def.maxAlphaVariation, def.maxAlphaVariation });
-			m_colors[i].alpha = std::clamp(m_colors[i].alpha + randomAlphaVariation, 0.0f, 1.0f);
+			// Color
+			star.color = def.colorRange.Lerp(weightedRandomPercent);
+			{
+				float randomAlphaVariation = d2d::RandomFloat({ -def.maxAlphaVariation, def.maxAlphaVariation });
+				star.color.alpha += randomAlphaVariation;
+				d2d::Clamp(star.color.alpha, { 0.0f, 1.0f });
+			}
 		}
 	}
 	void Starfield::Update(const b2Vec2& cameraPosition)
 	{
 		b2Vec2 cameraChange{ cameraPosition - m_cameraPosition };
-		for(StarID i = 0; i < m_numStars; ++i)
+		for(Star& star : m_starList)
 		{
 			// Move star proportional to viewport change, then wrap around the boundary
-			m_positions[i] -= m_speedFactors[i] * cameraChange;
-			d2d::WrapVector(m_positions[i], m_boundaryRect);
+			star.position -= star.speedFactor * cameraChange;
+			d2d::WrapVector(star.position, m_boundaryRect);
 		}
 		m_cameraPosition = cameraPosition;
 	}
@@ -62,12 +71,12 @@ namespace Space
 		for(int sizeIndex = m_pointSizeIndexRange.GetMin(); sizeIndex <= m_pointSizeIndexRange.GetMax(); ++sizeIndex)
 		{
 			d2d::Window::SetPointSize(d2d::Window::POINT_SIZES[sizeIndex]);
-			for(StarID i = 0; i < m_numStars; ++i)
+			for(const Star& star : m_starList)
 			{
-				if(m_pointSizeIndices[i] == sizeIndex)
+				if(star.pointSizeIndex == sizeIndex)
 				{
-					d2d::Window::SetColor(m_colors[i]);
-					d2d::Window::DrawPoint(m_positions[i]);
+					d2d::Window::SetColor(star.color);
+					d2d::Window::DrawPoint(star.position);
 				}
 			}
 		}

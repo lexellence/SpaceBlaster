@@ -10,8 +10,8 @@
 #pragma once
 namespace Space
 {
-	using StarID = unsigned;
-	const StarID STARFIELD_MAX_STARS = 50000;
+	const b2Vec2 STARFIELD_DEFAULT_VELOCITY{ -10.0f, -10.0f };
+	const float STARFIELD_SMALLER_STARS_WEIGHT_EXPONENT = 8.0f;
 	struct StarfieldDef
 	{
 		float maxCameraDimension;
@@ -34,11 +34,14 @@ namespace Space
 	private:
 		b2Vec2 m_cameraPosition;
 		d2d::Rect m_boundaryRect;
-		StarID m_numStars{};
-		b2Vec2 m_positions[STARFIELD_MAX_STARS];
-		float m_speedFactors[STARFIELD_MAX_STARS];
-		int m_pointSizeIndices[STARFIELD_MAX_STARS];
+		struct Star
+		{
+			b2Vec2 position;
+			float speedFactor;
+			int pointSizeIndex;
+			d2d::Color color;
+		};
+		std::vector<Star> m_starList;
 		d2d::Range<int> m_pointSizeIndexRange;
-		d2d::Color m_colors[STARFIELD_MAX_STARS];
 	};
 }
