@@ -30,6 +30,7 @@ namespace Space
 	//\-----------------/-----------------------------------------
 	void Game::ClearLevel(const b2Vec2& newWorldDimensions)
 	{
+		m_starfieldPtr->Randomize();
 		m_cameraPtr->ResetZoom();
 		m_cameraFollowingEntity = false;
 		m_player.isSet = false;
