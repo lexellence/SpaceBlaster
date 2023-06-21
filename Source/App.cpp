@@ -117,7 +117,7 @@ namespace Space
 		catch(const GameException& e)
 		{
 			std::string message{ "AppState init error: "s + std::string{ e.what() } };
-			SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Error", message.c_str(), nullptr);
+			d2d::Window::ShowSimpleMessageBox(d2d::MessageBoxType::D2D_ERROR, "Error"s, message);
 			m_currentState = AppStateID::QUIT;
 		}
 	}
@@ -146,6 +146,9 @@ namespace Space
 				case SDL_WINDOWEVENT_CLOSE:
 					m_nextState = AppStateID::QUIT;
 					return;
+				case SDL_WINDOWEVENT_SIZE_CHANGED:
+					d2d::Window::Resize(event.window.data1, event.window.data2);
+					return;
 				}
 			}
 			currentStatePtr->ProcessEvent(event);
@@ -160,7 +163,7 @@ namespace Space
 			catch(const GameException& e)
 			{
 				std::string message{ "Game update error: "s + std::string{ e.what() } };
-				SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Error", message.c_str(), nullptr);
+				d2d::Window::ShowSimpleMessageBox(d2d::MessageBoxType::D2D_ERROR, "Error"s, message);
 				m_nextState = AppStateID::QUIT;
 			}
 		}
