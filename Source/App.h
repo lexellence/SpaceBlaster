@@ -26,6 +26,7 @@ namespace Space
 		void Run();
 	private:
 		void Init();
+		void InitStarfield();
 		void Step(float dt);
 
 		std::shared_ptr<AppState> GetStatePtr(AppStateID appState);

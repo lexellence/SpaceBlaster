@@ -12,13 +12,13 @@
 
 namespace Space
 {
-	void Starfield::Init(const StarfieldDef& def)
+	void Starfield::Init(const StarfieldDef& def, float maxCameraDimension)
 	{
 		m_def = def;
 		m_cameraPosition = b2Vec2_zero;
 		{
 			// Boundary
-			float paddedSize{ m_def.maxCameraDimension * m_def.edgePaddingFactor };
+			float paddedSize{ maxCameraDimension * m_def.edgePaddingFactor };
 			m_boundaryRect.SetCenter(b2Vec2_zero, { paddedSize, paddedSize });
 		}
 		{

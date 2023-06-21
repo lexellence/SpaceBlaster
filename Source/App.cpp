@@ -15,6 +15,9 @@
 #include "MainMenuState.h"
 #include "GameState.h"
 #include "Exceptions.h"
+#include "CameraSettings.h"
+#include "StarfieldSettings.h"
+
 namespace Space
 {
 	void App::Run()
@@ -44,12 +47,9 @@ namespace Space
 		}
 		d2d::SeedRandomNumberGenerator();
 
-		// Camera, starfield
-		GameDef gameDef;
-		gameDef.LoadFrom("Data/game.hjson");
-		m_camera.Init(gameDef.cameraDimensionRange, gameDef.cameraZoomSpeed, gameDef.cameraInitialZoomOutPercent);
-		d2LogDebug << "gameDef.starfield.pointSizeIndexRange " << gameDef.starfield.pointSizeIndexRange.GetMin() << " " << gameDef.starfield.pointSizeIndexRange.GetMax();
-		m_starfield.Init(gameDef.starfield);
+		m_camera.Init(CameraSettings::CAMERA_SIZE_RANGE, CameraSettings::ZOOM_SPEED, 
+			CameraSettings::INITIAL_ZOOM_OUT_PERCENT);
+		InitStarfield();
 
 		// AppStates
 		m_introStatePtr = std::make_shared<IntroState>(&m_camera, &m_starfield);
@@ -60,6 +60,18 @@ namespace Space
 		m_currentState = FIRST_APP_STATE;
 		m_nextState = FIRST_APP_STATE;
 		InitCurrentState();
+	}
+	void App::InitStarfield()
+	{
+		StarfieldDef def;
+		def.edgePaddingFactor = StarfieldSettings::EDGE_PADDING_FACTOR;
+		def.density = StarfieldSettings::DENSITY;
+		def.speedFactorRange = StarfieldSettings::SPEED_FACTOR_RANGE;
+		def.pointSizeIndexRange = StarfieldSettings::POINT_SIZE_INDEX_RANGE;
+		def.maxPointSizeIndexVariation = StarfieldSettings::MAX_POINT_SIZE_INDEX_VARIATION;
+		def.colorRange = StarfieldSettings::COLOR_RANGE;
+		def.maxAlphaVariation = StarfieldSettings::MAX_ALPHA_VARIATION;
+		m_starfield.Init(def, CameraSettings::CAMERA_SIZE_RANGE.GetMax());
 	}
 	void App::Step(float dt)
 	{

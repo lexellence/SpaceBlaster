@@ -10,7 +10,6 @@
 #include "pch.h"
 #include "IntroState.h"
 #include "AppState.h"
-#include "GameDef.h"
 #include "Starfield.h"
 #include "Camera.h"
 

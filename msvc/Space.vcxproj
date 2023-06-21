@@ -16,7 +16,6 @@
     <ClCompile Include="..\Source\Camera.cpp" />
     <ClCompile Include="..\Source\EntityFactory.cpp" />
     <ClCompile Include="..\Source\Game.cpp" />
-    <ClCompile Include="..\Source\GameDef.cpp" />
     <ClCompile Include="..\Source\GameState.cpp" />
     <ClCompile Include="..\Source\IntroState.cpp" />
     <ClCompile Include="..\Source\main.cpp" />
@@ -39,11 +38,11 @@
     <ClInclude Include="..\Source\AppState.h" />
     <ClInclude Include="..\Source\b2_user_settings.h" />
     <ClInclude Include="..\Source\Camera.h" />
+    <ClInclude Include="..\Source\CameraSettings.h" />
     <ClInclude Include="..\Source\EntityFactory.h" />
     <ClInclude Include="..\Source\Exceptions.h" />
     <ClInclude Include="..\Source\Game.h" />
     <ClInclude Include="..\Source\GameConstants.h" />
-    <ClInclude Include="..\Source\GameDef.h" />
     <ClInclude Include="..\Source\GameInput.h" />
     <ClInclude Include="..\Source\GameModels.h" />
     <ClInclude Include="..\Source\GameState.h" />
@@ -52,6 +51,7 @@
     <ClInclude Include="..\Source\ParticleSystem.h" />
     <ClInclude Include="..\Source\pch.h" />
     <ClInclude Include="..\Source\Starfield.h" />
+    <ClInclude Include="..\Source\StarfieldSettings.h" />
     <ClInclude Include="..\Source\World.h" />
     <ClInclude Include="..\Source\WorldDef.h" />
   </ItemGroup>

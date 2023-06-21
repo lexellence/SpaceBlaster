@@ -10,7 +10,6 @@
 #pragma once
 #include "World.h"
 #include "Camera.h"
-#include "GameDef.h"
 #include "Starfield.h"
 #include "GameConstants.h"
 #include "GameModels.h"

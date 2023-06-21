@@ -14,7 +14,6 @@ namespace Space
 	const int STARFIELD_SMALLER_STARS_WEIGHT_EXPONENT = 1;
 	struct StarfieldDef
 	{
-		float maxCameraDimension;
 		float edgePaddingFactor;
 		float density;
 		d2d::Range<float> speedFactorRange;
@@ -26,7 +25,7 @@ namespace Space
 	class Starfield
 	{
 	public:
-		void Init(const StarfieldDef& def);
+		void Init(const StarfieldDef& def, float maxCameraDimension);
 		void InitCameraPosition(const b2Vec2& cameraPosition);
 		void Randomize();
 		void Update(const b2Vec2& cameraPosition);
