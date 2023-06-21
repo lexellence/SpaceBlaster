@@ -9,8 +9,10 @@
   window: {
     title: "Space Blaster"
     fullScreen: true
-    position: [ 0, 0 ]
-    size: [ 0, 0 ]
+    x: 0
+    y: 0
+    width: 720
+    height: 480
     vsync: true
     doubleBuffer: true
     antiAliasingSamples: 4  // 1 disables AA, 2-16 enables AA

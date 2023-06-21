@@ -46,11 +46,11 @@ namespace Space
 			window.title = d2d::GetString(windowData, "title");
 			window.fullScreen = d2d::GetBool(windowData, "fullScreen");
 
-			window.position.at(0) = d2d::GetVectorInt(windowData, "position", 0);
-			window.position.at(1) = d2d::GetVectorInt(windowData, "position", 1);
+			window.x = d2d::GetInt(windowData, "x");
+			window.y = d2d::GetInt(windowData, "y");
 
-			window.size.at(0) = d2d::GetVectorInt(windowData, "size", 0);
-			window.size.at(1) = d2d::GetVectorInt(windowData, "size", 1);
+			window.width = d2d::GetInt(windowData, "width");
+			window.height = d2d::GetInt(windowData, "height");
 
 			window.vsync = d2d::GetBool(windowData, "vsync");
 			window.doubleBuffer = d2d::GetBool(windowData, "doubleBuffer");
@@ -101,8 +101,8 @@ namespace Space
 
 		// window
 		if(window.title.empty()) throw SettingOutOfRangeException{ "window.title" };
-		if(window.size[0] < 0) throw SettingOutOfRangeException{ "window.size[0]" };
-		if(window.size[1] < 0) throw SettingOutOfRangeException{ "window.size[1]" };
+		if(window.width < 0) throw SettingOutOfRangeException{ "window.width" };
+		if(window.height < 0) throw SettingOutOfRangeException{ "window.height" };
 		if(!d2d::Window::VALID_ANTI_ALIASING_SAMPLES.Contains(window.antiAliasingSamples))
 			throw SettingOutOfRangeException{ "window.antiAliasingSamples" };
 
