@@ -12,6 +12,26 @@
 #include "Exceptions.h"
 namespace Space
 {
+	namespace
+	{
+		//+-----------------------------\-----------------------------
+		//|	   StringToImageInitFlag    |
+		//\-----------------------------/-----------------------------
+		int StringToImageInitFlag(std::string extensionString)
+		{
+			d2d::ToLowerCase(extensionString);
+			if(extensionString == "jpg")
+				return IMG_INIT_JPG;
+			else if(extensionString == "png")
+				return IMG_INIT_PNG;
+			else if(extensionString == "tif")
+				return IMG_INIT_TIF;
+			else if(extensionString == "webp")
+				return IMG_INIT_WEBP;
+			else
+				return 0;
+		}
+	}
 	void AppDef::LoadFrom(const std::string& appFilePath)
 	{
 		d2d::HjsonValue data{ d2d::FileToHJSON(appFilePath) };
@@ -68,7 +88,7 @@ namespace Space
 			for(unsigned i = 0; i < windowData["imageExtensions"].size(); ++i)
 			{
 				std::string flagString{ d2d::GetVectorString(windowData, "imageExtensions"s, i) };
-				int flag{ d2d::StringToImageInitFlag(flagString) };
+				int flag{ StringToImageInitFlag(flagString) };
 				if(!flag)
 					throw LoadSettingsFileException{ appFilePath + "Invalid value: window.imageExtensions["s + d2d::ToString(i) + "]: "s + flagString };
 				window.imageExtensions |= flag;

@@ -123,14 +123,14 @@ namespace Space
 		d2d::Window::SetColor(m_titleTextStyle.color);
 		d2d::Window::PushMatrix();
 		d2d::Window::Translate(m_titlePosition * resolution);
-		d2d::Window::DrawString(m_title, m_titleAlignment, m_titleTextStyle.size * resolution.x, m_titleTextStyle.fontPtr);
+		d2d::Window::DrawString(m_title, m_titleTextStyle.size * resolution.y, m_titleTextStyle.fontRefPtr, m_titleAnchor);
 		d2d::Window::PopMatrix();
 
 		// Draw author
 		d2d::Window::SetColor(m_authorTextStyle.color);
 		d2d::Window::PushMatrix();
 		d2d::Window::Translate(m_authorPosition * resolution);
-		d2d::Window::DrawString(m_author, m_authorAlignment, m_authorTextStyle.size * resolution.x, m_authorTextStyle.fontPtr);
+		d2d::Window::DrawString(m_author, m_authorTextStyle.size * resolution.y, m_authorTextStyle.fontRefPtr, m_authorAlignment);
 		d2d::Window::PopMatrix();
 	}
 }

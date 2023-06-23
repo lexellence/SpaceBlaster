@@ -26,7 +26,7 @@ namespace Space
 		d2d::FontReference m_orbitronLightFont{ "Fonts/OrbitronLight.otf" };
 
 		const std::string m_title{ "Space Blaster" };
-		const d2d::Alignment m_titleAlignment{ d2d::Alignment::CENTER_BOTTOM };
+		const d2d::AlignmentAnchor m_titleAnchor{ d2d::AlignmentAnchorX::CENTER, d2d::AlignmentAnchorY::BOTTOM };
 		const d2d::TextStyle m_titleTextStyle{
 			&m_orbitronLightFont,
 			{ 0.0f, 1.0f, 0.0f, 1.0f },
@@ -34,7 +34,7 @@ namespace Space
 		};
 
 		const std::string m_author{ "Lexellence Games" };
-		const d2d::Alignment m_authorAlignment{ d2d::Alignment::CENTER_TOP };
+		const d2d::AlignmentAnchor m_authorAlignment{ d2d::AlignmentAnchorX::CENTER, d2d::AlignmentAnchorY::TOP };
 		d2d::TextStyle m_authorTextStyle{
 			&m_alexBrushFont,
 			d2d::Color(),

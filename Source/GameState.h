@@ -117,7 +117,7 @@ namespace Space
 
 		// FPS display
 		const b2Vec2 m_fpsPosition{ 1.0f, 1.0f };
-		const d2d::Alignment m_fpsAlignment{ d2d::Alignment::RIGHT_TOP };
+		const d2d::AlignmentAnchor m_fpsAlignment{ d2d::AlignmentAnchorX::RIGHT, d2d::AlignmentAnchorY::TOP };
 		const d2d::TextStyle m_fpsTextStyle{
 			&m_orbitronLightFont,
 			{ 1.0f, 1.0f, 0.0f, 1.0f },
