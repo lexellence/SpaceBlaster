@@ -48,6 +48,7 @@
     <ClInclude Include="..\Source\GameState.h" />
     <ClInclude Include="..\Source\IntroState.h" />
     <ClInclude Include="..\Source\MainMenuState.h" />
+    <ClInclude Include="..\Source\GUISettings.h" />
     <ClInclude Include="..\Source\ParticleSystem.h" />
     <ClInclude Include="..\Source\pch.h" />
     <ClInclude Include="..\Source\Starfield.h" />

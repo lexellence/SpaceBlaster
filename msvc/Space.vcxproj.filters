@@ -143,5 +143,8 @@
     <ClInclude Include="..\Source\CameraSettings.h">
       <Filter>Source Files\App</Filter>
     </ClInclude>
+    <ClInclude Include="..\Source\GUISettings.h">
+      <Filter>Source Files\States</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

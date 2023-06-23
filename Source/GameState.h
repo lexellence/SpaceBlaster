@@ -61,31 +61,10 @@ namespace Space
 		Keyboard m_keyboard;
 		PlayerController m_playerController;
 
-		// Text
-		d2d::FontReference m_orbitronLightFont{ "Fonts/OrbitronLight.otf"s };
-		const d2d::TextStyle m_buttonTextStyle{
-			&m_orbitronLightFont,
-			{ 0.0f, 0.5f, 0.8f, 1.0f },
-				0.035f
-		};
-		const d2d::TextStyle m_titleTextStyle{
-			&m_orbitronLightFont,
-			{ 0.8f, 0.8f, 0.8f, 0.8f },
-				0.045f
-		};
-
-		// Menu colors
-		const d2d::Color m_buttonColor{ d2d::COLOR_ZERO };
-		const d2d::Color m_buttonHighlightColor{ 1.0f, 1.0f, 1.0f, 0.3f };
-		const d2d::Color m_buttonBorderColor{ 0.5f, 0.5f, 0.5f, 0.5f };
-		const d2d::Color m_postLevelBackgroundColor{ 0.1f, 0.1f, 0.1f, 0.6f };
-		const d2d::Color m_pauseBackgroundColor{ 0.5f, 0.5f, 0.5f, 0.3f };
-
 		// Pause menu
 		const std::string m_pauseTitle{ "Paused" };
 		const std::string m_resumeString{ "Resume" };
 		const std::string m_quitString{ "Quit" };
-		const std::vector<std::string> m_pauseMenuLabels{ m_resumeString, m_quitString };
 
 		// Post-level menu
 		const std::string m_postLevelTitle{ "Would you like to visit the shop to purchase upgrades?" };
@@ -100,28 +79,9 @@ namespace Space
 		const std::string m_engineString{ "Engine Upgrades" };
 		const std::string m_gadgetsString{ "Gadgets" };
 		const std::string m_backString{ "Back" };
-		const std::vector<std::string> m_shopMenuLabels
-		{ m_backString, m_weaponsString, m_protectionString, m_engineString, m_gadgetsString };
-		const std::vector<std::string> m_weaponsMenuLabels{ m_backString };
-		const std::vector<std::string> m_protectionMenuLabels{ m_backString };
-		const std::vector<std::string> m_engineMenuLabels{ m_backString };
-		const std::vector<std::string> m_gadgetsMenuLabels{ m_backString };
-
-		// Menu setting helpers
-		 d2d::MenuButton m_newButton{.textStyle{ m_buttonTextStyle },
-			 .color{ m_buttonColor },
-			 .highlightColor{ m_buttonHighlightColor },
-			 .borderColor{ m_buttonBorderColor }
-		};
-		void SetMenuButtons(const std::vector<std::string>& labelList);
 
 		// FPS display
 		const b2Vec2 m_fpsPosition{ 1.0f, 1.0f };
 		const d2d::AlignmentAnchor m_fpsAlignment{ d2d::AlignmentAnchorX::RIGHT, d2d::AlignmentAnchorY::TOP };
-		const d2d::TextStyle m_fpsTextStyle{
-			&m_orbitronLightFont,
-			{ 1.0f, 1.0f, 0.0f, 1.0f },
-				0.05f
-		};
 	};
 }

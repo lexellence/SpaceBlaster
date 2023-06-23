@@ -11,7 +11,7 @@
 #include "GameState.h"
 #include "AppState.h"
 #include "Game.h"
-
+#include "GUISettings.h"
 namespace Space
 {
 	GameState::GameState(Camera* cameraPtr, Starfield* starfieldPtr)
@@ -20,7 +20,7 @@ namespace Space
 	{}
 	void GameState::Init()
 	{
-		m_menu.SetTitleStyle(m_titleTextStyle);
+		m_menu.SetTitleStyle(GUISettings::menuTitleTextStyle);
 		m_showFPS = false;
 		ResetController();
 		StartActionMode(true);
@@ -113,59 +113,89 @@ namespace Space
 		if(startLevel)
 			m_game.StartCurrentLevel();
 	}
-	void GameState::SetMenuButtons(const std::vector<std::string>& labelList)
-	{
-		m_menu.RemoveAllButtons();
-		for(auto label : labelList)
-		{
-			m_newButton.label = label;
-			m_menu.AddButton(m_newButton);
-		}
-	}
 	void GameState::StartPauseMenu()
 	{
 		m_mode = GameMode::PAUSED;
-		m_menu.Init();
+		m_menu.ClearButtons();
+
 		m_menu.SetTitle(m_pauseTitle);
-		m_menu.SetBackgroundColor(m_pauseBackgroundColor);
-		SetMenuButtons(m_pauseMenuLabels);
+		m_menu.SetBackgroundColor(GUISettings::pauseMenuBackgroundColor);
+
+		d2d::MenuButton button;
+		button.label = m_quitString;
+		button.style = GUISettings::backButtonStyle;
+		m_menu.AddButton(button);
+		button.label = m_resumeString;
+		button.style = GUISettings::normalButtonStyle;
+		m_menu.AddButton(button, true);
 	}
 	void GameState::StartPostLevelMenu(PostLevelMenu mode)
 	{
 		m_mode = GameMode::POST_LEVEL;
 		m_postLevelMenuMode = mode;
+		m_menu.ClearButtons();
 
-		m_menu.Init();
-		m_menu.SetBackgroundColor(m_postLevelBackgroundColor);
+		m_menu.SetBackgroundColor(GUISettings::postLevelMenuBackgroundColor);
+		d2d::MenuButton button;
 		if(m_postLevelMenuMode == PostLevelMenu::MAIN)
 		{
 			m_menu.SetTitle(m_postLevelTitle);
-			SetMenuButtons(m_postLevelMenuLabels);
+			button.label = m_quitString;
+			button.style = GUISettings::backButtonStyle;
+			m_menu.AddButton(button);
+			button.label = m_purchaseString;
+			button.style = GUISettings::normalButtonStyle;
+			m_menu.AddButton(button);
+			button.label = m_nextLevelString;
+			button.style = GUISettings::normalButtonStyle;
+			m_menu.AddButton(button, true);
 		}
 		else if(m_postLevelMenuMode == PostLevelMenu::SHOP_MAIN)
 		{
 			m_menu.SetTitle(m_shopTitle);
-			SetMenuButtons(m_shopMenuLabels);
+			button.label = m_backString;
+			button.style = GUISettings::backButtonStyle;
+			m_menu.AddButton(button, true);
+			button.label = m_weaponsString;
+			button.style = GUISettings::normalButtonStyle;
+			m_menu.AddButton(button);
+			button.label = m_protectionString;
+			button.style = GUISettings::normalButtonStyle;
+			m_menu.AddButton(button);
+			button.label = m_engineString;
+			button.style = GUISettings::normalButtonStyle;
+			m_menu.AddButton(button);
+			button.label = m_gadgetsString;
+			button.style = GUISettings::normalButtonStyle;
+			m_menu.AddButton(button);
 		}
 		else if(m_postLevelMenuMode == PostLevelMenu::SHOP_WEAPONS)
 		{
 			m_menu.SetTitle(m_weaponsString);
-			SetMenuButtons(m_weaponsMenuLabels);
+			button.label = m_backString;
+			button.style = GUISettings::backButtonStyle;
+			m_menu.AddButton(button, true);
 		}
 		else if(m_postLevelMenuMode == PostLevelMenu::SHOP_PROTECTION)
 		{
 			m_menu.SetTitle(m_protectionString);
-			SetMenuButtons(m_protectionMenuLabels);
+			button.label = m_backString;
+			button.style = GUISettings::backButtonStyle;
+			m_menu.AddButton(button, true);
 		}
 		else if(m_postLevelMenuMode == PostLevelMenu::SHOP_ENGINE)
 		{
 			m_menu.SetTitle(m_engineString);
-			SetMenuButtons(m_engineMenuLabels);
+			button.label = m_backString;
+			button.style = GUISettings::backButtonStyle;
+			m_menu.AddButton(button, true);
 		}
 		else if(m_postLevelMenuMode == PostLevelMenu::SHOP_GADGETS)
 		{
 			m_menu.SetTitle(m_gadgetsString);
-			SetMenuButtons(m_gadgetsMenuLabels);
+			button.label = m_backString;
+			button.style = GUISettings::backButtonStyle;
+			m_menu.AddButton(button, true);
 		}
 	}
 	void GameState::Draw()
@@ -189,10 +219,10 @@ namespace Space
 
 			d2d::Window::DisableTextures();
 			d2d::Window::EnableBlending();
-			d2d::Window::SetColor(m_fpsTextStyle.color);
+			d2d::Window::SetColor(GUISettings::fpsTextStyle.color);
 			d2d::Window::PushMatrix();
 			d2d::Window::Translate(m_fpsPosition * resolution);
-			d2d::Window::DrawString(fpsString, m_fpsTextStyle.size * resolution.y, m_fpsTextStyle.fontRefPtr, m_fpsAlignment);
+			d2d::Window::DrawString(fpsString, GUISettings::fpsTextStyle.size * resolution.y, GUISettings::fpsTextStyle.fontRefPtr, m_fpsAlignment);
 			d2d::Window::PopMatrix();
 		}
 	}
