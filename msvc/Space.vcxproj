@@ -109,7 +109,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>C:\boost\boost_1_82_0;$(ProjectDir)..\..\..\libs\SDL2\include;$(ProjectDir)..\..\..\libs\freetype-2.13.0\include;$(ProjectDir)..\..\..\libs\box2d-2.4.1\include;$(ProjectDir)..\..\d2d\Include;$(ProjectDir)..\..\d2d\extern\hjson-cpp-2.3\;$(ProjectDir)..\..\d2d\extern\libdrawtext-0.6\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\libs\ftgl-2.1.3~rc5\src;C:\boost\boost_1_82_0;$(ProjectDir)..\..\..\libs\SDL2\include;$(ProjectDir)..\..\..\libs\freetype-2.13.0\include;$(ProjectDir)..\..\..\libs\box2d-2.4.1\include;$(ProjectDir)..\..\d2d\Include;$(ProjectDir)..\..\d2d\extern\hjson-cpp-2.3\;$(ProjectDir)..\..\d2d\extern\libdrawtext-0.6\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
@@ -119,8 +119,8 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>SDL2.lib;SDL2main.lib;freetype.lib;SDL2_image.lib;SDL2_net.lib;opengl32.lib;glu32.lib;d2d.lib;hjson.lib;drawtext.lib;box2d.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(ProjectDir)..\..\d2d\Lib\x64\$(Configuration);$(ProjectDir)..\..\..\libs\freetype-2.13.0\objs\x64\$(Configuration);$(ProjectDir)..\..\..\libs\box2d-2.4.1\build\bin\$(Configuration);$(ProjectDir)..\..\..\libs\SDL2\lib\x64;$(ProjectDir)..\..\d2d\extern\hjson-cpp-2.3\win-x64;$(ProjectDir)..\..\d2d\extern\libdrawtext-0.6\win-x64\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;freetype.lib;SDL2_image.lib;SDL2_net.lib;opengl32.lib;glu32.lib;d2d.lib;hjson.lib;box2d.lib;ftgl_static_D.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ProjectDir)..\..\..\libs\ftgl-2.1.3~rc5\lib\x64;$(ProjectDir)..\..\d2d\Lib\x64\$(Configuration);$(ProjectDir)..\..\..\libs\freetype-2.13.0\objs\x64\$(Configuration);$(ProjectDir)..\..\..\libs\box2d-2.4.1\build\bin\$(Configuration);$(ProjectDir)..\..\..\libs\SDL2\lib\x64;$(ProjectDir)..\..\d2d\extern\hjson-cpp-2.3\win-x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -132,7 +132,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>C:\boost\boost_1_82_0;$(ProjectDir)..\..\..\libs\SDL2\include;$(ProjectDir)..\..\..\libs\freetype-2.13.0\include;$(ProjectDir)..\..\..\libs\box2d-2.4.1\include;$(ProjectDir)..\..\d2d\Include;$(ProjectDir)..\..\d2d\extern\hjson-cpp-2.3\;$(ProjectDir)..\..\d2d\extern\libdrawtext-0.6\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\libs\ftgl-2.1.3~rc5\src;C:\boost\boost_1_82_0;$(ProjectDir)..\..\..\libs\SDL2\include;$(ProjectDir)..\..\..\libs\freetype-2.13.0\include;$(ProjectDir)..\..\..\libs\box2d-2.4.1\include;$(ProjectDir)..\..\d2d\Include;$(ProjectDir)..\..\d2d\extern\hjson-cpp-2.3\;$(ProjectDir)..\..\d2d\extern\libdrawtext-0.6\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
@@ -144,8 +144,8 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>SDL2.lib;SDL2main.lib;freetype.lib;SDL2_image.lib;SDL2_net.lib;opengl32.lib;glu32.lib;d2d.lib;hjson.lib;drawtext.lib;box2d.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(ProjectDir)..\..\d2d\Lib\x64\$(Configuration);$(ProjectDir)..\..\..\libs\freetype-2.13.0\objs\x64\$(Configuration);$(ProjectDir)..\..\..\libs\box2d-2.4.1\build\bin\$(Configuration);$(ProjectDir)..\..\..\libs\SDL2\lib\x64;$(ProjectDir)..\..\d2d\extern\hjson-cpp-2.3\win-x64;$(ProjectDir)..\..\d2d\extern\libdrawtext-0.6\win-x64\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;freetype.lib;SDL2_image.lib;SDL2_net.lib;opengl32.lib;glu32.lib;d2d.lib;hjson.lib;box2d.lib;ftgl_static.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ProjectDir)..\..\..\libs\ftgl-2.1.3~rc5\lib\x64;$(ProjectDir)..\..\d2d\Lib\x64\$(Configuration);$(ProjectDir)..\..\..\libs\freetype-2.13.0\objs\x64\$(Configuration);$(ProjectDir)..\..\..\libs\box2d-2.4.1\build\bin\$(Configuration);$(ProjectDir)..\..\..\libs\SDL2\lib\x64;$(ProjectDir)..\..\d2d\extern\hjson-cpp-2.3\win-x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

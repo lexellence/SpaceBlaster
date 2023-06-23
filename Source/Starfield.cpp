@@ -72,6 +72,9 @@ namespace Space
 	}
 	void Starfield::Draw() const
 	{
+		d2d::Window::DisableTextures();
+		d2d::Window::EnableBlending();
+
 		d2d::Window::PushMatrix();
 		d2d::Window::Translate(m_cameraPosition);
 		for(int sizeIndex = m_def.pointSizeIndexRange.GetMin(); sizeIndex <= m_def.pointSizeIndexRange.GetMax(); ++sizeIndex)

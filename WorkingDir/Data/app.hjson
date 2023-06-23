@@ -11,8 +11,8 @@
     fullScreen: false
     x: 0
     y: 0
-    width: 720
-    height: 480
+    width: 400
+    height: 400
     vsync: true
     doubleBuffer: true
     antiAliasingSamples: 4  // 1 disables AA, 2-16 enables AA

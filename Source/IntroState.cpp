@@ -108,12 +108,13 @@ namespace Space
 			return;
 
 		//d2d::Window::SetShowCursor(true);
-		d2d::Window::DisableTextures();
-		d2d::Window::EnableBlending();
 
 		// Starfield
 		d2d::Window::SetCameraRect(m_cameraPtr->GetRect());
 		m_starfieldPtr->Draw();
+
+		d2d::Window::EnableTextures();
+		d2d::Window::EnableBlending();
 
 		// Set camera to screen resolution
 		b2Vec2 resolution{ d2d::Window::GetScreenResolution() };
