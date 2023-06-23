@@ -11,7 +11,7 @@
 #include "World.h"
 #include "Camera.h"
 #include "Starfield.h"
-#include "GameConstants.h"
+#include "GameSettings.h"
 #include "GameModels.h"
 namespace Space
 {

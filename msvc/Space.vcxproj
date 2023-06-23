@@ -42,7 +42,7 @@
     <ClInclude Include="..\Source\EntityFactory.h" />
     <ClInclude Include="..\Source\Exceptions.h" />
     <ClInclude Include="..\Source\Game.h" />
-    <ClInclude Include="..\Source\GameConstants.h" />
+    <ClInclude Include="..\Source\GameSettings.h" />
     <ClInclude Include="..\Source\GameInput.h" />
     <ClInclude Include="..\Source\GameModels.h" />
     <ClInclude Include="..\Source\GameState.h" />

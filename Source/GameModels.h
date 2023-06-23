@@ -8,7 +8,7 @@
 **
 \**************************************************************************************/
 #pragma once
-#include "GameConstants.h"
+#include "GameSettings.h"
 namespace Space
 {
 	constexpr unsigned NUM_XLARGE_ASTEROID_MODELS = 4;
