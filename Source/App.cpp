@@ -47,7 +47,7 @@ namespace Space
 		}
 		d2d::SeedRandomNumberGenerator();
 
-		m_camera.Init(CameraSettings::CAMERA_SIZE_RANGE, CameraSettings::ZOOM_SPEED, 
+		m_camera.Init(CameraSettings::DIMENSION_RANGE, CameraSettings::ZOOM_SPEED, 
 			CameraSettings::INITIAL_ZOOM_OUT_PERCENT);
 		InitStarfield();
 
@@ -71,7 +71,7 @@ namespace Space
 		def.maxPointSizeIndexVariation = StarfieldSettings::MAX_POINT_SIZE_INDEX_VARIATION;
 		def.colorRange = StarfieldSettings::COLOR_RANGE;
 		def.maxAlphaVariation = StarfieldSettings::MAX_ALPHA_VARIATION;
-		m_starfield.Init(def, CameraSettings::CAMERA_SIZE_RANGE.GetMax());
+		m_starfield.Init(def, CameraSettings::DIMENSION_RANGE.GetMax());
 	}
 	void App::Step(float dt)
 	{
