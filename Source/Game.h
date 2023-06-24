@@ -101,6 +101,7 @@ namespace Space
 			float credits{};
 			unsigned currentLevel{ 1 };
 			bool exited{};
+			std::vector<std::string> upgradeList;
 		} m_player;
 		
 		std::list<DelayedGameAction> m_delayedGameActions;

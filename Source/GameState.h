@@ -11,15 +11,13 @@
 #include "AppState.h"
 #include "Game.h"
 #include "GameInput.h"
+#include "Shop.h"
 namespace Space
 {
 	enum class GameMode
 	{
-		ACTION, PAUSED, POST_LEVEL
-	};
-	enum class PostLevelMenu
-	{
-		MAIN, SHOP_MAIN, SHOP_WEAPONS, SHOP_PROTECTION, SHOP_ENGINE, SHOP_GADGETS
+		ACTION, PAUSED, 
+		POST_LEVEL, SHOP_MAIN, SHOP_ROOM
 	};
 
 	class GameState : public AppState
@@ -34,7 +32,9 @@ namespace Space
 	private:
 		void StartActionMode(bool startLevel = false);
 		void StartPauseMenu();
-		void StartPostLevelMenu(PostLevelMenu menu);
+		void StartPostLevel();
+		void StartShopMain(std::string selectedButtonName = ""s);
+		void StartShopRoom(std::string roomName);
 
 		void PauseGame();
 		void UnpauseGame();
@@ -50,9 +50,9 @@ namespace Space
 		void DrawFPS();
 
 		// Game
-		Game m_game;
 		GameMode m_mode;
-		PostLevelMenu m_postLevelMenuMode;
+		Game m_game;
+		Shop m_shop;
 		d2d::Menu m_menu;
 		bool m_showFPS;
 
@@ -71,13 +71,6 @@ namespace Space
 		const std::string m_nextLevelString{ "Start Next Wave" };
 		const std::string m_purchaseString{ "Purchase Upgrades" };
 		const std::vector<std::string> m_postLevelMenuLabels{ m_nextLevelString, m_purchaseString, m_quitString };
-
-		// Shop menu
-		const std::string m_shopTitle{ "Shop" };
-		const std::string m_weaponsString{ "Weapons" };
-		const std::string m_protectionString{ "Hull/Shields" };
-		const std::string m_engineString{ "Engine Upgrades" };
-		const std::string m_gadgetsString{ "Gadgets" };
 		const std::string m_backString{ "Back" };
 
 		// FPS display

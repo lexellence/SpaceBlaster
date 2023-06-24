@@ -12,6 +12,7 @@
 #include "AppState.h"
 #include "Game.h"
 #include "GUISettings.h"
+#include "ShopSettings.h"
 namespace Space
 {
 	GameState::GameState(Camera* cameraPtr, Starfield* starfieldPtr)
@@ -21,84 +22,60 @@ namespace Space
 	void GameState::Init()
 	{
 		m_menu.SetTitleStyle(GUISettings::menuTitleTextStyle);
+		m_shop.Init(ShopSettings::ROOM_LIST);
 		m_showFPS = false;
 		ResetController();
 		StartActionMode(true);
 	}
 	AppStateID GameState::Update(float dt)
 	{
-		if(m_mode == GameMode::PAUSED || m_mode == GameMode::POST_LEVEL)
+		if(m_mode == GameMode::ACTION)
+		{
+			UpdatePlayerController();
+			if(m_game.DidPlayerExit())
+				StartPostLevel();
+		}
+		else
 		{
 			// Get menu button pressed
 			std::string pressedButton;
 			bool pressed;
 			pressed = m_menu.PollPressedButton(pressedButton);
-
-			// Quit
-			if(pressedButton == m_quitString)
-				return AppStateID::MAIN_MENU;
-
-			if(m_mode == GameMode::PAUSED)
+			if(pressed)
 			{
-				// Pause menu
-				if(pressedButton == m_resumeString)
-					UnpauseGame();
-			}
-			else if(m_mode == GameMode::POST_LEVEL)
-			{
-				if(m_postLevelMenuMode == PostLevelMenu::MAIN)
+				// Quit
+				if(pressedButton == m_quitString)
+					return AppStateID::MAIN_MENU;
+
+				if(m_mode == GameMode::PAUSED)
+				{
+					// Pause menu
+					if(pressedButton == m_resumeString)
+						UnpauseGame();
+				}
+				else if(m_mode == GameMode::POST_LEVEL)
 				{
 					// Post-level main menu
 					if(pressedButton == m_nextLevelString)
 						StartActionMode(true);
 					else if(pressedButton == m_purchaseString)
-						StartPostLevelMenu(PostLevelMenu::SHOP_MAIN);
+						StartShopMain();
 				}
-				else if(m_postLevelMenuMode == PostLevelMenu::SHOP_MAIN)
+				else if(m_mode == GameMode::SHOP_MAIN)
 				{
 					// Shop main menu
 					if(pressedButton == m_backString)
-						StartPostLevelMenu(PostLevelMenu::MAIN);
-					else if(pressedButton == m_weaponsString)
-						StartPostLevelMenu(PostLevelMenu::SHOP_WEAPONS);
-					else if(pressedButton == m_protectionString)
-						StartPostLevelMenu(PostLevelMenu::SHOP_PROTECTION);
-					else if(pressedButton == m_engineString)
-						StartPostLevelMenu(PostLevelMenu::SHOP_ENGINE);
-					else if(pressedButton == m_gadgetsString)
-						StartPostLevelMenu(PostLevelMenu::SHOP_GADGETS);
+						StartPostLevel();
+					else
+						StartShopRoom(pressedButton);
 				}
-				else if(m_postLevelMenuMode == PostLevelMenu::SHOP_WEAPONS)
+				else if(m_mode == GameMode::SHOP_ROOM)
 				{
-					// Shop weapons menu
+					// Shop room submenus
 					if(pressedButton == m_backString)
-						StartPostLevelMenu(PostLevelMenu::SHOP_MAIN);
-				}
-				else if(m_postLevelMenuMode == PostLevelMenu::SHOP_PROTECTION)
-				{
-					// Shop protection menu
-					if(pressedButton == m_backString)
-						StartPostLevelMenu(PostLevelMenu::SHOP_MAIN);
-				}
-				else if(m_postLevelMenuMode == PostLevelMenu::SHOP_ENGINE)
-				{
-					// Shop engine menu
-					if(pressedButton == m_backString)
-						StartPostLevelMenu(PostLevelMenu::SHOP_MAIN);
-				}
-				else if(m_postLevelMenuMode == PostLevelMenu::SHOP_GADGETS)
-				{
-					// Shop gadgets menu
-					if(pressedButton == m_backString)
-						StartPostLevelMenu(PostLevelMenu::SHOP_MAIN);
+						StartShopMain(m_menu.GetTitle());
 				}
 			}
-		}
-		else if(m_mode == GameMode::ACTION)
-		{
-			UpdatePlayerController();
-			if(m_game.DidPlayerExit())
-				StartPostLevelMenu(PostLevelMenu::MAIN);
 		}
 
 		// Game
@@ -129,80 +106,70 @@ namespace Space
 		button.style = GUISettings::normalButtonStyle;
 		m_menu.AddButton(button, true);
 	}
-	void GameState::StartPostLevelMenu(PostLevelMenu mode)
+	void GameState::StartPostLevel()
 	{
 		m_mode = GameMode::POST_LEVEL;
-		m_postLevelMenuMode = mode;
+		m_menu.SetTitle(m_postLevelTitle);
+		m_menu.SetBackgroundColor(GUISettings::postLevelMenuBackgroundColor);
 		m_menu.ClearButtons();
 
-		m_menu.SetBackgroundColor(GUISettings::postLevelMenuBackgroundColor);
 		d2d::MenuButton button;
-		if(m_postLevelMenuMode == PostLevelMenu::MAIN)
+		button.label = m_quitString;
+		button.style = GUISettings::backButtonStyle;
+		m_menu.AddButton(button);
+		button.label = m_purchaseString;
+		button.style = GUISettings::normalButtonStyle;
+		m_menu.AddButton(button);
+		button.label = m_nextLevelString;
+		button.style = GUISettings::normalButtonStyle;
+		m_menu.AddButton(button, true);
+	}
+	void GameState::StartShopMain(std::string selectedButtonName)
+	{
+		m_mode = GameMode::SHOP_MAIN;
+		m_menu.SetTitle(ShopSettings::TITLE);
+		m_menu.SetBackgroundColor(GUISettings::postLevelMenuBackgroundColor);
+		m_menu.ClearButtons();
+
+		d2d::MenuButton button;
+		button.label = m_backString;
+		button.style = GUISettings::backButtonStyle;
+		m_menu.AddButton(button, true);
+
+		button.style = GUISettings::normalButtonStyle;
+		auto names = m_shop.GetRoomNames();
+		for(auto name : names)
 		{
-			m_menu.SetTitle(m_postLevelTitle);
-			button.label = m_quitString;
-			button.style = GUISettings::backButtonStyle;
-			m_menu.AddButton(button);
-			button.label = m_purchaseString;
-			button.style = GUISettings::normalButtonStyle;
-			m_menu.AddButton(button);
-			button.label = m_nextLevelString;
-			button.style = GUISettings::normalButtonStyle;
-			m_menu.AddButton(button, true);
+			button.label = name;
+			bool select = (name == selectedButtonName);
+			m_menu.AddButton(button, select);
 		}
-		else if(m_postLevelMenuMode == PostLevelMenu::SHOP_MAIN)
+	}
+	void GameState::StartShopRoom(std::string roomName)
+	{
+		m_mode = GameMode::SHOP_ROOM;
+		m_menu.SetTitle(roomName);
+		m_menu.SetBackgroundColor(GUISettings::postLevelMenuBackgroundColor);
+		m_menu.ClearButtons();
+
+		d2d::MenuButton button;
+		button.label = m_backString;
+		button.style = GUISettings::backButtonStyle;
+		m_menu.AddButton(button, true);
+
+		button.style = GUISettings::normalButtonStyle;
+		auto names = m_shop.GetShopItemNames(roomName);
+		for(auto name : names)
 		{
-			m_menu.SetTitle(m_shopTitle);
-			button.label = m_backString;
-			button.style = GUISettings::backButtonStyle;
-			m_menu.AddButton(button, true);
-			button.label = m_weaponsString;
-			button.style = GUISettings::normalButtonStyle;
+			button.label = name;
 			m_menu.AddButton(button);
-			button.label = m_protectionString;
-			button.style = GUISettings::normalButtonStyle;
-			m_menu.AddButton(button);
-			button.label = m_engineString;
-			button.style = GUISettings::normalButtonStyle;
-			m_menu.AddButton(button);
-			button.label = m_gadgetsString;
-			button.style = GUISettings::normalButtonStyle;
-			m_menu.AddButton(button);
-		}
-		else if(m_postLevelMenuMode == PostLevelMenu::SHOP_WEAPONS)
-		{
-			m_menu.SetTitle(m_weaponsString);
-			button.label = m_backString;
-			button.style = GUISettings::backButtonStyle;
-			m_menu.AddButton(button, true);
-		}
-		else if(m_postLevelMenuMode == PostLevelMenu::SHOP_PROTECTION)
-		{
-			m_menu.SetTitle(m_protectionString);
-			button.label = m_backString;
-			button.style = GUISettings::backButtonStyle;
-			m_menu.AddButton(button, true);
-		}
-		else if(m_postLevelMenuMode == PostLevelMenu::SHOP_ENGINE)
-		{
-			m_menu.SetTitle(m_engineString);
-			button.label = m_backString;
-			button.style = GUISettings::backButtonStyle;
-			m_menu.AddButton(button, true);
-		}
-		else if(m_postLevelMenuMode == PostLevelMenu::SHOP_GADGETS)
-		{
-			m_menu.SetTitle(m_gadgetsString);
-			button.label = m_backString;
-			button.style = GUISettings::backButtonStyle;
-			m_menu.AddButton(button, true);
 		}
 	}
 	void GameState::Draw()
 	{
 		d2d::Window::SetShowCursor(m_mode != GameMode::ACTION);
 		m_game.Draw();
-		if(m_mode == GameMode::PAUSED || m_mode == GameMode::POST_LEVEL)
+		if(m_mode != GameMode::ACTION)
 			m_menu.Draw();
 		if(m_showFPS)
 			DrawFPS();
@@ -229,7 +196,7 @@ namespace Space
 
 	void GameState::ProcessEvent(const SDL_Event& event)
 	{
-		if(m_mode == GameMode::PAUSED || m_mode == GameMode::POST_LEVEL)
+		if(m_mode != GameMode::ACTION)
 			m_menu.ProcessEvent(event);
 
 		switch(event.type)

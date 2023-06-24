@@ -25,6 +25,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="..\Source\Shop.cpp" />
     <ClCompile Include="..\Source\Starfield.cpp" />
     <ClCompile Include="..\Source\World.cpp" />
     <ClCompile Include="..\Source\WorldDef.cpp" />
@@ -51,6 +52,8 @@
     <ClInclude Include="..\Source\GUISettings.h" />
     <ClInclude Include="..\Source\ParticleSystem.h" />
     <ClInclude Include="..\Source\pch.h" />
+    <ClInclude Include="..\Source\Shop.h" />
+    <ClInclude Include="..\Source\ShopSettings.h" />
     <ClInclude Include="..\Source\Starfield.h" />
     <ClInclude Include="..\Source\StarfieldSettings.h" />
     <ClInclude Include="..\Source\World.h" />
