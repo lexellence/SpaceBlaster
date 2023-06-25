@@ -26,6 +26,16 @@ namespace Space
 	}
 
 	//+-----------------\-----------------------------------------
+	//|	    NewGame     |
+	//\-----------------/-----------------------------------------
+	void Game::NewGame()
+	{
+		m_player.credits = 0.0f;
+		m_player.currentLevel = 1;
+		m_player.upgrades.clear();
+	}
+
+	//+-----------------\-----------------------------------------
 	//|	   ClearLevel   |
 	//\-----------------/-----------------------------------------
 	void Game::ClearLevel(const b2Vec2& newWorldDimensions)

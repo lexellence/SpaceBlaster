@@ -22,9 +22,11 @@ namespace Space
 	void GameState::Init()
 	{
 		m_menu.SetTitleStyle(GUISettings::menuTitleTextStyle);
-		m_shop.Init(ShopSettings::ROOM_LIST);
 		m_showFPS = false;
 		ResetController();
+
+		m_shop.Init(ShopSettings::ROOM_LIST);
+		m_game.NewGame();
 		StartActionMode(true);
 	}
 	AppStateID GameState::Update(float dt)

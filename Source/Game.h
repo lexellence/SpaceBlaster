@@ -37,6 +37,7 @@ namespace Space
 	public:
 		Game() = delete;
 		Game(Camera* cameraPtr, Starfield* starfieldPtr);
+		void NewGame();
 		void Update(float dt, PlayerController &playerController);
 		void Draw();
 		bool DidPlayerExit() const;
