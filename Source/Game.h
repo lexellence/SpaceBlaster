@@ -42,7 +42,10 @@ namespace Space
 		void Draw();
 		bool DidPlayerExit() const;
 		void StartCurrentLevel();
-		void UpgradePlayer(ShopItemID itemID);
+		float GetPlayerCredits() const;
+
+		// Returns true if purchase was successful, otherwise returns false.
+		bool PurchaseUpgrade(ShopItemID itemID, float price = 0.0f);
 
 		// World callbacks
 		void EntityWillBeDestroyed(WorldID entityID) override;

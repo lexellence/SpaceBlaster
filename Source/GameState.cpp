@@ -22,6 +22,7 @@ namespace Space
 	void GameState::Init()
 	{
 		m_menu.SetTitleStyle(GUISettings::menuTitleTextStyle);
+		m_menu.SetSubtitleStyle(GUISettings::menuSubtitleTextStyle);
 		m_showFPS = false;
 		ResetController();
 
@@ -81,11 +82,14 @@ namespace Space
 					{
 						// Purchase upgrade
 						ShopItemID itemID = GetShopMenuButtonID(pressedButton);
-						m_shop.RemoveItems({ itemID });
-						m_game.UpgradePlayer(itemID);
-						unsigned buttonIndex = m_menu.GetSelectedButtonIndex();
-						StartShopRoom(roomName);
-						m_menu.SetSelectedButton(buttonIndex);
+						float price = GetShopMenuButtonPrice(pressedButton);
+						if(m_game.PurchaseUpgrade(itemID, price))
+						{
+							m_shop.RemoveItems({ itemID });
+							unsigned buttonIndex = m_menu.GetSelectedButtonIndex();
+							StartShopRoom(roomName);
+							m_menu.SetSelectedButton(buttonIndex);
+						}
 					}
 				}
 			}
@@ -109,6 +113,7 @@ namespace Space
 		m_menu.ClearButtons();
 
 		m_menu.SetTitle(m_pauseTitle);
+		ShowCreditsOnMenu(false);
 		m_menu.SetBackgroundColor(GUISettings::pauseMenuBackgroundColor);
 
 		d2d::MenuButton button;
@@ -123,6 +128,7 @@ namespace Space
 	{
 		m_mode = GameMode::POST_LEVEL;
 		m_menu.SetTitle(m_postLevelTitle);
+		ShowCreditsOnMenu(false);
 		m_menu.SetBackgroundColor(GUISettings::postLevelMenuBackgroundColor);
 		m_menu.ClearButtons();
 
@@ -141,6 +147,7 @@ namespace Space
 	{
 		m_mode = GameMode::SHOP_MAIN;
 		m_menu.SetTitle(ShopSettings::TITLE);
+		ShowCreditsOnMenu(true);
 		m_menu.SetBackgroundColor(GUISettings::postLevelMenuBackgroundColor);
 		m_menu.ClearButtons();
 
@@ -162,6 +169,7 @@ namespace Space
 	{
 		m_mode = GameMode::SHOP_ROOM;
 		m_menu.SetTitle(roomName);
+		ShowCreditsOnMenu(true);
 		m_menu.SetBackgroundColor(GUISettings::postLevelMenuBackgroundColor);
 		m_menu.ClearButtons();
 
@@ -180,6 +188,13 @@ namespace Space
 			SetShopMenuButtonPrice(button, item.price);
 			m_menu.AddButton(button);
 		}
+	}
+	void GameState::ShowCreditsOnMenu(bool flag)
+	{
+		if(flag)
+			m_menu.SetSubtitle("Credits: "s + d2d::ToString(m_game.GetPlayerCredits()));
+		else
+			m_menu.SetSubtitle();
 	}
 	void GameState::Draw()
 	{

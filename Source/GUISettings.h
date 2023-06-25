@@ -28,6 +28,8 @@ namespace Space
 		const d2d::FontReference orbitronLightFont{ "Fonts/OrbitronLight.otf" };
 		const d2d::TextStyle menuTitleTextStyle{ &orbitronLightFont,
 			{ 0.0f, 1.0f, 0.0f, 1.0f }, 0.045f };
+		const d2d::TextStyle menuSubtitleTextStyle{ &orbitronLightFont,
+			{ 0.0f, 0.0f, 1.0f, 1.0f }, buttonTextSize };
 		const d2d::TextStyle normalButtonTextStyle{ &orbitronLightFont,
 			{ 0.2f, 0.8f, 0.2f, 1.0f }, buttonTextSize };
 		const d2d::TextStyle backButtonTextStyle{ &orbitronLightFont,

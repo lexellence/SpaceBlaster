@@ -35,6 +35,7 @@ namespace Space
 		void StartPostLevel();
 		void StartShopMain(std::string selectedButtonName = ""s);
 		void StartShopRoom(std::string roomName);
+		void ShowCreditsOnMenu(bool flag);
 
 		void PauseGame();
 		void UnpauseGame();

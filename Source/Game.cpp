@@ -87,15 +87,33 @@ namespace Space
 	}
 
 	//+-----------------------\-----------------------------------
-	//|	    UpgradePlayer     |
+	//|	  GetPlayerCredits    |
 	//\-----------------------/-----------------------------------
-	void Game::UpgradePlayer(ShopItemID itemID)
+	float Game::GetPlayerCredits() const
+	{
+		return m_player.credits;
+	}
+
+	//+-----------------------\-----------------------------------
+	//|	   PurchaseUpgrade    |
+	//\-----------------------/
+	//	Returns true if purchase was successful,
+	//	otherwise returns false.
+	//------------------------------------------------------------
+	bool Game::PurchaseUpgrade(ShopItemID itemID, float price)
 	{
 		if(m_player.upgrades.contains(itemID))
-			return;
-		m_player.upgrades.insert(itemID);
-		if(m_player.isSet)
-			ApplyPlayerUpgrades(m_world, m_player.id, m_player.upgrades);
+			return true;
+
+		if(m_player.credits >= price)
+		{
+			m_player.upgrades.insert(itemID);
+			m_player.credits -= price;
+			if(m_player.isSet)
+				ApplyPlayerUpgrades(m_world, m_player.id, m_player.upgrades);
+			return true;
+		}
+		return false;
 	}
 
 	//+-----------------------\-----------------------------------
