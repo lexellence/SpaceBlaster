@@ -33,8 +33,9 @@ namespace Space
 		void StartActionMode(bool startLevel = false);
 		void StartPauseMenu();
 		void StartPostLevel();
-		void StartShopMain(std::string selectedButtonName = ""s);
+		void StartShopMain(std::string selectedButtonName = {});
 		void StartShopRoom(std::string roomName);
+		bool DoesShopHaveAffordableItems(const std::string& roomName = {}) const;
 		void ShowCreditsOnMenu(bool flag);
 
 		void PauseGame();

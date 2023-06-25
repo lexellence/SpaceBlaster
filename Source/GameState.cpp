@@ -136,9 +136,14 @@ namespace Space
 		button.label = m_quitString;
 		button.style = GUISettings::backButtonStyle;
 		m_menu.AddButton(button);
+
 		button.label = m_purchaseString;
-		button.style = GUISettings::normalButtonStyle;
+		if(DoesShopHaveAffordableItems())
+			button.style = GUISettings::normalButtonStyle;
+		else
+			button.style = GUISettings::grayedButtonStyle;
 		m_menu.AddButton(button);
+
 		button.label = m_nextLevelString;
 		button.style = GUISettings::normalButtonStyle;
 		m_menu.AddButton(button, true);
@@ -156,12 +161,15 @@ namespace Space
 		button.style = GUISettings::backButtonStyle;
 		m_menu.AddButton(button, true);
 
-		button.style = GUISettings::normalButtonStyle;
-		auto names = m_shop.GetRoomNames();
-		for(auto name : names)
+		auto roomNames = m_shop.GetRoomNames();
+		for(auto roomName : roomNames)
 		{
-			button.label = name;
-			bool select = (name == selectedButtonName);
+			if(DoesShopHaveAffordableItems(roomName))
+				button.style = GUISettings::normalButtonStyle;
+			else
+				button.style = GUISettings::grayedButtonStyle;
+			button.label = roomName;
+			bool select = (roomName == selectedButtonName);
 			m_menu.AddButton(button, select);
 		}
 	}
@@ -178,16 +186,28 @@ namespace Space
 		button.style = GUISettings::backButtonStyle;
 		m_menu.AddButton(button, true);
 
-		button.style = GUISettings::normalButtonStyle;
-		const auto& items = m_shop.GetShopItems(roomName);
+		const auto& items = m_shop.GetItems(roomName);
 		for(const auto& item : items)
 		{
-			// Add button for shop item
+			if(m_game.GetPlayerCredits() >= item.price)
+				button.style = GUISettings::normalButtonStyle;
+			else
+				button.style = GUISettings::grayedButtonStyle;
 			button.label = item.name + "    Cost: "s + d2d::ToString(item.price);
 			SetShopMenuButtonID(button, item.id);
 			SetShopMenuButtonPrice(button, item.price);
 			m_menu.AddButton(button);
 		}
+	}
+	bool GameState::DoesShopHaveAffordableItems(const std::string& roomName) const
+	{
+		const auto& items = m_shop.GetItems(roomName);
+		for(const auto& item : items)
+		{
+			if(m_game.GetPlayerCredits() >= item.price)
+				return true;
+		}
+		return false;
 	}
 	void GameState::ShowCreditsOnMenu(bool flag)
 	{

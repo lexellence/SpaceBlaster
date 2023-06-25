@@ -14,12 +14,15 @@ namespace Space
 	{
 		const d2d::Color normalButtonColor{ 0.0f, 0.3f, 0.0f, 0.2f };
 		const d2d::Color backButtonColor{ 0.3f, 0.0f, 0.0f, 0.2f };
+		const d2d::Color grayedButtonColor{ 0.1f, 0.1f, 0.1f, 0.2f };
 
 		const d2d::Color normalButtonHighlightColor{ 0.0f, 1.0f, 0.0f, 0.4f };
 		const d2d::Color backButtonHighlightColor{ 1.0f, 0.0f, 0.0f, 0.4f };
+		const d2d::Color grayedButtonHighlightColor{ 0.33f, 0.33f, 0.33f, 0.4f };
 
 		const d2d::Color normalButtonBorderColor{ 0.1f, 0.5f, 0.1f, 0.7f };
 		const d2d::Color backButtonBorderColor{ 0.5f, 0.1f, 0.1f, 0.7f };
+		const d2d::Color grayedButtonBorderColor{ 0.25f, 0.25f, 0.25f, 0.7f };
 
 		const d2d::Color postLevelMenuBackgroundColor{ 0.1f, 0.1f, 0.1f, 0.6f };
 		const d2d::Color pauseMenuBackgroundColor{ 0.5f, 0.5f, 0.5f, 0.3f };
@@ -34,6 +37,8 @@ namespace Space
 			{ 0.2f, 0.8f, 0.2f, 1.0f }, buttonTextSize };
 		const d2d::TextStyle backButtonTextStyle{ &orbitronLightFont,
 			{ 0.8f, 0.2f, 0.2f, 1.0f }, buttonTextSize };
+		const d2d::TextStyle grayedButtonTextStyle{ &orbitronLightFont,
+			{ 0.3f, 0.3f, 0.3f, 1.0f }, buttonTextSize };
 
 		const d2d::ButtonStyle normalButtonStyle{
 			.text{ normalButtonTextStyle },
@@ -46,6 +51,12 @@ namespace Space
 			.color{ backButtonColor },
 			.highlightColor{ backButtonHighlightColor },
 			.borderColor{ backButtonBorderColor }
+		};
+		const d2d::ButtonStyle grayedButtonStyle{
+			.text{ grayedButtonTextStyle },
+			.color{ grayedButtonColor },
+			.highlightColor{ grayedButtonHighlightColor },
+			.borderColor{ grayedButtonBorderColor }
 		};
 
 		const d2d::TextStyle fpsTextStyle{ &orbitronLightFont,

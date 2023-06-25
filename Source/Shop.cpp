@@ -36,7 +36,7 @@ namespace Space
 			names.push_back(room.name);
 		return names;
 	}
-	std::vector<std::string> Shop::GetShopItemNames(const std::string& roomName) const
+	std::vector<std::string> Shop::GetItemNames(const std::string& roomName) const
 	{
 		std::vector<std::string> names;
 		for(const ShopRoom& room : m_roomList)
@@ -48,12 +48,12 @@ namespace Space
 			}
 		return names;
 	}
-	std::vector<ShopItem> Shop::GetShopItems(const std::string& roomName) const
+	std::vector<ShopItem> Shop::GetItems(const std::string& roomName) const
 	{
 		std::vector<ShopItem> items;
 		for(const ShopRoom& room : m_roomList)
 		{
-			if(room.name == roomName)
+			if(roomName.empty() || room.name == roomName)
 			{
 				for(const ShopItemProgression& prog : room.itemProgressionList)
 					items.push_back(prog.front());
