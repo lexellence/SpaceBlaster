@@ -30,20 +30,24 @@ namespace Space
 		const d2d::Color postLevelMenuBackgroundColor{ 0.1f, 0.1f, 0.1f, 0.6f };
 		const d2d::Color pauseMenuBackgroundColor{ 0.5f, 0.5f, 0.5f, 0.3f };
 
+		const d2d::Color menuTitleTextColor{ 0.0f, 1.0f, 0.0f, 1.0f };
+		const d2d::Color menuSubtitleTextColor{ 0.0f, 0.0f, 1.0f, 1.0f };
+
+		const d2d::Color normalButtonTextColor{ 0.2f, 0.8f, 0.2f, 1.0f };
+		const d2d::Color secondaryButtonTextColor{ 0.2f, 0.2f, 0.8f, 1.0f };
+		const d2d::Color backButtonTextColor{ 0.8f, 0.2f, 0.2f, 1.0f };
+		const d2d::Color grayedButtonTextColor{ 0.3f, 0.3f, 0.3f, 1.0f };
+
+		const float menuTitleTextSize = 0.045f;
+		const float menuSubtitleTextSize = 0.035f;
 		const float buttonTextSize = 0.035f;
 		const d2d::FontReference orbitronLightFont{ "Fonts/OrbitronLight.otf" };
-		const d2d::TextStyle menuTitleTextStyle{ &orbitronLightFont,
-			{ 0.0f, 1.0f, 0.0f, 1.0f }, 0.045f };
-		const d2d::TextStyle menuSubtitleTextStyle{ &orbitronLightFont,
-			{ 0.0f, 0.0f, 1.0f, 1.0f }, buttonTextSize };
-		const d2d::TextStyle normalButtonTextStyle{ &orbitronLightFont,
-			{ 0.2f, 0.8f, 0.2f, 1.0f }, buttonTextSize };
-		const d2d::TextStyle secondaryButtonTextStyle{ &orbitronLightFont,
-			{ 0.2f, 0.2f, 0.8f, 1.0f }, buttonTextSize };
-		const d2d::TextStyle backButtonTextStyle{ &orbitronLightFont,
-			{ 0.8f, 0.2f, 0.2f, 1.0f }, buttonTextSize };
-		const d2d::TextStyle grayedButtonTextStyle{ &orbitronLightFont,
-			{ 0.3f, 0.3f, 0.3f, 1.0f }, buttonTextSize };
+		const d2d::TextStyle menuTitleTextStyle{ &orbitronLightFont, menuTitleTextColor, menuTitleTextSize };
+		const d2d::TextStyle menuSubtitleTextStyle{ &orbitronLightFont,	menuSubtitleTextColor, menuSubtitleTextSize };
+		const d2d::TextStyle normalButtonTextStyle{ &orbitronLightFont,	normalButtonTextColor, buttonTextSize };
+		const d2d::TextStyle secondaryButtonTextStyle{ &orbitronLightFont, secondaryButtonTextColor, buttonTextSize };
+		const d2d::TextStyle backButtonTextStyle{ &orbitronLightFont, backButtonTextColor, buttonTextSize };
+		const d2d::TextStyle grayedButtonTextStyle{ &orbitronLightFont, grayedButtonTextColor, buttonTextSize };
 
 		const d2d::ButtonStyle normalButtonStyle{
 			.text{ normalButtonTextStyle },
@@ -70,7 +74,8 @@ namespace Space
 			.borderColor{ grayedButtonBorderColor }
 		};
 
-		const d2d::TextStyle fpsTextStyle{ &orbitronLightFont,
-			{ 1.0f, 1.0f, 0.0f, 1.0f }, 0.05f };
+		const d2d::Color fpsTextColor{ 1.0f, 1.0f, 0.0f, 1.0f };
+		const float fpsTextSize = 0.05f;
+		const d2d::TextStyle fpsTextStyle{ &orbitronLightFont, fpsTextColor, fpsTextSize };
 	}
 }
