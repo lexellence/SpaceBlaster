@@ -17,6 +17,7 @@ namespace Space
 		GUNS_2, GUNS_3, GUNS_4, GUNS_5,
 		REPAIR_HULL, REFUEL
 	};
+
 	namespace ShopSettings
 	{
 		const std::string TITLE{ "Shop" };

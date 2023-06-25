@@ -62,4 +62,22 @@ namespace Space
 		}
 		return items;
 	}
+
+	// Item-Button Conversions
+	void SetShopMenuButtonID(d2d::MenuButton& button, ShopItemID id)
+	{
+		button.userData[0].i = (int)id;
+	}
+	ShopItemID GetShopMenuButtonID(const d2d::MenuButton& button)
+	{
+		return (ShopItemID)button.userData[0].i;
+	}
+	void SetShopMenuButtonPrice(d2d::MenuButton& button, float price)
+	{
+		button.userData[1].f = price;
+	}
+	float GetShopMenuButtonPrice(const d2d::MenuButton& button)
+	{
+		return button.userData[1].f;
+	}
 }

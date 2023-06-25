@@ -80,7 +80,7 @@ namespace Space
 					else
 					{
 						// Purchase upgrade
-						ShopItemID itemID = (ShopItemID)pressedButton.userData;
+						ShopItemID itemID = GetShopMenuButtonID(pressedButton);
 						m_shop.RemoveItems({ itemID });
 						m_game.UpgradePlayer(itemID);
 						unsigned buttonIndex = m_menu.GetSelectedButtonIndex();
@@ -174,8 +174,10 @@ namespace Space
 		const auto& items = m_shop.GetShopItems(roomName);
 		for(const auto& item : items)
 		{
-			button.label = item.name;
-			button.userData = item.id;
+			// Add button for shop item
+			button.label = item.name + "    Cost: "s + d2d::ToString(item.price);
+			SetShopMenuButtonID(button, item.id);
+			SetShopMenuButtonPrice(button, item.price);
 			m_menu.AddButton(button);
 		}
 	}

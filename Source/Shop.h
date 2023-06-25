@@ -35,4 +35,10 @@ namespace Space
 		std::list<ShopItem> m_repairRoomItems;
 		std::vector<ShopRoom> m_roomList;
 	};
+
+	// Item-Button Conversions
+	void SetShopMenuButtonID(d2d::MenuButton& button, ShopItemID id);
+	ShopItemID GetShopMenuButtonID(const d2d::MenuButton& button);
+	void SetShopMenuButtonPrice(d2d::MenuButton& button, float price);
+	float GetShopMenuButtonPrice(const d2d::MenuButton& button);
 }
