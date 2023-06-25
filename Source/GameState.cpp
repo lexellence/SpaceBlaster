@@ -139,7 +139,7 @@ namespace Space
 
 		button.label = m_purchaseString;
 		if(DoesShopHaveAffordableItems())
-			button.style = GUISettings::normalButtonStyle;
+			button.style = GUISettings::secondaryButtonStyle;
 		else
 			button.style = GUISettings::grayedButtonStyle;
 		m_menu.AddButton(button);
@@ -165,7 +165,7 @@ namespace Space
 		for(auto roomName : roomNames)
 		{
 			if(DoesShopHaveAffordableItems(roomName))
-				button.style = GUISettings::normalButtonStyle;
+				button.style = GUISettings::secondaryButtonStyle;
 			else
 				button.style = GUISettings::grayedButtonStyle;
 			button.label = roomName;
@@ -190,7 +190,7 @@ namespace Space
 		for(const auto& item : items)
 		{
 			if(m_game.GetPlayerCredits() >= item.price)
-				button.style = GUISettings::normalButtonStyle;
+				button.style = GUISettings::secondaryButtonStyle;
 			else
 				button.style = GUISettings::grayedButtonStyle;
 			button.label = item.name + "    Cost: "s + d2d::ToString(item.price);

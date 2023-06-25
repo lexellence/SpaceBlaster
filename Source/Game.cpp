@@ -30,7 +30,7 @@ namespace Space
 	//\-----------------/-----------------------------------------
 	void Game::NewGame()
 	{
-		m_player.credits = 0.0f;
+		m_player.credits = 10.0f;
 		m_player.currentLevel = 1;
 		m_player.upgrades.clear();
 	}
