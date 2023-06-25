@@ -21,7 +21,7 @@ namespace Space
 	struct ShopRoom
 	{
 		std::string name;
-		std::vector<ShopItemProgression> itemProgressionList;
+		std::list<ShopItemProgression> itemProgressionList;
 	};
 	class Shop
 	{
@@ -30,6 +30,7 @@ namespace Space
 		void RemoveItems(const std::vector<ShopItemID>& itemIDs);
 		std::vector<std::string> GetRoomNames() const;
 		std::vector<std::string> GetShopItemNames(const std::string& roomName) const;
+		std::vector<ShopItem> GetShopItems(const std::string& roomName) const;
 	private:
 		std::list<ShopItem> m_repairRoomItems;
 		std::vector<ShopRoom> m_roomList;

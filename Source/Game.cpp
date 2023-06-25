@@ -76,6 +76,41 @@ namespace Space
 		ValidateWorldDimensions();
 	}
 
+	//+-----------------------\-----------------------------------
+	//|	    UpgradePlayer     |
+	//\-----------------------/-----------------------------------
+	void Game::UpgradePlayer(ShopItemID itemID)
+	{
+		if(m_player.upgrades.contains(itemID))
+			return;
+		m_player.upgrades.insert(itemID);
+		if(m_player.isSet)
+			ApplyPlayerUpgrades(m_world, m_player.id, m_player.upgrades);
+	}
+
+	//+-----------------------\-----------------------------------
+	//|	 ApplyPlayerUpgrades  |
+	//\-----------------------/-----------------------------------
+	void Game::ApplyPlayerUpgrades(World& world, WorldID playerID, const std::set<ShopItemID>& upgrades)
+	{
+		for(auto itemID : upgrades)
+			switch(itemID)
+			{
+			case ShopItemID::GUNS_2:
+				AddBlasterGuns(m_world, m_player.id, 2);
+				break;
+			case ShopItemID::GUNS_3:
+				AddBlasterGuns(m_world, m_player.id, 3);
+				break;
+			case ShopItemID::GUNS_4:
+				AddBlasterGuns(m_world, m_player.id, 4);
+				break;
+			case ShopItemID::GUNS_5:
+				AddBlasterGuns(m_world, m_player.id, 5);
+				break;
+			}
+	}
+
 	//+-----------------\-----------------------------------------
 	//|	 DidPlayerExit  |
 	//\-----------------/-----------------------------------------
@@ -383,6 +418,7 @@ namespace Space
 		WorldID blasterID = CreateBlaster(world, def);
 		world.AddIconCollectorComponent(blasterID);
 		SetPlayer(blasterID);
+		ApplyPlayerUpgrades(world, blasterID, m_player.upgrades);
 		FollowEntity(blasterID);
 	}
 
@@ -435,16 +471,8 @@ namespace Space
 
 		world.AddFuelComponent(id, BLASTER_MAX_FUEL, BLASTER_MAX_FUEL);
 		world.AddBoosterComponent(id, BLASTER_BOOST_FACTOR, BOOST_SECONDS, BOOST_COOLDOWN_SECONDS);
-
 		world.AddBrakeComponent(id, BLASTER_BRAKE_DECELERATION);
-
-		// Bullets
-		world.AddProjectileLauncherComponent(id, 5, false);
-		world.AddProjectileLauncher(id, 0, m_bulletDef, { BLASTER_PROJECTILE_OFFSET_X, 0.0f }, BLASTER_CANON_IMPULSE, BLASTER_CANON_INTERVAL, false, false);
-		//world.AddProjectileLauncher(id, 1, m_bulletDef, { BLASTER_PROJECTILE_OFFSET_X,  BLASTER_PROJECTILE_INNER_SPREAD_Y }, BLASTER_CANON_IMPULSE, BLASTER_CANON_INTERVAL, false, false);
-		//world.AddProjectileLauncher(id, 2, m_bulletDef, { BLASTER_PROJECTILE_OFFSET_X, -BLASTER_PROJECTILE_INNER_SPREAD_Y }, BLASTER_CANON_IMPULSE, BLASTER_CANON_INTERVAL, false, false);
-		//world.AddProjectileLauncher(id, 3, m_bulletDef, { BLASTER_PROJECTILE_OFFSET_X,  BLASTER_PROJECTILE_OUTER_SPREAD_Y }, BLASTER_CANON_IMPULSE, BLASTER_CANON_INTERVAL, false, false);
-		//world.AddProjectileLauncher(id, 4, m_bulletDef, { BLASTER_PROJECTILE_OFFSET_X, -BLASTER_PROJECTILE_OUTER_SPREAD_Y }, BLASTER_CANON_IMPULSE, BLASTER_CANON_INTERVAL, false, false);
+		AddBlasterGuns(world, id, 1);
 
 		// Missiles
 		//world.AddProjectileLauncherComponent(id, 5, true);
@@ -462,6 +490,27 @@ namespace Space
 		return id;
 	}
 
+	//+---------------------------\-------------------------------
+	//|		 AddBlasterGuns		  |
+	//\---------------------------/-------------------------------
+	void Game::AddBlasterGuns(World& world, WorldID entityID, unsigned numGuns)
+	{
+		d2d::Clamp(numGuns, { 1, 5 });
+		world.AddProjectileLauncherComponent(entityID, numGuns, false);
+		unsigned launcherSlot = 0;
+		if(numGuns == 1 || numGuns == 3 || numGuns == 5)
+			world.AddProjectileLauncher(entityID, launcherSlot++, m_bulletDef, { BLASTER_PROJECTILE_OFFSET_X, 0.0f }, BLASTER_CANON_IMPULSE, BLASTER_CANON_INTERVAL, false, false);
+		if(numGuns >= 2)
+		{
+			world.AddProjectileLauncher(entityID, launcherSlot++, m_bulletDef, { BLASTER_PROJECTILE_OFFSET_X,  BLASTER_PROJECTILE_INNER_SPREAD_Y }, BLASTER_CANON_IMPULSE, BLASTER_CANON_INTERVAL, false, false);
+			world.AddProjectileLauncher(entityID, launcherSlot++, m_bulletDef, { BLASTER_PROJECTILE_OFFSET_X, -BLASTER_PROJECTILE_INNER_SPREAD_Y }, BLASTER_CANON_IMPULSE, BLASTER_CANON_INTERVAL, false, false);
+		}
+		if(numGuns >= 4)
+		{
+			world.AddProjectileLauncher(entityID, launcherSlot++, m_bulletDef, { BLASTER_PROJECTILE_OFFSET_X,  BLASTER_PROJECTILE_OUTER_SPREAD_Y }, BLASTER_CANON_IMPULSE, BLASTER_CANON_INTERVAL, false, false);
+			world.AddProjectileLauncher(entityID, launcherSlot++, m_bulletDef, { BLASTER_PROJECTILE_OFFSET_X, -BLASTER_PROJECTILE_OUTER_SPREAD_Y }, BLASTER_CANON_IMPULSE, BLASTER_CANON_INTERVAL, false, false);
+		}
+	}
 	//+---------------------------\-------------------------------
 	//|	   CreateXLargeAsteroid	  |
 	//\---------------------------/-------------------------------

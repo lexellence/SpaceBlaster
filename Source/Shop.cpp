@@ -19,10 +19,15 @@ namespace Space
 	{
 		for(ShopItemID id : itemIDs)
 			for(ShopRoom& room : m_roomList)
-				for(ShopItemProgression& prog : room.itemProgressionList)
-					for(auto itemIt = prog.begin(); itemIt != prog.end(); itemIt++)
+				for(auto progressionIt = room.itemProgressionList.begin(); 
+					progressionIt != room.itemProgressionList.end(); progressionIt++)
+				{
+					for(auto itemIt = progressionIt->begin(); itemIt != progressionIt->end(); itemIt++)
 						if(itemIt->id == id)
-							itemIt = prog.erase(itemIt);
+							itemIt = progressionIt->erase(itemIt);
+					if(progressionIt->empty())
+						progressionIt = room.itemProgressionList.erase(progressionIt);
+				}
 	}
 	std::vector<std::string> Shop::GetRoomNames() const
 	{
@@ -42,5 +47,19 @@ namespace Space
 				return names;
 			}
 		return names;
+	}
+	std::vector<ShopItem> Shop::GetShopItems(const std::string& roomName) const
+	{
+		std::vector<ShopItem> items;
+		for(const ShopRoom& room : m_roomList)
+		{
+			if(room.name == roomName)
+			{
+				for(const ShopItemProgression& prog : room.itemProgressionList)
+					items.push_back(prog.front());
+				return items;
+			}
+		}
+		return items;
 	}
 }

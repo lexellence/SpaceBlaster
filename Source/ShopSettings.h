@@ -30,7 +30,7 @@ namespace Space
 		// Weapon room
 		const ShopItemProgression GUNS
 		{
-			{ "Dual Guns", 5.0f, GUNS_2},
+			{ "Dual Guns", 5.0f, GUNS_2 },
 			{ "Trip Guns", 10.0f, GUNS_3 },
 			{ "Quad Guns", 15.0f, GUNS_4 },
 			{ "Guns Blazin'", 20.0f, GUNS_5 }
@@ -47,7 +47,7 @@ namespace Space
 		//	{ "Space Blaster", 20.0f }
 		//};
 		const ShopRoom WEAPONS_ROOM{ 
-			{ "Weapons" },
+			"Weapons"s,
 			{
 				GUNS
 				//LASERS,

@@ -38,42 +38,53 @@ namespace Space
 		else
 		{
 			// Get menu button pressed
-			std::string pressedButton;
+			d2d::MenuButton pressedButton;
 			bool pressed;
 			pressed = m_menu.PollPressedButton(pressedButton);
 			if(pressed)
 			{
 				// Quit
-				if(pressedButton == m_quitString)
+				if(pressedButton.label == m_quitString)
 					return AppStateID::MAIN_MENU;
 
 				if(m_mode == GameMode::PAUSED)
 				{
 					// Pause menu
-					if(pressedButton == m_resumeString)
+					if(pressedButton.label == m_resumeString)
 						UnpauseGame();
 				}
 				else if(m_mode == GameMode::POST_LEVEL)
 				{
 					// Post-level main menu
-					if(pressedButton == m_nextLevelString)
+					if(pressedButton.label == m_nextLevelString)
 						StartActionMode(true);
-					else if(pressedButton == m_purchaseString)
+					else if(pressedButton.label == m_purchaseString)
 						StartShopMain();
 				}
 				else if(m_mode == GameMode::SHOP_MAIN)
 				{
 					// Shop main menu
-					if(pressedButton == m_backString)
+					if(pressedButton.label == m_backString)
 						StartPostLevel();
 					else
-						StartShopRoom(pressedButton);
+						StartShopRoom(pressedButton.label);
 				}
 				else if(m_mode == GameMode::SHOP_ROOM)
 				{
 					// Shop room submenus
-					if(pressedButton == m_backString)
-						StartShopMain(m_menu.GetTitle());
+					std::string roomName = m_menu.GetTitle();
+					if(pressedButton.label == m_backString)
+						StartShopMain(roomName);
+					else
+					{
+						// Purchase upgrade
+						ShopItemID itemID = (ShopItemID)pressedButton.userData;
+						m_shop.RemoveItems({ itemID });
+						m_game.UpgradePlayer(itemID);
+						unsigned buttonIndex = m_menu.GetSelectedButtonIndex();
+						StartShopRoom(roomName);
+						m_menu.SetSelectedButton(buttonIndex);
+					}
 				}
 			}
 		}
@@ -158,10 +169,11 @@ namespace Space
 		m_menu.AddButton(button, true);
 
 		button.style = GUISettings::normalButtonStyle;
-		auto names = m_shop.GetShopItemNames(roomName);
-		for(auto name : names)
+		const auto& items = m_shop.GetShopItems(roomName);
+		for(const auto& item : items)
 		{
-			button.label = name;
+			button.label = item.name;
+			button.userData = item.id;
 			m_menu.AddButton(button);
 		}
 	}

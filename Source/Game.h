@@ -13,6 +13,7 @@
 #include "Starfield.h"
 #include "GameSettings.h"
 #include "GameModels.h"
+#include "ShopSettings.h"
 namespace Space
 {
 	enum class GameAction
@@ -40,6 +41,7 @@ namespace Space
 		void Draw();
 		bool DidPlayerExit() const;
 		void StartCurrentLevel();
+		void UpgradePlayer(ShopItemID itemID);
 
 		// World callbacks
 		void EntityWillBeDestroyed(WorldID entityID) override;
@@ -62,6 +64,7 @@ namespace Space
 		void UpdateDelayedActions(float dt);
 		void SetPlayer(WorldID entityID);
 		bool IsPlayer(WorldID entityID) const;
+		void ApplyPlayerUpgrades(World& world, WorldID playerID, const std::set<ShopItemID>& upgrades);
 		void FollowEntity(WorldID entityID);
 
 		WorldID CreateBasicObject(World &world, const b2Vec2 &size, int drawLayer,
@@ -70,6 +73,7 @@ namespace Space
 		void CreatePlayer(World &world, const InstanceDef &def);
 		WorldID CreateScout(World &world, const InstanceDef &def);
 		WorldID CreateBlaster(World &world, const InstanceDef &def);
+		void AddBlasterGuns(World& world, WorldID entityID, unsigned numGuns);
 		WorldID CreateXLargeAsteroid(World &world, unsigned modelIndex, bool isRock, const InstanceDef &def);
 		WorldID CreateLargeAsteroid(World &world, unsigned modelIndex, bool isRock, const InstanceDef &def);
 		WorldID CreateMediumAsteroid(World &world, unsigned modelIndex, bool isRock, const InstanceDef &def);
@@ -101,7 +105,7 @@ namespace Space
 			float credits{};
 			unsigned currentLevel{ 1 };
 			bool exited{};
-			std::vector<std::string> upgradeList;
+			std::set<ShopItemID> upgrades;
 		} m_player;
 		
 		std::list<DelayedGameAction> m_delayedGameActions;
