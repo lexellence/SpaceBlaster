@@ -9,21 +9,22 @@
 \**************************************************************************************/
 #pragma once
 #include "AppState.h"
+#include "GUISettings.h"
 namespace Space
 {
 	class MainMenuState : public AppState
 	{
 	public:
-		MainMenuState(Camera* cameraPtr, Starfield* starfieldPtr);
+		using AppState::AppState;
 		void Init() override;
 		void ProcessEvent(const SDL_Event& event) override;
 		AppStateID Update(float dt) override;
 		void Draw() override;
 
 	private:
-		const std::string m_newGameString{ "New Game" };
-		const std::string m_quitString{ "Quit" };
-		const std::string m_title{ "Space Blaster" };
 		d2d::Menu m_menu;
+		d2d::FontReference m_titleFont{ GUISettings::Menu::Text::Font::TITLE };
+		d2d::FontReference m_subtitleFont{ GUISettings::Menu::Text::Font::SUBTITLE };
+		d2d::FontReference m_buttonFont{ GUISettings::Menu::Text::Font::BUTTON };
 	};
 }

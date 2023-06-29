@@ -13,27 +13,36 @@
 #include "Starfield.h"
 #include "Camera.h"
 #include "GUISettings.h"
+#include "GUIStrings.h"
 namespace Space
 {
-	MainMenuState::MainMenuState(Camera* cameraPtr, Starfield* starfieldPtr)
-		: AppState{ cameraPtr, starfieldPtr }
-	{
-		m_menu.SetTitle(m_title);
-		m_menu.SetTitleStyle(GUISettings::menuTitleTextStyle);
-		m_menu.SetBackgroundColor(d2d::COLOR_ZERO);
-
-		d2d::MenuButton button;
-		button.label = m_quitString;
-		button.style = GUISettings::backButtonStyle;
-		m_menu.AddButton(button);
-
-		button.label = m_newGameString;
-		button.style = GUISettings::normalButtonStyle;
-		m_menu.AddButton(button, true);
-	}
 	void MainMenuState::Init()
 	{
-		m_menu.Init();
+		m_menu.SetBackgroundColor(GUISettings::Menu::BackgroundColor::MAIN);
+		m_menu.SetTitleColor(GUISettings::Menu::Text::Color::TITLE);
+		m_menu.SetSubtitleColor(GUISettings::Menu::Text::Color::SUBTITLE);
+		m_menu.SetTitleFont(&m_titleFont);
+		m_menu.SetSubtitleFont(&m_subtitleFont);
+		m_menu.SetButtonFont(&m_buttonFont);
+		m_menu.SetTitleTextSize(GUISettings::Menu::Text::Size::TITLE);
+		m_menu.SetSubtitleTextSize(GUISettings::Menu::Text::Size::SUBTITLE);
+		m_menu.SetButtonTextSize(GUISettings::Menu::Text::Size::BUTTON);
+
+		m_menu.SetTitle(GUIStrings::MainMenu::TITLE);
+		m_menu.SetSubtitle();
+
+		m_menu.ClearButtons();
+		d2d::MenuButton button;
+		button.label = GUIStrings::MainMenu::QUIT;
+		button.style = GUISettings::Menu::ButtonStyles::Normal::BACK;
+		button.highlightStyle = GUISettings::Menu::ButtonStyles::Highlight::BACK;
+		m_menu.AddButton(button);
+
+		button.label = GUIStrings::MainMenu::NEW_GAME;
+		button.style = GUISettings::Menu::ButtonStyles::Normal::PRIMARY;
+		button.highlightStyle = GUISettings::Menu::ButtonStyles::Highlight::PRIMARY;
+		m_menu.AddButton(button, true);
+
 	}
 	void MainMenuState::ProcessEvent(const SDL_Event& event)
 	{
@@ -49,9 +58,9 @@ namespace Space
 		std::string pressedButton;
 		if(m_menu.PollPressedButton(pressedButton))
 		{
-			if(pressedButton == m_newGameString)
+			if(pressedButton == GUIStrings::MainMenu::NEW_GAME)
 				return AppStateID::GAME;
-			else if(pressedButton == m_quitString)
+			else if(pressedButton == GUIStrings::MainMenu::QUIT)
 				return AppStateID::QUIT;
 		}
 		return AppStateID::MAIN_MENU;

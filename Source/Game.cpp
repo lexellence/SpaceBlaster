@@ -10,7 +10,7 @@
 #include "pch.h"
 #include "Game.h"
 #include "Exceptions.h"
-
+#include "GUISettings.h"
 namespace Space
 {
 	Game::Game(Camera* cameraPtr, Starfield* starfieldPtr)
@@ -814,14 +814,15 @@ namespace Space
 			// Draw fuel
 			if(m_world.HasComponents(m_player.id, COMPONENT_FUEL))
 			{
-				d2d::Window::SetColor(m_fuelTextStyle.color);
+				d2d::Window::SetColor(GUISettings::HUD::Text::Color::FUEL);
 				d2d::Window::PushMatrix();
-				d2d::Window::Translate(m_fuelPosition * resolution);
+				d2d::Window::Translate(GUISettings::HUD::Text::Position::FUEL * resolution);
 				{
 					int fuelInt = (int)(m_world.GetFuelLevel(m_player.id) + 0.5f);
 					int maxFuelInt = (int)(m_world.GetMaxFuelLevel(m_player.id) + 0.5f);
 					std::string fuelString = d2d::ToString(fuelInt) + "/" + d2d::ToString(maxFuelInt);
-					d2d::Window::DrawString(fuelString, m_fuelTextStyle.size * resolution.y, m_fuelTextStyle.fontRefPtr, m_fuelAlignment);
+					d2d::Window::DrawString(fuelString, GUISettings::HUD::Text::Size::FUEL * resolution.y,
+						m_hudFont, GUISettings::HUD::Text::Position::FUEL_ALIGNMENT);
 				}
 				d2d::Window::PopMatrix();
 			}
@@ -829,32 +830,37 @@ namespace Space
 			// Draw icons collected
 			if(m_world.HasComponents(m_player.id, COMPONENT_ICON_COLLECTOR))
 			{
-				d2d::Window::SetColor(m_iconsTextStyle.color);
+				d2d::Window::SetColor(GUISettings::HUD::Text::Color::ICONS);
 				d2d::Window::PushMatrix();
-				d2d::Window::Translate(m_iconsPosition * resolution);
+				d2d::Window::Translate(GUISettings::HUD::Text::Position::ICONS * resolution);
 				{
 					unsigned icons = m_world.GetIconsCollected(m_player.id);
 					std::string iconsString = d2d::ToString(icons);
-					d2d::Window::DrawString(iconsString, m_iconsTextStyle.size * resolution.y, m_iconsTextStyle.fontRefPtr, m_iconsAlignment);
+					d2d::Window::DrawString(iconsString, GUISettings::HUD::Text::Size::ICONS * resolution.y,
+						m_hudFont, GUISettings::HUD::Text::Position::ICONS_ALIGNMENT);
 				}
 				d2d::Window::PopMatrix();
 			}
 
 			// Draw credits
-			d2d::Window::SetColor(m_creditsTextStyle.color);
+			d2d::Window::SetColor(GUISettings::HUD::Text::Color::CREDITS);
 			d2d::Window::PushMatrix();
-			d2d::Window::Translate(m_creditsPosition * resolution);
+			d2d::Window::Translate(GUISettings::HUD::Text::Position::CREDITS * resolution);
 			{
-				d2d::Window::DrawString(d2d::ToString(m_player.credits), m_creditsTextStyle.size * resolution.y, m_creditsTextStyle.fontRefPtr, m_creditsAlignment);
+				std::string creditsString = d2d::ToString(m_player.credits);
+				d2d::Window::DrawString(creditsString, GUISettings::HUD::Text::Size::CREDITS * resolution.y,
+					m_hudFont, GUISettings::HUD::Text::Position::CREDITS_ALIGNMENT);
 			}
 			d2d::Window::PopMatrix();
 
 			// Draw level
-			d2d::Window::SetColor(m_levelTextStyle.color);
+			d2d::Window::SetColor(GUISettings::HUD::Text::Color::LEVEL);
 			d2d::Window::PushMatrix();
-			d2d::Window::Translate(m_levelPosition * resolution);
+			d2d::Window::Translate(GUISettings::HUD::Text::Position::LEVEL * resolution);
 			{
-				d2d::Window::DrawString(d2d::ToString(m_player.currentLevel), m_levelTextStyle.size * resolution.y, m_levelTextStyle.fontRefPtr, m_levelAlignment);
+				std::string levelString = d2d::ToString(m_player.currentLevel);
+				d2d::Window::DrawString(levelString, GUISettings::HUD::Text::Size::LEVEL * resolution.y,
+					m_hudFont, GUISettings::HUD::Text::Position::LEVEL_ALIGNMENT);
 			}
 			d2d::Window::PopMatrix();
 		}

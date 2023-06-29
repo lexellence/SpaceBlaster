@@ -12,6 +12,7 @@
 #include "Game.h"
 #include "GameInput.h"
 #include "Shop.h"
+#include "GUISettings.h"
 namespace Space
 {
 	enum class GameMode
@@ -23,7 +24,7 @@ namespace Space
 	class GameState : public AppState
 	{
 	public:
-		GameState(Camera* cameraPtr, Starfield* starfieldPtr);
+		using AppState::AppState;
 		void Init() override;
 		void ProcessEvent(const SDL_Event& event) override;
 		AppStateID Update(float dt) override;
@@ -35,8 +36,8 @@ namespace Space
 		void StartPostLevel();
 		void StartShopMain(std::string selectedButtonName = {});
 		void StartShopRoom(std::string roomName);
-		bool DoesShopHaveAffordableItems(const std::string& roomName = {}) const;
-		void ShowCreditsOnMenu(bool flag);
+		bool CanPlayerAffordAnyItems(const std::string& roomName = {}) const;
+		std::string GetCreditsString() const;
 
 		void PauseGame();
 		void UnpauseGame();
@@ -53,7 +54,7 @@ namespace Space
 
 		// Game
 		GameMode m_mode;
-		Game m_game;
+		Game m_game{ m_cameraPtr, m_starfieldPtr };
 		Shop m_shop;
 		d2d::Menu m_menu;
 		bool m_showFPS;
@@ -63,20 +64,9 @@ namespace Space
 		Keyboard m_keyboard;
 		PlayerController m_playerController;
 
-		// Pause menu
-		const std::string m_pauseTitle{ "Paused" };
-		const std::string m_resumeString{ "Resume" };
-		const std::string m_quitString{ "Quit" };
-
-		// Post-level menu
-		const std::string m_postLevelTitle{ "Would you like to visit the shop to purchase upgrades?" };
-		const std::string m_nextLevelString{ "Start Next Wave" };
-		const std::string m_purchaseString{ "Purchase Upgrades" };
-		const std::vector<std::string> m_postLevelMenuLabels{ m_nextLevelString, m_purchaseString, m_quitString };
-		const std::string m_backString{ "Back" };
-
-		// FPS display
-		const b2Vec2 m_fpsPosition{ 1.0f, 1.0f };
-		const d2d::AlignmentAnchor m_fpsAlignment{ d2d::AlignmentAnchorX::RIGHT, d2d::AlignmentAnchorY::TOP };
+		d2d::FontReference m_titleFont{ GUISettings::Menu::Text::Font::TITLE };
+		d2d::FontReference m_subtitleFont{ GUISettings::Menu::Text::Font::SUBTITLE };
+		d2d::FontReference m_buttonFont{ GUISettings::Menu::Text::Font::BUTTON };
+		d2d::FontReference m_HUDFont{ GUISettings::HUD::Text::Font::DEFAULT };
 	};
 }

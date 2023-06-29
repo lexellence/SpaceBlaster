@@ -47,6 +47,7 @@
     <ClInclude Include="..\Source\GameInput.h" />
     <ClInclude Include="..\Source\GameModels.h" />
     <ClInclude Include="..\Source\GameState.h" />
+    <ClInclude Include="..\Source\GUIStrings.h" />
     <ClInclude Include="..\Source\IntroState.h" />
     <ClInclude Include="..\Source\MainMenuState.h" />
     <ClInclude Include="..\Source\GUISettings.h" />

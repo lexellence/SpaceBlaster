@@ -25,6 +25,9 @@
     <Filter Include="Source Files\Game">
       <UniqueIdentifier>{0cac9332-fabf-435f-8f3a-bba21c08dcc3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Settings">
+      <UniqueIdentifier>{9999531e-eecc-4536-86d8-250c4d332d1f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Source\Camera.cpp">
@@ -140,20 +143,23 @@
     <ClInclude Include="..\Source\GameInput.h">
       <Filter>Source Files\Game</Filter>
     </ClInclude>
-    <ClInclude Include="..\Source\StarfieldSettings.h">
-      <Filter>Source Files\App</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Source\CameraSettings.h">
-      <Filter>Source Files\App</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Source\GUISettings.h">
-      <Filter>Source Files\States</Filter>
-    </ClInclude>
     <ClInclude Include="..\Source\Shop.h">
       <Filter>Source Files\Game</Filter>
     </ClInclude>
+    <ClInclude Include="..\Source\GUISettings.h">
+      <Filter>Source Files\Settings</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\GUIStrings.h">
+      <Filter>Source Files\Settings</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\StarfieldSettings.h">
+      <Filter>Source Files\Settings</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\CameraSettings.h">
+      <Filter>Source Files\Settings</Filter>
+    </ClInclude>
     <ClInclude Include="..\Source\ShopSettings.h">
-      <Filter>Source Files\Game</Filter>
+      <Filter>Source Files\Settings</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
