@@ -26,18 +26,21 @@ namespace Space
 		void Run();
 	private:
 		void Init();
+		void InitD2D();
 		void InitStarfield();
+		void InitStates();
 		void Step(float dt);
 
-		std::shared_ptr<AppState> GetStatePtr(AppStateID appState);
+		std::shared_ptr<AppState> GetStatePtr(AppStateID appState) const;
 		void InitCurrentState();
 		void UpdateCurrentState(float dt);
-		void Draw();
+		void Draw() const;
 		void Shutdown();
 
-		std::shared_ptr<IntroState> m_introStatePtr;
-		std::shared_ptr<MainMenuState> m_mainMenuStatePtr;
-		std::shared_ptr<GameState> m_gameStatePtr;
+		ResourceManager* m_resourcesPtr{};
+		std::shared_ptr<IntroState> m_introStatePtr{};
+		std::shared_ptr<MainMenuState> m_mainMenuStatePtr{};
+		std::shared_ptr<GameState> m_gameStatePtr{};
 
 		AppStateID m_currentState{ FIRST_APP_STATE };
 		AppStateID m_nextState{ FIRST_APP_STATE };

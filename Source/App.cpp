@@ -17,7 +17,7 @@
 #include "Exceptions.h"
 #include "CameraSettings.h"
 #include "StarfieldSettings.h"
-
+#include "Resources.h"
 namespace Space
 {
 	void App::Run()
@@ -35,7 +35,15 @@ namespace Space
 	}
 	void App::Init()
 	{
-		// Init d2d
+		InitD2D();
+		m_resourcesPtr = new ResourceManager();
+		m_camera.Init(CameraSettings::DIMENSION_RANGE, CameraSettings::ZOOM_SPEED,
+			CameraSettings::INITIAL_ZOOM_OUT_PERCENT);
+		InitStarfield();
+		InitStates();
+	}
+	void App::InitD2D()
+	{
 		d2d::Init(d2LogSeverityTrace, "Space.log");
 		{
 			AppDef settings;
@@ -46,20 +54,6 @@ namespace Space
 			m_hasFocus = false;
 		}
 		d2d::SeedRandomNumberGenerator();
-
-		m_camera.Init(CameraSettings::DIMENSION_RANGE, CameraSettings::ZOOM_SPEED, 
-			CameraSettings::INITIAL_ZOOM_OUT_PERCENT);
-		InitStarfield();
-
-		// AppStates
-		m_introStatePtr = std::make_shared<IntroState>(&m_camera, &m_starfield);
-		m_mainMenuStatePtr = std::make_shared<MainMenuState>(&m_camera, &m_starfield);
-		m_gameStatePtr = std::make_shared<GameState>(&m_camera, &m_starfield);
-
-		// Start first app state
-		m_currentState = FIRST_APP_STATE;
-		m_nextState = FIRST_APP_STATE;
-		InitCurrentState();
 	}
 	void App::InitStarfield()
 	{
@@ -72,6 +66,17 @@ namespace Space
 		def.colorRange = StarfieldSettings::COLOR_RANGE;
 		def.maxAlphaVariation = StarfieldSettings::MAX_ALPHA_VARIATION;
 		m_starfield.Init(def, CameraSettings::DIMENSION_RANGE.GetMax());
+	}
+	void App::InitStates()
+	{
+		m_introStatePtr = std::make_shared<IntroState>(m_resourcesPtr, &m_camera, &m_starfield);
+		m_mainMenuStatePtr = std::make_shared<MainMenuState>(m_resourcesPtr, &m_camera, &m_starfield);
+		m_gameStatePtr = std::make_shared<GameState>(m_resourcesPtr, &m_camera, &m_starfield);
+
+		// Start first app state
+		m_currentState = FIRST_APP_STATE;
+		m_nextState = FIRST_APP_STATE;
+		InitCurrentState();
 	}
 	void App::Step(float dt)
 	{
@@ -96,7 +101,7 @@ namespace Space
 		// Just in case an exception brings us out of the main loop
 		Shutdown();
 	}
-	std::shared_ptr<AppState> App::GetStatePtr(AppStateID appState)
+	std::shared_ptr<AppState> App::GetStatePtr(AppStateID appState) const
 	{
 		switch(appState)
 		{
@@ -168,16 +173,20 @@ namespace Space
 			}
 		}
 	}
-	void App::Draw()
+	void App::Draw() const 
 	{
 		std::shared_ptr<AppState> currentStatePtr{ GetStatePtr(m_currentState) };
-
 		d2d::Window::StartScene();
 		currentStatePtr->Draw();
 		d2d::Window::EndScene();
 	}
 	void App::Shutdown()
 	{
+		if(m_resourcesPtr)
+		{
+			delete m_resourcesPtr;
+			m_resourcesPtr = nullptr;
+		}
 		d2d::Shutdown();
 	}
 }

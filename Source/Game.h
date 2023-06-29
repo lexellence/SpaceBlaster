@@ -36,7 +36,7 @@ namespace Space
 	{
 	public:
 		Game() = delete;
-		Game(Camera* cameraPtr, Starfield* starfieldPtr);
+		Game(ResourceManager* resourcesPtr, Camera* cameraPtr, Starfield* starfieldPtr);
 		void NewGame();
 		void Update(float dt, PlayerController &playerController);
 		void Draw();
@@ -94,14 +94,15 @@ namespace Space
 
 	private:
 		World m_world;
+		ResourceManager *const m_resourcesPtr;
 		Camera *const m_cameraPtr;
 		Starfield *const m_starfieldPtr;
 		bool m_firstUpdate{ true };
-		GameModels m_models;
+		GameModels m_models{ m_resourcesPtr };
 		bool m_cameraFollowingEntity{ false };
 		WorldID m_cameraFollowEntityID{};
 		b2Vec2 m_spawnAsteroidStartingDirection{};
-
+		std::list<DelayedGameAction> m_delayedGameActions;
 		struct
 		{
 			bool isSet{};
@@ -112,35 +113,7 @@ namespace Space
 			std::set<ShopItemID> upgrades;
 		} m_player;
 		
-		std::list<DelayedGameAction> m_delayedGameActions;
-
-		// Fonts
-		d2d::FontReference m_hudFont{"Fonts/OrbitronLight.otf"};
-		float m_hudFontSize{0.05f};
-
-		// HUD Fuel
-		const b2Vec2 m_fuelPosition{0.10f, 0.10f};
-		const d2d::AlignmentAnchor m_fuelAlignment{ d2d::AlignmentAnchorX::LEFT, d2d::AlignmentAnchorY::BOTTOM };
-		const d2d::TextStyle m_fuelTextStyle{ &m_hudFont, 
-			{1.0f, 0.2f, 0.2f, 1.0f}, m_hudFontSize };
-
-		// HUD Icons Collected
-		const b2Vec2 m_iconsPosition{0.10f, 0.90f};
-		const d2d::AlignmentAnchor m_iconsAlignment{ d2d::AlignmentAnchorX::LEFT, d2d::AlignmentAnchorY::TOP };
-		const d2d::TextStyle m_iconsTextStyle{ &m_hudFont,
-			{0.2f, 0.2f, 1.0f, 1.0f}, m_hudFontSize };
-
-		// HUD Credits
-		const b2Vec2 m_creditsPosition{0.90f, 0.90f};
-		const d2d::AlignmentAnchor m_creditsAlignment{ d2d::AlignmentAnchorX::RIGHT, d2d::AlignmentAnchorY::TOP };
-		const d2d::TextStyle m_creditsTextStyle{ &m_hudFont,
-			{0.2f, 1.0f, 0.2f, 1.0f}, m_hudFontSize };
-
-		// HUD Level
-		const b2Vec2 m_levelPosition{0.90f, 0.10f};
-		const d2d::AlignmentAnchor m_levelAlignment{ d2d::AlignmentAnchorX::RIGHT, d2d::AlignmentAnchorY::BOTTOM };
-		const d2d::TextStyle m_levelTextStyle{ &m_hudFont,
-			{1.0f, 1.0f, 0.2f, 1.0f}, m_hudFontSize };
+		const unsigned m_guiFont{ m_resourcesPtr->fonts.orbitronLight };
 
 		//+---------------------------\-------------------------------
 		//|		  Projectiles		  |
@@ -148,7 +121,7 @@ namespace Space
 		// Bullet
 		ProjectileDef m_bulletDef{ m_models.bullet,
 			BULLET_MATERIAL,
-			{BULLET_HEIGHT * m_models.textures.bullet.GetWidthToHeightRatio(), BULLET_HEIGHT},
+			{BULLET_HEIGHT * d2d::Window::GetWidthHeightRatio(m_resourcesPtr->textures.projectiles.bullet), BULLET_HEIGHT},
 			BULLET_FIXED_ROTATION,
 			BULLET_CONTINUOUS_COLLISION_DETECTION,
 			BULLET_FILTER,
@@ -165,7 +138,7 @@ namespace Space
 		// Missile
 		ProjectileDef m_missileDef{ m_models.missile,
 			MISSILE_MATERIAL,
-			{MISSILE_HEIGHT * m_models.textures.missileFrames[0].GetWidthToHeightRatio(), MISSILE_HEIGHT},
+			{MISSILE_HEIGHT * d2d::Window::GetWidthHeightRatio(m_resourcesPtr->textures.projectiles.missileFrames[0]), MISSILE_HEIGHT},
 			MISSILE_FIXED_ROTATION,
 			MISSILE_CONTINUOUS_COLLISION_DETECTION,
 			MISSILE_FILTER,
@@ -182,7 +155,7 @@ namespace Space
 		// Fat missile
 		ProjectileDef m_fatMissileDef{ m_models.fatMissile,
 			MISSILE_MATERIAL,
-			{MISSILE_HEIGHT * m_models.textures.fatMissileFrames[0].GetWidthToHeightRatio(), MISSILE_HEIGHT},
+			{MISSILE_HEIGHT * d2d::Window::GetWidthHeightRatio(m_resourcesPtr->textures.projectiles.fatMissileFrames[0]), MISSILE_HEIGHT},
 			MISSILE_FIXED_ROTATION,
 			MISSILE_CONTINUOUS_COLLISION_DETECTION,
 			MISSILE_FILTER,

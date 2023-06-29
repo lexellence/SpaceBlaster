@@ -11,18 +11,26 @@
 #include "GameState.h"
 #include "AppState.h"
 #include "Game.h"
-#include "GUISettings.h"
 #include "ShopSettings.h"
+#include "GUISettings.h"
+#include "GUIStrings.h"
 namespace Space
 {
-	GameState::GameState(Camera* cameraPtr, Starfield* starfieldPtr)
-		: AppState{ cameraPtr, starfieldPtr },
-		  m_game{ cameraPtr, starfieldPtr }
+	GameState::GameState(ResourceManager* resourcesPtr, Camera* cameraPtr, Starfield* starfieldPtr)
+		: AppState{ resourcesPtr, cameraPtr, starfieldPtr },
+		  m_game{ resourcesPtr, cameraPtr, starfieldPtr }
 	{}
 	void GameState::Init()
 	{
-		m_menu.SetTitleStyle(GUISettings::menuTitleTextStyle);
-		m_menu.SetSubtitleStyle(GUISettings::menuSubtitleTextStyle);
+		m_menu.SetTitleColor(GUISettings::Menu::Text::Color::TITLE);
+		m_menu.SetSubtitleColor(GUISettings::Menu::Text::Color::SUBTITLE);
+		m_menu.SetTitleFont(m_titleFont);
+		m_menu.SetSubtitleFont(m_subtitleFont);
+		m_menu.SetButtonFont(m_buttonFont);
+		m_menu.SetTitleTextSize(GUISettings::Menu::Text::Size::TITLE);
+		m_menu.SetSubtitleTextSize(GUISettings::Menu::Text::Size::SUBTITLE);
+		m_menu.SetButtonTextSize(GUISettings::Menu::Text::Size::BUTTON);
+
 		m_showFPS = false;
 		ResetController();
 
@@ -42,32 +50,31 @@ namespace Space
 		{
 			// Get menu button pressed
 			d2d::MenuButton pressedButton;
-			bool pressed;
-			pressed = m_menu.PollPressedButton(pressedButton);
+			bool pressed = m_menu.PollPressedButton(pressedButton);
 			if(pressed)
 			{
-				// Quit
-				if(pressedButton.label == m_quitString)
-					return AppStateID::MAIN_MENU;
-
 				if(m_mode == GameMode::PAUSED)
 				{
 					// Pause menu
-					if(pressedButton.label == m_resumeString)
+					if(pressedButton.label == GUIStrings::PauseMenu::QUIT)
+						return AppStateID::MAIN_MENU;
+					else if(pressedButton.label == GUIStrings::PauseMenu::RESUME)
 						UnpauseGame();
 				}
 				else if(m_mode == GameMode::POST_LEVEL)
 				{
 					// Post-level main menu
-					if(pressedButton.label == m_nextLevelString)
+					if(pressedButton.label == GUIStrings::PostLevelMenu::QUIT)
+						return AppStateID::MAIN_MENU;
+					if(pressedButton.label == GUIStrings::PostLevelMenu::NEXT_LEVEL)
 						StartActionMode(true);
-					else if(pressedButton.label == m_purchaseString)
+					else if(pressedButton.label == GUIStrings::PostLevelMenu::SHOP)
 						StartShopMain();
 				}
 				else if(m_mode == GameMode::SHOP_MAIN)
 				{
 					// Shop main menu
-					if(pressedButton.label == m_backString)
+					if(pressedButton.label == GUIStrings::ShopMenu::BACK)
 						StartPostLevel();
 					else
 						StartShopRoom(pressedButton.label);
@@ -76,7 +83,7 @@ namespace Space
 				{
 					// Shop room submenus
 					std::string roomName = m_menu.GetTitle();
-					if(pressedButton.label == m_backString)
+					if(pressedButton.label == GUIStrings::ShopMenu::BACK_ROOM)
 						StartShopMain(roomName);
 					else
 					{
@@ -112,62 +119,79 @@ namespace Space
 		m_mode = GameMode::PAUSED;
 		m_menu.ClearButtons();
 
-		m_menu.SetTitle(m_pauseTitle);
-		ShowCreditsOnMenu(false);
-		m_menu.SetBackgroundColor(GUISettings::pauseMenuBackgroundColor);
+		m_menu.SetTitle(GUIStrings::PauseMenu::TITLE);
+		m_menu.SetSubtitle();
+		m_menu.SetBackgroundColor(GUISettings::Menu::BackgroundColor::PAUSE);
 
 		d2d::MenuButton button;
-		button.label = m_quitString;
-		button.style = GUISettings::backButtonStyle;
+		button.label = GUIStrings::PauseMenu::QUIT;
+		button.style = GUISettings::Menu::ButtonStyles::Normal::BACK;
+		button.highlightStyle = GUISettings::Menu::ButtonStyles::Highlight::BACK;
 		m_menu.AddButton(button);
-		button.label = m_resumeString;
-		button.style = GUISettings::normalButtonStyle;
+		button.label = GUIStrings::PauseMenu::RESUME;
+		button.style = GUISettings::Menu::ButtonStyles::Normal::PRIMARY;
+		button.highlightStyle = GUISettings::Menu::ButtonStyles::Highlight::PRIMARY;
 		m_menu.AddButton(button, true);
 	}
 	void GameState::StartPostLevel()
 	{
 		m_mode = GameMode::POST_LEVEL;
-		m_menu.SetTitle(m_postLevelTitle);
-		ShowCreditsOnMenu(false);
-		m_menu.SetBackgroundColor(GUISettings::postLevelMenuBackgroundColor);
+		m_menu.SetTitle(GUIStrings::PostLevelMenu::TITLE);
+		m_menu.SetSubtitle();
+		m_menu.SetBackgroundColor(GUISettings::Menu::BackgroundColor::POST_LEVEL);
 		m_menu.ClearButtons();
 
 		d2d::MenuButton button;
-		button.label = m_quitString;
-		button.style = GUISettings::backButtonStyle;
+		button.label = GUIStrings::PostLevelMenu::QUIT;
+		button.style = GUISettings::Menu::ButtonStyles::Normal::BACK;
+		button.highlightStyle = GUISettings::Menu::ButtonStyles::Highlight::BACK;
 		m_menu.AddButton(button);
 
-		button.label = m_purchaseString;
-		if(DoesShopHaveAffordableItems())
-			button.style = GUISettings::secondaryButtonStyle;
+		button.label = GUIStrings::PostLevelMenu::SHOP;
+		if(CanPlayerAffordAnyItems())
+		{
+			button.style = GUISettings::Menu::ButtonStyles::Normal::SECONDARY;
+			button.highlightStyle = GUISettings::Menu::ButtonStyles::Highlight::SECONDARY;
+		}
 		else
-			button.style = GUISettings::grayedButtonStyle;
+		{
+			button.style = GUISettings::Menu::ButtonStyles::Normal::GRAYED;
+			button.highlightStyle = GUISettings::Menu::ButtonStyles::Highlight::GRAYED;
+		}
 		m_menu.AddButton(button);
 
-		button.label = m_nextLevelString;
-		button.style = GUISettings::normalButtonStyle;
+		button.label = GUIStrings::PostLevelMenu::NEXT_LEVEL;
+		button.style = GUISettings::Menu::ButtonStyles::Normal::PRIMARY;
+		button.highlightStyle = GUISettings::Menu::ButtonStyles::Highlight::PRIMARY;
 		m_menu.AddButton(button, true);
 	}
 	void GameState::StartShopMain(std::string selectedButtonName)
 	{
 		m_mode = GameMode::SHOP_MAIN;
 		m_menu.SetTitle(ShopSettings::TITLE);
-		ShowCreditsOnMenu(true);
-		m_menu.SetBackgroundColor(GUISettings::postLevelMenuBackgroundColor);
+		m_menu.SetSubtitle(GetCreditsString());
+		m_menu.SetBackgroundColor(GUISettings::Menu::BackgroundColor::POST_LEVEL);
 		m_menu.ClearButtons();
 
 		d2d::MenuButton button;
-		button.label = m_backString;
-		button.style = GUISettings::backButtonStyle;
+		button.label = GUIStrings::ShopMenu::BACK;
+		button.style = GUISettings::Menu::ButtonStyles::Normal::BACK;
+		button.highlightStyle = GUISettings::Menu::ButtonStyles::Highlight::BACK;
 		m_menu.AddButton(button, true);
 
 		auto roomNames = m_shop.GetRoomNames();
-		for(auto roomName : roomNames)
+		for(const auto& roomName : roomNames)
 		{
-			if(DoesShopHaveAffordableItems(roomName))
-				button.style = GUISettings::secondaryButtonStyle;
+			if(CanPlayerAffordAnyItems(roomName))
+			{
+				button.style = GUISettings::Menu::ButtonStyles::Normal::SECONDARY;
+				button.highlightStyle = GUISettings::Menu::ButtonStyles::Highlight::SECONDARY;
+			}
 			else
-				button.style = GUISettings::grayedButtonStyle;
+			{
+				button.style = GUISettings::Menu::ButtonStyles::Normal::GRAYED;
+				button.highlightStyle = GUISettings::Menu::ButtonStyles::Highlight::GRAYED;
+			}
 			button.label = roomName;
 			bool select = (roomName == selectedButtonName);
 			m_menu.AddButton(button, select);
@@ -177,29 +201,36 @@ namespace Space
 	{
 		m_mode = GameMode::SHOP_ROOM;
 		m_menu.SetTitle(roomName);
-		ShowCreditsOnMenu(true);
-		m_menu.SetBackgroundColor(GUISettings::postLevelMenuBackgroundColor);
+		m_menu.SetSubtitle(GetCreditsString());
+		m_menu.SetBackgroundColor(GUISettings::Menu::BackgroundColor::POST_LEVEL);
 		m_menu.ClearButtons();
 
 		d2d::MenuButton button;
-		button.label = m_backString;
-		button.style = GUISettings::backButtonStyle;
+		button.label = GUIStrings::ShopMenu::BACK_ROOM;
+		button.style = GUISettings::Menu::ButtonStyles::Normal::BACK;
+		button.highlightStyle = GUISettings::Menu::ButtonStyles::Highlight::BACK;
 		m_menu.AddButton(button, true);
 
 		const auto& items = m_shop.GetItems(roomName);
 		for(const auto& item : items)
 		{
 			if(m_game.GetPlayerCredits() >= item.price)
-				button.style = GUISettings::secondaryButtonStyle;
+			{
+				button.style = GUISettings::Menu::ButtonStyles::Normal::SECONDARY;
+				button.highlightStyle = GUISettings::Menu::ButtonStyles::Highlight::SECONDARY;
+			}
 			else
-				button.style = GUISettings::grayedButtonStyle;
+			{
+				button.style = GUISettings::Menu::ButtonStyles::Normal::GRAYED;
+				button.highlightStyle = GUISettings::Menu::ButtonStyles::Highlight::GRAYED;
+			}
 			button.label = item.name + "    Cost: "s + d2d::ToString(item.price);
 			SetShopMenuButtonID(button, item.id);
 			SetShopMenuButtonPrice(button, item.price);
 			m_menu.AddButton(button);
 		}
 	}
-	bool GameState::DoesShopHaveAffordableItems(const std::string& roomName) const
+	bool GameState::CanPlayerAffordAnyItems(const std::string& roomName) const
 	{
 		const auto& items = m_shop.GetItems(roomName);
 		for(const auto& item : items)
@@ -209,12 +240,9 @@ namespace Space
 		}
 		return false;
 	}
-	void GameState::ShowCreditsOnMenu(bool flag)
+	std::string GameState::GetCreditsString() const
 	{
-		if(flag)
-			m_menu.SetSubtitle("Credits: "s + d2d::ToString(m_game.GetPlayerCredits()));
-		else
-			m_menu.SetSubtitle();
+		return "Credits: "s + d2d::ToString(m_game.GetPlayerCredits());
 	}
 	void GameState::Draw()
 	{
@@ -227,22 +255,21 @@ namespace Space
 	}
 	void GameState::DrawFPS()
 	{
-		// Set camera to screen resolution
 		b2Vec2 resolution{ d2d::Window::GetScreenResolution() };
 		d2d::Window::SetCameraRect({ b2Vec2_zero, resolution });
-		{
-			// Convert fps to string and draw
-			int fpsInt{ (int)(d2d::Window::GetFPS() + 0.5f) };
-			std::string fpsString{ d2d::ToString(fpsInt) };
 
-			d2d::Window::DisableTextures();
-			d2d::Window::EnableBlending();
-			d2d::Window::SetColor(GUISettings::fpsTextStyle.color);
-			d2d::Window::PushMatrix();
-			d2d::Window::Translate(m_fpsPosition * resolution);
-			d2d::Window::DrawString(fpsString, GUISettings::fpsTextStyle.size * resolution.y, GUISettings::fpsTextStyle.fontRefPtr, m_fpsAlignment);
-			d2d::Window::PopMatrix();
-		}
+		int fpsInt{ (int)(d2d::Window::GetFPS() + 0.5f) };
+		std::string fpsString{ d2d::ToString(fpsInt) };
+
+		d2d::Window::DisableTextures();
+		d2d::Window::EnableBlending();
+		d2d::Window::SetColor(GUISettings::HUD::Text::Color::FPS);
+		d2d::Window::PushMatrix();
+		d2d::Window::Translate(GUISettings::HUD::Text::Position::FPS * resolution);
+		d2d::Window::DrawString(m_guiFont, fpsString,
+			GUISettings::HUD::Text::Size::FPS * resolution.y,
+			GUISettings::HUD::Text::Position::FPS_ALIGNMENT);
+		d2d::Window::PopMatrix();
 	}
 
 	void GameState::ProcessEvent(const SDL_Event& event)

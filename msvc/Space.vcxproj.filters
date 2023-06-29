@@ -25,6 +25,9 @@
     <Filter Include="Source Files\Game">
       <UniqueIdentifier>{0cac9332-fabf-435f-8f3a-bba21c08dcc3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Settings">
+      <UniqueIdentifier>{66ccf78e-2b4b-4a9c-8589-9d009005cb5e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Source\Camera.cpp">
@@ -81,6 +84,9 @@
     <ClCompile Include="..\Source\Shop.cpp">
       <Filter>Source Files\Game</Filter>
     </ClCompile>
+    <ClCompile Include="..\Source\Resources.cpp">
+      <Filter>Source Files\App</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Source\Camera.h">
@@ -134,26 +140,32 @@
     <ClInclude Include="..\Source\b2_user_settings.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\Source\GameSettings.h">
-      <Filter>Source Files\Game</Filter>
-    </ClInclude>
     <ClInclude Include="..\Source\GameInput.h">
       <Filter>Source Files\Game</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Source\StarfieldSettings.h">
-      <Filter>Source Files\App</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Source\CameraSettings.h">
-      <Filter>Source Files\App</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Source\GUISettings.h">
-      <Filter>Source Files\States</Filter>
     </ClInclude>
     <ClInclude Include="..\Source\Shop.h">
       <Filter>Source Files\Game</Filter>
     </ClInclude>
+    <ClInclude Include="..\Source\StarfieldSettings.h">
+      <Filter>Source Files\Settings</Filter>
+    </ClInclude>
     <ClInclude Include="..\Source\ShopSettings.h">
-      <Filter>Source Files\Game</Filter>
+      <Filter>Source Files\Settings</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\GameSettings.h">
+      <Filter>Source Files\Settings</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\GUISettings.h">
+      <Filter>Source Files\Settings</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\CameraSettings.h">
+      <Filter>Source Files\Settings</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Resources.h">
+      <Filter>Source Files\App</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\GUIStrings.h">
+      <Filter>Source Files\Settings</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

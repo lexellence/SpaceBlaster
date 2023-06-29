@@ -8,74 +8,107 @@
 **
 \**************************************************************************************/
 #pragma once
-namespace Space
-{
-	namespace GUISettings
-	{
-		const d2d::Color normalButtonColor{ 0.0f, 0.3f, 0.0f, 0.2f };
-		const d2d::Color secondaryButtonColor{ 0.0f, 0.0f, 0.3f, 0.2f };
-		const d2d::Color backButtonColor{ 0.3f, 0.0f, 0.0f, 0.2f };
-		const d2d::Color grayedButtonColor{ 0.1f, 0.1f, 0.1f, 0.2f };
-
-		const d2d::Color normalButtonHighlightColor{ 0.0f, 1.0f, 0.0f, 0.4f };
-		const d2d::Color secondaryButtonHighlightColor{ 0.0f, 0.0f, 1.0f, 0.4f };
-		const d2d::Color backButtonHighlightColor{ 1.0f, 0.0f, 0.0f, 0.4f };
-		const d2d::Color grayedButtonHighlightColor{ 0.33f, 0.33f, 0.33f, 0.4f };
-
-		const d2d::Color normalButtonBorderColor{ 0.1f, 0.5f, 0.1f, 0.7f };
-		const d2d::Color secondaryButtonBorderColor{ 0.1f, 0.1f, 0.5f, 0.7f };
-		const d2d::Color backButtonBorderColor{ 0.5f, 0.1f, 0.1f, 0.7f };
-		const d2d::Color grayedButtonBorderColor{ 0.25f, 0.25f, 0.25f, 0.7f };
-
-		const d2d::Color postLevelMenuBackgroundColor{ 0.1f, 0.1f, 0.1f, 0.6f };
-		const d2d::Color pauseMenuBackgroundColor{ 0.5f, 0.5f, 0.5f, 0.3f };
-
-		const d2d::Color menuTitleTextColor{ 0.0f, 1.0f, 0.0f, 1.0f };
-		const d2d::Color menuSubtitleTextColor{ 0.0f, 0.0f, 1.0f, 1.0f };
-
-		const d2d::Color normalButtonTextColor{ 0.2f, 0.8f, 0.2f, 1.0f };
-		const d2d::Color secondaryButtonTextColor{ 0.2f, 0.2f, 0.8f, 1.0f };
-		const d2d::Color backButtonTextColor{ 0.8f, 0.2f, 0.2f, 1.0f };
-		const d2d::Color grayedButtonTextColor{ 0.3f, 0.3f, 0.3f, 1.0f };
-
-		const float menuTitleTextSize = 0.045f;
-		const float menuSubtitleTextSize = 0.035f;
-		const float buttonTextSize = 0.035f;
-		const d2d::FontReference orbitronLightFont{ "Fonts/OrbitronLight.otf" };
-		const d2d::TextStyle menuTitleTextStyle{ &orbitronLightFont, menuTitleTextColor, menuTitleTextSize };
-		const d2d::TextStyle menuSubtitleTextStyle{ &orbitronLightFont,	menuSubtitleTextColor, menuSubtitleTextSize };
-		const d2d::TextStyle normalButtonTextStyle{ &orbitronLightFont,	normalButtonTextColor, buttonTextSize };
-		const d2d::TextStyle secondaryButtonTextStyle{ &orbitronLightFont, secondaryButtonTextColor, buttonTextSize };
-		const d2d::TextStyle backButtonTextStyle{ &orbitronLightFont, backButtonTextColor, buttonTextSize };
-		const d2d::TextStyle grayedButtonTextStyle{ &orbitronLightFont, grayedButtonTextColor, buttonTextSize };
-
-		const d2d::ButtonStyle normalButtonStyle{
-			.text{ normalButtonTextStyle },
-			.color{ normalButtonColor },
-			.highlightColor{ normalButtonHighlightColor },
-			.borderColor{ normalButtonBorderColor }
-		};
-		const d2d::ButtonStyle secondaryButtonStyle{
-			.text{ secondaryButtonTextStyle },
-			.color{ secondaryButtonColor },
-			.highlightColor{ secondaryButtonHighlightColor },
-			.borderColor{ secondaryButtonBorderColor }
-		};
-		const d2d::ButtonStyle backButtonStyle{
-			.text{ backButtonTextStyle },
-			.color{ backButtonColor },
-			.highlightColor{ backButtonHighlightColor },
-			.borderColor{ backButtonBorderColor }
-		};
-		const d2d::ButtonStyle grayedButtonStyle{
-			.text{ grayedButtonTextStyle },
-			.color{ grayedButtonColor },
-			.highlightColor{ grayedButtonHighlightColor },
-			.borderColor{ grayedButtonBorderColor }
-		};
-
-		const d2d::Color fpsTextColor{ 1.0f, 1.0f, 0.0f, 1.0f };
-		const float fpsTextSize = 0.05f;
-		const d2d::TextStyle fpsTextStyle{ &orbitronLightFont, fpsTextColor, fpsTextSize };
+#include "Resources.h"
+namespace Space::GUISettings {
+	namespace Intro::Text {
+		namespace Color {
+			const d2d::Color TITLE{ 0.0f, 1.0f, 0.0f, 1.0f };
+			const d2d::Color SUBTITLE{ 0.5f, 0.0f, 0.7f, 1.0f };
+		}
+		namespace Size {
+			const float TITLE = 0.045f;
+			const float SUBTITLE = 0.045f;
+		}
+	}
+	namespace Menu::Text {
+		namespace Color {
+			const d2d::Color TITLE{ 0.0f, 1.0f, 0.0f, 1.0f };
+			const d2d::Color SUBTITLE{ 0.0f, 0.0f, 1.0f, 1.0f };
+		}
+		namespace Size {
+			const float TITLE = 0.045f;
+			const float SUBTITLE = 0.035f;
+			const float BUTTON = 0.035f;
+		}
+	}
+	namespace Menu::BackgroundColor {
+		const d2d::Color MAIN{};
+		const d2d::Color POST_LEVEL{ 0.1f, 0.1f, 0.1f, 0.6f };
+		const d2d::Color PAUSE{ 0.5f, 0.5f, 0.5f, 0.3f };
+	}
+	namespace Menu::ButtonStyles {
+		namespace Normal {
+			const d2d::ButtonStyle PRIMARY {
+				.textColor{ 0.2f, 0.8f, 0.2f, 1.0f },
+					.backgroundColor{ 0.0f, 0.3f, 0.0f, 0.3f },
+					.borderColor{ 0.1f, 0.5f, 0.1f, 1.0f }
+			};
+			const d2d::ButtonStyle SECONDARY {
+				.textColor{ 0.2f, 0.2f, 0.8f, 1.0f },
+					.backgroundColor{ 0.0f, 0.0f, 0.3f, 0.3f },
+					.borderColor{ 0.1f, 0.1f, 0.5f, 1.0f },
+			};
+			const d2d::ButtonStyle BACK {
+				.textColor{ 0.8f, 0.2f, 0.2f, 1.0f },
+					.backgroundColor{ 0.3f, 0.0f, 0.0f, 0.3f },
+					.borderColor{ 0.5f, 0.1f, 0.1f, 1.0f }
+			};
+			const d2d::ButtonStyle GRAYED {
+				.textColor{ 0.3f, 0.3f, 0.3f, 1.0f },
+					.backgroundColor{ 0.1f, 0.1f, 0.1f, 0.3f },
+					.borderColor{ 0.25f, 0.25f, 0.25f, 1.0f }
+			};
+		}
+		namespace Highlight {
+			const d2d::ButtonStyle PRIMARY {
+				.textColor{ 0.0f, 1.0f, 0.0f, 1.0f },
+					.backgroundColor{ 0.0f, 0.7f, 0.0f, 0.4f },
+					.borderColor{ 0.0f, 1.0f, 0.0f, 1.0f }
+			};
+			const d2d::ButtonStyle SECONDARY {
+				.textColor{ 0.0f, 0.0f, 1.0f, 1.0f },
+					.backgroundColor{ 0.0f, 0.0f, 0.7f, 0.4f },
+					.borderColor{ 0.0f, 0.0f, 1.0f, 1.0f },
+			};
+			const d2d::ButtonStyle BACK	{
+				.textColor{ 1.0f, 0.0f, 0.0f, 1.0f },
+					.backgroundColor{ 0.7f, 0.0f, 0.0f, 0.4f },
+					.borderColor{ 1.0f, 0.0f, 0.0f, 1.0f }
+			};
+			const d2d::ButtonStyle GRAYED {
+				.textColor{ 0.6f, 0.6f, 0.6f, 1.0f },
+					.backgroundColor{ 0.2f, 0.2f, 0.2f, 0.4f },
+					.borderColor{ 0.6f, 0.6f, 0.6f, 1.0f }
+			};
+		}
+	}
+	namespace HUD::Text {
+		namespace Color {
+			const d2d::Color FPS{ 1.0f, 1.0f, 0.0f, 1.0f };
+			const d2d::Color FUEL{ 1.0f, 0.2f, 0.2f, 1.0f };
+			const d2d::Color CREDITS{ 0.2f, 0.2f, 1.0f, 1.0f };
+			const d2d::Color LEVEL{1.0f, 1.0f, 0.2f, 1.0f};
+			const d2d::Color ICONS{0.2f, 0.2f, 1.0f, 1.0f};
+		}
+		namespace Size {
+			const float DEFAULT = 0.05f;
+			const float FPS = DEFAULT;
+			const float FUEL = DEFAULT;
+			const float CREDITS = DEFAULT;
+			const float LEVEL = DEFAULT;
+			const float ICONS = DEFAULT;
+		}
+		namespace Position {
+			const b2Vec2 FPS{ 1.0f, 1.0f };
+			const d2d::AlignmentAnchor FPS_ALIGNMENT{ d2d::AlignmentAnchorX::RIGHT, d2d::AlignmentAnchorY::TOP };
+			const b2Vec2 FUEL{ 0.10f, 0.10f };
+			const d2d::AlignmentAnchor FUEL_ALIGNMENT{ d2d::AlignmentAnchorX::LEFT, d2d::AlignmentAnchorY::BOTTOM };
+			const b2Vec2 CREDITS{ 0.90f, 0.90f };
+			const d2d::AlignmentAnchor CREDITS_ALIGNMENT{ d2d::AlignmentAnchorX::RIGHT, d2d::AlignmentAnchorY::TOP };
+			const b2Vec2 LEVEL{ 0.90f, 0.10f };
+			const d2d::AlignmentAnchor LEVEL_ALIGNMENT{ d2d::AlignmentAnchorX::RIGHT, d2d::AlignmentAnchorY::BOTTOM };
+			const b2Vec2 ICONS{ 0.10f, 0.90f };
+			const d2d::AlignmentAnchor ICONS_ALIGNMENT{ d2d::AlignmentAnchorX::LEFT, d2d::AlignmentAnchorY::TOP };
+		}
 	}
 }

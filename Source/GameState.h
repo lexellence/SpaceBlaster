@@ -23,7 +23,7 @@ namespace Space
 	class GameState : public AppState
 	{
 	public:
-		GameState(Camera* cameraPtr, Starfield* starfieldPtr);
+		GameState(ResourceManager* resourcesPtr, Camera* cameraPtr, Starfield* starfieldPtr);
 		void Init() override;
 		void ProcessEvent(const SDL_Event& event) override;
 		AppStateID Update(float dt) override;
@@ -35,8 +35,8 @@ namespace Space
 		void StartPostLevel();
 		void StartShopMain(std::string selectedButtonName = {});
 		void StartShopRoom(std::string roomName);
-		bool DoesShopHaveAffordableItems(const std::string& roomName = {}) const;
-		void ShowCreditsOnMenu(bool flag);
+		bool CanPlayerAffordAnyItems(const std::string& roomName = {}) const;
+		std::string GetCreditsString() const;
 
 		void PauseGame();
 		void UnpauseGame();
@@ -63,20 +63,10 @@ namespace Space
 		Keyboard m_keyboard;
 		PlayerController m_playerController;
 
-		// Pause menu
-		const std::string m_pauseTitle{ "Paused" };
-		const std::string m_resumeString{ "Resume" };
-		const std::string m_quitString{ "Quit" };
-
-		// Post-level menu
-		const std::string m_postLevelTitle{ "Would you like to visit the shop to purchase upgrades?" };
-		const std::string m_nextLevelString{ "Start Next Wave" };
-		const std::string m_purchaseString{ "Purchase Upgrades" };
-		const std::vector<std::string> m_postLevelMenuLabels{ m_nextLevelString, m_purchaseString, m_quitString };
-		const std::string m_backString{ "Back" };
-
-		// FPS display
-		const b2Vec2 m_fpsPosition{ 1.0f, 1.0f };
-		const d2d::AlignmentAnchor m_fpsAlignment{ d2d::AlignmentAnchorX::RIGHT, d2d::AlignmentAnchorY::TOP };
+		// Fonts
+		const unsigned m_titleFont{ m_resourcesPtr->fonts.orbitronLight };
+		const unsigned m_subtitleFont{ m_resourcesPtr->fonts.orbitronLight };
+		const unsigned m_buttonFont{ m_resourcesPtr->fonts.orbitronLight };
+		const unsigned m_guiFont{ m_resourcesPtr->fonts.orbitronLight };
 	};
 }

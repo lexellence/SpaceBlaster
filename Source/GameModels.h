@@ -9,6 +9,7 @@
 \**************************************************************************************/
 #pragma once
 #include "GameSettings.h"
+#include "Resources.h"
 namespace Space
 {
 	constexpr unsigned NUM_XLARGE_ASTEROID_MODELS = 4;
@@ -31,170 +32,179 @@ namespace Space
 	//\---------------------------/-------------------------------
 	struct GameModels
 	{
+	public:
+		GameModels(ResourceManager* resourcesPtr)
+			:m_resourcesPtr{ resourcesPtr }
+		{
+			d2Assert(m_resourcesPtr);
+		}
+	private:
+		ResourceManager *const m_resourcesPtr;
+	public:
 		//+---------------------------\-------------------------------
 		//|		    Textures		  |
 		//\---------------------------/-------------------------------
-		struct Textures
-		{
-			// Ships
-			d2d::TextureAtlas bigShipAtlas{ "Textures/bigships.png"s, "Textures/bigships.xml"s};
-			d2d::TextureFromAtlas blaster{ bigShipAtlas, "ship001"s};
-			d2d::TextureFromAtlas scout{ bigShipAtlas, "ship002"s};
+		//struct Textures
+		//{
+		//	// Ships
+		//	const d2d::TextureAtlas& bigShipAtlas = Resources::TextureAtlas::Get(Resources::TextureAtlas::BIG_SHIPS);
+		//	d2d::TextureFromAtlas blaster{ bigShipAtlas, "ship001"s};
+		//	d2d::TextureFromAtlas scout{ bigShipAtlas, "ship002"s};
 
-			// Effects
-			d2d::TextureAtlas effectAtlas{ "Textures/effects.png"s, "Textures/effects.xml"s};
-			d2d::TextureFromAtlas thruster{ effectAtlas, "thruster1"s};
+		//	// Effects
+		//	const d2d::TextureAtlas& effectAtlas = Resources::TextureAtlas::Get(Resources::TextureAtlas::EFFECTS);
+		//	d2d::TextureFromAtlas thruster{ effectAtlas, "thruster1"s};
 
-			// Items
-			d2d::TextureAtlas itemAtlas{ "Textures/items.png"s, "Textures/items.xml"s};
-			d2d::TextureFromAtlas apple{ itemAtlas, "apple"s};
-			d2d::TextureFromAtlas bumper{ itemAtlas, "repulser1"s};
-			d2d::TextureFromAtlas soda{ itemAtlas, "sodacan"s};
-			d2d::TextureFromAtlas melon{ itemAtlas, "watermelon"s};
+		//	// Items
+		//	const d2d::TextureAtlas& itemAtlas = Resources::TextureAtlas::Get(Resources::TextureAtlas::ITEMS);
+		//	d2d::TextureFromAtlas apple{ itemAtlas, "apple"s};
+		//	d2d::TextureFromAtlas bumper{ itemAtlas, "repulser1"s};
+		//	d2d::TextureFromAtlas soda{ itemAtlas, "sodacan"s};
+		//	d2d::TextureFromAtlas melon{ itemAtlas, "watermelon"s};
 
-			// Icons
-			d2d::TextureAtlas iconAtlas{ "Textures/icons.png"s, "Textures/icons.xml"s };
-			std::array<d2d::TextureFromAtlas, NUM_ICON_MODELS> icons{{
-				{ iconAtlas, "Solitaire"s },
-				{ iconAtlas, "RegistryDocument"s },
-				{ iconAtlas, "OutlookExpress"s },
-				{ iconAtlas, "NetworkSetup"s },
-				{ iconAtlas, "MyDocuments"s },
-				{ iconAtlas, "MyComputer"s },
-				{ iconAtlas, "Mouse"s },
-				{ iconAtlas, "MediaCenterFile"s },
-				{ iconAtlas, "GenericVideo"s },
-				{ iconAtlas, "GenericTextDocument"s },
-				{ iconAtlas, "GenericMedia"s },
-				{ iconAtlas, "GenericDocument"s },
-				{ iconAtlas, "GenericAudio"s },
-				{ iconAtlas, "GameController"s },
-				{ iconAtlas, "Font"s },
-				{ iconAtlas, "FolderClosed"s },
-				{ iconAtlas, "FloppyDisk"s },
-				{ iconAtlas, "EntireNetwork"s },
-				{ iconAtlas, "DVD-RW"s },
-				{ iconAtlas, "DLL"s },
-				{ iconAtlas, "DiskDefragmenter"s },
-				{ iconAtlas, "CommandPrompt"s },
-				{ iconAtlas, "ChangeOrRemovePrograms"s },
-				{ iconAtlas, "Calculator"s },
-				{ iconAtlas, "BluetoothDevices"s },
-				{ iconAtlas, "BAT"s },
-				{ iconAtlas, "IE6"s },
-				{ iconAtlas, "GIF"s }
-				}};
+		//	// Icons
+		//	const d2d::TextureAtlas& iconAtlas = Resources::TextureAtlas::Get(Resources::TextureAtlas::ICONS);
+		//	std::array<d2d::TextureFromAtlas, NUM_ICON_MODELS> icons{{
+		//		{ iconAtlas, "Solitaire"s },
+		//		{ iconAtlas, "RegistryDocument"s },
+		//		{ iconAtlas, "OutlookExpress"s },
+		//		{ iconAtlas, "NetworkSetup"s },
+		//		{ iconAtlas, "MyDocuments"s },
+		//		{ iconAtlas, "MyComputer"s },
+		//		{ iconAtlas, "Mouse"s },
+		//		{ iconAtlas, "MediaCenterFile"s },
+		//		{ iconAtlas, "GenericVideo"s },
+		//		{ iconAtlas, "GenericTextDocument"s },
+		//		{ iconAtlas, "GenericMedia"s },
+		//		{ iconAtlas, "GenericDocument"s },
+		//		{ iconAtlas, "GenericAudio"s },
+		//		{ iconAtlas, "GameController"s },
+		//		{ iconAtlas, "Font"s },
+		//		{ iconAtlas, "FolderClosed"s },
+		//		{ iconAtlas, "FloppyDisk"s },
+		//		{ iconAtlas, "EntireNetwork"s },
+		//		{ iconAtlas, "DVD-RW"s },
+		//		{ iconAtlas, "DLL"s },
+		//		{ iconAtlas, "DiskDefragmenter"s },
+		//		{ iconAtlas, "CommandPrompt"s },
+		//		{ iconAtlas, "ChangeOrRemovePrograms"s },
+		//		{ iconAtlas, "Calculator"s },
+		//		{ iconAtlas, "BluetoothDevices"s },
+		//		{ iconAtlas, "BAT"s },
+		//		{ iconAtlas, "IE6"s },
+		//		{ iconAtlas, "GIF"s }
+		//		}};
 
-			// Asteroids
-			d2d::TextureAtlas asteroidAtlas{ "Textures/asteroids.png"s, "Textures/asteroids.xml"s };
-			std::array<d2d::TextureFromAtlas, NUM_XLARGE_ASTEROID_MODELS> asteroidsXLarge{{
-				{ asteroidAtlas, "asteroidxlarge1"s },
-				{ asteroidAtlas, "asteroidxlarge2"s },
-				{ asteroidAtlas, "asteroidxlarge3"s },
-				{ asteroidAtlas, "asteroidxlarge4"s } }};
-			std::array<d2d::TextureFromAtlas, NUM_XLARGE_ASTEROID_MODELS> rocksXLarge{{
-				{ asteroidAtlas, "rockxlarge1"s },
-				{ asteroidAtlas, "rockxlarge2"s },
-				{ asteroidAtlas, "rockxlarge3"s },
-				{ asteroidAtlas, "rockxlarge4"s } }};
-			std::array<d2d::TextureFromAtlas, NUM_LARGE_ASTEROID_MODELS> asteroidsLarge{{
-				{ asteroidAtlas, "asteroidlarge1"s },
-				{ asteroidAtlas, "asteroidlarge2"s } }};
-			std::array<d2d::TextureFromAtlas, NUM_LARGE_ASTEROID_MODELS> rocksLarge{{
-				{ asteroidAtlas, "rocklarge1"s },
-				{ asteroidAtlas, "rocklarge2"s } }};
-			std::array<d2d::TextureFromAtlas, NUM_MEDIUM_ASTEROID_MODELS> asteroidsMedium{{
-				{ asteroidAtlas, "asteroidmedium1"s },
-				{ asteroidAtlas, "asteroidmedium2"s } }};
-			std::array<d2d::TextureFromAtlas, NUM_MEDIUM_ASTEROID_MODELS> rocksMedium{{
-				{ asteroidAtlas, "rockmedium1"s },
-				{ asteroidAtlas, "rockmedium2"s } }};
-			std::array<d2d::TextureFromAtlas, NUM_SMALL_ASTEROID_MODELS> asteroidsSmall{{
-				{ asteroidAtlas, "asteroidsmall1"s },
-				{ asteroidAtlas, "asteroidsmall2"s } }};
-			std::array<d2d::TextureFromAtlas, NUM_SMALL_ASTEROID_MODELS> rocksSmall{{
-				{ asteroidAtlas, "rocksmall1"s },
-				{ asteroidAtlas, "rocksmall2"s } }};
+		//	// Asteroids
+		//	const d2d::TextureAtlas& asteroidAtlas = Resources::TextureAtlas::Get(Resources::TextureAtlas::ASTEROIDS);
+		//	std::array<d2d::TextureFromAtlas, NUM_XLARGE_ASTEROID_MODELS> asteroidsXLarge{{
+		//		{ asteroidAtlas, "asteroidxlarge1"s },
+		//		{ asteroidAtlas, "asteroidxlarge2"s },
+		//		{ asteroidAtlas, "asteroidxlarge3"s },
+		//		{ asteroidAtlas, "asteroidxlarge4"s } }};
+		//	std::array<d2d::TextureFromAtlas, NUM_XLARGE_ASTEROID_MODELS> rocksXLarge{{
+		//		{ asteroidAtlas, "rockxlarge1"s },
+		//		{ asteroidAtlas, "rockxlarge2"s },
+		//		{ asteroidAtlas, "rockxlarge3"s },
+		//		{ asteroidAtlas, "rockxlarge4"s } }};
+		//	std::array<d2d::TextureFromAtlas, NUM_LARGE_ASTEROID_MODELS> asteroidsLarge{{
+		//		{ asteroidAtlas, "asteroidlarge1"s },
+		//		{ asteroidAtlas, "asteroidlarge2"s } }};
+		//	std::array<d2d::TextureFromAtlas, NUM_LARGE_ASTEROID_MODELS> rocksLarge{{
+		//		{ asteroidAtlas, "rocklarge1"s },
+		//		{ asteroidAtlas, "rocklarge2"s } }};
+		//	std::array<d2d::TextureFromAtlas, NUM_MEDIUM_ASTEROID_MODELS> asteroidsMedium{{
+		//		{ asteroidAtlas, "asteroidmedium1"s },
+		//		{ asteroidAtlas, "asteroidmedium2"s } }};
+		//	std::array<d2d::TextureFromAtlas, NUM_MEDIUM_ASTEROID_MODELS> rocksMedium{{
+		//		{ asteroidAtlas, "rockmedium1"s },
+		//		{ asteroidAtlas, "rockmedium2"s } }};
+		//	std::array<d2d::TextureFromAtlas, NUM_SMALL_ASTEROID_MODELS> asteroidsSmall{{
+		//		{ asteroidAtlas, "asteroidsmall1"s },
+		//		{ asteroidAtlas, "asteroidsmall2"s } }};
+		//	std::array<d2d::TextureFromAtlas, NUM_SMALL_ASTEROID_MODELS> rocksSmall{{
+		//		{ asteroidAtlas, "rocksmall1"s },
+		//		{ asteroidAtlas, "rocksmall2"s } }};
 
-			// Projectiles
-			d2d::TextureAtlas projectileAtlas{ "Textures/projectiles.png"s, "Textures/projectiles.xml"s };
-			d2d::TextureFromAtlas bullet{ projectileAtlas, "fireball1"s};
-			std::array<d2d::TextureFromAtlas, 2> missileFrames{{
-				{ projectileAtlas, "rocket005a"s },
-				{ projectileAtlas, "rocket005b"s } }};
-			std::array<d2d::TextureFromAtlas, 2> fatMissileFrames{{
-				{ projectileAtlas, "rocket006a"s },
-				{ projectileAtlas, "rocket006b"s } }};
-		} textures;
+		//	// Projectiles
+		//	const d2d::TextureAtlas& projectileAtlas = Resources::TextureAtlas::Get(Resources::TextureAtlas::PROJECTILES);
+		//	d2d::TextureFromAtlas bullet{ projectileAtlas, "fireball1"s};
+		//	std::array<d2d::TextureFromAtlas, 2> missileFrames{{
+		//		{ projectileAtlas, "rocket005a"s },
+		//		{ projectileAtlas, "rocket005b"s } }};
+		//	std::array<d2d::TextureFromAtlas, 2> fatMissileFrames{{
+		//		{ projectileAtlas, "rocket006a"s },
+		//		{ projectileAtlas, "rocket006b"s } }};
+		//} textures;
 
 		//+---------------------------\-------------------------------
 		//|		     Models 		  |
 		//\---------------------------/-------------------------------
 		// Ships
-		Model blaster{ "ship001", {textures.blaster} };
-		Model scout{ "ship002", {textures.scout} };
-		Model blasterThruster{ "thruster1", {{textures.thruster, 0.0f, d2d::WHITE_OPAQUE, BLASTER_THRUSTER_RELATIVE_SIZE}} };
-		Model scoutThruster{ "thruster1", {{textures.thruster, 0.0f, d2d::WHITE_OPAQUE, SCOUT_THRUSTER_RELATIVE_SIZE}} };
+		Model blaster{ "ship001", { m_resourcesPtr->textures.bigShips.blaster } };
+		Model scout{ "ship002", { m_resourcesPtr->textures.bigShips.scout } };
+		Model blasterThruster{ "thruster1", {{m_resourcesPtr->textures.effects.thruster, 0.0f, d2d::WHITE_OPAQUE, BLASTER_THRUSTER_RELATIVE_SIZE}} };
+		Model scoutThruster{ "thruster1", {{m_resourcesPtr->textures.effects.thruster, 0.0f, d2d::WHITE_OPAQUE, SCOUT_THRUSTER_RELATIVE_SIZE}} };
 
 		// Items
-		Model bumper{ "repulser1", {textures.bumper} };
-		Model soda{ "sodacan", {textures.soda} };
-		Model melon{ "watermelon", {textures.melon} };
-		Model apple{ "apple", {textures.apple} };
+		Model bumper{ "repulser1", {m_resourcesPtr->textures.items.bumper} };
+		Model soda{ "sodacan", {m_resourcesPtr->textures.items.soda} };
+		Model melon{ "watermelon", {m_resourcesPtr->textures.items.melon} };
+		Model apple{ "apple", {m_resourcesPtr->textures.items.apple} };
 
 		// XLarge
 		std::array<Model, NUM_XLARGE_ASTEROID_MODELS>
 			asteroidsXLarge{
-				Model{ "asteroidxlarge1", {textures.asteroidsXLarge.at(0)} },
-				Model{ "asteroidxlarge2", {textures.asteroidsXLarge.at(1)} },
-				Model{ "asteroidxlarge3", {textures.asteroidsXLarge.at(2)} },
-				Model{ "asteroidxlarge4", {textures.asteroidsXLarge.at(3)} } };
+				Model{ "asteroidxlarge1", {m_resourcesPtr->textures.asteroidsXLarge.at(0)} },
+				Model{ "asteroidxlarge2", {m_resourcesPtr->textures.asteroidsXLarge.at(1)} },
+				Model{ "asteroidxlarge3", {m_resourcesPtr->textures.asteroidsXLarge.at(2)} },
+				Model{ "asteroidxlarge4", {m_resourcesPtr->textures.asteroidsXLarge.at(3)} } };
 		std::array<Model, NUM_XLARGE_ASTEROID_MODELS>
 			rocksXLarge{
-				Model{ "asteroidxlarge1", {textures.rocksXLarge.at(0)} },
-				Model{ "asteroidxlarge2", {textures.rocksXLarge.at(1)} },
-				Model{ "asteroidxlarge3", {textures.rocksXLarge.at(2)} },
-				Model{ "asteroidxlarge4", {textures.rocksXLarge.at(3)} } };
+				Model{ "asteroidxlarge1", {m_resourcesPtr->textures.rocksXLarge.at(0)} },
+				Model{ "asteroidxlarge2", {m_resourcesPtr->textures.rocksXLarge.at(1)} },
+				Model{ "asteroidxlarge3", {m_resourcesPtr->textures.rocksXLarge.at(2)} },
+				Model{ "asteroidxlarge4", {m_resourcesPtr->textures.rocksXLarge.at(3)} } };
 
 		// Large
 		std::array<Model, NUM_LARGE_ASTEROID_MODELS>
 			asteroidsLarge{
-				Model{ "asteroidlarge1", {textures.asteroidsLarge.at(0)} },
-				Model{ "asteroidlarge2", {textures.asteroidsLarge.at(1)} } };
+				Model{ "asteroidlarge1", {m_resourcesPtr->textures.asteroidsLarge.at(0)} },
+				Model{ "asteroidlarge2", {m_resourcesPtr->textures.asteroidsLarge.at(1)} } };
 		std::array<Model, NUM_LARGE_ASTEROID_MODELS>
 			rocksLarge{
-				Model{ "asteroidlarge1", {textures.rocksLarge.at(0)} },
-				Model{ "asteroidlarge2", {textures.rocksLarge.at(1)} } };
+				Model{ "asteroidlarge1", {m_resourcesPtr->textures.rocksLarge.at(0)} },
+				Model{ "asteroidlarge2", {m_resourcesPtr->textures.rocksLarge.at(1)} } };
 
 		// Medium
 		std::array<Model, NUM_MEDIUM_ASTEROID_MODELS>
 			asteroidsMedium{
-				Model{ "asteroidmedium1", {textures.asteroidsMedium.at(0)} },
-				Model{ "asteroidmedium2", {textures.asteroidsMedium.at(1)} } };
+				Model{ "asteroidmedium1", {m_resourcesPtr->textures.asteroidsMedium.at(0)} },
+				Model{ "asteroidmedium2", {m_resourcesPtr->textures.asteroidsMedium.at(1)} } };
 		std::array<Model, NUM_MEDIUM_ASTEROID_MODELS>
 			rocksMedium{
-				Model{ "asteroidmedium1", {textures.rocksMedium.at(0)} },
-				Model{ "asteroidmedium2", {textures.rocksMedium.at(1)} } };
+				Model{ "asteroidmedium1", {m_resourcesPtr->textures.rocksMedium.at(0)} },
+				Model{ "asteroidmedium2", {m_resourcesPtr->textures.rocksMedium.at(1)} } };
 
 		// Small
 		std::array<Model, NUM_SMALL_ASTEROID_MODELS>
 			asteroidsSmall{
-				Model{ "asteroidsmall1", {textures.asteroidsSmall.at(0)} },
-				Model{ "asteroidsmall2", {textures.asteroidsSmall.at(1)} } };
+				Model{ "asteroidsmall1", {m_resourcesPtr->textures.asteroidsSmall.at(0)} },
+				Model{ "asteroidsmall2", {m_resourcesPtr->textures.asteroidsSmall.at(1)} } };
 		std::array<Model, NUM_SMALL_ASTEROID_MODELS>
 			rocksSmall{
-				Model{ "asteroidsmall1", { textures.rocksSmall.at(0)} },
-				Model{ "asteroidsmall2", { textures.rocksSmall.at(1)} } };
+				Model{ "asteroidsmall1", {m_resourcesPtr->textures.rocksSmall.at(0)} },
+				Model{ "asteroidsmall2", {m_resourcesPtr->textures.rocksSmall.at(1)} } };
 
 		// Projectiles
-		Model bullet{ "fireball1", {textures.bullet} };
+		Model bullet{ "fireball1", {m_resourcesPtr->textures.projectiles.bullet} };
 		Model missile{ "rocket005",
-			d2d::AnimationDef{ {d2d::AnimationFrame{textures.missileFrames.at(0), MISSILE_TIME_PER_FRAME},
-								d2d::AnimationFrame{textures.missileFrames.at(1), MISSILE_TIME_PER_FRAME}}, 
+			d2d::AnimationDef{ {d2d::AnimationFrame{m_resourcesPtr->textures.projectiles.missileFrames.at(0), MISSILE_TIME_PER_FRAME},
+								d2d::AnimationFrame{m_resourcesPtr->textures.projectiles.missileFrames.at(1), MISSILE_TIME_PER_FRAME}},
 			d2d::AnimationType::LOOP} };
 		Model fatMissile{ "rocket006",
-			d2d::AnimationDef{ {d2d::AnimationFrame{textures.fatMissileFrames.at(0), MISSILE_TIME_PER_FRAME},
-								d2d::AnimationFrame{textures.fatMissileFrames.at(1), MISSILE_TIME_PER_FRAME}},
+			d2d::AnimationDef{ {d2d::AnimationFrame{m_resourcesPtr->textures.projectiles.fatMissileFrames.at(0), MISSILE_TIME_PER_FRAME},
+								d2d::AnimationFrame{m_resourcesPtr->textures.projectiles.fatMissileFrames.at(1), MISSILE_TIME_PER_FRAME}},
 			d2d::AnimationType::LOOP} };
 	};
 }

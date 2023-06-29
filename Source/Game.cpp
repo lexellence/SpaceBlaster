@@ -10,12 +10,13 @@
 #include "pch.h"
 #include "Game.h"
 #include "Exceptions.h"
-
+#include "GUISettings.h"
 namespace Space
 {
-	Game::Game(Camera* cameraPtr, Starfield* starfieldPtr)
-		: m_cameraPtr{ cameraPtr }, m_starfieldPtr{ starfieldPtr }
+	Game::Game(ResourceManager* resourcesPtr, Camera* cameraPtr, Starfield* starfieldPtr)
+		: m_resourcesPtr{ resourcesPtr }, m_cameraPtr{ cameraPtr }, m_starfieldPtr{ starfieldPtr }
 	{
+		d2Assert(m_resourcesPtr);
 		d2Assert(m_cameraPtr);
 		d2Assert(m_starfieldPtr);
 
@@ -179,7 +180,7 @@ namespace Space
 			int model{ d2d::RandomInt({0, NUM_ICON_MODELS - 1}) };
 			b2Vec2 size;
 			size.y = ICON_HEIGHT;
-			size.x = size.y * m_models.textures.icons[model].GetWidthToHeightRatio();
+			size.x = size.y * d2d::Window::GetWidthHeightRatio(m_resourcesPtr->textures.icons[model]);
 			float boundingRadius = size.Length() * 0.5f;
 
 			InstanceDef def;
@@ -209,7 +210,7 @@ namespace Space
 			int model = d2d::RandomInt({ 0, NUM_XLARGE_ASTEROID_MODELS - 1 });
 			b2Vec2 size;
 			size.y = XLARGE_ASTEROID_HEIGHT * XLARGE_ASTEROID_RELATIVE_HEIGHTS[model];
-			size.x = size.y * m_models.textures.asteroidsXLarge[model].GetWidthToHeightRatio();
+			size.x = size.y * d2d::Window::GetWidthHeightRatio(m_resourcesPtr->textures.asteroidsXLarge[model]);
 			float boundingRadius = size.Length() * 0.5f;
 
 			float speed = d2d::RandomFloat(ASTEROID_STARTING_SPEED_RANGE_XL);
@@ -243,7 +244,7 @@ namespace Space
 			int model = d2d::RandomInt({ 0, NUM_LARGE_ASTEROID_MODELS - 1 });
 			b2Vec2 size;
 			size.y = LARGE_ASTEROID_HEIGHT * LARGE_ASTEROID_RELATIVE_HEIGHTS[model];
-			size.x = size.y * m_models.textures.asteroidsLarge[model].GetWidthToHeightRatio();
+			size.x = size.y * d2d::Window::GetWidthHeightRatio(m_resourcesPtr->textures.asteroidsLarge[model]);
 			float boundingRadius = size.Length() * 0.5f;
 
 			float speed = d2d::RandomFloat(ASTEROID_STARTING_SPEED_RANGE_L);
@@ -277,7 +278,7 @@ namespace Space
 			int model = d2d::RandomInt({ 0, NUM_MEDIUM_ASTEROID_MODELS - 1 });
 			b2Vec2 size;
 			size.y = MEDIUM_ASTEROID_HEIGHT * MEDIUM_ASTEROID_RELATIVE_HEIGHTS[model];
-			size.x = size.y * m_models.textures.asteroidsMedium[model].GetWidthToHeightRatio();
+			size.x = size.y * d2d::Window::GetWidthHeightRatio(m_resourcesPtr->textures.asteroidsMedium[model]);
 			float boundingRadius = size.Length() * 0.5f;
 
 			float speed = d2d::RandomFloat(ASTEROID_STARTING_SPEED_RANGE_M);
@@ -311,7 +312,7 @@ namespace Space
 			int model = d2d::RandomInt({ 0, NUM_SMALL_ASTEROID_MODELS - 1 });
 			b2Vec2 size;
 			size.y = SMALL_ASTEROID_HEIGHT * SMALL_ASTEROID_RELATIVE_HEIGHTS[model];
-			size.x = size.y * m_models.textures.asteroidsSmall[model].GetWidthToHeightRatio();
+			size.x = size.y * d2d::Window::GetWidthHeightRatio(m_resourcesPtr->textures.asteroidsSmall[model]);
 			float boundingRadius = size.Length() * 0.5f;
 
 			float speed = d2d::RandomFloat(ASTEROID_STARTING_SPEED_RANGE_S);
@@ -455,7 +456,7 @@ namespace Space
 	//\---------------------------/-------------------------------
 	WorldID Game::CreateScout(World& world, const InstanceDef& def)
 	{
-		b2Vec2 size{ SCOUT_HEIGHT * m_models.textures.scout.GetWidthToHeightRatio(), SCOUT_HEIGHT };
+		b2Vec2 size{ SCOUT_HEIGHT * d2d::Window::GetWidthHeightRatio(m_resourcesPtr->textures.bigShips.scout), SCOUT_HEIGHT };
 		WorldID id = CreateBasicObject(world, size, DEFAULT_DRAW_LAYER, m_models.scout, SHIP_MATERIAL, SHIP_FILTER, b2_dynamicBody, def);
 		world.AddRotatorComponent(id, SCOUT_ROTATION_SPEED);
 
@@ -487,7 +488,7 @@ namespace Space
 	//\---------------------------/-------------------------------
 	WorldID Game::CreateBlaster(World& world, const InstanceDef& def)
 	{
-		b2Vec2 size{ BLASTER_HEIGHT * m_models.textures.blaster.GetWidthToHeightRatio(), BLASTER_HEIGHT };
+		b2Vec2 size{ BLASTER_HEIGHT * d2d::Window::GetWidthHeightRatio(m_resourcesPtr->textures.bigShips.blaster), BLASTER_HEIGHT };
 		WorldID id = CreateBasicObject(world, size, DEFAULT_DRAW_LAYER, m_models.blaster, SHIP_MATERIAL, SHIP_FILTER, b2_dynamicBody, def);
 		world.AddRotatorComponent(id, BLASTER_ROTATION_SPEED);
 
@@ -546,7 +547,7 @@ namespace Space
 	{
 		d2Assert(modelIndex < NUM_XLARGE_ASTEROID_MODELS);
 		float height{ XLARGE_ASTEROID_HEIGHT * XLARGE_ASTEROID_RELATIVE_HEIGHTS[modelIndex] };
-		b2Vec2 size{ height * m_models.textures.asteroidsXLarge[modelIndex].GetWidthToHeightRatio(), height };
+		b2Vec2 size{ height * d2d::Window::GetWidthHeightRatio(m_resourcesPtr->textures.asteroidsXLarge[modelIndex]), height };
 		Model& model = isRock ? m_models.rocksXLarge.at(modelIndex) : m_models.asteroidsXLarge.at(modelIndex);
 		WorldID id = CreateBasicObject(world, size, DEFAULT_DRAW_LAYER, model, ASTEROID_MATERIAL, ASTEROID_FILTER, b2_dynamicBody, def);
 		world.AddHealthComponent(id, XLARGE_ASTEROID_HP);
@@ -564,7 +565,7 @@ namespace Space
 	{
 		d2Assert(modelIndex < NUM_LARGE_ASTEROID_MODELS);
 		float height{ LARGE_ASTEROID_HEIGHT * LARGE_ASTEROID_RELATIVE_HEIGHTS[modelIndex] };
-		b2Vec2 size{ height * m_models.textures.asteroidsLarge[modelIndex].GetWidthToHeightRatio(), height };
+		b2Vec2 size{ height * d2d::Window::GetWidthHeightRatio(m_resourcesPtr->textures.asteroidsLarge[modelIndex]), height };
 		Model& model = isRock ? m_models.rocksLarge.at(modelIndex) : m_models.asteroidsLarge.at(modelIndex);
 		WorldID id = CreateBasicObject(world, size, DEFAULT_DRAW_LAYER, model, ASTEROID_MATERIAL, ASTEROID_FILTER, b2_dynamicBody, def);
 		world.AddHealthComponent(id, LARGE_ASTEROID_HP);
@@ -582,7 +583,7 @@ namespace Space
 	{
 		d2Assert(modelIndex < NUM_MEDIUM_ASTEROID_MODELS);
 		float height{ MEDIUM_ASTEROID_HEIGHT * MEDIUM_ASTEROID_RELATIVE_HEIGHTS[modelIndex] };
-		b2Vec2 size{ height * m_models.textures.asteroidsMedium[modelIndex].GetWidthToHeightRatio(), height };
+		b2Vec2 size{ height * d2d::Window::GetWidthHeightRatio(m_resourcesPtr->textures.asteroidsMedium[modelIndex]), height };
 		Model& model = isRock ? m_models.rocksMedium.at(modelIndex) : m_models.asteroidsMedium.at(modelIndex);
 		WorldID id = CreateBasicObject(world, size, DEFAULT_DRAW_LAYER, model, ASTEROID_MATERIAL, ASTEROID_FILTER, b2_dynamicBody, def);
 		world.AddHealthComponent(id, MEDIUM_ASTEROID_HP);
@@ -600,7 +601,7 @@ namespace Space
 	{
 		d2Assert(modelIndex < NUM_SMALL_ASTEROID_MODELS);
 		float height{ SMALL_ASTEROID_HEIGHT * SMALL_ASTEROID_RELATIVE_HEIGHTS[modelIndex] };
-		b2Vec2 size{ height * m_models.textures.asteroidsSmall[modelIndex].GetWidthToHeightRatio(), height };
+		b2Vec2 size{ height * d2d::Window::GetWidthHeightRatio(m_resourcesPtr->textures.asteroidsSmall[modelIndex]), height };
 		Model& model = isRock ? m_models.rocksSmall.at(modelIndex) : m_models.asteroidsSmall.at(modelIndex);
 		WorldID id = CreateBasicObject(world, size, DEFAULT_DRAW_LAYER, model, ASTEROID_MATERIAL, ASTEROID_FILTER, b2_dynamicBody, def);
 		world.AddHealthComponent(id, SMALL_ASTEROID_HP);
@@ -616,7 +617,7 @@ namespace Space
 	//\---------------------------/-------------------------------
 	WorldID Game::CreateBumper(World& world, const InstanceDef& def)
 	{
-		b2Vec2 size{ BUMPER_HEIGHT * m_models.textures.bumper.GetWidthToHeightRatio(), BUMPER_HEIGHT };
+		b2Vec2 size{ BUMPER_HEIGHT * d2d::Window::GetWidthHeightRatio(m_resourcesPtr->textures.items.bumper), BUMPER_HEIGHT };
 		WorldID id = CreateBasicObject(world, size, DEFAULT_DRAW_LAYER, m_models.bumper, BUMPER_MATERIAL, BUMPER_FILTER, b2_kinematicBody, def);
 		return id;
 	}
@@ -626,7 +627,7 @@ namespace Space
 	//\---------------------------/-------------------------------
 	WorldID Game::CreateSoda(World& world, const InstanceDef& def)
 	{
-		b2Vec2 size{ SODA_HEIGHT * m_models.textures.soda.GetWidthToHeightRatio(), SODA_HEIGHT };
+		b2Vec2 size{ SODA_HEIGHT * d2d::Window::GetWidthHeightRatio(m_resourcesPtr->textures.items.soda), SODA_HEIGHT };
 		WorldID id = CreateBasicObject(world, size, DEFAULT_DRAW_LAYER, m_models.soda, FUEL_MATERIAL, FUEL_FILTER, b2_dynamicBody, def);
 		PowerUpComponent powerUp;
 		powerUp.type = PowerUpType::FUEL;
@@ -640,7 +641,7 @@ namespace Space
 	//\---------------------------/-------------------------------
 	WorldID Game::CreateMelon(World& world, const InstanceDef& def)
 	{
-		b2Vec2 size{ MELON_HEIGHT * m_models.textures.melon.GetWidthToHeightRatio(), MELON_HEIGHT };
+		b2Vec2 size{ MELON_HEIGHT * d2d::Window::GetWidthHeightRatio(m_resourcesPtr->textures.items.melon), MELON_HEIGHT };
 		WorldID id = CreateBasicObject(world, size, DEFAULT_DRAW_LAYER, m_models.melon, FUEL_MATERIAL, FUEL_FILTER, b2_dynamicBody, def);
 		PowerUpComponent powerUp;
 		powerUp.type = PowerUpType::FUEL;
@@ -654,7 +655,7 @@ namespace Space
 	//\---------------------------/-------------------------------
 	WorldID Game::CreateApple(World& world, const InstanceDef& def)
 	{
-		b2Vec2 size{ APPLE_HEIGHT * m_models.textures.apple.GetWidthToHeightRatio(), APPLE_HEIGHT };
+		b2Vec2 size{ APPLE_HEIGHT * d2d::Window::GetWidthHeightRatio(m_resourcesPtr->textures.items.apple), APPLE_HEIGHT };
 		size = 4.0f * size;
 		WorldID id = CreateBasicObject(world, size, DEFAULT_DRAW_LAYER, m_models.apple, FUEL_MATERIAL, FUEL_FILTER, b2_dynamicBody, def);
 		PowerUpComponent powerUp;
@@ -669,9 +670,9 @@ namespace Space
 	//\---------------------------/-------------------------------
 	WorldID Game::CreateIcon(World& world, unsigned modelIndex, const InstanceDef& def)
 	{
-		d2Assert(modelIndex < m_models.textures.icons.size());
-		b2Vec2 size{ ICON_HEIGHT * m_models.textures.icons.at(0).GetWidthToHeightRatio(), ICON_HEIGHT };
-		Model model{ "icon", { m_models.textures.icons.at(modelIndex) } };
+		d2Assert(modelIndex < m_resourcesPtr->textures.icons.size());
+		b2Vec2 size{ ICON_HEIGHT * d2d::Window::GetWidthHeightRatio(m_resourcesPtr->textures.icons[modelIndex]), ICON_HEIGHT };
+		Model model{ "icon", { m_resourcesPtr->textures.icons.at(modelIndex) } };
 		WorldID id = CreateBasicObject(world, size, DEFAULT_DRAW_LAYER, model, ICON_MATERIAL, ICON_FILTER, b2_dynamicBody, def);
 		PowerUpComponent powerUp;
 		powerUp.type = PowerUpType::ICON;
@@ -814,14 +815,16 @@ namespace Space
 			// Draw fuel
 			if(m_world.HasComponents(m_player.id, COMPONENT_FUEL))
 			{
-				d2d::Window::SetColor(m_fuelTextStyle.color);
+				d2d::Window::SetColor(GUISettings::HUD::Text::Color::FUEL);
 				d2d::Window::PushMatrix();
-				d2d::Window::Translate(m_fuelPosition * resolution);
+				d2d::Window::Translate(GUISettings::HUD::Text::Position::FUEL * resolution);
 				{
 					int fuelInt = (int)(m_world.GetFuelLevel(m_player.id) + 0.5f);
 					int maxFuelInt = (int)(m_world.GetMaxFuelLevel(m_player.id) + 0.5f);
 					std::string fuelString = d2d::ToString(fuelInt) + "/" + d2d::ToString(maxFuelInt);
-					d2d::Window::DrawString(fuelString, m_fuelTextStyle.size * resolution.y, m_fuelTextStyle.fontRefPtr, m_fuelAlignment);
+					d2d::Window::DrawString(m_guiFont, fuelString,
+						GUISettings::HUD::Text::Size::FUEL * resolution.y,
+						GUISettings::HUD::Text::Position::FUEL_ALIGNMENT);
 				}
 				d2d::Window::PopMatrix();
 			}
@@ -829,32 +832,40 @@ namespace Space
 			// Draw icons collected
 			if(m_world.HasComponents(m_player.id, COMPONENT_ICON_COLLECTOR))
 			{
-				d2d::Window::SetColor(m_iconsTextStyle.color);
+				d2d::Window::SetColor(GUISettings::HUD::Text::Color::ICONS);
 				d2d::Window::PushMatrix();
-				d2d::Window::Translate(m_iconsPosition * resolution);
+				d2d::Window::Translate(GUISettings::HUD::Text::Position::ICONS * resolution);
 				{
 					unsigned icons = m_world.GetIconsCollected(m_player.id);
 					std::string iconsString = d2d::ToString(icons);
-					d2d::Window::DrawString(iconsString, m_iconsTextStyle.size * resolution.y, m_iconsTextStyle.fontRefPtr, m_iconsAlignment);
+					d2d::Window::DrawString(m_guiFont, iconsString,
+						GUISettings::HUD::Text::Size::ICONS * resolution.y,
+						GUISettings::HUD::Text::Position::ICONS_ALIGNMENT);
 				}
 				d2d::Window::PopMatrix();
 			}
 
 			// Draw credits
-			d2d::Window::SetColor(m_creditsTextStyle.color);
+			d2d::Window::SetColor(GUISettings::HUD::Text::Color::CREDITS);
 			d2d::Window::PushMatrix();
-			d2d::Window::Translate(m_creditsPosition * resolution);
+			d2d::Window::Translate(GUISettings::HUD::Text::Position::CREDITS * resolution);
 			{
-				d2d::Window::DrawString(d2d::ToString(m_player.credits), m_creditsTextStyle.size * resolution.y, m_creditsTextStyle.fontRefPtr, m_creditsAlignment);
+				std::string creditsString = d2d::ToString(m_player.credits);
+				d2d::Window::DrawString(m_guiFont, creditsString,
+					GUISettings::HUD::Text::Size::CREDITS * resolution.y,
+					GUISettings::HUD::Text::Position::CREDITS_ALIGNMENT);
 			}
 			d2d::Window::PopMatrix();
 
 			// Draw level
-			d2d::Window::SetColor(m_levelTextStyle.color);
+			d2d::Window::SetColor(GUISettings::HUD::Text::Color::LEVEL);
 			d2d::Window::PushMatrix();
-			d2d::Window::Translate(m_levelPosition * resolution);
+			d2d::Window::Translate(GUISettings::HUD::Text::Position::LEVEL * resolution);
 			{
-				d2d::Window::DrawString(d2d::ToString(m_player.currentLevel), m_levelTextStyle.size * resolution.y, m_levelTextStyle.fontRefPtr, m_levelAlignment);
+				std::string levelString = d2d::ToString(m_player.currentLevel);
+				d2d::Window::DrawString(m_guiFont, levelString,
+					GUISettings::HUD::Text::Size::LEVEL * resolution.y,
+					GUISettings::HUD::Text::Position::LEVEL_ALIGNMENT);
 			}
 			d2d::Window::PopMatrix();
 		}

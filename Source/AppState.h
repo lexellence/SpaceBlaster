@@ -11,6 +11,7 @@
 union SDL_Event;
 #include "Camera.h"
 #include "Starfield.h"
+#include "Resources.h"
 namespace Space
 {
 	enum class AppStateID
@@ -21,9 +22,12 @@ namespace Space
 	{
 	public:
 		AppState() = delete;
-		AppState(Camera* cameraPtr, Starfield* starfieldPtr)
-			: m_cameraPtr{ cameraPtr }, m_starfieldPtr{ starfieldPtr }
+		AppState(ResourceManager* resourcesPtr, Camera* cameraPtr, Starfield* starfieldPtr)
+			: m_resourcesPtr{ resourcesPtr},
+			m_cameraPtr{ cameraPtr }, 
+			m_starfieldPtr{ starfieldPtr }
 		{
+			d2Assert(m_resourcesPtr);
 			d2Assert(m_cameraPtr);
 			d2Assert(m_starfieldPtr);
 		}
@@ -32,7 +36,8 @@ namespace Space
 		virtual AppStateID Update(float dt) = 0;
 		virtual void Draw() = 0;
 	protected:
-		Camera* m_cameraPtr;
-		Starfield* m_starfieldPtr;
+		ResourceManager *const m_resourcesPtr;
+		Camera *const m_cameraPtr;
+		Starfield *const m_starfieldPtr;
 	};
 }

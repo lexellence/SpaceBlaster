@@ -12,12 +12,10 @@
 #include "AppState.h"
 #include "Starfield.h"
 #include "Camera.h"
-
+#include "GUISettings.h"
+#include "GUIStrings.h"
 namespace Space
 {
-	IntroState::IntroState(Camera* cameraPtr, Starfield* starfieldPtr)
-		: AppState{ cameraPtr, starfieldPtr }
-	{}
 	void IntroState::Init()
 	{
 		m_gotoMenu = false;
@@ -26,8 +24,8 @@ namespace Space
 		m_titlePosition.Set(0.5f, m_titleStartScreenY);
 		m_titleSpeedScreensPerSecond = 0.0f;
 		m_authorFadingIn = false;
-		m_authorTextStyle.color.SetFloat(0.5f, 0.0f, 0.7f, m_authorStartAlpha);
 		m_authorFadeDelayElapsed = 0.0f;
+		m_authorPercentFadedIn = 0.0f;
 	}
 	void IntroState::ProcessEvent(const SDL_Event& event)
 	{
@@ -44,7 +42,7 @@ namespace Space
 				m_titlePosition.y = m_titleFinalScreenY;
 
 				m_authorFadingIn = false;
-				m_authorTextStyle.color.alpha = m_authorFinalAlpha;
+				m_authorPercentFadedIn = 1.0f;
 				m_animationsComplete = true;
 			}
 		}
@@ -85,13 +83,11 @@ namespace Space
 				if(m_authorFadeDelayElapsed >= m_authorFadeDelay)
 				{
 					// Fade text in
-					m_authorTextStyle.color.alpha += m_authorFadesPerSecond * dt;
-
-					// If the text's alpha has reached it's destination within the fade tolerance
-					if((m_authorTextStyle.color.alpha + m_fadeTolerance) > m_authorFinalAlpha)
+					m_authorPercentFadedIn += m_authorFadesPerSecond * dt;
+					if(m_authorPercentFadedIn >= 1.0f)
 					{
 						// Set text's final destination
-						m_authorTextStyle.color.alpha = m_authorFinalAlpha;
+						m_authorPercentFadedIn = 1.0f;
 
 						// End animation
 						m_authorFadingIn = false;
@@ -120,17 +116,22 @@ namespace Space
 		d2d::Window::SetCameraRect({ b2Vec2_zero, resolution });
 
 		// Draw title
-		d2d::Window::SetColor(m_titleTextStyle.color);
+		d2d::Window::SetColor(GUISettings::Intro::Text::Color::TITLE);
 		d2d::Window::PushMatrix();
 		d2d::Window::Translate(m_titlePosition * resolution);
-		d2d::Window::DrawString(m_title, m_titleTextStyle.size * resolution.y, m_titleTextStyle.fontRefPtr, m_titleAnchor);
+		d2d::Window::DrawString(m_titleFont, GUIStrings::Intro::TITLE, 
+			GUISettings::Intro::Text::Size::TITLE * resolution.y, m_titleAnchor);
 		d2d::Window::PopMatrix();
 
 		// Draw author
-		d2d::Window::SetColor(m_authorTextStyle.color);
+		d2d::Color authorColor = GUISettings::Intro::Text::Color::SUBTITLE;
+		if(m_authorFadingIn)
+			authorColor.alpha *= m_authorPercentFadedIn;
+		d2d::Window::SetColor(authorColor);
 		d2d::Window::PushMatrix();
 		d2d::Window::Translate(m_authorPosition * resolution);
-		d2d::Window::DrawString(m_author, m_authorTextStyle.size * resolution.y, m_authorTextStyle.fontRefPtr, m_authorAlignment);
+		d2d::Window::DrawString(m_authorFont, GUIStrings::Intro::AUTHOR, 
+			GUISettings::Intro::Text::Size::SUBTITLE * resolution.y, m_authorAlignment);
 		d2d::Window::PopMatrix();
 	}
 }
