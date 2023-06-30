@@ -144,7 +144,7 @@ namespace Space
 	// Random entity placement
 	const float MIN_BOUNDING_RADII_GAP_RELATIVE_TO_HEIGHT_ICONS = 2.0f;
 	const float MIN_BOUNDING_RADII_GAP_RELATIVE_TO_HEIGHT = 0.25f;
-	const unsigned MAX_ATTEMPTS_PER_ENTITY = 500;
+	const unsigned MAX_ATTEMPTS_PER_ENTITY = 10000;
 
 	// Asteroid spawning
 	const d2d::Range<float> ASTEROID_STARTING_SPEED_RANGE_XL{ 0.1f, 3.0f };

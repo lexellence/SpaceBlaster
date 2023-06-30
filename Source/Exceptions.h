@@ -26,4 +26,8 @@ namespace Space
 	{
 		using Exception::Exception;
 	};
+	struct CouldNotPlaceEntityException : public d2d::Exception
+	{
+		using Exception::Exception;
+	};
 }

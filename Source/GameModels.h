@@ -145,13 +145,13 @@ namespace Space
 		// XLarge
 		std::array<Model, NUM_XLARGE_ASTEROID_MODELS>
 			asteroidsXLarge{
-				Model{ "asteroidxlarge1", {textures.asteroidsXLarge.at(0)} },
+			Model{ "asteroidxlarge1", { textures.asteroidsXLarge.at(0) } },
 				Model{ "asteroidxlarge2", {textures.asteroidsXLarge.at(1)} },
 				Model{ "asteroidxlarge3", {textures.asteroidsXLarge.at(2)} },
 				Model{ "asteroidxlarge4", {textures.asteroidsXLarge.at(3)} } };
 		std::array<Model, NUM_XLARGE_ASTEROID_MODELS>
 			rocksXLarge{
-				Model{ "asteroidxlarge1", {textures.rocksXLarge.at(0)} },
+			Model{ "asteroidxlarge1", { textures.rocksXLarge.at(0) } },
 				Model{ "asteroidxlarge2", {textures.rocksXLarge.at(1)} },
 				Model{ "asteroidxlarge3", {textures.rocksXLarge.at(2)} },
 				Model{ "asteroidxlarge4", {textures.rocksXLarge.at(3)} } };
@@ -159,42 +159,96 @@ namespace Space
 		// Large
 		std::array<Model, NUM_LARGE_ASTEROID_MODELS>
 			asteroidsLarge{
-				Model{ "asteroidlarge1", {textures.asteroidsLarge.at(0)} },
+			Model{ "asteroidlarge1", { textures.asteroidsLarge.at(0) } },
 				Model{ "asteroidlarge2", {textures.asteroidsLarge.at(1)} } };
 		std::array<Model, NUM_LARGE_ASTEROID_MODELS>
 			rocksLarge{
-				Model{ "asteroidlarge1", {textures.rocksLarge.at(0)} },
+			Model{ "asteroidlarge1", { textures.rocksLarge.at(0) } },
 				Model{ "asteroidlarge2", {textures.rocksLarge.at(1)} } };
 
 		// Medium
 		std::array<Model, NUM_MEDIUM_ASTEROID_MODELS>
 			asteroidsMedium{
-				Model{ "asteroidmedium1", {textures.asteroidsMedium.at(0)} },
+			Model{ "asteroidmedium1", { textures.asteroidsMedium.at(0) } },
 				Model{ "asteroidmedium2", {textures.asteroidsMedium.at(1)} } };
 		std::array<Model, NUM_MEDIUM_ASTEROID_MODELS>
 			rocksMedium{
-				Model{ "asteroidmedium1", {textures.rocksMedium.at(0)} },
+			Model{ "asteroidmedium1", { textures.rocksMedium.at(0) } },
 				Model{ "asteroidmedium2", {textures.rocksMedium.at(1)} } };
 
 		// Small
 		std::array<Model, NUM_SMALL_ASTEROID_MODELS>
 			asteroidsSmall{
-				Model{ "asteroidsmall1", {textures.asteroidsSmall.at(0)} },
+			Model{ "asteroidsmall1", { textures.asteroidsSmall.at(0) } },
 				Model{ "asteroidsmall2", {textures.asteroidsSmall.at(1)} } };
 		std::array<Model, NUM_SMALL_ASTEROID_MODELS>
 			rocksSmall{
-				Model{ "asteroidsmall1", { textures.rocksSmall.at(0)} },
+			Model{ "asteroidsmall1", { textures.rocksSmall.at(0) } },
 				Model{ "asteroidsmall2", { textures.rocksSmall.at(1)} } };
 
 		// Projectiles
 		Model bullet{ "fireball1", {textures.bullet} };
 		Model missile{ "rocket005",
 			d2d::AnimationDef{ {d2d::AnimationFrame{textures.missileFrames.at(0), MISSILE_TIME_PER_FRAME},
-								d2d::AnimationFrame{textures.missileFrames.at(1), MISSILE_TIME_PER_FRAME}}, 
+								d2d::AnimationFrame{textures.missileFrames.at(1), MISSILE_TIME_PER_FRAME}},
 			d2d::AnimationType::LOOP} };
 		Model fatMissile{ "rocket006",
 			d2d::AnimationDef{ {d2d::AnimationFrame{textures.fatMissileFrames.at(0), MISSILE_TIME_PER_FRAME},
 								d2d::AnimationFrame{textures.fatMissileFrames.at(1), MISSILE_TIME_PER_FRAME}},
 			d2d::AnimationType::LOOP} };
+
+		//+---------------------------\-------------------------------
+		//|		  Projectiles		  |
+		//\---------------------------/-------------------------------
+		// Bullet
+		ProjectileDef bulletDef{ bullet,
+			BULLET_MATERIAL,
+			{BULLET_HEIGHT * textures.bullet.GetWidthToHeightRatio(), BULLET_HEIGHT},
+			BULLET_FIXED_ROTATION,
+			BULLET_CONTINUOUS_COLLISION_DETECTION,
+			BULLET_FILTER,
+			BULLET_DESTRUCTION_DELAY,
+			BULLET_DESTRUCTION_DELAY_TIME,
+			BULLET_DESTRUCTION_DELAY_ON_CONTACT,
+			BULLET_DESTRUCTION_DELAY_ON_CONTACT_TIME,
+			BULLET_DESTRUCTION_CHANCE_ON_CONTACT,
+			BULLET_DESTRUCTION_CHANCE,
+			BULLET_IGNORE_PARENT_COLLISIONS_UNTIL_FIRST_CONTACT,
+			BULLET_ACCELERATION,
+			BULLET_ACCELERATION_TIME };
+
+		// Missile
+		ProjectileDef missileDef{ missile,
+			MISSILE_MATERIAL,
+			{MISSILE_HEIGHT * textures.missileFrames[0].GetWidthToHeightRatio(), MISSILE_HEIGHT},
+			MISSILE_FIXED_ROTATION,
+			MISSILE_CONTINUOUS_COLLISION_DETECTION,
+			MISSILE_FILTER,
+			MISSILE_DESTRUCTION_DELAY,
+			MISSILE_DESTRUCTION_DELAY_TIME,
+			MISSILE_DESTRUCTION_DELAY_ON_CONTACT,
+			MISSILE_DESTRUCTION_DELAY_ON_CONTACT_TIME,
+			MISSILE_DESTRUCTION_CHANCE_ON_CONTACT,
+			MISSILE_DESTRUCTION_CHANCE,
+			MISSILE_IGNORE_PARENT_COLLISIONS_UNTIL_FIRST_CONTACT,
+			MISSILE_ACCELERATION,
+			MISSILE_ACCELERATION_TIME };
+
+		// Fat missile
+		ProjectileDef fatMissileDef{ fatMissile,
+			MISSILE_MATERIAL,
+			{MISSILE_HEIGHT * textures.fatMissileFrames[0].GetWidthToHeightRatio(), MISSILE_HEIGHT},
+			MISSILE_FIXED_ROTATION,
+			MISSILE_CONTINUOUS_COLLISION_DETECTION,
+			MISSILE_FILTER,
+			MISSILE_DESTRUCTION_DELAY,
+			MISSILE_DESTRUCTION_DELAY_TIME,
+			MISSILE_DESTRUCTION_DELAY_ON_CONTACT,
+			MISSILE_DESTRUCTION_DELAY_ON_CONTACT_TIME,
+			MISSILE_DESTRUCTION_CHANCE_ON_CONTACT,
+			MISSILE_DESTRUCTION_CHANCE,
+			MISSILE_IGNORE_PARENT_COLLISIONS_UNTIL_FIRST_CONTACT,
+			MISSILE_ACCELERATION,
+			MISSILE_ACCELERATION_TIME };
 	};
 }

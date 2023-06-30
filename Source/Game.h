@@ -12,7 +12,7 @@
 #include "Camera.h"
 #include "Starfield.h"
 #include "GameSettings.h"
-#include "GameModels.h"
+#include "EntityFactory.h"
 #include "ShopSettings.h"
 namespace Space
 {
@@ -55,13 +55,6 @@ namespace Space
 
 	private:
 		void ClearLevel(const b2Vec2& newWorldDimensions);
-		void SpawnPlayer();
-		void SpawnExit();
-		unsigned SpawnRandomIcons(unsigned count);
-		unsigned SpawnRandomXLargeAsteroids(unsigned count);
-		unsigned SpawnRandomLargeAsteroids(unsigned count);
-		unsigned SpawnRandomMediumAsteroids(unsigned count);
-		unsigned SpawnRandomSmallAsteroids(unsigned count);
 		void ValidateWorldDimensions() const;
 
 		void UpdateCamera(float dt, const PlayerController &playerController);
@@ -70,37 +63,17 @@ namespace Space
 		bool IsPlayer(WorldID entityID) const;
 		void ApplyPlayerUpgrades(World& world, WorldID playerID, const std::set<ShopItemID>& upgrades);
 		void FollowEntity(WorldID entityID);
-
-		WorldID CreateBasicObject(World &world, const b2Vec2 &size, int drawLayer,
-								  const Model &model, const d2d::Material &material, const d2d::Filter &filter,
-								  b2BodyType physicsType, const InstanceDef &def);
 		void CreatePlayer(World &world, const InstanceDef &def);
-		WorldID CreateScout(World &world, const InstanceDef &def);
-		WorldID CreateBlaster(World &world, const InstanceDef &def);
-		void AddBlasterGuns(World& world, WorldID entityID, unsigned numGuns);
-		WorldID CreateXLargeAsteroid(World &world, unsigned modelIndex, bool isRock, const InstanceDef &def);
-		WorldID CreateLargeAsteroid(World &world, unsigned modelIndex, bool isRock, const InstanceDef &def);
-		WorldID CreateMediumAsteroid(World &world, unsigned modelIndex, bool isRock, const InstanceDef &def);
-		WorldID CreateSmallAsteroid(World &world, unsigned modelIndex, bool isRock, const InstanceDef &def);
-		WorldID CreateBumper(World &world, const InstanceDef &def);
-		WorldID CreateSoda(World &world, const InstanceDef &def);
-		WorldID CreateMelon(World &world, const InstanceDef &def);
-		WorldID CreateApple(World &world, const InstanceDef &def);
-		WorldID CreateIcon(World &world, unsigned modelIndex, const InstanceDef &def);
-		WorldID CreateExit(World &world, const InstanceDef &def);
-		WorldID CreateExitSensor(World &world, const InstanceDef &def);
-
 		void DrawHUD();
 
 	private:
 		World m_world;
+		EntityFactory m_factory;
 		Camera *const m_cameraPtr;
 		Starfield *const m_starfieldPtr;
 		bool m_firstUpdate{ true };
-		GameModels m_models;
 		bool m_cameraFollowingEntity{ false };
 		WorldID m_cameraFollowEntityID{};
-		b2Vec2 m_spawnAsteroidStartingDirection{};
 		struct
 		{
 			bool isSet{};
@@ -112,59 +85,5 @@ namespace Space
 		} m_player;
 		std::list<DelayedGameAction> m_delayedGameActions;
 		d2d::FontReference m_hudFont{"Fonts/OrbitronLight.otf"};
-
-		//+---------------------------\-------------------------------
-		//|		  Projectiles		  |
-		//\---------------------------/-------------------------------
-		// Bullet
-		ProjectileDef m_bulletDef{ m_models.bullet,
-			BULLET_MATERIAL,
-			{BULLET_HEIGHT * m_models.textures.bullet.GetWidthToHeightRatio(), BULLET_HEIGHT},
-			BULLET_FIXED_ROTATION,
-			BULLET_CONTINUOUS_COLLISION_DETECTION,
-			BULLET_FILTER,
-			BULLET_DESTRUCTION_DELAY,
-			BULLET_DESTRUCTION_DELAY_TIME,
-			BULLET_DESTRUCTION_DELAY_ON_CONTACT,
-			BULLET_DESTRUCTION_DELAY_ON_CONTACT_TIME,
-			BULLET_DESTRUCTION_CHANCE_ON_CONTACT,
-			BULLET_DESTRUCTION_CHANCE,
-			BULLET_IGNORE_PARENT_COLLISIONS_UNTIL_FIRST_CONTACT,
-			BULLET_ACCELERATION,
-			BULLET_ACCELERATION_TIME };
-
-		// Missile
-		ProjectileDef m_missileDef{ m_models.missile,
-			MISSILE_MATERIAL,
-			{MISSILE_HEIGHT * m_models.textures.missileFrames[0].GetWidthToHeightRatio(), MISSILE_HEIGHT},
-			MISSILE_FIXED_ROTATION,
-			MISSILE_CONTINUOUS_COLLISION_DETECTION,
-			MISSILE_FILTER,
-			MISSILE_DESTRUCTION_DELAY,
-			MISSILE_DESTRUCTION_DELAY_TIME,
-			MISSILE_DESTRUCTION_DELAY_ON_CONTACT,
-			MISSILE_DESTRUCTION_DELAY_ON_CONTACT_TIME,
-			MISSILE_DESTRUCTION_CHANCE_ON_CONTACT,
-			MISSILE_DESTRUCTION_CHANCE,
-			MISSILE_IGNORE_PARENT_COLLISIONS_UNTIL_FIRST_CONTACT,
-			MISSILE_ACCELERATION,
-			MISSILE_ACCELERATION_TIME };
-
-		// Fat missile
-		ProjectileDef m_fatMissileDef{ m_models.fatMissile,
-			MISSILE_MATERIAL,
-			{MISSILE_HEIGHT * m_models.textures.fatMissileFrames[0].GetWidthToHeightRatio(), MISSILE_HEIGHT},
-			MISSILE_FIXED_ROTATION,
-			MISSILE_CONTINUOUS_COLLISION_DETECTION,
-			MISSILE_FILTER,
-			MISSILE_DESTRUCTION_DELAY,
-			MISSILE_DESTRUCTION_DELAY_TIME,
-			MISSILE_DESTRUCTION_DELAY_ON_CONTACT,
-			MISSILE_DESTRUCTION_DELAY_ON_CONTACT_TIME,
-			MISSILE_DESTRUCTION_CHANCE_ON_CONTACT,
-			MISSILE_DESTRUCTION_CHANCE,
-			MISSILE_IGNORE_PARENT_COLLISIONS_UNTIL_FIRST_CONTACT,
-			MISSILE_ACCELERATION,
-			MISSILE_ACCELERATION_TIME };
 	};
 }
