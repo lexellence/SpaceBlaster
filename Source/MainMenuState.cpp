@@ -18,6 +18,7 @@ namespace Space
 {
 	void MainMenuState::Init()
 	{
+		m_menu.SetViewRect();
 		m_menu.SetBackgroundColor(GUISettings::Menu::BackgroundColor::MAIN);
 		m_menu.SetTitleColor(GUISettings::Menu::Text::Color::TITLE);
 		m_menu.SetSubtitleColor(GUISettings::Menu::Text::Color::SUBTITLE);
@@ -68,6 +69,7 @@ namespace Space
 	void MainMenuState::Draw()
 	{
 		// Starfield
+		d2d::Window::SetViewRect();
 		d2d::Window::SetCameraRect(m_cameraPtr->GetRect());
 		m_starfieldPtr->Draw();
 

@@ -18,6 +18,7 @@ namespace Space
 {
 	void GameState::Init()
 	{
+		m_menu.SetViewRect();
 		m_menu.SetTitleColor(GUISettings::Menu::Text::Color::TITLE);
 		m_menu.SetSubtitleColor(GUISettings::Menu::Text::Color::SUBTITLE);
 		m_menu.SetTitleFont(&m_titleFont);
@@ -245,13 +246,17 @@ namespace Space
 		d2d::Window::SetShowCursor(m_mode != GameMode::ACTION);
 		m_game.Draw();
 		if(m_mode != GameMode::ACTION)
+		{
+			d2d::Window::SetViewRect();
 			m_menu.Draw();
+		}
 		if(m_showFPS)
 			DrawFPS();
 	}
 	void GameState::DrawFPS()
 	{
-		b2Vec2 resolution{ d2d::Window::GetScreenResolution() };
+		d2d::Window::SetViewRect();
+		b2Vec2 resolution{ d2d::Window::GetViewSize() };
 		d2d::Window::SetCameraRect({ b2Vec2_zero, resolution });
 
 		int fpsInt{ (int)(d2d::Window::GetFPS() + 0.5f) };

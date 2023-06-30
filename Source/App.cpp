@@ -146,9 +146,9 @@ namespace Space
 				case SDL_WINDOWEVENT_CLOSE:
 					m_nextState = AppStateID::QUIT;
 					return;
-				case SDL_WINDOWEVENT_SIZE_CHANGED:
-					d2d::Window::Resize(event.window.data1, event.window.data2);
-					return;
+				//case SDL_WINDOWEVENT_SIZE_CHANGED:
+				//	d2d::Window::Resize(event.window.data1, event.window.data2);
+				//	return;
 				}
 			}
 			currentStatePtr->ProcessEvent(event);

@@ -107,11 +107,12 @@ namespace Space
 		d2d::Window::EnableBlending();
 
 		// Starfield
+		d2d::Window::SetViewRect();
 		d2d::Window::SetCameraRect(m_cameraPtr->GetRect());
 		m_starfieldPtr->Draw();
 
 		// Set camera to screen resolution
-		b2Vec2 resolution{ d2d::Window::GetScreenResolution() };
+		b2Vec2 resolution{ d2d::Window::GetViewSize() };
 		d2d::Window::SetCameraRect({ b2Vec2_zero, resolution });
 
 		// Draw title

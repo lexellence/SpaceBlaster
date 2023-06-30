@@ -90,6 +90,9 @@ namespace Space::GUISettings {
 			};
 		}
 	}
+	namespace HUD::ViewRect {
+		const d2d::Rect GAME{{ 0.1f, 0.0f }, { 0.9f, 1.0f }};
+	}
 	namespace HUD::Text {
 		namespace Color {
 			const d2d::Color FPS{ 1.0f, 1.0f, 0.0f, 1.0f };

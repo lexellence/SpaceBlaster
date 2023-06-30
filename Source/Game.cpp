@@ -320,6 +320,7 @@ namespace Space
 	//\-------------/---------------------------------------------
 	void Game::Draw()
 	{
+		d2d::Window::SetViewRect(GUISettings::HUD::ViewRect::GAME);
 		d2d::Window::SetCameraRect(m_cameraPtr->GetRect());
 		m_starfieldPtr->Draw();
 		m_world.Draw();
@@ -332,7 +333,8 @@ namespace Space
 	void Game::DrawHUD()
 	{
 		// Text draw mode
-		b2Vec2 resolution{ d2d::Window::GetScreenResolution() };
+		d2d::Window::SetViewRect();
+		b2Vec2 resolution{ d2d::Window::GetViewSize() };
 		d2d::Window::SetCameraRect({ b2Vec2_zero, resolution });
 		d2d::Window::DisableTextures();
 		d2d::Window::EnableBlending();

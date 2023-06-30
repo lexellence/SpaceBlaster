@@ -64,7 +64,7 @@ namespace Space
 	d2d::Rect Camera::GetRect() const
 	{
 		d2d::Rect cameraRect;
-		cameraRect.SetCenter(GetPosition(), GetDimensions(d2d::Window::GetXYAspectRatio()));
+		cameraRect.SetCenter(GetPosition(), GetDimensions(d2d::Window::GetViewXYAspectRatio()));
 		return cameraRect;
 	}
 	void Camera::ResetZoom()
