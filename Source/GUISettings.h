@@ -90,8 +90,15 @@ namespace Space::GUISettings {
 			};
 		}
 	}
-	namespace HUD::ViewRect {
-		const d2d::Rect GAME{{ 0.1f, 0.0f }, { 0.9f, 1.0f }};
+	namespace HUD::ViewSections {
+		const d2d::Rect ACTION{{ 0.1f, 0.0f }, { 0.9f, 1.0f }};
+		const d2d::Rect LEFT{{ 0.0f, 0.0f }, { ACTION.lowerBound.x, 1.0f }};
+		const d2d::Rect RIGHT{{ ACTION.upperBound.x, 0.0f }, { 1.0f, 1.0f }};
+	}
+	namespace HUD::Background {
+		namespace Color {
+			const d2d::Color DEFAULT{ 0.0f, 0.3f, 0.0f, 0.3f };
+		}
 	}
 	namespace HUD::Text {
 		namespace Color {
@@ -99,10 +106,10 @@ namespace Space::GUISettings {
 			const d2d::Color FUEL{ 1.0f, 0.2f, 0.2f, 1.0f };
 			const d2d::Color CREDITS{ 0.2f, 0.2f, 1.0f, 1.0f };
 			const d2d::Color LEVEL{1.0f, 1.0f, 0.2f, 1.0f};
-			const d2d::Color ICONS{0.2f, 0.2f, 1.0f, 1.0f};
+			const d2d::Color ICONS{1.0f, 0.2f, 1.0f, 1.0f};
 		}
 		namespace Size {
-			const float DEFAULT = 0.05f;
+			const float DEFAULT = 0.035f;
 			const float FPS = DEFAULT;
 			const float FUEL = DEFAULT;
 			const float CREDITS = DEFAULT;
@@ -110,16 +117,16 @@ namespace Space::GUISettings {
 			const float ICONS = DEFAULT;
 		}
 		namespace Position {
-			const b2Vec2 FPS{ 1.0f, 1.0f };
+			const b2Vec2 FPS{ 0.99f, 0.99f };
 			const d2d::AlignmentAnchor FPS_ALIGNMENT{ d2d::AlignmentAnchorX::RIGHT, d2d::AlignmentAnchorY::TOP };
-			const b2Vec2 FUEL{ 0.10f, 0.10f };
-			const d2d::AlignmentAnchor FUEL_ALIGNMENT{ d2d::AlignmentAnchorX::LEFT, d2d::AlignmentAnchorY::BOTTOM };
-			const b2Vec2 CREDITS{ 0.90f, 0.90f };
-			const d2d::AlignmentAnchor CREDITS_ALIGNMENT{ d2d::AlignmentAnchorX::RIGHT, d2d::AlignmentAnchorY::TOP };
-			const b2Vec2 LEVEL{ 0.90f, 0.10f };
-			const d2d::AlignmentAnchor LEVEL_ALIGNMENT{ d2d::AlignmentAnchorX::RIGHT, d2d::AlignmentAnchorY::BOTTOM };
-			const b2Vec2 ICONS{ 0.10f, 0.90f };
-			const d2d::AlignmentAnchor ICONS_ALIGNMENT{ d2d::AlignmentAnchorX::LEFT, d2d::AlignmentAnchorY::TOP };
+			const b2Vec2 FUEL{ HUD::ViewSections::LEFT.GetCenterX(), 0.25f};
+			const d2d::AlignmentAnchor FUEL_ALIGNMENT{ d2d::AlignmentAnchorX::CENTER, d2d::AlignmentAnchorY::CENTER };
+			const b2Vec2 CREDITS{ HUD::ViewSections::LEFT.GetCenterX(), 0.5f };
+			const d2d::AlignmentAnchor CREDITS_ALIGNMENT{ d2d::AlignmentAnchorX::CENTER, d2d::AlignmentAnchorY::CENTER };
+			const b2Vec2 LEVEL{ HUD::ViewSections::LEFT.GetCenterX(), 0.75f };
+			const d2d::AlignmentAnchor LEVEL_ALIGNMENT{ d2d::AlignmentAnchorX::CENTER, d2d::AlignmentAnchorY::CENTER };
+			const b2Vec2 ICONS{ HUD::ViewSections::RIGHT.GetCenterX(), 0.75f };
+			const d2d::AlignmentAnchor ICONS_ALIGNMENT{ d2d::AlignmentAnchorX::CENTER, d2d::AlignmentAnchorY::CENTER };
 		}
 		namespace Font {
 			const std::string DEFAULT = "Fonts/OrbitronLight.otf";

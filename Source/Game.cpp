@@ -109,7 +109,7 @@ namespace Space
 			m_player.credits -= price;
 			if(m_player.isSet)
 				//ApplyPlayerUpgrades(m_world, m_player.id, m_player.upgrades);
-			return true;
+				return true;
 		}
 		return false;
 	}
@@ -320,11 +320,14 @@ namespace Space
 	//\-------------/---------------------------------------------
 	void Game::Draw()
 	{
-		d2d::Window::SetViewRect(GUISettings::HUD::ViewRect::GAME);
+		//d2d::Window::SetViewRect(GUISettings::HUD::ViewSections::ACTION);
+		d2d::Window::SetViewRect();
 		d2d::Window::SetCameraRect(m_cameraPtr->GetRect());
 		m_starfieldPtr->Draw();
 		m_world.Draw();
-		DrawHUD();
+
+		if(m_player.isSet)
+			DrawHUD();
 	}
 
 	//+-------------\---------------------------------------------
@@ -332,67 +335,67 @@ namespace Space
 	//\-------------/---------------------------------------------
 	void Game::DrawHUD()
 	{
-		// Text draw mode
+		b2Vec2 screenSize{ d2d::Window::GetScreenSize() };
+		int screenWidth, screenHeight;
+		d2d::Window::GetScreenSize(&screenWidth, &screenHeight);
+
 		d2d::Window::SetViewRect();
-		b2Vec2 resolution{ d2d::Window::GetViewSize() };
-		d2d::Window::SetCameraRect({ b2Vec2_zero, resolution });
+		d2d::Window::SetCameraRect({ b2Vec2_zero, screenSize });
+
 		d2d::Window::DisableTextures();
 		d2d::Window::EnableBlending();
 
-		if(m_player.isSet)
+		// Draw fuel
+		if(m_world.HasComponents(m_player.id, COMPONENT_FUEL))
 		{
-			// Draw fuel
-			if(m_world.HasComponents(m_player.id, COMPONENT_FUEL))
-			{
-				d2d::Window::SetColor(GUISettings::HUD::Text::Color::FUEL);
-				d2d::Window::PushMatrix();
-				d2d::Window::Translate(GUISettings::HUD::Text::Position::FUEL * resolution);
-				{
-					int fuelInt = (int)(m_world.GetFuelLevel(m_player.id) + 0.5f);
-					int maxFuelInt = (int)(m_world.GetMaxFuelLevel(m_player.id) + 0.5f);
-					std::string fuelString = d2d::ToString(fuelInt) + "/" + d2d::ToString(maxFuelInt);
-					d2d::Window::DrawString(fuelString, GUISettings::HUD::Text::Size::FUEL * resolution.y,
-						m_hudFont, GUISettings::HUD::Text::Position::FUEL_ALIGNMENT);
-				}
-				d2d::Window::PopMatrix();
-			}
-
-			// Draw icons collected
-			if(m_world.HasComponents(m_player.id, COMPONENT_ICON_COLLECTOR))
-			{
-				d2d::Window::SetColor(GUISettings::HUD::Text::Color::ICONS);
-				d2d::Window::PushMatrix();
-				d2d::Window::Translate(GUISettings::HUD::Text::Position::ICONS * resolution);
-				{
-					unsigned icons = m_world.GetIconsCollected(m_player.id);
-					std::string iconsString = d2d::ToString(icons);
-					d2d::Window::DrawString(iconsString, GUISettings::HUD::Text::Size::ICONS * resolution.y,
-						m_hudFont, GUISettings::HUD::Text::Position::ICONS_ALIGNMENT);
-				}
-				d2d::Window::PopMatrix();
-			}
-
-			// Draw credits
-			d2d::Window::SetColor(GUISettings::HUD::Text::Color::CREDITS);
+			d2d::Window::SetColor(GUISettings::HUD::Text::Color::FUEL);
 			d2d::Window::PushMatrix();
-			d2d::Window::Translate(GUISettings::HUD::Text::Position::CREDITS * resolution);
+			d2d::Window::Translate(GUISettings::HUD::Text::Position::FUEL * screenSize);
 			{
-				std::string creditsString = d2d::ToString(m_player.credits);
-				d2d::Window::DrawString(creditsString, GUISettings::HUD::Text::Size::CREDITS * resolution.y,
-					m_hudFont, GUISettings::HUD::Text::Position::CREDITS_ALIGNMENT);
-			}
-			d2d::Window::PopMatrix();
-
-			// Draw level
-			d2d::Window::SetColor(GUISettings::HUD::Text::Color::LEVEL);
-			d2d::Window::PushMatrix();
-			d2d::Window::Translate(GUISettings::HUD::Text::Position::LEVEL * resolution);
-			{
-				std::string levelString = d2d::ToString(m_player.currentLevel);
-				d2d::Window::DrawString(levelString, GUISettings::HUD::Text::Size::LEVEL * resolution.y,
-					m_hudFont, GUISettings::HUD::Text::Position::LEVEL_ALIGNMENT);
+				int fuelInt = (int)(m_world.GetFuelLevel(m_player.id) + 0.5f);
+				int maxFuelInt = (int)(m_world.GetMaxFuelLevel(m_player.id) + 0.5f);
+				std::string fuelString = d2d::ToString(fuelInt) + "/" + d2d::ToString(maxFuelInt);
+				d2d::Window::DrawString(fuelString, GUISettings::HUD::Text::Size::FUEL * screenSize.y,
+					m_hudFont, GUISettings::HUD::Text::Position::FUEL_ALIGNMENT);
 			}
 			d2d::Window::PopMatrix();
 		}
+
+		// Draw icons collected
+		if(m_world.HasComponents(m_player.id, COMPONENT_ICON_COLLECTOR))
+		{
+			d2d::Window::SetColor(GUISettings::HUD::Text::Color::ICONS);
+			d2d::Window::PushMatrix();
+			d2d::Window::Translate(GUISettings::HUD::Text::Position::ICONS * screenSize);
+			{
+				unsigned icons = m_world.GetIconsCollected(m_player.id);
+				std::string iconsString = d2d::ToString(icons);
+				d2d::Window::DrawString(iconsString, GUISettings::HUD::Text::Size::ICONS * screenSize.y,
+					m_hudFont, GUISettings::HUD::Text::Position::ICONS_ALIGNMENT);
+			}
+			d2d::Window::PopMatrix();
+		}
+
+		// Draw credits
+		d2d::Window::SetColor(GUISettings::HUD::Text::Color::CREDITS);
+		d2d::Window::PushMatrix();
+		d2d::Window::Translate(GUISettings::HUD::Text::Position::CREDITS * screenSize);
+		{
+			std::string creditsString = d2d::ToString(m_player.credits);
+			d2d::Window::DrawString(creditsString, GUISettings::HUD::Text::Size::CREDITS * screenSize.y,
+				m_hudFont, GUISettings::HUD::Text::Position::CREDITS_ALIGNMENT);
+		}
+		d2d::Window::PopMatrix();
+
+		// Draw level
+		d2d::Window::SetColor(GUISettings::HUD::Text::Color::LEVEL);
+		d2d::Window::PushMatrix();
+		d2d::Window::Translate(GUISettings::HUD::Text::Position::LEVEL * screenSize);
+		{
+			std::string levelString = d2d::ToString(m_player.currentLevel);
+			d2d::Window::DrawString(levelString, GUISettings::HUD::Text::Size::LEVEL * screenSize.y,
+				m_hudFont, GUISettings::HUD::Text::Position::LEVEL_ALIGNMENT);
+		}
+		d2d::Window::PopMatrix();
 	}
 }
