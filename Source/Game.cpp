@@ -202,7 +202,7 @@ namespace Space
 	void Game::CreatePlayer(World& world, const InstanceDef& def)
 	{
 		WorldID blasterID = m_factory.CreateBlaster(world, def);
-		world.AddIconCollectorComponent(blasterID);
+		world.AddIconCollectorComponent(blasterID, &m_player.credits);
 		SetPlayer(blasterID);
 		ApplyPlayerUpgrades(world, blasterID, m_player.upgrades);
 		FollowEntity(blasterID);
@@ -309,8 +309,6 @@ namespace Space
 		if(IsPlayer(entityID))
 		{
 			m_player.exited = true;
-			if(m_world.HasComponents(entityID, COMPONENT_ICON_COLLECTOR))
-				m_player.credits += (float)m_world.GetIconsCollected(entityID);
 			m_player.currentLevel++;
 		}
 	}
@@ -361,17 +359,17 @@ namespace Space
 			d2d::Window::PopMatrix();
 		}
 
-		// Draw icons collected
+		// Draw icons remaining
 		if(m_world.HasComponents(m_player.id, COMPONENT_ICON_COLLECTOR))
 		{
 			d2d::Window::SetColor(GUISettings::HUD::Text::Color::ICONS);
 			d2d::Window::PushMatrix();
 			d2d::Window::Translate(GUISettings::HUD::Text::Position::ICONS * screenSize);
 			{
-				unsigned icons = m_world.GetIconsCollected(m_player.id);
-				std::string iconsString = "Icons\nCollected\n" + d2d::ToString(icons);
-				d2d::Window::DrawString(iconsString, GUISettings::HUD::Text::Size::ICONS * screenSize.y,
-					m_hudFont, GUISettings::HUD::Text::Position::ICONS_ALIGNMENT);
+				//unsigned iconsLeft = m_world.GetIconsCollected(m_player.id);
+				//std::string iconsString = "Icons\nLeft\n" + d2d::ToString(iconsLeft);
+				//d2d::Window::DrawString(iconsString, GUISettings::HUD::Text::Size::ICONS * screenSize.y,
+				//	m_hudFont, GUISettings::HUD::Text::Position::ICONS_ALIGNMENT);
 			}
 			d2d::Window::PopMatrix();
 		}

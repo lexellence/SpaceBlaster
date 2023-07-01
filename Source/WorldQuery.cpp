@@ -146,10 +146,6 @@ namespace Space
 	{
 		return m_fuelComponents[entityID].max;
 	}
-	unsigned World::GetIconsCollected(WorldID entityID) const
-	{
-		return m_iconCollectorComponents[entityID].iconsCollected;
-	}
 	float World::GetTotalThrusterAcceleration(WorldID id) const
 	{
 		float totalAcceleration{ 0.0f };
