@@ -354,7 +354,7 @@ namespace Space
 			{
 				int fuelInt = (int)(m_world.GetFuelLevel(m_player.id) + 0.5f);
 				int maxFuelInt = (int)(m_world.GetMaxFuelLevel(m_player.id) + 0.5f);
-				std::string fuelString = d2d::ToString(fuelInt) + "/" + d2d::ToString(maxFuelInt);
+				std::string fuelString = "Fuel\n" + d2d::ToString(fuelInt) + "/" + d2d::ToString(maxFuelInt);
 				d2d::Window::DrawString(fuelString, GUISettings::HUD::Text::Size::FUEL * screenSize.y,
 					m_hudFont, GUISettings::HUD::Text::Position::FUEL_ALIGNMENT);
 			}
@@ -369,7 +369,7 @@ namespace Space
 			d2d::Window::Translate(GUISettings::HUD::Text::Position::ICONS * screenSize);
 			{
 				unsigned icons = m_world.GetIconsCollected(m_player.id);
-				std::string iconsString = d2d::ToString(icons);
+				std::string iconsString = "Icons\nCollected\n" + d2d::ToString(icons);
 				d2d::Window::DrawString(iconsString, GUISettings::HUD::Text::Size::ICONS * screenSize.y,
 					m_hudFont, GUISettings::HUD::Text::Position::ICONS_ALIGNMENT);
 			}
@@ -381,7 +381,7 @@ namespace Space
 		d2d::Window::PushMatrix();
 		d2d::Window::Translate(GUISettings::HUD::Text::Position::CREDITS * screenSize);
 		{
-			std::string creditsString = d2d::ToString(m_player.credits);
+			std::string creditsString = "Credits\n" + d2d::ToString(m_player.credits);
 			d2d::Window::DrawString(creditsString, GUISettings::HUD::Text::Size::CREDITS * screenSize.y,
 				m_hudFont, GUISettings::HUD::Text::Position::CREDITS_ALIGNMENT);
 		}
@@ -392,7 +392,7 @@ namespace Space
 		d2d::Window::PushMatrix();
 		d2d::Window::Translate(GUISettings::HUD::Text::Position::LEVEL * screenSize);
 		{
-			std::string levelString = d2d::ToString(m_player.currentLevel);
+			std::string levelString = "Wave\n" + d2d::ToString(m_player.currentLevel);
 			d2d::Window::DrawString(levelString, GUISettings::HUD::Text::Size::LEVEL * screenSize.y,
 				m_hudFont, GUISettings::HUD::Text::Position::LEVEL_ALIGNMENT);
 		}
