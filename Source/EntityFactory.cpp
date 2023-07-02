@@ -64,14 +64,6 @@ namespace Space
 	//\---------------------------/-------------------------------
 	WorldID EntityFactory::CreateBlaster(World& world, const InstanceDef& def)
 	{
-		//static const d2d::TextureAtlas bigShipAtlas{ "Textures/bigships.png"s, "Textures/bigships.xml"s};
-		//static const d2d::TextureFromAtlas blasterTexture{ bigShipAtlas, "ship001"s};
-		//static const Model blaster{ "ship001", { blasterTexture } };
-
-		//static const d2d::TextureAtlas effectAtlas{ "Textures/effects.png"s, "Textures/effects.xml"s};
-		//static const d2d::TextureFromAtlas thrusterTexture{ effectAtlas, "thruster1"s};
-		//static const Model blasterThruster{ "thruster1", {{thrusterTexture, 0.0f, d2d::WHITE_OPAQUE, BLASTER_THRUSTER_RELATIVE_SIZE}} };
-
 		b2Vec2 size{ BLASTER_HEIGHT * m_models.textures.blaster.GetWidthToHeightRatio(), BLASTER_HEIGHT };
 		WorldID id = CreateBasicObject(world, size, DEFAULT_DRAW_LAYER, m_models.blaster, SHIP_MATERIAL, SHIP_FILTER, b2_dynamicBody, def);
 		world.AddRotatorComponent(id, BLASTER_ROTATION_SPEED);
