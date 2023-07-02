@@ -31,7 +31,7 @@ namespace Space
 	//\-----------------/-----------------------------------------
 	void Game::NewGame()
 	{
-		m_player.credits = 10.0f;
+		m_player.credits = 100.0f;
 		m_player.currentLevel = 1;
 		m_player.upgrades.clear();
 	}
@@ -108,8 +108,8 @@ namespace Space
 			m_player.upgrades.insert(itemID);
 			m_player.credits -= price;
 			if(m_player.isSet)
-				//ApplyPlayerUpgrades(m_world, m_player.id, m_player.upgrades);
-				return true;
+				ApplyPlayerUpgrades(m_world, m_player.id, { itemID });
+			return true;
 		}
 		return false;
 	}
