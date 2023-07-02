@@ -163,8 +163,8 @@ namespace Space
 	const float PARTICLE_EXPLOSION_FADEIN = 0.0f;
 
 	// Particle explosions - num particles
-	const unsigned BLASTER_NUM_PARTICLES = 600;
-	const unsigned SCOUT_NUM_PARTICLES = 600;
+	const unsigned BLASTER_NUM_PARTICLES = 150;
+	const unsigned SCOUT_NUM_PARTICLES = 75;
 	const unsigned XLARGE_ASTEROID_NUM_PARTICLES = 80;
 	const unsigned LARGE_ASTEROID_NUM_PARTICLES = 40;
 	const unsigned MEDIUM_ASTEROID_NUM_PARTICLES = 20;
