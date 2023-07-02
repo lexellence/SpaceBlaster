@@ -17,6 +17,7 @@
     <ClCompile Include="..\Source\EntityFactory.cpp" />
     <ClCompile Include="..\Source\Game.cpp" />
     <ClCompile Include="..\Source\GameState.cpp" />
+    <ClCompile Include="..\Source\GUISettings.cpp" />
     <ClCompile Include="..\Source\IntroState.cpp" />
     <ClCompile Include="..\Source\main.cpp" />
     <ClCompile Include="..\Source\MainMenuState.cpp" />

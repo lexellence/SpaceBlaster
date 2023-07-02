@@ -47,7 +47,10 @@ namespace Space
 	}
 	void MainMenuState::ProcessEvent(const SDL_Event& event)
 	{
-		m_menu.ProcessEvent(event);
+		if(GUISettings::Menu::IsGoBackEvent(event))
+			m_menu.PressButton(GUIStrings::MainMenu::QUIT);
+		else
+			m_menu.ProcessEvent(event);
 	}
 	AppStateID MainMenuState::Update(float dt)
 	{

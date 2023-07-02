@@ -56,7 +56,7 @@ namespace Space
 					if(pressedButton.label == GUIStrings::PauseMenu::QUIT)
 						return AppStateID::MAIN_MENU;
 					else if(pressedButton.label == GUIStrings::PauseMenu::RESUME)
-						UnpauseGame();
+						MenuGoBack();
 				}
 				else if(m_mode == GameMode::POST_LEVEL)
 				{
@@ -72,16 +72,15 @@ namespace Space
 				{
 					// Shop main menu
 					if(pressedButton.label == GUIStrings::ShopMenu::BACK)
-						StartPostLevel();
+						MenuGoBack();
 					else
 						StartShopRoom(pressedButton.label);
 				}
 				else if(m_mode == GameMode::SHOP_ROOM)
 				{
 					// Shop room submenus
-					std::string roomName = m_menu.GetTitle();
 					if(pressedButton.label == GUIStrings::ShopMenu::BACK_ROOM)
-						StartShopMain(roomName);
+						MenuGoBack();
 					else
 					{
 						// Purchase upgrade
@@ -91,7 +90,7 @@ namespace Space
 						{
 							m_shop.RemoveItems({ itemID });
 							unsigned buttonIndex = m_menu.GetSelectedButtonIndex();
-							StartShopRoom(roomName);
+							StartShopRoom(m_menu.GetTitle());
 							m_menu.SetSelectedButton(buttonIndex);
 						}
 					}
@@ -104,6 +103,21 @@ namespace Space
 			m_game.Update(dt, m_playerController);
 
 		return AppStateID::GAME;
+	}
+	void GameState::MenuGoBack()
+	{
+		switch(m_mode)
+		{
+		case GameMode::PAUSED:
+			UnpauseGame();
+			break;
+		case GameMode::SHOP_MAIN:
+			StartPostLevel();
+			break;
+		case GameMode::SHOP_ROOM:
+			StartShopMain(m_menu.GetTitle());
+			break;
+		}
 	}
 	void GameState::StartActionMode(bool startLevel)
 	{
@@ -275,7 +289,14 @@ namespace Space
 	void GameState::ProcessEvent(const SDL_Event& event)
 	{
 		if(m_mode != GameMode::ACTION)
+		{
+			if(GUISettings::Menu::IsGoBackEvent(event))
+			{
+				MenuGoBack();
+				return;
+			}
 			m_menu.ProcessEvent(event);
+		}
 
 		switch(event.type)
 		{

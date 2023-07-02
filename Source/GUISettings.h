@@ -4,7 +4,7 @@
 ** Author: David Leksen
 ** Date:
 **
-** Header file for camera settings
+** Header file for GUI settings
 **
 \**************************************************************************************/
 #pragma once
@@ -22,6 +22,11 @@ namespace Space::GUISettings {
 			const std::string TITLE = "Fonts/OrbitronLight.otf";
 			const std::string SUBTITLE = "Fonts/AlexBrush.otf";
 		}
+	}
+	namespace Menu {
+		const SDL_Keycode BACK_KEY = SDLK_ESCAPE;
+		const SDL_GameControllerButton BACK_BUTTON = SDL_CONTROLLER_BUTTON_B;
+		bool IsGoBackEvent(const SDL_Event& event);
 	}
 	namespace Menu::Text {
 		namespace Color {

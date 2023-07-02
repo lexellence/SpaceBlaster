@@ -31,6 +31,7 @@ namespace Space
 		void Draw() override;
 
 	private:
+		void MenuGoBack();
 		void StartActionMode(bool startLevel = false);
 		void StartPauseMenu();
 		void StartPostLevel();
