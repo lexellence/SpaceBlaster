@@ -22,6 +22,9 @@ namespace Space
 		WorldID CreateScout(World &world, const InstanceDef &def);
 		WorldID CreateBlaster(World &world, const InstanceDef &def);
 		void AddBlasterGuns(World& world, WorldID entityID, unsigned count);
+
+		WorldID CreateUFOGray(World &world, const InstanceDef &def);
+
 		std::vector<WorldID> CreateRandomXLargeAsteroids(World& world, unsigned count, float directionAngle);
 		std::vector<WorldID> CreateRandomLargeAsteroids(World& world, unsigned count, float directionAngle);
 		std::vector<WorldID> CreateRandomMediumAsteroids(World& world, unsigned count, float directionAngle);

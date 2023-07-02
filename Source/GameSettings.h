@@ -26,6 +26,7 @@ namespace Space
 	// Rotation speed
 	const float BLASTER_ROTATION_SPEED = 6.0f;
 	const float SCOUT_ROTATION_SPEED = 6.0f;
+	const float UFO_ROTATION_SPEED = 3.0f;
 
 	// Thrusters
 	const float BLASTER_THRUSTER_ACCELERATION = 8.0f;
@@ -99,6 +100,7 @@ namespace Space
 	// HP
 	const float BLASTER_HP = 200.0f;
 	const float SCOUT_HP = 30.0f;
+	const float UFO_HP = 15.0f;
 	const float XLARGE_ASTEROID_HP = 115.0f;
 	const float LARGE_ASTEROID_HP = 65.0f;
 	const float MEDIUM_ASTEROID_HP = 40.0f;
@@ -126,6 +128,7 @@ namespace Space
 	// Sizes
 	const float BLASTER_HEIGHT = 4.0f;
 	const float SCOUT_HEIGHT = BLASTER_HEIGHT * SCOUT_TO_BLASTER_HEIGHT_RATIO * 1.5f;
+	const float UFO_HEIGHT = 3.0f;
 	const float BULLET_HEIGHT = 0.35f;
 	const float SMALL_BULLET_HEIGHT = 0.5f * BULLET_HEIGHT;
 	const float MISSILE_HEIGHT = 0.5f;
@@ -165,6 +168,7 @@ namespace Space
 	// Particle explosions - num particles
 	const unsigned BLASTER_NUM_PARTICLES = 150;
 	const unsigned SCOUT_NUM_PARTICLES = 75;
+	const unsigned UFO_NUM_PARTICLES = 15;
 	const unsigned XLARGE_ASTEROID_NUM_PARTICLES = 80;
 	const unsigned LARGE_ASTEROID_NUM_PARTICLES = 40;
 	const unsigned MEDIUM_ASTEROID_NUM_PARTICLES = 20;
@@ -173,11 +177,13 @@ namespace Space
 	// Particle explosions - speed ranges
 	const d2d::Range<float> BLASTER_PARTICLE_SPEED_RANGE{ 1.0f, 15.0f };
 	const d2d::Range<float> SCOUT_PARTICLE_SPEED_RANGE{ 1.0f, 15.0f };
+	const d2d::Range<float> UFO_PARTICLE_SPEED_RANGE{ 1.0f, 15.0f };
 	const d2d::Range<float> ASTEROID_PARTICLE_SPEED_RANGE{ 1.0f, 15.0f };
 
 	// Particle explosions - particle size ranges
 	const d2d::Range<int> BLASTER_PARTICLE_SIZE_INDEX_RANGE{ 5, 14 };
 	const d2d::Range<int> SCOUT_PARTICLE_SIZE_INDEX_RANGE{ 5, 14 };
+	const d2d::Range<int> UFO_PARTICLE_SIZE_INDEX_RANGE{ 3, 12 };
 	const d2d::Range<int> XLARGE_ASTEROID_PARTICLE_SIZE_INDEX_RANGE{ 6, 15 };
 	const d2d::Range<int> LARGE_ASTEROID_PARTICLE_SIZE_INDEX_RANGE{ 5, 14 };
 	const d2d::Range<int> MEDIUM_ASTEROID_PARTICLE_SIZE_INDEX_RANGE{ 4, 13 };
@@ -185,12 +191,14 @@ namespace Space
 
 	// Particle explosions - particle color ranges
 	const d2d::ColorRange BLASTER_PARTICLE_COLOR_RANGE{{39, 59, 39, 255}, { 87, 119, 87, 255 }};
+	const d2d::ColorRange UFO_GRAY_PARTICLE_COLOR_RANGE{{99, 99, 99, 255}, { 219, 219, 219, 255 }};
 	const d2d::ColorRange ASTEROID_PARTICLE_COLOR_RANGE{{92, 68, 52, 255}, { 153, 112, 85, 255 }};
 	const d2d::ColorRange ROCK_PARTICLE_COLOR_RANGE{{115, 126, 131, 255}, { 154, 170, 177, 255 }};
 
 	// Particle explosions - lifetimes
 	const float BLASTER_PARTICLE_LIFETIME = 30.0f;
 	const float SCOUT_PARTICLE_LIFETIME = 30.0f;
+	const float UFO_PARTICLE_LIFETIME = 15.0f;
 	const float XLARGE_ASTEROID_PARTICLE_LIFETIME = 10.0f;
 	const float LARGE_ASTEROID_PARTICLE_LIFETIME = 8.0f;
 	const float MEDIUM_ASTEROID_PARTICLE_LIFETIME = 6.0f;

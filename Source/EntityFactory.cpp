@@ -116,6 +116,23 @@ namespace Space
 			world.AddProjectileLauncher(entityID, launcherSlot++, m_models.bulletDef, { BLASTER_PROJECTILE_OFFSET_X, -BLASTER_PROJECTILE_OUTER_SPREAD_Y }, BLASTER_CANON_IMPULSE, BLASTER_CANON_INTERVAL, false, false);
 		}
 	}
+
+	//+---------------------------\-------------------------------
+	//|		 CreateUFOGray		  |
+	//\---------------------------/-------------------------------
+	WorldID EntityFactory::CreateUFOGray(World &world, const InstanceDef &def)
+	{
+		b2Vec2 size{ UFO_HEIGHT * m_models.textures.ufoGray.GetWidthToHeightRatio(), UFO_HEIGHT };
+		WorldID id = CreateBasicObject(world, size, DEFAULT_DRAW_LAYER, m_models.ufoGray, SHIP_MATERIAL, SHIP_FILTER, b2_dynamicBody, def);
+		world.AddRotatorComponent(id, UFO_ROTATION_SPEED);
+		world.AddHealthComponent(id, UFO_HP);
+		world.AddParticleExplosionOnDeathComponent(id, PARTICLE_EXPLOSION_RELATIVE_SIZE,
+			UFO_NUM_PARTICLES, UFO_PARTICLE_SPEED_RANGE, DAMAGE_BASED_SPEED_INCREASE_FACTOR,
+			UFO_PARTICLE_SIZE_INDEX_RANGE, UFO_GRAY_PARTICLE_COLOR_RANGE,
+			UFO_PARTICLE_LIFETIME, PARTICLE_EXPLOSION_FADEIN, BLASTER_PARTICLE_FADEOUT);
+		return id;
+	}
+
 	//+--------------------------------\--------------------------
 	//|	  CreateRandomXLargeAsteroids  |
 	//\--------------------------------/--------------------------

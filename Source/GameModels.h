@@ -36,10 +36,15 @@ namespace Space
 		//\---------------------------/-------------------------------
 		struct Textures
 		{
-			// Ships
+			// Big ships
 			d2d::TextureAtlas bigShipAtlas{ "Textures/bigships.png"s, "Textures/bigships.xml"s};
 			d2d::TextureFromAtlas blaster{ bigShipAtlas, "ship001"s};
 			d2d::TextureFromAtlas scout{ bigShipAtlas, "ship002"s};
+
+			// Tiny ships
+			d2d::TextureAtlas tinyShipAtlas{ "Textures/tinyships.png"s, "Textures/tinyships.xml"s};
+			d2d::TextureFromAtlas ufoGreen{ tinyShipAtlas, "tinyship015green"s};
+			d2d::TextureFromAtlas ufoGray{ tinyShipAtlas, "tinyship015gray"s};
 
 			// Effects
 			d2d::TextureAtlas effectAtlas{ "Textures/effects.png"s, "Textures/effects.xml"s};
@@ -133,6 +138,8 @@ namespace Space
 		// Ships
 		Model blaster{ "ship001", {textures.blaster} };
 		Model scout{ "ship002", {textures.scout} };
+		Model ufoGreen{ "tinyship015green", {textures.ufoGreen} };
+		Model ufoGray{ "tinyship015gray", {textures.ufoGray} };
 		Model blasterThruster{ "thruster1", {{textures.thruster, 0.0f, d2d::WHITE_OPAQUE, BLASTER_THRUSTER_RELATIVE_SIZE}} };
 		Model scoutThruster{ "thruster1", {{textures.thruster, 0.0f, d2d::WHITE_OPAQUE, SCOUT_THRUSTER_RELATIVE_SIZE}} };
 
