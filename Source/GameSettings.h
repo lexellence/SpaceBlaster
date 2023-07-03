@@ -31,6 +31,7 @@ namespace Space
 	// Thrusters
 	const float BLASTER_THRUSTER_ACCELERATION = 8.0f;
 	const float SCOUT_THRUSTER_ACCELERATION = 20.0f;
+	const float UFO_THRUSTER_ACCELERATION = 4.0f;
 	const float BLASTER_BOOST_FACTOR = 8.0f;
 	const float SCOUT_BOOST_FACTOR = 5.0f;
 	const float BOOST_SECONDS = 0.2f;
@@ -39,6 +40,7 @@ namespace Space
 	// Thruster positions
 	const float BLASTER_THRUSTER_OFFSET_X = -0.44f;
 	const float SCOUT_THRUSTER_OFFSET_X = -0.9f;
+	const float UFO_THRUSTER_OFFSET_X = -0.44f;
 	const float BLASTER_THRUSTER_INNER_SPREAD_Y = 0.33f;
 	const float BLASTER_THRUSTER_OUTER_SPREAD_Y = 0.437f;
 	const float SCOUT_THRUSTER_SPREAD_Y = 0.1f;
@@ -128,7 +130,7 @@ namespace Space
 	// Sizes
 	const float BLASTER_HEIGHT = 4.0f;
 	const float SCOUT_HEIGHT = BLASTER_HEIGHT * SCOUT_TO_BLASTER_HEIGHT_RATIO * 1.5f;
-	const float UFO_HEIGHT = 3.0f;
+	const float UFO_HEIGHT = 6.0f;
 	const float BULLET_HEIGHT = 0.35f;
 	const float SMALL_BULLET_HEIGHT = 0.5f * BULLET_HEIGHT;
 	const float MISSILE_HEIGHT = 0.5f;

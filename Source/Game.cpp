@@ -65,7 +65,7 @@ namespace Space
 		{
 			m_factory.CreateExit(m_world, { .position{ 0.0f, -12.0f } });
 			CreatePlayer(m_world, { .position{ b2Vec2_zero }, .angle{ d2d::PI_OVER_TWO } });
-			m_factory.CreateUFOGray(m_world, { .position{ 12.0f, 12.0f } });
+			auto id = m_factory.CreateUFOGray(m_world, { .position{ 12.0f, 12.0f } });
 			m_factory.CreateUFOGray(m_world, { .position{ -12.0f, 12.0f } });
 
 			m_factory.CreateRandomIcons(m_world, 8);

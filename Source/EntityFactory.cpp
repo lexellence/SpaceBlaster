@@ -125,6 +125,9 @@ namespace Space
 		b2Vec2 size{ UFO_HEIGHT * m_models.textures.ufoGray.GetWidthToHeightRatio(), UFO_HEIGHT };
 		WorldID id = CreateBasicObject(world, size, DEFAULT_DRAW_LAYER, m_models.ufoGray, SHIP_MATERIAL, SHIP_FILTER, b2_dynamicBody, def);
 		world.AddRotatorComponent(id, UFO_ROTATION_SPEED);
+		world.AddThrusterComponent(id, 1, 1.0f);
+		world.AddThruster(id, 0, m_models.blasterThruster.animationDef, UFO_THRUSTER_ACCELERATION, 0.0f, { BLASTER_THRUSTER_OFFSET_X, 0.0f });
+
 		world.AddHealthComponent(id, UFO_HP);
 		world.AddParticleExplosionOnDeathComponent(id, PARTICLE_EXPLOSION_RELATIVE_SIZE,
 			UFO_NUM_PARTICLES, UFO_PARTICLE_SPEED_RANGE, DAMAGE_BASED_SPEED_INCREASE_FACTOR,
