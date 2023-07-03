@@ -140,8 +140,8 @@ namespace Space
 		Model scout{ "ship002", {textures.scout} };
 		Model ufoGreen{ "tinyship015green", {textures.ufoGreen} };
 		Model ufoGray{ "tinyship015gray", {textures.ufoGray} };
-		Model blasterThruster{ "thruster1", {{textures.thruster, 0.0f, d2d::WHITE_OPAQUE, BLASTER_THRUSTER_RELATIVE_SIZE}} };
-		Model scoutThruster{ "thruster1", {{textures.thruster, 0.0f, d2d::WHITE_OPAQUE, SCOUT_THRUSTER_RELATIVE_SIZE}} };
+		Model blasterThruster{ "thruster1", {{textures.thruster, 0.0f, BLASTER_THRUSTER_RELATIVE_SIZE}} };
+		Model scoutThruster{ "thruster1", {{textures.thruster, 0.0f, SCOUT_THRUSTER_RELATIVE_SIZE}} };
 
 		// Items
 		Model bumper{ "repulser1", {textures.bumper} };
