@@ -136,73 +136,82 @@ namespace Space
 		//|		     Models 		  |
 		//\---------------------------/-------------------------------
 		// Ships
-		Model blaster{ "ship001", {textures.blaster} };
-		Model scout{ "ship002", {textures.scout} };
-		Model ufoGreen{ "tinyship015green", {textures.ufoGreen} };
-		Model ufoGray{ "tinyship015gray", {textures.ufoGray} };
-		Model blasterThruster{ "thruster1", {{textures.thruster, 0.0f, BLASTER_THRUSTER_RELATIVE_SIZE}} };
-		Model scoutThruster{ "thruster1", {{textures.thruster, 0.0f, SCOUT_THRUSTER_RELATIVE_SIZE}} };
+		Model blaster{ "ship001", {.frameList{ textures.blaster }} };
+		Model scout{ "ship002", {.frameList{ textures.scout }} };
+		Model ufoGreen{ "tinyship015green", {.frameList{ textures.ufoGreen }} };
+		Model ufoGray{ "tinyship015gray", {.frameList{ textures.ufoGray }} };
+		Model blasterThruster{ "thruster1", {.frameList{{ textures.thruster, 0.0f, BLASTER_THRUSTER_RELATIVE_SIZE }}} };
+		Model scoutThruster{ "thruster1", {.frameList{{ textures.thruster, 0.0f, SCOUT_THRUSTER_RELATIVE_SIZE }}} };
 
 		// Items
-		Model bumper{ "repulser1", {textures.bumper} };
-		Model soda{ "sodacan", {textures.soda} };
-		Model melon{ "watermelon", {textures.melon} };
-		Model apple{ "apple", {textures.apple} };
+		Model bumper{ "repulser1", {.frameList{ textures.bumper }} };
+		Model soda{ "sodacan", {.frameList{ textures.soda }} };
+		Model melon{ "watermelon", {.frameList{ textures.melon }} };
+		Model apple{ "apple", {.frameList{ textures.apple }} };
 
 		// XLarge
-		std::array<Model, NUM_XLARGE_ASTEROID_MODELS>
-			asteroidsXLarge{
-			Model{ "asteroidxlarge1", { textures.asteroidsXLarge.at(0) } },
-				Model{ "asteroidxlarge2", {textures.asteroidsXLarge.at(1)} },
-				Model{ "asteroidxlarge3", {textures.asteroidsXLarge.at(2)} },
-				Model{ "asteroidxlarge4", {textures.asteroidsXLarge.at(3)} } };
+		std::array<Model, NUM_XLARGE_ASTEROID_MODELS> asteroidsXLarge{
+			Model{ "asteroidxlarge1", { .frameList{ textures.asteroidsXLarge.at(0) } } },
+				Model{ "asteroidxlarge2", {.frameList{ textures.asteroidsXLarge.at(1)}} },
+				Model{ "asteroidxlarge3", {.frameList{ textures.asteroidsXLarge.at(2)}} },
+				Model{ "asteroidxlarge4", {.frameList{ textures.asteroidsXLarge.at(3)}} } };
 		std::array<Model, NUM_XLARGE_ASTEROID_MODELS>
 			rocksXLarge{
-			Model{ "asteroidxlarge1", { textures.rocksXLarge.at(0) } },
-				Model{ "asteroidxlarge2", {textures.rocksXLarge.at(1)} },
-				Model{ "asteroidxlarge3", {textures.rocksXLarge.at(2)} },
-				Model{ "asteroidxlarge4", {textures.rocksXLarge.at(3)} } };
+			Model{ "asteroidxlarge1", { .frameList{ textures.rocksXLarge.at(0) } } },
+				Model{ "asteroidxlarge2", {.frameList{ textures.rocksXLarge.at(1) }} },
+				Model{ "asteroidxlarge3", {.frameList{ textures.rocksXLarge.at(2) }} },
+				Model{ "asteroidxlarge4", {.frameList{ textures.rocksXLarge.at(3) }} } };
 
 		// Large
 		std::array<Model, NUM_LARGE_ASTEROID_MODELS>
 			asteroidsLarge{
-			Model{ "asteroidlarge1", { textures.asteroidsLarge.at(0) } },
-				Model{ "asteroidlarge2", {textures.asteroidsLarge.at(1)} } };
+			Model{ "asteroidlarge1", { .frameList{ textures.asteroidsLarge.at(0) } } },
+				Model{ "asteroidlarge2", {.frameList{ textures.asteroidsLarge.at(1) }} } };
 		std::array<Model, NUM_LARGE_ASTEROID_MODELS>
 			rocksLarge{
-			Model{ "asteroidlarge1", { textures.rocksLarge.at(0) } },
-				Model{ "asteroidlarge2", {textures.rocksLarge.at(1)} } };
+			Model{ "asteroidlarge1", { .frameList{ textures.rocksLarge.at(0) } } },
+				Model{ "asteroidlarge2", {.frameList{ textures.rocksLarge.at(1) }} } };
 
 		// Medium
 		std::array<Model, NUM_MEDIUM_ASTEROID_MODELS>
 			asteroidsMedium{
-			Model{ "asteroidmedium1", { textures.asteroidsMedium.at(0) } },
-				Model{ "asteroidmedium2", {textures.asteroidsMedium.at(1)} } };
+			Model{ "asteroidmedium1", { .frameList{ textures.asteroidsMedium.at(0) } } },
+				Model{ "asteroidmedium2", {.frameList{ textures.asteroidsMedium.at(1)} } } };
 		std::array<Model, NUM_MEDIUM_ASTEROID_MODELS>
 			rocksMedium{
-			Model{ "asteroidmedium1", { textures.rocksMedium.at(0) } },
-				Model{ "asteroidmedium2", {textures.rocksMedium.at(1)} } };
+			Model{ "asteroidmedium1", { .frameList{ textures.rocksMedium.at(0) } } },
+				Model{ "asteroidmedium2", {.frameList{ textures.rocksMedium.at(1)} } } };
 
 		// Small
 		std::array<Model, NUM_SMALL_ASTEROID_MODELS>
 			asteroidsSmall{
-			Model{ "asteroidsmall1", { textures.asteroidsSmall.at(0) } },
-				Model{ "asteroidsmall2", {textures.asteroidsSmall.at(1)} } };
+			Model{ "asteroidsmall1", { .frameList{ textures.asteroidsSmall.at(0) } } },
+				Model{ "asteroidsmall2", {.frameList{ textures.asteroidsSmall.at(1)}} } };
 		std::array<Model, NUM_SMALL_ASTEROID_MODELS>
 			rocksSmall{
-			Model{ "asteroidsmall1", { textures.rocksSmall.at(0) } },
-				Model{ "asteroidsmall2", { textures.rocksSmall.at(1)} } };
+			Model{ "asteroidsmall1", { .frameList{ textures.rocksSmall.at(0) } } },
+				Model{ "asteroidsmall2", {.frameList{ textures.rocksSmall.at(1) } } } };
 
 		// Projectiles
-		Model bullet{ "fireball1", {textures.bullet} };
-		Model missile{ "rocket005",
-			d2d::AnimationDef{ {d2d::AnimationFrame{textures.missileFrames.at(0), MISSILE_TIME_PER_FRAME},
-								d2d::AnimationFrame{textures.missileFrames.at(1), MISSILE_TIME_PER_FRAME}},
-			d2d::AnimationType::LOOP} };
-		Model fatMissile{ "rocket006",
-			d2d::AnimationDef{ {d2d::AnimationFrame{textures.fatMissileFrames.at(0), MISSILE_TIME_PER_FRAME},
-								d2d::AnimationFrame{textures.fatMissileFrames.at(1), MISSILE_TIME_PER_FRAME}},
-			d2d::AnimationType::LOOP} };
+		Model bullet{ "fireball1", {.frameList{ textures.bullet }} };
+		Model missile
+		{ 
+			"rocket005",
+			{
+				.frameList{ {textures.missileFrames.at(0), MISSILE_TIME_PER_FRAME},
+							{textures.missileFrames.at(1), MISSILE_TIME_PER_FRAME}},
+				.type = d2d::AnimationType::LOOP
+			}
+		};
+		Model fatMissile
+		{ 
+			"rocket006",
+			{ 
+				.frameList{ {textures.fatMissileFrames.at(0), MISSILE_TIME_PER_FRAME},
+							{textures.fatMissileFrames.at(1), MISSILE_TIME_PER_FRAME} },
+				.type = d2d::AnimationType::LOOP
+			}
+		};
 
 		//+---------------------------\-------------------------------
 		//|		  Projectiles		  |

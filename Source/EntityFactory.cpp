@@ -421,7 +421,7 @@ namespace Space
 	{
 		d2Assert(modelIndex < m_models.textures.icons.size());
 		b2Vec2 size{ ICON_HEIGHT * m_models.textures.icons.at(0).GetWidthToHeightRatio(), ICON_HEIGHT };
-		Model model{ "icon", { m_models.textures.icons.at(modelIndex) } };
+		Model model{ "icon", { {m_models.textures.icons.at(modelIndex)} } };
 		WorldID id = CreateBasicObject(world, size, DEFAULT_DRAW_LAYER, model, ICON_MATERIAL, ICON_FILTER, b2_dynamicBody, def);
 		PowerUpComponent powerUp;
 		powerUp.type = PowerUpType::ICON;
