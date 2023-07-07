@@ -10,7 +10,7 @@
 #pragma once
 #include "ParticleSystem.h"
 #include "WorldDef.h"
-
+#include "Model.h"
 namespace Space
 {
 	using WorldID = size_t;
@@ -50,11 +50,6 @@ namespace Space
 	{
 		int layer;
 		d2d::Animation animation;
-	};
-	struct Model
-	{
-		std::string name;
-		d2d::AnimationDef animationDef;
 	};
 	struct ProjectileDef
 	{

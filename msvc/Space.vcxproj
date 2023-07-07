@@ -21,6 +21,7 @@
     <ClCompile Include="..\Source\IntroState.cpp" />
     <ClCompile Include="..\Source\main.cpp" />
     <ClCompile Include="..\Source\MainMenuState.cpp" />
+    <ClCompile Include="..\Source\Model.cpp" />
     <ClCompile Include="..\Source\ParticleSystem.cpp" />
     <ClCompile Include="..\Source\pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -52,6 +53,7 @@
     <ClInclude Include="..\Source\IntroState.h" />
     <ClInclude Include="..\Source\MainMenuState.h" />
     <ClInclude Include="..\Source\GUISettings.h" />
+    <ClInclude Include="..\Source\Model.h" />
     <ClInclude Include="..\Source\ParticleSystem.h" />
     <ClInclude Include="..\Source\pch.h" />
     <ClInclude Include="..\Source\Shop.h" />
