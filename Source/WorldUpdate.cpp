@@ -444,21 +444,8 @@ namespace Space
 					CreateExplosionFromEntity(id, m_particleExplosionComponents[id]);
 			}
 
-			// Destroy Box2D bodies
-			if(HasPhysics(id))
-			{
-				m_b2WorldPtr->DestroyBody(m_physicsComponents[id].mainBody.b2BodyPtr);
-				m_physicsComponents[id].mainBody.b2BodyPtr = nullptr;
-				for(CloneBody& cloneBody : m_physicsComponents[id].cloneBodyList)
-				{
-					m_b2WorldPtr->DestroyBody(cloneBody.b2BodyPtr);
-					cloneBody.b2BodyPtr = nullptr;
-				}
-			}
-
-			// Disable all components/flags
-			m_componentBits[id].reset();
-			m_flagBits[id].reset();
+			RemoveAllFlags(id);
+			RemoveAllComponents(id);
 		}
 		m_destroyBuffer.clear();
 	}

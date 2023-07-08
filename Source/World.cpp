@@ -114,15 +114,43 @@ namespace Space
 		else
 			m_flagBits[entityID] &= ~flagBits;
 	}
+	void World::RemoveAllFlags(WorldID entityID)
+	{
+		d2Assert(entityID < WORLD_MAX_ENTITIES);
+		m_flagBits[entityID].reset();
+	}
 	void World::RemoveComponent(WorldID entityID, ComponentBit componentBit)
 	{
 		d2Assert(entityID < WORLD_MAX_ENTITIES);
+		if(componentBit == COMPONENT_PHYSICS)
+			DestroyB2Bodies(entityID);
 		m_componentBits[entityID].reset(componentBit);
 	}
 	void World::RemoveComponentSet(WorldID entityID, ComponentBitset componentBits)
 	{
 		d2Assert(entityID < WORLD_MAX_ENTITIES);
+		if(componentBits[COMPONENT_PHYSICS])
+			DestroyB2Bodies(entityID);
 		m_componentBits[entityID] &= ~componentBits;
+	}
+	void World::RemoveAllComponents(WorldID entityID)
+	{
+		d2Assert(entityID < WORLD_MAX_ENTITIES);
+		DestroyB2Bodies(entityID);
+		m_componentBits[entityID].reset();
+	}
+	void World::DestroyB2Bodies(WorldID entityID)
+	{
+		if(HasPhysics(entityID))
+		{
+			m_b2WorldPtr->DestroyBody(m_physicsComponents[entityID].mainBody.b2BodyPtr);
+			m_physicsComponents[entityID].mainBody.b2BodyPtr = nullptr;
+			for(CloneBody& cloneBody : m_physicsComponents[entityID].cloneBodyList)
+			{
+				m_b2WorldPtr->DestroyBody(cloneBody.b2BodyPtr);
+				cloneBody.b2BodyPtr = nullptr;
+			}
+		}
 	}
 	//void World::RemoveAllComponentsExcept(WorldID entityID, BitMask componentBits)
 	//{

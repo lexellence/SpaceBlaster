@@ -183,8 +183,11 @@ namespace Space
 		void Destroy(WorldID id);
 		void SetFlag(WorldID entityID, FlagBit flagBit, bool enable);
 		void SetFlagSet(WorldID entityID, FlagBitset flagBits, bool enable);
+		void RemoveAllFlags(WorldID entityID);
 		void RemoveComponent(WorldID entityID, ComponentBit componentBit);
 		void RemoveComponentSet(WorldID entityID, ComponentBitset componentBits);
+		void RemoveAllComponents(WorldID entityID);
+		void DestroyB2Bodies(WorldID entityID);
 		//void RemoveAllComponentsExcept(WorldID entityID, BitMask componentBitMask);
 
 		// Physics
