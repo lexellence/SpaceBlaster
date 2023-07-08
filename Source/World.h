@@ -157,7 +157,7 @@ namespace Space
 		bool HasSize(EntityID entityID) const;
 		bool HasSize2D(EntityID entityID) const;
 		bool HasPhysics(EntityID entityID) const;
-		bool GetClosestPhysicalEntity(const b2Vec2& position, float boudingRadius,
+		bool GetClosestPhysicalEntity(const b2Vec2& position, float boundingRadius,
 			EntityID& entityIDOut, float& boundingRadiiGapOut) const;
 		int GetDrawLayer(EntityID entityID) const;
 		float GetFuelLevel(EntityID entityID) const;

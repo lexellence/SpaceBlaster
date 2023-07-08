@@ -116,7 +116,7 @@ namespace Space
 	//	returns true and sets entityIDOut and relativePositionOut to
 	//	the closest entity (relativePosition may point to clone body)
 	//+-----------------------------------------------------------
-	bool World::GetClosestPhysicalEntity(const b2Vec2& position, float boudingRadius,
+	bool World::GetClosestPhysicalEntity(const b2Vec2& position, float boundingRadius,
 		EntityID& entityIDOut, float& boundingRadiiGapOut) const
 	{
 		b2Body* b2BodyPtr = m_b2WorldPtr->GetBodyList();
@@ -136,7 +136,7 @@ namespace Space
 					boundingCircleRadius = m_boundingRadiusComponents[bodyPtr->entityID];
 				else
 					boundingCircleRadius = 0.0f;
-				float gap{ relativePosition.Length() - boudingRadius - boundingCircleRadius };
+				float gap{ relativePosition.Length() - boundingRadius - boundingCircleRadius };
 				if(gap < closestGap)
 				{
 					closestEntityID = bodyPtr->entityID;
