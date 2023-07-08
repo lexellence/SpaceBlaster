@@ -29,10 +29,10 @@ namespace Space
 	//+----------------------\------------------------------------
 	//|	   GetEntityCount	 |
 	//\----------------------/------------------------------------
-	WorldID World::GetEntityCount() const
+	EntityID World::GetEntityCount() const
 	{
-		WorldID entityCount{ 0 };
-		for(WorldID id = 0; id < WORLD_MAX_ENTITIES; ++id)
+		EntityID entityCount{ 0 };
+		for(EntityID id = 0; id < WORLD_MAX_ENTITIES; ++id)
 			if(EntityExists(id))
 				++entityCount;
 		return entityCount;
@@ -40,7 +40,7 @@ namespace Space
 	//+----------------------\------------------------------------
 	//|	   EntityExists 	 |
 	//\----------------------/------------------------------------
-	bool World::EntityExists(WorldID entityID) const
+	bool World::EntityExists(EntityID entityID) const
 	{
 		d2Assert(entityID < WORLD_MAX_ENTITIES);
 		return m_componentBits[entityID].any() || m_flagBits[entityID].any();
@@ -48,7 +48,7 @@ namespace Space
 	//+----------------------\------------------------------------
 	//|	    HasComponent	 |
 	//\----------------------/------------------------------------
-	bool World::HasComponent(WorldID entityID, ComponentBit component) const
+	bool World::HasComponent(EntityID entityID, ComponentBit component) const
 	{
 		d2Assert(entityID < WORLD_MAX_ENTITIES);
 		return m_componentBits[entityID].test(component);
@@ -56,7 +56,7 @@ namespace Space
 	//+----------------------\------------------------------------
 	//|	    HasComponents	 |
 	//\----------------------/------------------------------------
-	bool World::HasComponentSet(WorldID entityID, ComponentBitset componentBits) const
+	bool World::HasComponentSet(EntityID entityID, ComponentBitset componentBits) const
 	{
 		d2Assert(entityID < WORLD_MAX_ENTITIES);
 		return (m_componentBits[entityID] & componentBits) == componentBits;
@@ -64,7 +64,7 @@ namespace Space
 	//+----------------------\------------------------------------
 	//|		  HasFlag		 |
 	//\----------------------/------------------------------------
-	bool World::HasFlag(WorldID entityID, FlagBit flagBit) const
+	bool World::HasFlag(EntityID entityID, FlagBit flagBit) const
 	{
 		d2Assert(entityID < WORLD_MAX_ENTITIES);
 		return m_flagBits[entityID].test(flagBit);
@@ -72,7 +72,7 @@ namespace Space
 	//+----------------------\------------------------------------
 	//|		 HasFlags		 |
 	//\----------------------/------------------------------------
-	bool World::HasFlagSet(WorldID entityID, FlagBitset flagBits) const
+	bool World::HasFlagSet(EntityID entityID, FlagBitset flagBits) const
 	{
 		d2Assert(entityID < WORLD_MAX_ENTITIES);
 		return (m_flagBits[entityID] & flagBits) == flagBits;
@@ -80,14 +80,14 @@ namespace Space
 	//+----------------------\------------------------------------
 	//|		 IsActive		 |
 	//\----------------------/------------------------------------
-	bool World::IsActive(WorldID entityID) const
+	bool World::IsActive(EntityID entityID) const
 	{
 		return HasFlag(entityID, FLAG_ACTIVE);
 	}
 	//+----------------------\------------------------------------
 	//|		  HasSize		 |
 	//\----------------------/------------------------------------
-	bool World::HasSize(WorldID entityID) const
+	bool World::HasSize(EntityID entityID) const
 	{
 		return EntityExists(entityID) &&
 			(m_sizeComponents[entityID].x > 0.0f ||
@@ -96,7 +96,7 @@ namespace Space
 	//+----------------------\------------------------------------
 	//|		 HasSize2D		 |
 	//\----------------------/------------------------------------
-	bool World::HasSize2D(WorldID entityID) const
+	bool World::HasSize2D(EntityID entityID) const
 	{
 		return EntityExists(entityID) &&
 			(m_sizeComponents[entityID].x > 0.0f &&
@@ -105,7 +105,7 @@ namespace Space
 	//+----------------------\------------------------------------
 	//|		 HasPhysics		 |
 	//\----------------------/------------------------------------
-	bool World::HasPhysics(WorldID entityID) const
+	bool World::HasPhysics(EntityID entityID) const
 	{
 		return HasComponent(entityID, COMPONENT_PHYSICS);
 	}
@@ -117,13 +117,13 @@ namespace Space
 	//	the closest entity (relativePosition may point to clone body)
 	//+-----------------------------------------------------------
 	bool World::GetClosestPhysicalEntity(const b2Vec2& position, float boudingRadius,
-		WorldID& entityIDOut, float& boundingRadiiGapOut) const
+		EntityID& entityIDOut, float& boundingRadiiGapOut) const
 	{
 		b2Body* b2BodyPtr = m_b2WorldPtr->GetBodyList();
 		if(!b2BodyPtr)
 			return false;
 
-		WorldID closestEntityID;
+		EntityID closestEntityID;
 		float closestGap{ FLT_MAX };
 		while(b2BodyPtr)
 		{
@@ -150,22 +150,22 @@ namespace Space
 		boundingRadiiGapOut = closestGap;
 		return true;
 	}
-	int World::GetDrawLayer(WorldID entityID) const
+	int World::GetDrawLayer(EntityID entityID) const
 	{
 		if(EntityExists(entityID))
 			return m_drawAnimationComponents[entityID].layer;
 		else
 			return 0;
 	}
-	float World::GetFuelLevel(WorldID entityID) const
+	float World::GetFuelLevel(EntityID entityID) const
 	{
 		return m_fuelComponents[entityID].level;
 	}
-	float World::GetMaxFuelLevel(WorldID entityID) const
+	float World::GetMaxFuelLevel(EntityID entityID) const
 	{
 		return m_fuelComponents[entityID].max;
 	}
-	float World::GetTotalThrusterAcceleration(WorldID id) const
+	float World::GetTotalThrusterAcceleration(EntityID id) const
 	{
 		float totalAcceleration{ 0.0f };
 		if(HasComponent(id, COMPONENT_THRUSTER) && IsActive(id))
@@ -180,7 +180,7 @@ namespace Space
 		}
 		return totalAcceleration;
 	}
-	float World::GetTotalThrusterFuelRequired(WorldID id, float dt) const
+	float World::GetTotalThrusterFuelRequired(EntityID id, float dt) const
 	{
 		float totalFuelRequired{ 0.0f };
 		if(HasComponent(id, COMPONENT_THRUSTER) && IsActive(id))
@@ -203,7 +203,7 @@ namespace Space
 	//\-------------------------/
 	//	Failure to ensure entity has a physics component will result in undefined behavior
 	//+-----------------------------------------------------------------------
-	const b2Transform& World::GetSmoothedTransform(WorldID entityID) const
+	const b2Transform& World::GetSmoothedTransform(EntityID entityID) const
 	{
 		d2Assert(HasPhysics(entityID));
 		return m_smoothedTransforms[entityID];
@@ -213,7 +213,7 @@ namespace Space
 	//\-------------------------/
 	//	Failure to ensure entity has a physics component will result in undefined behavior
 	//+-----------------------------------------------------------------------
-	const b2Vec2& World::GetLinearVelocity(WorldID entityID) const
+	const b2Vec2& World::GetLinearVelocity(EntityID entityID) const
 	{
 		d2Assert(HasPhysics(entityID));
 		return m_physicsComponents[entityID].mainBody.b2BodyPtr->GetLinearVelocity();
@@ -223,7 +223,7 @@ namespace Space
 	//\-------------------------/
 	//	Failure to ensure entity has a physics component will result in undefined behavior
 	//+-----------------------------------------------------------------------
-	float World::GetAngularVelocity(WorldID entityID) const
+	float World::GetAngularVelocity(EntityID entityID) const
 	{
 		d2Assert(HasPhysics(entityID));
 		return m_physicsComponents[entityID].mainBody.b2BodyPtr->GetAngularVelocity();
@@ -233,7 +233,7 @@ namespace Space
 	//\-------------------------/
 	//	Failure to ensure entity has a physics component will result in undefined behavior
 	//+-----------------------------------------------------------------------
-	const b2Vec2& World::GetLocalCenterOfMass(WorldID entityID) const
+	const b2Vec2& World::GetLocalCenterOfMass(EntityID entityID) const
 	{
 		//std::cout << "World::GetLocalCenterOfMass entityID=" << entityID << std::endl;
 		d2Assert(HasPhysics(entityID));
@@ -244,7 +244,7 @@ namespace Space
 	//\---------------------/
 	//	Failure to ensure entity has a physics component will result in undefined behavior
 	//+-----------------------------------------------------------------------
-	const b2Vec2& World::GetWorldCenter(WorldID entityID) const
+	const b2Vec2& World::GetWorldCenter(EntityID entityID) const
 	{
 		d2Assert(HasPhysics(entityID));
 		return m_physicsComponents[entityID].mainBody.b2BodyPtr->GetWorldCenter();
@@ -255,7 +255,7 @@ namespace Space
 	//+-----------------\-----------------------------------------------------
 	//|   GetQuadrant	| (private)
 	//\-----------------/-----------------------------------------------------
-	World::Quadrant World::GetQuadrant(const b2Vec2& position) const
+	Quadrant World::GetQuadrant(const b2Vec2& position) const
 	{
 		bool onLeftHalf{ position.x < m_worldCenter.x };
 		bool onBottomHalf{ position.y < m_worldCenter.y };
@@ -267,7 +267,7 @@ namespace Space
 	//+-------------------------\---------------------------------------------
 	//|   GetCloneSectionList	| (private)
 	//\-------------------------/---------------------------------------------
-	World::CloneSectionList World::GetCloneSectionList(const b2Vec2& position) const
+	CloneSectionList World::GetCloneSectionList(const b2Vec2& position) const
 	{
 		Quadrant entityQuadrant{ GetQuadrant(position) };
 		switch(entityQuadrant)
@@ -281,7 +281,7 @@ namespace Space
 	//+-------------------------\---------------------------------------------
 	//|   GetCloneSectionList	| (private)
 	//\-------------------------/---------------------------------------------
-	World::CloneSectionList World::GetCloneSectionList(const b2Body& b2Body) const
+	CloneSectionList World::GetCloneSectionList(const b2Body& b2Body) const
 	{
 		return GetCloneSectionList(b2Body.GetWorldCenter());
 	}

@@ -16,11 +16,11 @@ namespace Space
 	//+---------------------------\-------------------------------
 	//|		CreateBasicObject	  |
 	//\---------------------------/-------------------------------
-	WorldID EntityFactory::CreateBasicObject(World& world, const b2Vec2& size, int drawLayer,
+	EntityID EntityFactory::CreateBasicObject(World& world, const b2Vec2& size, int drawLayer,
 		const Model& model, const d2d::Material& material, const d2d::Filter& filter,
 		b2BodyType physicsType, const InstanceDef& def)
 	{
-		WorldID id = world.NewEntityID(size, drawLayer, def.activate);
+		EntityID id = world.NewEntityID(size, drawLayer, def.activate);
 		world.AddPhysicsComponent(id, physicsType, def);
 		world.AddShapes(id, model.name, material, filter);
 		world.AddDrawAnimationComponent(id, model.animationDef);
@@ -30,10 +30,10 @@ namespace Space
 	//+---------------------------\-------------------------------
 	//|		  CreateScout		  |
 	//\---------------------------/-------------------------------
-	WorldID EntityFactory::CreateScout(World& world, const InstanceDef& def)
+	EntityID EntityFactory::CreateScout(World& world, const InstanceDef& def)
 	{
 		b2Vec2 size{ SCOUT_HEIGHT * m_models.textures.scout.GetWidthToHeightRatio(), SCOUT_HEIGHT };
-		WorldID id = CreateBasicObject(world, size, DEFAULT_DRAW_LAYER, m_models.scout, SHIP_MATERIAL, SHIP_FILTER, b2_dynamicBody, def);
+		EntityID id = CreateBasicObject(world, size, DEFAULT_DRAW_LAYER, m_models.scout, SHIP_MATERIAL, SHIP_FILTER, b2_dynamicBody, def);
 		world.AddRotatorComponent(id, SCOUT_ROTATION_SPEED);
 
 		world.AddThrusterComponent(id, 2);
@@ -62,10 +62,10 @@ namespace Space
 	//+---------------------------\-------------------------------
 	//|		  CreateBlaster		  |
 	//\---------------------------/-------------------------------
-	WorldID EntityFactory::CreateBlaster(World& world, const InstanceDef& def)
+	EntityID EntityFactory::CreateBlaster(World& world, const InstanceDef& def)
 	{
 		b2Vec2 size{ BLASTER_HEIGHT * m_models.textures.blaster.GetWidthToHeightRatio(), BLASTER_HEIGHT };
-		WorldID id = CreateBasicObject(world, size, DEFAULT_DRAW_LAYER, m_models.blaster, SHIP_MATERIAL, SHIP_FILTER, b2_dynamicBody, def);
+		EntityID id = CreateBasicObject(world, size, DEFAULT_DRAW_LAYER, m_models.blaster, SHIP_MATERIAL, SHIP_FILTER, b2_dynamicBody, def);
 		world.AddRotatorComponent(id, BLASTER_ROTATION_SPEED);
 
 		world.AddThrusterComponent(id, 4);
@@ -98,7 +98,7 @@ namespace Space
 	//+---------------------------\-------------------------------
 	//|		 AddBlasterGuns		  |
 	//\---------------------------/-------------------------------
-	void EntityFactory::AddBlasterGuns(World& world, WorldID entityID, unsigned numGuns)
+	void EntityFactory::AddBlasterGuns(World& world, EntityID entityID, unsigned numGuns)
 	{
 		d2d::Clamp(numGuns, { 1, 5 });
 		world.AddProjectileLauncherComponent(entityID, numGuns, false);
@@ -120,10 +120,10 @@ namespace Space
 	//+---------------------------\-------------------------------
 	//|		 CreateUFOGray		  |
 	//\---------------------------/-------------------------------
-	WorldID EntityFactory::CreateUFOGray(World &world, const InstanceDef &def)
+	EntityID EntityFactory::CreateUFOGray(World &world, const InstanceDef &def)
 	{
 		b2Vec2 size{ UFO_HEIGHT * m_models.textures.ufoGray.GetWidthToHeightRatio(), UFO_HEIGHT };
-		WorldID id = CreateBasicObject(world, size, DEFAULT_DRAW_LAYER, m_models.ufoGray, SHIP_MATERIAL, SHIP_FILTER, b2_dynamicBody, def);
+		EntityID id = CreateBasicObject(world, size, DEFAULT_DRAW_LAYER, m_models.ufoGray, SHIP_MATERIAL, SHIP_FILTER, b2_dynamicBody, def);
 		world.AddRotatorComponent(id, UFO_ROTATION_SPEED);
 		world.AddThrusterComponent(id, 1, 1.0f);
 		world.AddThruster(id, 0, m_models.blasterThruster.animationDef, UFO_THRUSTER_ACCELERATION, 0.0f, { BLASTER_THRUSTER_OFFSET_X, 0.0f });
@@ -139,11 +139,11 @@ namespace Space
 	//+--------------------------------\--------------------------
 	//|	  CreateRandomXLargeAsteroids  |
 	//\--------------------------------/--------------------------
-	std::vector<WorldID> EntityFactory::CreateRandomXLargeAsteroids(World& world, unsigned count, float directionAngle)
+	std::vector<EntityID> EntityFactory::CreateRandomXLargeAsteroids(World& world, unsigned count, float directionAngle)
 	{
 		const float minGap = XLARGE_ASTEROID_HEIGHT * MIN_BOUNDING_RADII_GAP_RELATIVE_TO_HEIGHT;
 		const b2Vec2 direction = d2d::GetUnitVec2FromAngle(directionAngle);
-		std::vector<WorldID> idList;
+		std::vector<EntityID> idList;
 		for(unsigned i = 0; i < count; ++i)
 		{
 			int model = d2d::RandomInt({ 0, NUM_XLARGE_ASTEROID_MODELS - 1 });
@@ -171,11 +171,11 @@ namespace Space
 	//+--------------------------------\--------------------------
 	//|	  CreateRandomLargeAsteroids   |
 	//\--------------------------------/--------------------------
-	std::vector<WorldID> EntityFactory::CreateRandomLargeAsteroids(World& world, unsigned count, float directionAngle)
+	std::vector<EntityID> EntityFactory::CreateRandomLargeAsteroids(World& world, unsigned count, float directionAngle)
 	{
 		const float minGap = LARGE_ASTEROID_HEIGHT * MIN_BOUNDING_RADII_GAP_RELATIVE_TO_HEIGHT;
 		const b2Vec2 direction = d2d::GetUnitVec2FromAngle(directionAngle);
-		std::vector<WorldID> idList;
+		std::vector<EntityID> idList;
 		for(unsigned i = 0; i < count; ++i)
 		{
 			int model = d2d::RandomInt({ 0, NUM_LARGE_ASTEROID_MODELS - 1 });
@@ -203,11 +203,11 @@ namespace Space
 	//+--------------------------------\--------------------------
 	//|	 CreateRandomMediumAsteroids   |
 	//\--------------------------------/--------------------------
-	std::vector<WorldID> EntityFactory::CreateRandomMediumAsteroids(World& world, unsigned count, float directionAngle)
+	std::vector<EntityID> EntityFactory::CreateRandomMediumAsteroids(World& world, unsigned count, float directionAngle)
 	{
 		const float minGap = MEDIUM_ASTEROID_HEIGHT * MIN_BOUNDING_RADII_GAP_RELATIVE_TO_HEIGHT;
 		const b2Vec2 direction = d2d::GetUnitVec2FromAngle(directionAngle);
-		std::vector<WorldID> idList;
+		std::vector<EntityID> idList;
 		for(unsigned i = 0; i < count; ++i)
 		{
 			int model = d2d::RandomInt({ 0, NUM_MEDIUM_ASTEROID_MODELS - 1 });
@@ -235,11 +235,11 @@ namespace Space
 	//+--------------------------------\--------------------------
 	//|	  CreateRandomSmallAsteroids   |
 	//\--------------------------------/--------------------------
-	std::vector<WorldID> EntityFactory::CreateRandomSmallAsteroids(World& world, unsigned count, float directionAngle)
+	std::vector<EntityID> EntityFactory::CreateRandomSmallAsteroids(World& world, unsigned count, float directionAngle)
 	{
 		const float minGap = SMALL_ASTEROID_HEIGHT * MIN_BOUNDING_RADII_GAP_RELATIVE_TO_HEIGHT;
 		const b2Vec2 direction = d2d::GetUnitVec2FromAngle(directionAngle);
-		std::vector<WorldID> idList;
+		std::vector<EntityID> idList;
 		for(unsigned i = 0; i < count; ++i)
 		{
 			int model = d2d::RandomInt({ 0, NUM_SMALL_ASTEROID_MODELS - 1 });
@@ -265,13 +265,13 @@ namespace Space
 	//+---------------------------\-------------------------------
 	//|	   CreateXLargeAsteroid	  |
 	//\---------------------------/-------------------------------
-	WorldID EntityFactory::CreateXLargeAsteroid(World& world, unsigned modelIndex, bool isRock, const InstanceDef& def)
+	EntityID EntityFactory::CreateXLargeAsteroid(World& world, unsigned modelIndex, bool isRock, const InstanceDef& def)
 	{
 		d2Assert(modelIndex < NUM_XLARGE_ASTEROID_MODELS);
 		float height{ XLARGE_ASTEROID_HEIGHT * XLARGE_ASTEROID_RELATIVE_HEIGHTS[modelIndex] };
 		b2Vec2 size{ height * m_models.textures.asteroidsXLarge[modelIndex].GetWidthToHeightRatio(), height };
 		const Model& model = isRock ? m_models.rocksXLarge.at(modelIndex) : m_models.asteroidsXLarge.at(modelIndex);
-		WorldID id = CreateBasicObject(world, size, DEFAULT_DRAW_LAYER, model, ASTEROID_MATERIAL, ASTEROID_FILTER, b2_dynamicBody, def);
+		EntityID id = CreateBasicObject(world, size, DEFAULT_DRAW_LAYER, model, ASTEROID_MATERIAL, ASTEROID_FILTER, b2_dynamicBody, def);
 		world.AddHealthComponent(id, XLARGE_ASTEROID_HP);
 		world.AddParticleExplosionOnDeathComponent(id, PARTICLE_EXPLOSION_RELATIVE_SIZE,
 			XLARGE_ASTEROID_NUM_PARTICLES, ASTEROID_PARTICLE_SPEED_RANGE, DAMAGE_BASED_SPEED_INCREASE_FACTOR,
@@ -283,13 +283,13 @@ namespace Space
 	//+---------------------------\-------------------------------
 	//|	   CreateLargeAsteroid	  |
 	//\---------------------------/-------------------------------
-	WorldID EntityFactory::CreateLargeAsteroid(World& world, unsigned modelIndex, bool isRock, const InstanceDef& def)
+	EntityID EntityFactory::CreateLargeAsteroid(World& world, unsigned modelIndex, bool isRock, const InstanceDef& def)
 	{
 		d2Assert(modelIndex < NUM_LARGE_ASTEROID_MODELS);
 		float height{ LARGE_ASTEROID_HEIGHT * LARGE_ASTEROID_RELATIVE_HEIGHTS[modelIndex] };
 		b2Vec2 size{ height * m_models.textures.asteroidsLarge[modelIndex].GetWidthToHeightRatio(), height };
 		const Model& model = isRock ? m_models.rocksLarge.at(modelIndex) : m_models.asteroidsLarge.at(modelIndex);
-		WorldID id = CreateBasicObject(world, size, DEFAULT_DRAW_LAYER, model, ASTEROID_MATERIAL, ASTEROID_FILTER, b2_dynamicBody, def);
+		EntityID id = CreateBasicObject(world, size, DEFAULT_DRAW_LAYER, model, ASTEROID_MATERIAL, ASTEROID_FILTER, b2_dynamicBody, def);
 		world.AddHealthComponent(id, LARGE_ASTEROID_HP);
 		world.AddParticleExplosionOnDeathComponent(id, PARTICLE_EXPLOSION_RELATIVE_SIZE,
 			LARGE_ASTEROID_NUM_PARTICLES, ASTEROID_PARTICLE_SPEED_RANGE, DAMAGE_BASED_SPEED_INCREASE_FACTOR,
@@ -301,13 +301,13 @@ namespace Space
 	//+---------------------------\-------------------------------
 	//|	  CreateMediumAsteroid	  |
 	//\---------------------------/-------------------------------
-	WorldID EntityFactory::CreateMediumAsteroid(World& world, unsigned modelIndex, bool isRock, const InstanceDef& def)
+	EntityID EntityFactory::CreateMediumAsteroid(World& world, unsigned modelIndex, bool isRock, const InstanceDef& def)
 	{
 		d2Assert(modelIndex < NUM_MEDIUM_ASTEROID_MODELS);
 		float height{ MEDIUM_ASTEROID_HEIGHT * MEDIUM_ASTEROID_RELATIVE_HEIGHTS[modelIndex] };
 		b2Vec2 size{ height * m_models.textures.asteroidsMedium[modelIndex].GetWidthToHeightRatio(), height };
 		const Model& model = isRock ? m_models.rocksMedium.at(modelIndex) : m_models.asteroidsMedium.at(modelIndex);
-		WorldID id = CreateBasicObject(world, size, DEFAULT_DRAW_LAYER, model, ASTEROID_MATERIAL, ASTEROID_FILTER, b2_dynamicBody, def);
+		EntityID id = CreateBasicObject(world, size, DEFAULT_DRAW_LAYER, model, ASTEROID_MATERIAL, ASTEROID_FILTER, b2_dynamicBody, def);
 		world.AddHealthComponent(id, MEDIUM_ASTEROID_HP);
 		world.AddParticleExplosionOnDeathComponent(id, PARTICLE_EXPLOSION_RELATIVE_SIZE,
 			MEDIUM_ASTEROID_NUM_PARTICLES, ASTEROID_PARTICLE_SPEED_RANGE, DAMAGE_BASED_SPEED_INCREASE_FACTOR,
@@ -319,13 +319,13 @@ namespace Space
 	//+---------------------------\-------------------------------
 	//|	   CreateSmallAsteroid	  |
 	//\---------------------------/-------------------------------
-	WorldID EntityFactory::CreateSmallAsteroid(World& world, unsigned modelIndex, bool isRock, const InstanceDef& def)
+	EntityID EntityFactory::CreateSmallAsteroid(World& world, unsigned modelIndex, bool isRock, const InstanceDef& def)
 	{
 		d2Assert(modelIndex < NUM_SMALL_ASTEROID_MODELS);
 		float height{ SMALL_ASTEROID_HEIGHT * SMALL_ASTEROID_RELATIVE_HEIGHTS[modelIndex] };
 		b2Vec2 size{ height * m_models.textures.asteroidsSmall[modelIndex].GetWidthToHeightRatio(), height };
 		const Model& model = isRock ? m_models.rocksSmall.at(modelIndex) : m_models.asteroidsSmall.at(modelIndex);
-		WorldID id = CreateBasicObject(world, size, DEFAULT_DRAW_LAYER, model, ASTEROID_MATERIAL, ASTEROID_FILTER, b2_dynamicBody, def);
+		EntityID id = CreateBasicObject(world, size, DEFAULT_DRAW_LAYER, model, ASTEROID_MATERIAL, ASTEROID_FILTER, b2_dynamicBody, def);
 		world.AddHealthComponent(id, SMALL_ASTEROID_HP);
 		world.AddParticleExplosionOnDeathComponent(id, PARTICLE_EXPLOSION_RELATIVE_SIZE,
 			SMALL_ASTEROID_NUM_PARTICLES, ASTEROID_PARTICLE_SPEED_RANGE, DAMAGE_BASED_SPEED_INCREASE_FACTOR,
@@ -337,20 +337,20 @@ namespace Space
 	//+---------------------------\-------------------------------
 	//|	     CreateBumper		  |
 	//\---------------------------/-------------------------------
-	WorldID EntityFactory::CreateBumper(World& world, const InstanceDef& def)
+	EntityID EntityFactory::CreateBumper(World& world, const InstanceDef& def)
 	{
 		b2Vec2 size{ BUMPER_HEIGHT * m_models.textures.bumper.GetWidthToHeightRatio(), BUMPER_HEIGHT };
-		WorldID id = CreateBasicObject(world, size, DEFAULT_DRAW_LAYER, m_models.bumper, BUMPER_MATERIAL, BUMPER_FILTER, b2_kinematicBody, def);
+		EntityID id = CreateBasicObject(world, size, DEFAULT_DRAW_LAYER, m_models.bumper, BUMPER_MATERIAL, BUMPER_FILTER, b2_kinematicBody, def);
 		return id;
 	}
 
 	//+---------------------------\-------------------------------
 	//|	       CreateSoda		  |
 	//\---------------------------/-------------------------------
-	WorldID EntityFactory::CreateSoda(World& world, const InstanceDef& def)
+	EntityID EntityFactory::CreateSoda(World& world, const InstanceDef& def)
 	{
 		b2Vec2 size{ SODA_HEIGHT * m_models.textures.soda.GetWidthToHeightRatio(), SODA_HEIGHT };
-		WorldID id = CreateBasicObject(world, size, DEFAULT_DRAW_LAYER, m_models.soda, FUEL_MATERIAL, FUEL_FILTER, b2_dynamicBody, def);
+		EntityID id = CreateBasicObject(world, size, DEFAULT_DRAW_LAYER, m_models.soda, FUEL_MATERIAL, FUEL_FILTER, b2_dynamicBody, def);
 		PowerUpComponent powerUp;
 		powerUp.type = PowerUpType::FUEL;
 		powerUp.value = 10;
@@ -361,10 +361,10 @@ namespace Space
 	//+---------------------------\-------------------------------
 	//|		   CreateMelon		  |
 	//\---------------------------/-------------------------------
-	WorldID EntityFactory::CreateMelon(World& world, const InstanceDef& def)
+	EntityID EntityFactory::CreateMelon(World& world, const InstanceDef& def)
 	{
 		b2Vec2 size{ MELON_HEIGHT * m_models.textures.melon.GetWidthToHeightRatio(), MELON_HEIGHT };
-		WorldID id = CreateBasicObject(world, size, DEFAULT_DRAW_LAYER, m_models.melon, FUEL_MATERIAL, FUEL_FILTER, b2_dynamicBody, def);
+		EntityID id = CreateBasicObject(world, size, DEFAULT_DRAW_LAYER, m_models.melon, FUEL_MATERIAL, FUEL_FILTER, b2_dynamicBody, def);
 		PowerUpComponent powerUp;
 		powerUp.type = PowerUpType::FUEL;
 		powerUp.value = 20;
@@ -375,11 +375,11 @@ namespace Space
 	//+---------------------------\-------------------------------
 	//|		   CreateApple		  |
 	//\---------------------------/-------------------------------
-	WorldID EntityFactory::CreateApple(World& world, const InstanceDef& def)
+	EntityID EntityFactory::CreateApple(World& world, const InstanceDef& def)
 	{
 		b2Vec2 size{ APPLE_HEIGHT * m_models.textures.apple.GetWidthToHeightRatio(), APPLE_HEIGHT };
 		size = 4.0f * size;
-		WorldID id = CreateBasicObject(world, size, DEFAULT_DRAW_LAYER, m_models.apple, FUEL_MATERIAL, FUEL_FILTER, b2_dynamicBody, def);
+		EntityID id = CreateBasicObject(world, size, DEFAULT_DRAW_LAYER, m_models.apple, FUEL_MATERIAL, FUEL_FILTER, b2_dynamicBody, def);
 		PowerUpComponent powerUp;
 		powerUp.type = PowerUpType::FUEL;
 		powerUp.value = 5;
@@ -390,9 +390,9 @@ namespace Space
 	//+---------------------------\-------------------------------
 	//|		CreateRandomIcons	  |
 	//\---------------------------/-------------------------------
-	std::vector<WorldID> EntityFactory::CreateRandomIcons(World& world, unsigned count)
+	std::vector<EntityID> EntityFactory::CreateRandomIcons(World& world, unsigned count)
 	{
-		std::vector<WorldID> idList;
+		std::vector<EntityID> idList;
 		for(unsigned i = 0; i < count; ++i)
 		{
 			const float minGap = MIN_BOUNDING_RADII_GAP_RELATIVE_TO_HEIGHT_ICONS * ICON_HEIGHT;
@@ -417,12 +417,12 @@ namespace Space
 	//+---------------------------\-------------------------------
 	//|		   CreateIcon		  |
 	//\---------------------------/-------------------------------
-	WorldID EntityFactory::CreateIcon(World& world, unsigned modelIndex, const InstanceDef& def)
+	EntityID EntityFactory::CreateIcon(World& world, unsigned modelIndex, const InstanceDef& def)
 	{
 		d2Assert(modelIndex < m_models.textures.icons.size());
 		b2Vec2 size{ ICON_HEIGHT * m_models.textures.icons.at(0).GetWidthToHeightRatio(), ICON_HEIGHT };
 		Model model{ "icon", &m_models.textures.icons.at(modelIndex)};
-		WorldID id = CreateBasicObject(world, size, DEFAULT_DRAW_LAYER, model, ICON_MATERIAL, ICON_FILTER, b2_dynamicBody, def);
+		EntityID id = CreateBasicObject(world, size, DEFAULT_DRAW_LAYER, model, ICON_MATERIAL, ICON_FILTER, b2_dynamicBody, def);
 		PowerUpComponent powerUp;
 		powerUp.type = PowerUpType::ICON;
 		powerUp.value = 1;
@@ -433,7 +433,7 @@ namespace Space
 	//+---------------------------\-------------------------------
 	//|	      CreateExit		  |
 	//\---------------------------/-------------------------------
-	WorldID EntityFactory::CreateExit(World& world, const InstanceDef& def)
+	EntityID EntityFactory::CreateExit(World& world, const InstanceDef& def)
 	{
 		InstanceDef tempDef;
 		tempDef.position = def.position;
@@ -449,7 +449,7 @@ namespace Space
 
 		tempDef.position = def.position;
 		tempDef.angle = 0.0f;
-		WorldID id3 = CreateExitSensor(world, tempDef);
+		EntityID id3 = CreateExitSensor(world, tempDef);
 
 		return id3;
 	}
@@ -457,10 +457,10 @@ namespace Space
 	//+---------------------------\-------------------------------
 	//|	    CreateExitSensor	  |
 	//\---------------------------/-------------------------------
-	WorldID EntityFactory::CreateExitSensor(World& world, const InstanceDef& def)
+	EntityID EntityFactory::CreateExitSensor(World& world, const InstanceDef& def)
 	{
 		b2Vec2 size = { 15.0f, 1.5f };
-		WorldID id = world.NewEntityID(size, 0, def.activate);
+		EntityID id = world.NewEntityID(size, 0, def.activate);
 		world.AddPhysicsComponent(id, b2_kinematicBody, def);
 		world.AddRectShape(id, BUMPER_MATERIAL, BUMPER_FILTER, { 1.0f, 1.0f }, true);
 		DrawFixturesComponent drawFixtures;

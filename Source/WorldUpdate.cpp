@@ -63,7 +63,7 @@ namespace Space
 	}
 	void World::UpdateDestructionDelayComponents(float dt)
 	{
-		for(WorldID id = 0; id < WORLD_MAX_ENTITIES; ++id)
+		for(EntityID id = 0; id < WORLD_MAX_ENTITIES; ++id)
 			if(HasComponent(id, COMPONENT_DESTRUCTION_DELAY) && IsActive(id))
 				if(m_destructionDelayComponents[id] > 0.0f)
 				{
@@ -77,7 +77,7 @@ namespace Space
 	//\------------------------/----------------------------------
 	void World::UpdatePlayerControllerComponents(float dt, PlayerController& playerController)
 	{
-		for(WorldID id = 0; id < WORLD_MAX_ENTITIES; ++id)
+		for(EntityID id = 0; id < WORLD_MAX_ENTITIES; ++id)
 			if(HasFlag(id, FLAG_PLAYER_CONTROLLED) && IsActive(id))
 			{
 				if(HasComponent(id, COMPONENT_PRIMARY_PROJECTILE_LAUNCHER))
@@ -110,7 +110,7 @@ namespace Space
 	{
 		ComponentBitset requiredComponents;
 		requiredComponents.set(COMPONENT_ROTATOR).set(COMPONENT_PHYSICS);
-		for(WorldID id = 0; id < WORLD_MAX_ENTITIES; ++id)
+		for(EntityID id = 0; id < WORLD_MAX_ENTITIES; ++id)
 			if(HasComponentSet(id, requiredComponents) && IsActive(id))
 			{
 				// If entity was just turning but now not, stop rotation.
@@ -122,7 +122,7 @@ namespace Space
 					m_physicsComponents[id].mainBody.b2BodyPtr->SetAngularVelocity(m_rotatorComponents[id].factor * m_rotatorComponents[id].rotationSpeed);
 			}
 	}
-	void World::ApplyThrust(WorldID id, float acceleration)
+	void World::ApplyThrust(EntityID id, float acceleration)
 	{
 		float angle{ m_physicsComponents[id].mainBody.b2BodyPtr->GetAngle() };
 		float inputAdjustedForce{ m_physicsComponents[id].mainBody.b2BodyPtr->GetMass() * acceleration * m_thrusterComponents[id].factor };
@@ -133,7 +133,7 @@ namespace Space
 	{
 		ComponentBitset requiredComponents;
 		requiredComponents.set(COMPONENT_THRUSTER).set(COMPONENT_PHYSICS);
-		for(WorldID id = 0; id < WORLD_MAX_ENTITIES; ++id)
+		for(EntityID id = 0; id < WORLD_MAX_ENTITIES; ++id)
 			if(HasComponentSet(id, requiredComponents) && IsActive(id))
 				if(m_thrusterComponents[id].factor > 0.0f)
 				{
@@ -164,7 +164,7 @@ namespace Space
 	}
 	void World::UpdateSetThrustFactorAfterDelayComponents(float dt)
 	{
-		for(WorldID id = 0; id < WORLD_MAX_ENTITIES; ++id)
+		for(EntityID id = 0; id < WORLD_MAX_ENTITIES; ++id)
 			if(HasComponent(id, COMPONENT_SET_THRUST_AFTER_DELAY) && IsActive(id))
 			{
 				m_setThrustFactorAfterDelayComponents[id].delay -= dt;
@@ -180,7 +180,7 @@ namespace Space
 	{
 		ComponentBitset requiredComponents;
 		requiredComponents.set(COMPONENT_BOOSTER).set(COMPONENT_PHYSICS);
-		for(WorldID id = 0; id < WORLD_MAX_ENTITIES; ++id)
+		for(EntityID id = 0; id < WORLD_MAX_ENTITIES; ++id)
 			if(HasComponentSet(id, requiredComponents) && IsActive(id))
 			{
 				if(m_boosterComponents[id].secondsLeft > 0.0f)
@@ -207,7 +207,7 @@ namespace Space
 	{
 		ComponentBitset requiredComponents;
 		requiredComponents.set(COMPONENT_BRAKE).set(COMPONENT_PHYSICS);
-		for(WorldID id = 0; id < WORLD_MAX_ENTITIES; ++id)
+		for(EntityID id = 0; id < WORLD_MAX_ENTITIES; ++id)
 			if(HasComponentSet(id, requiredComponents) && IsActive(id))
 				if(m_brakeComponents[id].factor > 0.0f)
 				{
@@ -237,7 +237,7 @@ namespace Space
 		}
 		ComponentArray< ProjectileLauncherComponent >& projectileLauncherComponents{ *projectileLauncherComponentsPtr };
 
-		for(WorldID id = 0; id < WORLD_MAX_ENTITIES; ++id)
+		for(EntityID id = 0; id < WORLD_MAX_ENTITIES; ++id)
 			if(HasComponentSet(id, requiredComponents) && IsActive(id))
 			{
 				for(unsigned i = 0; i < projectileLauncherComponents[id].numSlots; ++i)
@@ -274,7 +274,7 @@ namespace Space
 	//\-------------/---------------------------------------------
 	void World::UpdateDrawAnimationComponents(float dt)
 	{
-		for(WorldID id = 0; id < WORLD_MAX_ENTITIES; ++id)
+		for(EntityID id = 0; id < WORLD_MAX_ENTITIES; ++id)
 			if(HasComponentSet(id, COMPONENT_DRAW_ANIMATION) && IsActive(id))
 			{
 				m_drawAnimationComponents[id].animation.Update(dt);
@@ -300,7 +300,7 @@ namespace Space
 	void World::SaveVelocities()
 	{
 		// Velocities saved for use in calculating particle explosion velocities
-		for(WorldID id = 0; id < WORLD_MAX_ENTITIES; ++id)
+		for(EntityID id = 0; id < WORLD_MAX_ENTITIES; ++id)
 			if(HasPhysics(id))
 				m_lastLinearVelocities[id] = m_physicsComponents[id].mainBody.b2BodyPtr->GetLinearVelocity();
 	}
@@ -311,7 +311,7 @@ namespace Space
 	}
 	void World::ResetSmoothStates()
 	{
-		for(WorldID id = 0; id < WORLD_MAX_ENTITIES; ++id)
+		for(EntityID id = 0; id < WORLD_MAX_ENTITIES; ++id)
 			if(HasPhysics(id))
 			{
 				m_lastTransforms[id] = m_physicsComponents[id].mainBody.b2BodyPtr->GetTransform();
@@ -323,7 +323,7 @@ namespace Space
 		// For each entity, use quadrant to determine which clones it should have.
 		// Then replace old clones with new ones at correct locations while retaining
 		// existing ones which are already at the correct location.
-		for(WorldID id = 0; id < WORLD_MAX_ENTITIES; ++id)
+		for(EntityID id = 0; id < WORLD_MAX_ENTITIES; ++id)
 			if(HasPhysics(id) && IsActive(id))
 			{
 				// Determine locations of clones we should have
@@ -391,7 +391,7 @@ namespace Space
 		EmptyPhysicsStep();
 
 		// Now that the proper clone locations are in place, update states as necessary
-		for(WorldID id = 0; id < WORLD_MAX_ENTITIES; ++id)
+		for(EntityID id = 0; id < WORLD_MAX_ENTITIES; ++id)
 			if(HasPhysics(id) && IsActive(id))
 			{
 				b2Body* mainB2BodyPtr{ m_physicsComponents[id].mainBody.b2BodyPtr };
@@ -427,7 +427,7 @@ namespace Space
 	}
 	void World::ProcessDestroyBuffer()
 	{
-		for(WorldID id : m_destroyBuffer)
+		for(EntityID id : m_destroyBuffer)
 		{
 			// Send notifications to Game
 			if(HasFlag(id, FLAG_EXITED))
@@ -452,7 +452,7 @@ namespace Space
 	void World::WrapEntities()
 	{
 		bool doManualWrapping{ false };
-		for(WorldID id = 0; id < WORLD_MAX_ENTITIES; ++id)
+		for(EntityID id = 0; id < WORLD_MAX_ENTITIES; ++id)
 		{
 			if(HasPhysics(id) && IsActive(id))
 			{
@@ -520,14 +520,14 @@ namespace Space
 		if(doManualWrapping)
 		{
 			// De-activate bodies flagged for manual wrap
-			for(WorldID id = 0; id < WORLD_MAX_ENTITIES; ++id)
+			for(EntityID id = 0; id < WORLD_MAX_ENTITIES; ++id)
 				if(HasPhysics(id) && IsActive(id))
 					if(m_physicsWrapDatas[id].requiresManualWrapping)
 						m_physicsComponents[id].mainBody.b2BodyPtr->SetEnabled(false);
 			EmptyPhysicsStep();
 
 			// Manual wraps
-			for(WorldID id = 0; id < WORLD_MAX_ENTITIES; ++id)
+			for(EntityID id = 0; id < WORLD_MAX_ENTITIES; ++id)
 				if(HasPhysics(id) && IsActive(id))
 					if(m_physicsWrapDatas[id].requiresManualWrapping)
 					{
@@ -610,7 +610,7 @@ namespace Space
 	//\---------------------------------/
 	//	Called by WrapEntities()
 	//+-----------------------------------------------------------------------
-	World::CloneSection World::GetOpposingCloneSection(CloneSection cloneSection) const
+	CloneSection World::GetOpposingCloneSection(CloneSection cloneSection) const
 	{
 		switch(cloneSection)
 		{
@@ -633,7 +633,7 @@ namespace Space
 	void World::SmoothStates(float timestepAlpha)
 	{
 		// Use current transform for static bodies, otherwise use interpolated transform
-		for(WorldID id = 0; id < WORLD_MAX_ENTITIES; ++id)
+		for(EntityID id = 0; id < WORLD_MAX_ENTITIES; ++id)
 			if(HasPhysics(id) && IsActive(id))
 			{
 				if(m_physicsComponents[id].mainBody.b2BodyPtr->GetType() == b2_staticBody)
@@ -665,8 +665,8 @@ namespace Space
 				return false;
 
 		// Collisions with exit
-		WorldID id1{ bodyPtr1->entityID };
-		WorldID id2{ bodyPtr2->entityID };
+		EntityID id1{ bodyPtr1->entityID };
+		EntityID id2{ bodyPtr2->entityID };
 		PreSolveExit(id1, id2);
 		PreSolveExit(id2, id1);
 
@@ -697,19 +697,19 @@ namespace Space
 
 		if(bodyPtr1 && bodyPtr2)
 		{
-			WorldID id1 = bodyPtr1->entityID;
-			WorldID id2 = bodyPtr2->entityID;
+			EntityID id1 = bodyPtr1->entityID;
+			EntityID id2 = bodyPtr2->entityID;
 
 			PreSolveIconCollector(id1, id2, contactPtr);
 			PreSolveIconCollector(id2, id1, contactPtr);
 		}
 	}
-	void World::PreSolveExit(WorldID id1, WorldID id2)
+	void World::PreSolveExit(EntityID id1, EntityID id2)
 	{
 		if(HasFlag(id1, FLAG_EXIT))
 			Exit(id2);
 	}
-	void World::Exit(WorldID id)
+	void World::Exit(EntityID id)
 	{
 		//// Turn off all components except graphics
 		//BitMask componentsToKeep = COMPONENT_NONE;
@@ -722,7 +722,7 @@ namespace Space
 		SetFlag(id, FLAG_EXITED, true);
 		Destroy(id);
 	}
-	void World::PreSolveIconCollector(WorldID id1, WorldID id2, b2Contact* contactPtr)
+	void World::PreSolveIconCollector(EntityID id1, EntityID id2, b2Contact* contactPtr)
 	{
 		bool isCollector1 = HasComponent(id1, COMPONENT_ICON_COLLECTOR);
 		bool isIcon2 = HasComponent(id2, COMPONENT_POWERUP) && m_powerUpComponents[id2].type == PowerUpType::ICON;
@@ -852,8 +852,8 @@ namespace Space
 					Destroy(bodyPtr->entityID);
 
 		// FLAG_IGNORE_PARENT_COLLISIONS_UNTIL_FIRST_CONTACT_END
-		WorldID id1{ bodyPtrs[0]->entityID };
-		WorldID id2{ bodyPtrs[1]->entityID };
+		EntityID id1{ bodyPtrs[0]->entityID };
+		EntityID id2{ bodyPtrs[1]->entityID };
 		bool entity1IsParentOf2{ HasComponent(id2, COMPONENT_PARENT) && m_parentComponents[id2] == id1 };
 		bool entity2IsParentOf1{ HasComponent(id1, COMPONENT_PARENT) && m_parentComponents[id1] == id2 };
 		if(entity2IsParentOf1 && HasFlag(id1, FLAG_IGNORE_PARENT_COLLISIONS_UNTIL_FIRST_CONTACT_END))
@@ -861,7 +861,7 @@ namespace Space
 		if(entity1IsParentOf2 && HasFlag(id2, FLAG_IGNORE_PARENT_COLLISIONS_UNTIL_FIRST_CONTACT_END))
 			SetFlag(id2, FLAG_IGNORE_PARENT_COLLISIONS_UNTIL_FIRST_CONTACT_END, false);
 	}
-	void World::AdjustHealth(WorldID entityID, float healthChange)
+	void World::AdjustHealth(EntityID entityID, float healthChange)
 	{
 		if(HasComponent(entityID, COMPONENT_HEALTH))
 		{
@@ -871,7 +871,7 @@ namespace Space
 				m_healthComponents[entityID].hp += healthChange;
 		}
 	}
-	void World::ReduceHealthToZero(WorldID entityID)
+	void World::ReduceHealthToZero(EntityID entityID)
 	{
 		if(HasComponent(entityID, COMPONENT_HEALTH))
 		{
@@ -883,7 +883,7 @@ namespace Space
 			Destroy(entityID);
 		}
 	}
-	void World::CreateExplosionFromEntity(WorldID entityID, const ParticleExplosionComponent& particleExplosion)
+	void World::CreateExplosionFromEntity(EntityID entityID, const ParticleExplosionComponent& particleExplosion)
 	{
 		unsigned numParticles{ particleExplosion.numParticles };
 		int numParticlesOverflowing{ (int)(m_particleSystem.firstUnusedIndex + numParticles) - (int)MAX_PARTICLES };
@@ -964,13 +964,13 @@ namespace Space
 	//+------------------------\----------------------------------
 	//|	   Box2D user data     |
 	//\------------------------/----------------------------------
-	World::Body* World::GetUserBodyPtr(b2Body* b2BodyPtr) const
+	Body* World::GetUserBodyPtr(b2Body* b2BodyPtr) const
 	{
 		if(b2BodyPtr)
 			return reinterpret_cast<Body*>(b2BodyPtr->GetUserData().pointer);
 		return nullptr;
 	}
-	World::Body* World::GetUserBodyFromFixture(b2Fixture* fixturePtr)
+	Body* World::GetUserBodyFromFixture(b2Fixture* fixturePtr)
 	{
 		d2Assert(fixturePtr && "Box2D Bug");
 
@@ -1000,7 +1000,7 @@ namespace Space
 	//+------------------------\----------------------------------
 	//|	 Clone-aware modifiers |
 	//\------------------------/----------------------------------
-	void World::SetTransform(WorldID entityID, const b2Vec2& position, float angle)
+	void World::SetTransform(EntityID entityID, const b2Vec2& position, float angle)
 	{
 		if(HasPhysics(entityID))
 		{
@@ -1010,7 +1010,7 @@ namespace Space
 				cloneBody.b2BodyPtr->SetTransform(position + GetCloneOffset(cloneBody.section), angle);
 		}
 	}
-	void World::SetLinearVelocity(WorldID entityID, const b2Vec2& velocity)
+	void World::SetLinearVelocity(EntityID entityID, const b2Vec2& velocity)
 	{
 		if(HasPhysics(entityID))
 		{
@@ -1019,7 +1019,7 @@ namespace Space
 				cloneBody.b2BodyPtr->SetLinearVelocity(velocity);
 		}
 	}
-	void World::SetAngularVelocity(WorldID entityID, float angularVelocity)
+	void World::SetAngularVelocity(EntityID entityID, float angularVelocity)
 	{
 		if(HasPhysics(entityID))
 		{
@@ -1028,7 +1028,7 @@ namespace Space
 				cloneBody.b2BodyPtr->SetAngularVelocity(angularVelocity);
 		}
 	}
-	void World::Activate(WorldID entityID)
+	void World::Activate(EntityID entityID)
 	{
 		SetFlag(entityID, FLAG_ACTIVE, true);
 		if(HasPhysics(entityID))
@@ -1038,7 +1038,7 @@ namespace Space
 				cloneBody.b2BodyPtr->SetEnabled(true);
 		}
 	}
-	void World::Deactivate(WorldID entityID)
+	void World::Deactivate(EntityID entityID)
 	{
 		SetFlag(entityID, FLAG_ACTIVE, false);
 		if(HasPhysics(entityID))
@@ -1048,7 +1048,7 @@ namespace Space
 				cloneBody.b2BodyPtr->SetEnabled(false);
 		}
 	}
-	void World::ApplyForceToCenter(WorldID entityID, const b2Vec2& force)
+	void World::ApplyForceToCenter(EntityID entityID, const b2Vec2& force)
 	{
 		if(HasPhysics(entityID))
 		{
@@ -1057,7 +1057,7 @@ namespace Space
 				cloneBody.b2BodyPtr->ApplyForceToCenter(force, true);
 		}
 	}
-	void World::ApplyForceToLocalPoint(WorldID entityID, const b2Vec2& force, const b2Vec2& localPoint)
+	void World::ApplyForceToLocalPoint(EntityID entityID, const b2Vec2& force, const b2Vec2& localPoint)
 	{
 		if(HasPhysics(entityID))
 		{
@@ -1066,7 +1066,7 @@ namespace Space
 				cloneBody.b2BodyPtr->ApplyForce(force, cloneBody.b2BodyPtr->GetWorldPoint(localPoint), true);
 		}
 	}
-	void World::ApplyForceToWorldPoint(WorldID entityID, const b2Vec2& force, const b2Vec2& worldPoint)
+	void World::ApplyForceToWorldPoint(EntityID entityID, const b2Vec2& force, const b2Vec2& worldPoint)
 	{
 		if(HasPhysics(entityID))
 		{
@@ -1076,7 +1076,7 @@ namespace Space
 				cloneBody.b2BodyPtr->ApplyForce(force, cloneBody.b2BodyPtr->GetWorldPoint(localPoint), true);
 		}
 	}
-	void World::ApplyTorque(WorldID entityID, float torque)
+	void World::ApplyTorque(EntityID entityID, float torque)
 	{
 		if(HasPhysics(entityID))
 		{
@@ -1085,7 +1085,7 @@ namespace Space
 				cloneBody.b2BodyPtr->ApplyTorque(torque, true);
 		}
 	}
-	void World::ApplyLinearImpulseToCenter(WorldID entityID, const b2Vec2& impulse)
+	void World::ApplyLinearImpulseToCenter(EntityID entityID, const b2Vec2& impulse)
 	{
 		if(HasPhysics(entityID))
 		{
@@ -1094,7 +1094,7 @@ namespace Space
 				cloneBody.b2BodyPtr->ApplyLinearImpulseToCenter(impulse, true);
 		}
 	}
-	void World::ApplyLinearImpulseToLocalPoint(WorldID entityID, const b2Vec2& impulse, const b2Vec2& localPoint)
+	void World::ApplyLinearImpulseToLocalPoint(EntityID entityID, const b2Vec2& impulse, const b2Vec2& localPoint)
 	{
 		if(HasPhysics(entityID))
 		{
@@ -1103,7 +1103,7 @@ namespace Space
 				cloneBody.b2BodyPtr->ApplyLinearImpulse(impulse, cloneBody.b2BodyPtr->GetWorldPoint(localPoint), true);
 		}
 	}
-	void World::ApplyLinearImpulseToWorldPoint(WorldID entityID, const b2Vec2& impulse, const b2Vec2& worldPoint)
+	void World::ApplyLinearImpulseToWorldPoint(EntityID entityID, const b2Vec2& impulse, const b2Vec2& worldPoint)
 	{
 		if(HasPhysics(entityID))
 		{
@@ -1113,7 +1113,7 @@ namespace Space
 				cloneBody.b2BodyPtr->ApplyLinearImpulse(impulse, cloneBody.b2BodyPtr->GetWorldPoint(localPoint), true);
 		}
 	}
-	void World::ApplyAngularImpulse(WorldID entityID, float impulse)
+	void World::ApplyAngularImpulse(EntityID entityID, float impulse)
 	{
 		if(HasPhysics(entityID))
 		{
@@ -1125,7 +1125,7 @@ namespace Space
 	//+----------------------\------------------------------------
 	//|		   Joints		 |
 	//\----------------------/------------------------------------
-	//b2PrismaticJoint* World::ApplyPrismaticJoint(WorldID id1, WorldID id2, const b2Vec2& localAxis1,
+	//b2PrismaticJoint* World::ApplyPrismaticJoint(EntityID id1, EntityID id2, const b2Vec2& localAxis1,
 	//	const b2Vec2& localAnchor1, const b2Vec2& localAnchor2, float referenceAngle,
 	//	bool enableLimit, const d2d::Range<float>& translationRange)
 	//{

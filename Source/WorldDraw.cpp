@@ -74,7 +74,7 @@ namespace Space
 		d2d::Window::EnableBlending();
 		ComponentBitset requiredComponents; 
 		requiredComponents.set(COMPONENT_THRUSTER).set(COMPONENT_PHYSICS);
-		for(WorldID id = 0; id < WORLD_MAX_ENTITIES; ++id)
+		for(EntityID id = 0; id < WORLD_MAX_ENTITIES; ++id)
 			if(m_drawAnimationComponents[id].layer == layer)
 				if(HasComponentSet(id, requiredComponents) && HasSize2D(id) && IsActive(id))
 					if(m_thrusterComponents[id].factor > 0.0f)
@@ -122,7 +122,7 @@ namespace Space
 		d2d::Window::EnableBlending();
 		ComponentBitset requiredComponents;
 		requiredComponents.set(COMPONENT_DRAW_ANIMATION).set(COMPONENT_PHYSICS);
-		for(WorldID id = 0; id < WORLD_MAX_ENTITIES; ++id)
+		for(EntityID id = 0; id < WORLD_MAX_ENTITIES; ++id)
 			if(m_drawAnimationComponents[id].layer == layer)
 				if(HasComponentSet(id, requiredComponents) && HasSize2D(id) && IsActive(id))
 				{
@@ -149,7 +149,7 @@ namespace Space
 		d2d::Window::DisableTextures();
 		d2d::Window::EnableBlending();
 		d2d::Window::SetLineWidth(m_settings.drawFixturesLineWidth);
-		for(WorldID id = 0; id < WORLD_MAX_ENTITIES; ++id)
+		for(EntityID id = 0; id < WORLD_MAX_ENTITIES; ++id)
 			if(m_drawAnimationComponents[id].layer == layer)
 			{
 				bool draw{ false };
@@ -217,7 +217,7 @@ namespace Space
 		d2d::Window::EnableBlending();
 		ComponentBitset requiredComponents;
 		requiredComponents.set(COMPONENT_HEALTH).set(COMPONENT_PHYSICS);
-		for(WorldID id = 0; id < WORLD_MAX_ENTITIES; ++id)
+		for(EntityID id = 0; id < WORLD_MAX_ENTITIES; ++id)
 			if(HasComponentSet(id, requiredComponents) && IsActive(id))
 				if(m_healthComponents[id].hp < m_healthComponents[id].hpMax)
 				{

@@ -48,10 +48,10 @@ namespace Space
 		bool PurchaseUpgrade(ShopItemID itemID, float price = 0.0f);
 
 		// World callbacks
-		void EntityWillBeDestroyed(WorldID entityID) override;
-		void EntityWrapped(WorldID entityID, const b2Vec2 &translation) override;
-		void ProjectileLaunched(const ProjectileDef& projectileDef, WorldID parentID) override;
-		void EntityExited(WorldID entityID) override;
+		void EntityWillBeDestroyed(EntityID entityID) override;
+		void EntityWrapped(EntityID entityID, const b2Vec2 &translation) override;
+		void ProjectileLaunched(const ProjectileDef& projectileDef, EntityID parentID) override;
+		void EntityExited(EntityID entityID) override;
 
 	private:
 		void ClearLevel(const b2Vec2& newWorldDimensions);
@@ -59,10 +59,10 @@ namespace Space
 
 		void UpdateCamera(float dt, const PlayerController &playerController);
 		void UpdateDelayedActions(float dt);
-		void SetPlayer(WorldID entityID);
-		bool IsPlayer(WorldID entityID) const;
-		void ApplyPlayerUpgrades(World& world, WorldID playerID, const std::set<ShopItemID>& upgrades);
-		void FollowEntity(WorldID entityID);
+		void SetPlayer(EntityID entityID);
+		bool IsPlayer(EntityID entityID) const;
+		void ApplyPlayerUpgrades(World& world, EntityID playerID, const std::set<ShopItemID>& upgrades);
+		void FollowEntity(EntityID entityID);
 		void CreatePlayer(World &world, const InstanceDef &def);
 		void DrawHUD();
 
@@ -73,11 +73,11 @@ namespace Space
 		Starfield *const m_starfieldPtr;
 		bool m_firstUpdate{ true };
 		bool m_cameraFollowingEntity{ false };
-		WorldID m_cameraFollowEntityID{};
+		EntityID m_cameraFollowEntityID{};
 		struct
 		{
 			bool isSet{};
-			WorldID id{};
+			EntityID id{};
 			float credits{};
 			unsigned currentLevel{ 1 };
 			bool exited{};

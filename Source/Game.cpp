@@ -118,7 +118,7 @@ namespace Space
 	//+-----------------------\-----------------------------------
 	//|	 ApplyPlayerUpgrades  |
 	//\-----------------------/-----------------------------------
-	void Game::ApplyPlayerUpgrades(World& world, WorldID playerID, const std::set<ShopItemID>& upgrades)
+	void Game::ApplyPlayerUpgrades(World& world, EntityID playerID, const std::set<ShopItemID>& upgrades)
 	{
 		for(auto itemID : upgrades)
 			switch(itemID)
@@ -165,7 +165,7 @@ namespace Space
 	//+---------------------------\-------------------------------
 	//|	        SetPlayer		  |
 	//\---------------------------/-------------------------------
-	void Game::SetPlayer(WorldID entityID)
+	void Game::SetPlayer(EntityID entityID)
 	{
 		if(m_world.EntityExists(entityID))
 		{
@@ -183,7 +183,7 @@ namespace Space
 	//+---------------------------\-------------------------------
 	//|	        IsPlayer		  |
 	//\---------------------------/-------------------------------
-	bool Game::IsPlayer(WorldID entityID) const
+	bool Game::IsPlayer(EntityID entityID) const
 	{
 		return (m_player.isSet && entityID == m_player.id);
 	}
@@ -191,7 +191,7 @@ namespace Space
 	//+---------------------------\-------------------------------
 	//|	      FollowEntity		  |
 	//\---------------------------/-------------------------------
-	void Game::FollowEntity(WorldID entityID)
+	void Game::FollowEntity(EntityID entityID)
 	{
 		m_cameraFollowingEntity = true;
 		m_cameraFollowEntityID = entityID;
@@ -202,7 +202,7 @@ namespace Space
 	//\---------------------------/-------------------------------
 	void Game::CreatePlayer(World& world, const InstanceDef& def)
 	{
-		WorldID blasterID = m_factory.CreateBlaster(world, def);
+		EntityID blasterID = m_factory.CreateBlaster(world, def);
 		world.AddIconCollectorComponent(blasterID, &m_player.credits);
 		SetPlayer(blasterID);
 		ApplyPlayerUpgrades(world, blasterID, m_player.upgrades);
@@ -274,7 +274,7 @@ namespace Space
 	//+--------------------------\--------------------------------
 	//|	 EntityWillBeDestroyed   | override (DestroyListener)
 	//\--------------------------/--------------------------------
-	void Game::EntityWillBeDestroyed(WorldID entityID)
+	void Game::EntityWillBeDestroyed(EntityID entityID)
 	{
 		if(m_cameraFollowingEntity && entityID == m_cameraFollowEntityID)
 			m_cameraFollowingEntity = false;
@@ -292,7 +292,7 @@ namespace Space
 	//+--------------------------\--------------------------------
 	//|	      EntityWrapped      | override (WrapListener)
 	//\--------------------------/--------------------------------
-	void Game::EntityWrapped(WorldID entityID, const b2Vec2& translation)
+	void Game::EntityWrapped(EntityID entityID, const b2Vec2& translation)
 	{
 		if(m_cameraFollowingEntity && entityID == m_cameraFollowEntityID)
 			m_starfieldPtr->MoveCameraWithoutMovingStars(translation);
@@ -300,12 +300,12 @@ namespace Space
 	//+--------------------------\--------------------------------
 	//|	   ProjectileLaunched    | override (ProjectileLauncherListener)
 	//\--------------------------/--------------------------------
-	void Game::ProjectileLaunched(const ProjectileDef& projectileDef, WorldID parentID)
+	void Game::ProjectileLaunched(const ProjectileDef& projectileDef, EntityID parentID)
 	{}
 	//+--------------------------\--------------------------------
 	//|	      EntityExited       | override (ExitListener)
 	//\--------------------------/--------------------------------
-	void Game::EntityExited(WorldID entityID)
+	void Game::EntityExited(EntityID entityID)
 	{
 		if(IsPlayer(entityID))
 		{
