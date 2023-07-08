@@ -255,10 +255,8 @@ namespace Space
 		bool EntityExists(WorldID entityID) const;
 		bool HasComponent(WorldID entityID, ComponentBit componentBit) const;
 		bool HasComponentSet(WorldID entityID, ComponentBitset componentBits) const;
-		//bool HasComponents(WorldID entityID, const std::vector<ComponentBit>& componentBitList) const;
 		bool HasFlag(WorldID entityID, FlagBit flagBit) const;
 		bool HasFlagSet(WorldID entityID, FlagBitset flagBits) const;
-		//bool HasFlags(WorldID entityID, const std::vector<FlagBit>& flagBitList) const;
 
 		bool HasSize(WorldID entityID) const;
 		bool HasSize2D(WorldID entityID) const;

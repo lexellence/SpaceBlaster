@@ -62,17 +62,6 @@ namespace Space
 		return (m_componentBits[entityID] & componentBits) == componentBits;
 	}
 	//+----------------------\------------------------------------
-	//|	    HasComponents	 |
-	//\----------------------/------------------------------------
-	//bool World::HasComponents(WorldID entityID, const std::vector<ComponentBit>& componentBitList) const
-	//{
-	//	d2Assert(entityID < WORLD_MAX_ENTITIES);
-	//	for(const ComponentBit& comp : componentBitList)
-	//		if(!m_componentBits[entityID].test(comp))
-	//			return false;
-	//	return true;
-	//}
-	//+----------------------\------------------------------------
 	//|		  HasFlag		 |
 	//\----------------------/------------------------------------
 	bool World::HasFlag(WorldID entityID, FlagBit flagBit) const
@@ -88,17 +77,6 @@ namespace Space
 		d2Assert(entityID < WORLD_MAX_ENTITIES);
 		return (m_flagBits[entityID] & flagBits) == flagBits;
 	}
-	//+----------------------\------------------------------------
-	//|		 HasFlags		 |
-	//\----------------------/------------------------------------
-	//bool World::HasFlags(WorldID entityID, const std::vector<FlagBit>& flagBitList) const
-	//{
-	//	d2Assert(entityID < WORLD_MAX_ENTITIES);
-	//	for(const FlagBit& flag : flagBitList)
-	//		if(!m_flagBits[entityID].test(flag))
-	//			return false;
-	//	return true;
-	//}
 	//+----------------------\------------------------------------
 	//|		 IsActive		 |
 	//\----------------------/------------------------------------
