@@ -42,6 +42,7 @@ namespace Space
 	//\----------------------/------------------------------------
 	bool World::EntityExists(WorldID entityID) const
 	{
+		d2Assert(entityID < WORLD_MAX_ENTITIES);
 		return m_componentBits[entityID].any() || m_flagBits[entityID].any();
 	}
 	//+----------------------\------------------------------------
@@ -49,14 +50,16 @@ namespace Space
 	//\----------------------/------------------------------------
 	bool World::HasComponent(WorldID entityID, ComponentBit component) const
 	{
-		return m_componentBits.at(entityID).test(component);
+		d2Assert(entityID < WORLD_MAX_ENTITIES);
+		return m_componentBits[entityID].test(component);
 	}
 	//+----------------------\------------------------------------
 	//|	    HasComponents	 |
 	//\----------------------/------------------------------------
 	bool World::HasComponentSet(WorldID entityID, ComponentBitset componentBits) const
 	{
-		return (m_componentBits.at(entityID) & componentBits) == componentBits;
+		d2Assert(entityID < WORLD_MAX_ENTITIES);
+		return (m_componentBits[entityID] & componentBits) == componentBits;
 	}
 	//+----------------------\------------------------------------
 	//|	    HasComponents	 |
@@ -74,14 +77,16 @@ namespace Space
 	//\----------------------/------------------------------------
 	bool World::HasFlag(WorldID entityID, FlagBit flagBit) const
 	{
-		return m_flagBits.at(entityID).test(flagBit);
+		d2Assert(entityID < WORLD_MAX_ENTITIES);
+		return m_flagBits[entityID].test(flagBit);
 	}
 	//+----------------------\------------------------------------
 	//|		 HasFlags		 |
 	//\----------------------/------------------------------------
 	bool World::HasFlagSet(WorldID entityID, FlagBitset flagBits) const
 	{
-		return (m_flagBits.at(entityID) & flagBits) == flagBits;
+		d2Assert(entityID < WORLD_MAX_ENTITIES);
+		return (m_flagBits[entityID] & flagBits) == flagBits;
 	}
 	//+----------------------\------------------------------------
 	//|		 HasFlags		 |
