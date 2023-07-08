@@ -157,8 +157,11 @@ namespace Space
 		bool HasSize(EntityID entityID) const;
 		bool HasSize2D(EntityID entityID) const;
 		bool HasPhysics(EntityID entityID) const;
-		bool GetClosestPhysicalEntity(const b2Vec2& position, float boundingRadius,
-			EntityID& entityIDOut, float& boundingRadiiGapOut) const;
+
+		// Get <id, boundingCircleGap> of count closest entities
+		std::list<std::pair<EntityID, float>> GetClosestEntities(const b2Vec2& position, 
+			float radius, unsigned count) const;
+
 		int GetDrawLayer(EntityID entityID) const;
 		float GetFuelLevel(EntityID entityID) const;
 		float GetMaxFuelLevel(EntityID entityID) const;

@@ -170,11 +170,8 @@ namespace Space
 		do
 		{
 			position = d2d::RandomVec2InRect(m_worldRect);
-			EntityID id;
-			float boundingRadiiGap;
-			if(!GetClosestPhysicalEntity(position, newBoundingRadius, id, boundingRadiiGap))
-				acceptablePositionFound = true;
-			else if(boundingRadiiGap >= minGap)
+			auto closestEntities = GetClosestEntities(position, newBoundingRadius, 1);
+			if(closestEntities.empty() || closestEntities.front().second >= minGap)
 				acceptablePositionFound = true;
 		} while(!acceptablePositionFound && ++attempts < maxAttempts);
 

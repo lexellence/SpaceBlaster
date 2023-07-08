@@ -110,45 +110,45 @@ namespace Space
 		return HasComponent(entityID, COMPONENT_PHYSICS);
 	}
 	//+------------------------------\----------------------------
-	//|   GetClosestPhysicalEntity	 |
-	//\------------------------------/
-	//	Returns false if no physical entities exist, otherwise
-	//	returns true and sets entityIDOut and relativePositionOut to
-	//	the closest entity (relativePosition may point to clone body)
-	//+-----------------------------------------------------------
-	bool World::GetClosestPhysicalEntity(const b2Vec2& position, float boundingRadius,
-		EntityID& entityIDOut, float& boundingRadiiGapOut) const
+	//|		 GetClosestEntities		 |
+	//\------------------------------/----------------------------
+	// Get <id, boundingRadiiGap> of count closest entities
+	std::list<std::pair<EntityID, float>> World::GetClosestEntities(const b2Vec2& position, 
+		float radius, unsigned count) const
 	{
 		b2Body* b2BodyPtr = m_b2WorldPtr->GetBodyList();
-		if(!b2BodyPtr)
-			return false;
+		if(!b2BodyPtr || count < 1)
+			return {};
 
-		EntityID closestEntityID;
-		float closestGap{ FLT_MAX };
+		std::list<std::pair<EntityID, float>> closestEntityList;
 		while(b2BodyPtr)
 		{
 			Body* bodyPtr = GetUserBodyPtr(b2BodyPtr);
 			if(bodyPtr)
 			{
-				b2Vec2 relativePosition{ b2BodyPtr->GetPosition() - position };
-				float boundingCircleRadius;
-				if(HasSize(bodyPtr->entityID))
-					boundingCircleRadius = m_boundingRadiusComponents[bodyPtr->entityID];
-				else
-					boundingCircleRadius = 0.0f;
-				float gap{ relativePosition.Length() - boundingRadius - boundingCircleRadius };
-				if(gap < closestGap)
+				float gap = GetBoundingRadiiGap(position, radius,
+					b2BodyPtr->GetPosition(), m_boundingRadiusComponents[bodyPtr->entityID]);
+
+				// Insert into list if closer than others
+				auto it = closestEntityList.begin();
+				for(unsigned i = 0; i < count; i++, it++)
 				{
-					closestEntityID = bodyPtr->entityID;
-					closestGap = gap;
+					if(it == closestEntityList.end() || gap < it->second)
+					{
+						it = closestEntityList.insert(it, std::make_pair(bodyPtr->entityID, gap));
+						break;
+					}
 				}
+
+				// Don't let list grow beyond requested number
+				if(closestEntityList.size() > count)
+					closestEntityList.resize(count);
+
 				b2BodyPtr = b2BodyPtr->GetNext();
 			}
 		}
 
-		entityIDOut = closestEntityID;
-		boundingRadiiGapOut = closestGap;
-		return true;
+		return closestEntityList;
 	}
 	int World::GetDrawLayer(EntityID entityID) const
 	{
