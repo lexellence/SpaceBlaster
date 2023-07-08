@@ -467,7 +467,7 @@ namespace Space
 		drawFixtures.color = d2d::Color{ 0.0f, 1.0f, 0.0f, 0.6f };
 		drawFixtures.fill = true;
 		world.AddDrawFixturesComponent(id, drawFixtures);
-		world.SetFlags(id, FLAG_EXIT, true);
+		world.SetFlag(id, FLAG_EXIT, true);
 		return id;
 	}
 

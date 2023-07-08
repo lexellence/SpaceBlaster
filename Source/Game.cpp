@@ -171,10 +171,10 @@ namespace Space
 		{
 			// Remove player controller from existing player entity
 			if(m_player.isSet)
-				m_world.SetFlags(m_player.id, FLAG_PLAYER_CONTROLLED, false);
+				m_world.SetFlag(m_player.id, FLAG_PLAYER_CONTROLLED, false);
 
 			// Set new player
-			m_world.SetFlags(entityID, FLAG_PLAYER_CONTROLLED, true);
+			m_world.SetFlag(entityID, FLAG_PLAYER_CONTROLLED, true);
 			m_player.id = entityID;
 			m_player.isSet = true;
 		}
@@ -345,7 +345,7 @@ namespace Space
 		d2d::Window::EnableBlending();
 
 		// Draw fuel
-		if(m_world.HasComponents(m_player.id, COMPONENT_FUEL))
+		if(m_world.HasComponent(m_player.id, COMPONENT_FUEL))
 		{
 			d2d::Window::SetColor(GUISettings::HUD::Text::Color::FUEL);
 			d2d::Window::PushMatrix();
@@ -361,7 +361,7 @@ namespace Space
 		}
 
 		// Draw icons remaining
-		if(m_world.HasComponents(m_player.id, COMPONENT_ICON_COLLECTOR))
+		if(m_world.HasComponent(m_player.id, COMPONENT_ICON_COLLECTOR))
 		{
 			d2d::Window::SetColor(GUISettings::HUD::Text::Color::ICONS);
 			d2d::Window::PushMatrix();

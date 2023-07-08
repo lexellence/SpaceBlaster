@@ -120,43 +120,46 @@ namespace Space
 	};
 
 	// Components have other associated data while flags do not
-	typedef long long BitMask;
-	enum ComponentBits : BitMask
+	enum ComponentBit : size_t
 	{
-		COMPONENT_NONE = 0,
-		COMPONENT_PHYSICS = 1 << 0,
-		COMPONENT_DRAW_ON_RADAR = 1 << 1,
-		COMPONENT_DRAW_ANIMATION = 1 << 2,
-		COMPONENT_DRAW_FIXTURES = 1 << 3,
-		COMPONENT_HEALTH = 1 << 4,
-		COMPONENT_PARENT = 1 << 5,
-		COMPONENT_PARTICLE_EXPLOSION = 1 << 6,
-		COMPONENT_DESTRUCTION_DELAY = 1 << 7,
-		COMPONENT_DESTRUCTION_DELAY_ON_CONTACT = 1 << 8,
-		COMPONENT_DESTRUCTION_CHANCE_ON_CONTACT = 1 << 9,
-		COMPONENT_ROTATOR = 1 << 10,
-		COMPONENT_THRUSTER = 1 << 11,
-		COMPONENT_SET_THRUST_AFTER_DELAY = 1 << 12,
-		COMPONENT_BRAKE = 1 << 13,
-		COMPONENT_PRIMARY_PROJECTILE_LAUNCHER = 1 << 14,
-		COMPONENT_SECONDARY_PROJECTILE_LAUNCHER = 1 << 15,
-		COMPONENT_FUEL = 1 << 16,
-		COMPONENT_BOOSTER = 1 << 17,
-		COMPONENT_ICON_COLLECTOR = 1 << 18,
-		COMPONENT_POWERUP = 1 << 19
+		COMPONENT_PHYSICS = 0,
+		COMPONENT_DRAW_ON_RADAR,
+		COMPONENT_DRAW_ANIMATION,
+		COMPONENT_DRAW_FIXTURES,
+		COMPONENT_HEALTH,
+		COMPONENT_PARENT,
+		COMPONENT_PARTICLE_EXPLOSION,
+		COMPONENT_DESTRUCTION_DELAY,
+		COMPONENT_DESTRUCTION_DELAY_ON_CONTACT,
+		COMPONENT_DESTRUCTION_CHANCE_ON_CONTACT,
+		COMPONENT_ROTATOR,
+		COMPONENT_THRUSTER,
+		COMPONENT_SET_THRUST_AFTER_DELAY,
+		COMPONENT_BRAKE,
+		COMPONENT_PRIMARY_PROJECTILE_LAUNCHER,
+		COMPONENT_SECONDARY_PROJECTILE_LAUNCHER,
+		COMPONENT_FUEL,
+		COMPONENT_BOOSTER,
+		COMPONENT_ICON_COLLECTOR,
+		COMPONENT_POWERUP,
+		COMPONENT_NUM_BITS
 	};
+	typedef std::bitset<COMPONENT_NUM_BITS> ComponentBitset;
+
 	// Unlike components, flags have no associated data
-	enum FlagBits : BitMask
+	enum FlagBit : size_t
 	{
-		FLAG_NONE = 0,
-		FLAG_ACTIVE = 1 << 0,
-		FLAG_PLAYER_CONTROLLED = 1 << 1,
-		FLAG_IGNORE_PARENT_COLLISIONS_UNTIL_FIRST_CONTACT_END = 1 << 2,
-		FLAG_DISABLE_COLLISIONS_ON_CONTACT_END = 1 << 3,
-		FLAG_DESTRUCTION_ON_ANIMATION_COMPLETION = 1 << 4,
-		FLAG_EXIT = 1 << 5,
-		FLAG_EXITED = 1 << 6
+		FLAG_ACTIVE = 0,
+		FLAG_PLAYER_CONTROLLED,
+		FLAG_IGNORE_PARENT_COLLISIONS_UNTIL_FIRST_CONTACT_END,
+		FLAG_DISABLE_COLLISIONS_ON_CONTACT_END,
+		FLAG_DESTRUCTION_ON_ANIMATION_COMPLETION,
+		FLAG_EXIT,
+		FLAG_EXITED,
+		FLAG_NUM_BITS
 	};
+	typedef std::bitset<FLAG_NUM_BITS> FlagBitset;
+
 	//+---------------------------------------------\
 	//|  World: b2World wrapper and entity manager  |
 	//\---------------------------------------------/
@@ -178,8 +181,10 @@ namespace Space
 		// Creating entities
 		WorldID NewEntityID(const b2Vec2& size, int drawLayer = 0, bool activate = true);
 		void Destroy(WorldID id);
-		void SetFlags(WorldID entityID, FlagBits flagBits, bool enable = true);
-		void RemoveComponents(WorldID entityID, BitMask componentBitMask);
+		void SetFlag(WorldID entityID, FlagBit flagBit, bool enable);
+		void SetFlagSet(WorldID entityID, FlagBitset flagBits, bool enable);
+		void RemoveComponent(WorldID entityID, ComponentBit componentBit);
+		void RemoveComponentSet(WorldID entityID, ComponentBitset componentBits);
 		//void RemoveAllComponentsExcept(WorldID entityID, BitMask componentBitMask);
 
 		// Physics
@@ -243,9 +248,15 @@ namespace Space
 		const d2d::Rect& GetWorldRect() const;
 		const b2Vec2& GetWorldCenter() const;
 		WorldID GetEntityCount() const;
+
 		bool EntityExists(WorldID entityID) const;
-		bool HasComponents(WorldID entityID, BitMask componentMask) const;
-		bool HasFlags(WorldID entityID, BitMask flagMask) const;
+		bool HasComponent(WorldID entityID, ComponentBit componentBit) const;
+		bool HasComponentSet(WorldID entityID, ComponentBitset componentBits) const;
+		//bool HasComponents(WorldID entityID, const std::vector<ComponentBit>& componentBitList) const;
+		bool HasFlag(WorldID entityID, FlagBit flagBit) const;
+		bool HasFlagSet(WorldID entityID, FlagBitset flagBits) const;
+		//bool HasFlags(WorldID entityID, const std::vector<FlagBit>& flagBitList) const;
+
 		bool HasSize(WorldID entityID) const;
 		bool HasSize2D(WorldID entityID) const;
 		bool HasPhysics(WorldID entityID) const;
@@ -496,8 +507,8 @@ namespace Space
 		d2d::Rect m_worldRect;
 
 		// All entities have these by default:
-		ComponentArray< BitMask > m_componentBits;
-		ComponentArray< BitMask > m_flagBits;
+		ComponentArray< ComponentBitset > m_componentBits;
+		ComponentArray< FlagBitset > m_flagBits;
 		ComponentArray< bool > m_activeFlags;
 		ComponentArray< b2Vec2 > m_sizeComponents;
 		ComponentArray< float > m_boundingRadiusComponents;

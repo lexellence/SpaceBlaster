@@ -64,7 +64,7 @@ namespace Space
 	void World::UpdateDestructionDelayComponents(float dt)
 	{
 		for(WorldID id = 0; id < WORLD_MAX_ENTITIES; ++id)
-			if(HasComponents(id, COMPONENT_DESTRUCTION_DELAY) && IsActive(id))
+			if(HasComponent(id, COMPONENT_DESTRUCTION_DELAY) && IsActive(id))
 				if(m_destructionDelayComponents[id] > 0.0f)
 				{
 					m_destructionDelayComponents[id] -= dt;
@@ -78,39 +78,40 @@ namespace Space
 	void World::UpdatePlayerControllerComponents(float dt, PlayerController& playerController)
 	{
 		for(WorldID id = 0; id < WORLD_MAX_ENTITIES; ++id)
-			if(HasFlags(id, FLAG_PLAYER_CONTROLLED) && IsActive(id))
+			if(HasFlag(id, FLAG_PLAYER_CONTROLLED) && IsActive(id))
 			{
-				if(HasComponents(id, COMPONENT_PRIMARY_PROJECTILE_LAUNCHER))
+				if(HasComponent(id, COMPONENT_PRIMARY_PROJECTILE_LAUNCHER))
 					m_primaryProjectileLauncherComponents[id].factor = playerController.primaryFireFactor;
-				if(HasComponents(id, COMPONENT_SECONDARY_PROJECTILE_LAUNCHER))
+				if(HasComponent(id, COMPONENT_SECONDARY_PROJECTILE_LAUNCHER))
 					m_secondaryProjectileLauncherComponents[id].factor = playerController.secondaryFireFactor;
 
-				if(HasComponents(id, COMPONENT_ROTATOR))
+				if(HasComponent(id, COMPONENT_ROTATOR))
 				{
 					m_rotatorComponents[id].lastFactor = m_rotatorComponents[id].factor;
 					m_rotatorComponents[id].factor = playerController.turnFactor;
 				}
 
 				ThrusterComponent& thrusterComponent{ m_thrusterComponents[id] };
-				if(HasComponents(id, COMPONENT_THRUSTER))
+				if(HasComponent(id, COMPONENT_THRUSTER))
 					thrusterComponent.factor = playerController.thrustFactor;
-				if(playerController.boost && HasComponents(id, COMPONENT_BOOSTER) &&
+				if(playerController.boost && HasComponent(id, COMPONENT_BOOSTER) &&
 					m_boosterComponents[id].secondsLeft <= 0.0f &&
 					m_boosterComponents[id].cooldownSecondsLeft <= 0.0f)
 				{
 					m_boosterComponents[id].secondsLeft = m_boosterComponents[id].boostSeconds;
 				}
 
-				if(HasComponents(id, COMPONENT_BRAKE))
+				if(HasComponent(id, COMPONENT_BRAKE))
 					m_brakeComponents[id].factor = playerController.brakeFactor;
 
 			}
 	}
 	void World::UpdateRotatorComponents()
 	{
-		BitMask requiredComponents{ COMPONENT_ROTATOR | COMPONENT_PHYSICS };
+		ComponentBitset requiredComponents;
+		requiredComponents.set(COMPONENT_ROTATOR).set(COMPONENT_PHYSICS);
 		for(WorldID id = 0; id < WORLD_MAX_ENTITIES; ++id)
-			if(HasComponents(id, requiredComponents) && IsActive(id))
+			if(HasComponentSet(id, requiredComponents) && IsActive(id))
 			{
 				// If entity was just turning but now not, stop rotation.
 				if(m_rotatorComponents[id].lastFactor != 0.0f && m_rotatorComponents[id].factor == 0.0f)
@@ -130,9 +131,10 @@ namespace Space
 	}
 	void World::UpdateThrusterComponents(float dt)
 	{
-		BitMask requiredComponents{ COMPONENT_THRUSTER | COMPONENT_PHYSICS };
+		ComponentBitset requiredComponents;
+		requiredComponents.set(COMPONENT_THRUSTER).set(COMPONENT_PHYSICS);
 		for(WorldID id = 0; id < WORLD_MAX_ENTITIES; ++id)
-			if(HasComponents(id, requiredComponents) && IsActive(id))
+			if(HasComponentSet(id, requiredComponents) && IsActive(id))
 				if(m_thrusterComponents[id].factor > 0.0f)
 				{
 					d2Assert(m_thrusterComponents[id].numSlots <= WORLD_MAX_THRUSTER_SLOTS);
@@ -140,7 +142,7 @@ namespace Space
 					float fuelRequired = GetTotalThrusterFuelRequired(id, dt);
 
 					// Fuel
-					if(fuelRequired > 0.0f && HasComponents(id, COMPONENT_FUEL))
+					if(fuelRequired > 0.0f && HasComponent(id, COMPONENT_FUEL))
 					{
 						if(m_fuelComponents[id].level < fuelRequired)
 						{
@@ -163,22 +165,23 @@ namespace Space
 	void World::UpdateSetThrustFactorAfterDelayComponents(float dt)
 	{
 		for(WorldID id = 0; id < WORLD_MAX_ENTITIES; ++id)
-			if(HasComponents(id, COMPONENT_SET_THRUST_AFTER_DELAY) && IsActive(id))
+			if(HasComponent(id, COMPONENT_SET_THRUST_AFTER_DELAY) && IsActive(id))
 			{
 				m_setThrustFactorAfterDelayComponents[id].delay -= dt;
 				if(m_setThrustFactorAfterDelayComponents[id].delay <= 0.0f)
 				{
-					if(HasComponents(id, COMPONENT_THRUSTER))
+					if(HasComponent(id, COMPONENT_THRUSTER))
 						m_thrusterComponents[id].factor = m_setThrustFactorAfterDelayComponents[id].factor;
-					RemoveComponents(id, COMPONENT_SET_THRUST_AFTER_DELAY);
+					RemoveComponent(id, COMPONENT_SET_THRUST_AFTER_DELAY);
 				}
 			}
 	}
 	void World::UpdateBoosterComponents(float dt)
 	{
-		BitMask requiredComponents{ COMPONENT_BOOSTER | COMPONENT_PHYSICS };
+		ComponentBitset requiredComponents;
+		requiredComponents.set(COMPONENT_BOOSTER).set(COMPONENT_PHYSICS);
 		for(WorldID id = 0; id < WORLD_MAX_ENTITIES; ++id)
-			if(HasComponents(id, requiredComponents) && IsActive(id))
+			if(HasComponentSet(id, requiredComponents) && IsActive(id))
 			{
 				if(m_boosterComponents[id].secondsLeft > 0.0f)
 				{
@@ -202,9 +205,10 @@ namespace Space
 	}
 	void World::UpdateBrakeComponents()
 	{
-		BitMask requiredComponents{ COMPONENT_BRAKE | COMPONENT_PHYSICS };
+		ComponentBitset requiredComponents;
+		requiredComponents.set(COMPONENT_BRAKE).set(COMPONENT_PHYSICS);
 		for(WorldID id = 0; id < WORLD_MAX_ENTITIES; ++id)
-			if(HasComponents(id, requiredComponents) && IsActive(id))
+			if(HasComponentSet(id, requiredComponents) && IsActive(id))
 				if(m_brakeComponents[id].factor > 0.0f)
 				{
 					b2Vec2 unitVelocity{ m_physicsComponents[id].mainBody.b2BodyPtr->GetLinearVelocity() };
@@ -219,21 +223,22 @@ namespace Space
 	void World::UpdateProjectileLauncherComponents(float dt, bool secondaryLaunchers)
 	{
 		ComponentArray< ProjectileLauncherComponent >* projectileLauncherComponentsPtr;
-		BitMask requiredComponents{ COMPONENT_PHYSICS };
+		ComponentBitset requiredComponents;
+		requiredComponents.set(COMPONENT_PHYSICS);
 		if(secondaryLaunchers)
 		{
 			projectileLauncherComponentsPtr = &m_secondaryProjectileLauncherComponents;
-			requiredComponents |= COMPONENT_SECONDARY_PROJECTILE_LAUNCHER;
+			requiredComponents.set(COMPONENT_SECONDARY_PROJECTILE_LAUNCHER);
 		}
 		else
 		{
 			projectileLauncherComponentsPtr = &m_primaryProjectileLauncherComponents;
-			requiredComponents |= COMPONENT_PRIMARY_PROJECTILE_LAUNCHER;
+			requiredComponents.set(COMPONENT_PRIMARY_PROJECTILE_LAUNCHER);
 		}
 		ComponentArray< ProjectileLauncherComponent >& projectileLauncherComponents{ *projectileLauncherComponentsPtr };
 
 		for(WorldID id = 0; id < WORLD_MAX_ENTITIES; ++id)
-			if(HasComponents(id, requiredComponents) && IsActive(id))
+			if(HasComponentSet(id, requiredComponents) && IsActive(id))
 			{
 				for(unsigned i = 0; i < projectileLauncherComponents[id].numSlots; ++i)
 				{
@@ -270,10 +275,10 @@ namespace Space
 	void World::UpdateDrawAnimationComponents(float dt)
 	{
 		for(WorldID id = 0; id < WORLD_MAX_ENTITIES; ++id)
-			if(HasComponents(id, COMPONENT_DRAW_ANIMATION) && IsActive(id))
+			if(HasComponentSet(id, COMPONENT_DRAW_ANIMATION) && IsActive(id))
 			{
 				m_drawAnimationComponents[id].animation.Update(dt);
-				if(!m_drawAnimationComponents[id].animation.IsAnimated() && HasFlags(id, FLAG_DESTRUCTION_ON_ANIMATION_COMPLETION))
+				if(!m_drawAnimationComponents[id].animation.IsAnimated() && HasFlag(id, FLAG_DESTRUCTION_ON_ANIMATION_COMPLETION))
 					Destroy(id);
 			}
 	}
@@ -425,16 +430,19 @@ namespace Space
 		for(WorldID id : m_destroyBuffer)
 		{
 			// Send notifications to Game
-			if(HasFlags(id, FLAG_EXITED))
+			if(HasFlag(id, FLAG_EXITED))
 				if(m_exitListenerPtr)
 					m_exitListenerPtr->EntityExited(id);
 			if(m_destructionListenerPtr)
 				m_destructionListenerPtr->EntityWillBeDestroyed(id);
 
 			// Particle explosion
-			if(!HasFlags(id, FLAG_EXITED))
-				if(HasComponents(id, COMPONENT_PARTICLE_EXPLOSION | COMPONENT_PHYSICS) && IsActive(id))
+			if(!HasFlag(id, FLAG_EXITED))
+			{
+				ComponentBitset requiredComponents = ComponentBitset{}.set(COMPONENT_PARTICLE_EXPLOSION).set(COMPONENT_PHYSICS);
+				if(HasComponentSet(id, requiredComponents) && IsActive(id))
 					CreateExplosionFromEntity(id, m_particleExplosionComponents[id]);
+			}
 
 			// Destroy Box2D bodies
 			if(HasPhysics(id))
@@ -449,8 +457,8 @@ namespace Space
 			}
 
 			// Disable all components/flags
-			m_componentBits[id] = COMPONENT_NONE;
-			m_flagBits[id] = FLAG_NONE;
+			m_componentBits[id].reset();
+			m_flagBits[id].reset();
 		}
 		m_destroyBuffer.clear();
 	}
@@ -676,10 +684,10 @@ namespace Space
 		PreSolveExit(id2, id1);
 
 		// Ignore collisions with parents (if flag is set)
-		bool entity1IsParentOf2{ HasComponents(id2, COMPONENT_PARENT) && m_parentComponents[id2] == id1 };
-		bool entity2IsParentOf1{ HasComponents(id1, COMPONENT_PARENT) && m_parentComponents[id1] == id2 };
-		if((entity2IsParentOf1 && HasFlags(id1, FLAG_IGNORE_PARENT_COLLISIONS_UNTIL_FIRST_CONTACT_END)) ||
-			(entity1IsParentOf2 && HasFlags(id2, FLAG_IGNORE_PARENT_COLLISIONS_UNTIL_FIRST_CONTACT_END)))
+		bool entity1IsParentOf2{ HasComponent(id2, COMPONENT_PARENT) && m_parentComponents[id2] == id1 };
+		bool entity2IsParentOf1{ HasComponent(id1, COMPONENT_PARENT) && m_parentComponents[id1] == id2 };
+		if((entity2IsParentOf1 && HasFlag(id1, FLAG_IGNORE_PARENT_COLLISIONS_UNTIL_FIRST_CONTACT_END)) ||
+			(entity1IsParentOf2 && HasFlag(id2, FLAG_IGNORE_PARENT_COLLISIONS_UNTIL_FIRST_CONTACT_END)))
 			return false;
 		else
 			return ShouldCollideDefaultFiltering(fixturePtr1->GetFilterData(), fixturePtr2->GetFilterData());
@@ -711,7 +719,7 @@ namespace Space
 	}
 	void World::PreSolveExit(WorldID id1, WorldID id2)
 	{
-		if(HasFlags(id1, FLAG_EXIT))
+		if(HasFlag(id1, FLAG_EXIT))
 			Exit(id2);
 	}
 	void World::Exit(WorldID id)
@@ -724,13 +732,13 @@ namespace Space
 		//	componentsToKeep |= COMPONENT_DRAW_FIXTURES;
 		//RemoveAllComponentsExcept(id, componentsToKeep);
 
-		SetFlags(id, FLAG_EXITED);
+		SetFlag(id, FLAG_EXITED, true);
 		Destroy(id);
 	}
 	void World::PreSolveIconCollector(WorldID id1, WorldID id2, b2Contact* contactPtr)
 	{
-		bool isCollector1 = HasComponents(id1, COMPONENT_ICON_COLLECTOR);
-		bool isIcon2 = HasComponents(id2, COMPONENT_POWERUP) && m_powerUpComponents[id2].type == PowerUpType::ICON;
+		bool isCollector1 = HasComponent(id1, COMPONENT_ICON_COLLECTOR);
+		bool isIcon2 = HasComponent(id2, COMPONENT_POWERUP) && m_powerUpComponents[id2].type == PowerUpType::ICON;
 
 		if(isCollector1 && isIcon2)
 		{
@@ -844,31 +852,31 @@ namespace Space
 
 		// COMPONENT_DESTRUCTION_DELAY_ON_CONTACT
 		for(Body* bodyPtr : bodyPtrs)
-			if(!bodyPtr->isClone && HasComponents(bodyPtr->entityID, COMPONENT_DESTRUCTION_DELAY_ON_CONTACT))
+			if(!bodyPtr->isClone && HasComponent(bodyPtr->entityID, COMPONENT_DESTRUCTION_DELAY_ON_CONTACT))
 			{
 				AddDestructionDelayComponent(bodyPtr->entityID, m_destructionDelayOnContactComponents[bodyPtr->entityID]);
-				RemoveComponents(bodyPtr->entityID, COMPONENT_DESTRUCTION_DELAY_ON_CONTACT);
+				RemoveComponent(bodyPtr->entityID, COMPONENT_DESTRUCTION_DELAY_ON_CONTACT);
 			}
 
 		// COMPONENT_DESTRUCTION_CHANCE_ON_CONTACT
 		for(Body* bodyPtr : bodyPtrs)
-			if(!bodyPtr->isClone && HasComponents(bodyPtr->entityID, COMPONENT_DESTRUCTION_CHANCE_ON_CONTACT))
+			if(!bodyPtr->isClone && HasComponent(bodyPtr->entityID, COMPONENT_DESTRUCTION_CHANCE_ON_CONTACT))
 				if(d2d::RandomFloatPercent() <= m_destructionChanceOnContactComponents[bodyPtr->entityID])
 					Destroy(bodyPtr->entityID);
 
 		// FLAG_IGNORE_PARENT_COLLISIONS_UNTIL_FIRST_CONTACT_END
 		WorldID id1{ bodyPtrs[0]->entityID };
 		WorldID id2{ bodyPtrs[1]->entityID };
-		bool entity1IsParentOf2{ HasComponents(id2, COMPONENT_PARENT) && m_parentComponents[id2] == id1 };
-		bool entity2IsParentOf1{ HasComponents(id1, COMPONENT_PARENT) && m_parentComponents[id1] == id2 };
-		if(entity2IsParentOf1 && HasFlags(id1, FLAG_IGNORE_PARENT_COLLISIONS_UNTIL_FIRST_CONTACT_END))
-			SetFlags(id1, FLAG_IGNORE_PARENT_COLLISIONS_UNTIL_FIRST_CONTACT_END, false);
-		if(entity1IsParentOf2 && HasFlags(id2, FLAG_IGNORE_PARENT_COLLISIONS_UNTIL_FIRST_CONTACT_END))
-			SetFlags(id2, FLAG_IGNORE_PARENT_COLLISIONS_UNTIL_FIRST_CONTACT_END, false);
+		bool entity1IsParentOf2{ HasComponent(id2, COMPONENT_PARENT) && m_parentComponents[id2] == id1 };
+		bool entity2IsParentOf1{ HasComponent(id1, COMPONENT_PARENT) && m_parentComponents[id1] == id2 };
+		if(entity2IsParentOf1 && HasFlag(id1, FLAG_IGNORE_PARENT_COLLISIONS_UNTIL_FIRST_CONTACT_END))
+			SetFlag(id1, FLAG_IGNORE_PARENT_COLLISIONS_UNTIL_FIRST_CONTACT_END, false);
+		if(entity1IsParentOf2 && HasFlag(id2, FLAG_IGNORE_PARENT_COLLISIONS_UNTIL_FIRST_CONTACT_END))
+			SetFlag(id2, FLAG_IGNORE_PARENT_COLLISIONS_UNTIL_FIRST_CONTACT_END, false);
 	}
 	void World::AdjustHealth(WorldID entityID, float healthChange)
 	{
-		if(HasComponents(entityID, COMPONENT_HEALTH))
+		if(HasComponent(entityID, COMPONENT_HEALTH))
 		{
 			if(m_healthComponents[entityID].hp + healthChange <= 0.0f)
 				ReduceHealthToZero(entityID);
@@ -878,7 +886,7 @@ namespace Space
 	}
 	void World::ReduceHealthToZero(WorldID entityID)
 	{
-		if(HasComponents(entityID, COMPONENT_HEALTH))
+		if(HasComponent(entityID, COMPONENT_HEALTH))
 		{
 			if(m_healthComponents[entityID].hp > 0.0f)
 			{
@@ -900,7 +908,7 @@ namespace Space
 
 		float WEIGHT_OF_CURRENT_VELOCITY{ 0.2f };
 		b2Vec2 explosionVelocity{ d2d::Lerp(m_lastLinearVelocities[entityID], m_physicsComponents[entityID].mainBody.b2BodyPtr->GetLinearVelocity(), WEIGHT_OF_CURRENT_VELOCITY) };
-		float deathDamage{ HasComponents(entityID, COMPONENT_HEALTH) ? m_healthComponents[entityID].deathDamage : 0.0f };
+		float deathDamage{ HasComponent(entityID, COMPONENT_HEALTH) ? m_healthComponents[entityID].deathDamage : 0.0f };
 
 		// Add particles before modifying values
 		ParticleID firstIndex{ m_particleSystem.firstUnusedIndex };
@@ -1035,7 +1043,7 @@ namespace Space
 	}
 	void World::Activate(WorldID entityID)
 	{
-		SetFlags(entityID, FLAG_ACTIVE, true);
+		SetFlag(entityID, FLAG_ACTIVE, true);
 		if(HasPhysics(entityID))
 		{
 			m_physicsComponents[entityID].mainBody.b2BodyPtr->SetEnabled(true);
@@ -1045,7 +1053,7 @@ namespace Space
 	}
 	void World::Deactivate(WorldID entityID)
 	{
-		SetFlags(entityID, FLAG_ACTIVE, false);
+		SetFlag(entityID, FLAG_ACTIVE, false);
 		if(HasPhysics(entityID))
 		{
 			m_physicsComponents[entityID].mainBody.b2BodyPtr->SetEnabled(false);

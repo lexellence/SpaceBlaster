@@ -42,28 +42,64 @@ namespace Space
 	//\----------------------/------------------------------------
 	bool World::EntityExists(WorldID entityID) const
 	{
-		return m_componentBits[entityID] != COMPONENT_NONE || m_flagBits[entityID] != FLAG_NONE;
+		return m_componentBits[entityID].any() || m_flagBits[entityID].any();
 	}
 	//+----------------------\------------------------------------
-	//|	   HasComponents	 |
+	//|	    HasComponent	 |
 	//\----------------------/------------------------------------
-	bool World::HasComponents(WorldID entityID, BitMask componentMask) const
+	bool World::HasComponent(WorldID entityID, ComponentBit component) const
 	{
-		return (m_componentBits[entityID] & componentMask) == componentMask;
+		return m_componentBits.at(entityID).test(component);
+	}
+	//+----------------------\------------------------------------
+	//|	    HasComponents	 |
+	//\----------------------/------------------------------------
+	bool World::HasComponentSet(WorldID entityID, ComponentBitset componentBits) const
+	{
+		return (m_componentBits.at(entityID) & componentBits) == componentBits;
+	}
+	//+----------------------\------------------------------------
+	//|	    HasComponents	 |
+	//\----------------------/------------------------------------
+	//bool World::HasComponents(WorldID entityID, const std::vector<ComponentBit>& componentBitList) const
+	//{
+	//	d2Assert(entityID < WORLD_MAX_ENTITIES);
+	//	for(const ComponentBit& comp : componentBitList)
+	//		if(!m_componentBits[entityID].test(comp))
+	//			return false;
+	//	return true;
+	//}
+	//+----------------------\------------------------------------
+	//|		  HasFlag		 |
+	//\----------------------/------------------------------------
+	bool World::HasFlag(WorldID entityID, FlagBit flagBit) const
+	{
+		return m_flagBits.at(entityID).test(flagBit);
 	}
 	//+----------------------\------------------------------------
 	//|		 HasFlags		 |
 	//\----------------------/------------------------------------
-	bool World::HasFlags(WorldID entityID, BitMask flagMask) const
+	bool World::HasFlagSet(WorldID entityID, FlagBitset flagBits) const
 	{
-		return (m_flagBits[entityID] & flagMask) == flagMask;
+		return (m_flagBits.at(entityID) & flagBits) == flagBits;
 	}
+	//+----------------------\------------------------------------
+	//|		 HasFlags		 |
+	//\----------------------/------------------------------------
+	//bool World::HasFlags(WorldID entityID, const std::vector<FlagBit>& flagBitList) const
+	//{
+	//	d2Assert(entityID < WORLD_MAX_ENTITIES);
+	//	for(const FlagBit& flag : flagBitList)
+	//		if(!m_flagBits[entityID].test(flag))
+	//			return false;
+	//	return true;
+	//}
 	//+----------------------\------------------------------------
 	//|		 IsActive		 |
 	//\----------------------/------------------------------------
 	bool World::IsActive(WorldID entityID) const
 	{
-		return HasFlags(entityID, FLAG_ACTIVE);
+		return HasFlag(entityID, FLAG_ACTIVE);
 	}
 	//+----------------------\------------------------------------
 	//|		  HasSize		 |
@@ -88,7 +124,7 @@ namespace Space
 	//\----------------------/------------------------------------
 	bool World::HasPhysics(WorldID entityID) const
 	{
-		return HasComponents(entityID, COMPONENT_PHYSICS);
+		return HasComponent(entityID, COMPONENT_PHYSICS);
 	}
 	//+------------------------------\----------------------------
 	//|   GetClosestPhysicalEntity	 |
@@ -149,13 +185,13 @@ namespace Space
 	float World::GetTotalThrusterAcceleration(WorldID id) const
 	{
 		float totalAcceleration{ 0.0f };
-		if(HasComponents(id, COMPONENT_THRUSTER) && IsActive(id))
+		if(HasComponent(id, COMPONENT_THRUSTER) && IsActive(id))
 		{
 			for(unsigned i = 0; i < m_thrusterComponents[id].numSlots; ++i)
 				if(m_thrusterComponents[id].thrusters[i].enabled)
 					totalAcceleration += m_thrusterComponents[id].thrusters[i].acceleration;
 			// Boost
-			if(HasComponents(id, COMPONENT_BOOSTER))
+			if(HasComponent(id, COMPONENT_BOOSTER))
 				if(m_boosterComponents[id].secondsLeft > 0.0f)
 					totalAcceleration *= m_boosterComponents[id].factor;
 		}
@@ -164,13 +200,13 @@ namespace Space
 	float World::GetTotalThrusterFuelRequired(WorldID id, float dt) const
 	{
 		float totalFuelRequired{ 0.0f };
-		if(HasComponents(id, COMPONENT_THRUSTER) && IsActive(id))
+		if(HasComponent(id, COMPONENT_THRUSTER) && IsActive(id))
 		{
 			for(unsigned i = 0; i < m_thrusterComponents[id].numSlots; ++i)
 				if(m_thrusterComponents[id].thrusters[i].enabled)
 					totalFuelRequired += dt * m_thrusterComponents[id].thrusters[i].fuelPerSecond * m_thrusterComponents[id].factor;
 			// Boost
-			if(HasComponents(id, COMPONENT_BOOSTER))
+			if(HasComponent(id, COMPONENT_BOOSTER))
 				if(m_boosterComponents[id].secondsLeft > 0.0f)
 					totalFuelRequired *= m_boosterComponents[id].factor * WORLD_BOOST_FUEL_USE_PENALTY_FACTOR;
 

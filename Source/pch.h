@@ -16,3 +16,4 @@
 #define B2_USER_SETTINGS
 #include "d2d.h"
 #include <set>
+#include <bitset>
