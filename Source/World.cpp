@@ -558,4 +558,11 @@ namespace Space
 		m_brakeComponents[entityID].factor = 0.0f;
 		m_brakeComponents[entityID].deceleration = deceleration;
 	}
+	void World::AddRadarComponent(EntityID entityID, float range)
+	{
+		d2Assert(entityID < WORLD_MAX_ENTITIES);
+		m_componentBits[entityID].set(COMPONENT_RADAR);
+		m_radarComponents[entityID].range = range;
+		m_radarComponents[entityID].entitiesInRange.clear();
+	}
 }

@@ -150,6 +150,32 @@ namespace Space
 
 		return closestEntityList;
 	}
+
+	//+------------------------------\----------------------------
+	//|		  GetEntitiesInArea		 |
+	//\------------------------------/----------------------------
+	// Get id of entities whose bounding circle intersects with given area
+	std::vector<EntityID> World::GetEntitiesInArea(const b2Vec2& position, float radius) const
+	{
+		b2Body* b2BodyPtr = m_b2WorldPtr->GetBodyList();
+		if(!b2BodyPtr)
+			return {};
+
+		std::vector<EntityID> entityList;
+		while(b2BodyPtr)
+		{
+			Body* bodyPtr = GetUserBodyPtr(b2BodyPtr);
+			if(bodyPtr)
+			{
+				float gap = GetBoundingRadiiGap(position, radius,
+					b2BodyPtr->GetPosition(), m_boundingRadiusComponents[bodyPtr->entityID]);
+				if(gap <= 0.0f)
+					entityList.push_back(bodyPtr->entityID);
+			}
+		}
+		return entityList;
+	}
+
 	int World::GetDrawLayer(EntityID entityID) const
 	{
 		if(EntityExists(entityID))

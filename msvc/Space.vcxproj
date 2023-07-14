@@ -30,10 +30,12 @@
     <ClCompile Include="..\Source\Shop.cpp" />
     <ClCompile Include="..\Source\Starfield.cpp" />
     <ClCompile Include="..\Source\World.cpp" />
+    <ClCompile Include="..\Source\WorldAI.cpp" />
     <ClCompile Include="..\Source\WorldDef.cpp" />
     <ClCompile Include="..\Source\WorldDraw.cpp" />
     <ClCompile Include="..\Source\WorldQuery.cpp" />
     <ClCompile Include="..\Source\WorldUpdate.cpp" />
+    <ClCompile Include="..\Source\WorldUtility.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Source\App.h" />
@@ -62,6 +64,7 @@
     <ClInclude Include="..\Source\StarfieldSettings.h" />
     <ClInclude Include="..\Source\World.h" />
     <ClInclude Include="..\Source\WorldDef.h" />
+    <ClInclude Include="..\Source\WorldUtility.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

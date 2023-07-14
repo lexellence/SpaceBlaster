@@ -36,6 +36,8 @@ namespace Space
 		COMPONENT_BOOSTER,
 		COMPONENT_ICON_COLLECTOR,
 		COMPONENT_POWERUP,
+		COMPONENT_AI,
+		COMPONENT_RADAR,
 		COMPONENT_NUM_BITS
 	};
 	typedef std::bitset<COMPONENT_NUM_BITS> ComponentBitset;
@@ -226,5 +228,18 @@ namespace Space
 		float factor;
 		unsigned numSlots;
 		std::array<ProjectileLauncher, WORLD_MAX_PROJECTILE_LAUNCHER_SLOTS> projectileLaunchers;
+	};
+	enum class AIType
+	{
+		AI_ROAM
+	};
+	struct AIComponent
+	{
+		AIType type;
+	};
+	struct RadarComponent
+	{
+		float range;
+		std::vector<EntityID> entitiesInRange;
 	};
 }

@@ -11,6 +11,7 @@
 #include "Components.h"
 #include "ParticleSystem.h"
 #include "WorldDef.h"
+#include "WorldUtility.h"
 namespace Space
 {
 	const EntityID WORLD_MAX_ENTITIES = 10000;
@@ -142,6 +143,10 @@ namespace Space
 		void AddRotatorComponent(EntityID entityID, float rotationSpeed);
 		void AddBrakeComponent(EntityID entityID, float deceleration);
 
+		// AI
+		void AddAIComponent(EntityID entityID, AIType type);
+		void AddRadarComponent(EntityID entityID, float range);
+
 		// Query
 		bool IsActive(EntityID entityID) const;
 		const d2d::Rect& GetWorldRect() const;
@@ -161,6 +166,9 @@ namespace Space
 		// Get <id, boundingCircleGap> of count closest entities
 		std::list<std::pair<EntityID, float>> GetClosestEntities(const b2Vec2& position, 
 			float radius, unsigned count) const;
+
+		// Get id of entities whose bounding circle intersects with given area
+		std::vector<EntityID> GetEntitiesInArea(const b2Vec2& position, float radius) const;
 
 		int GetDrawLayer(EntityID entityID) const;
 		float GetFuelLevel(EntityID entityID) const;
@@ -228,6 +236,7 @@ namespace Space
 		void UpdateBrakeComponents();
 		void UpdateProjectileLauncherComponents(float dt, bool secondaryLaunchers);
 		void UpdateDrawAnimationComponents(float dt);
+		void UpdateAIComponents(float dt);
 		void ApplyImpulseDamage(Body* bodyPtr1, Body* bodyPtr2, const float* normalImpulses, unsigned numImpulses);
 
 		// Physics
@@ -348,6 +357,8 @@ namespace Space
 		ComponentArray< DrawRadarComponent > m_drawRadarComponents;
 		ComponentArray< PowerUpComponent > m_powerUpComponents;
 		ComponentArray< IconCollectorComponent > m_iconCollectorComponents;
+		ComponentArray< AIComponent > m_AIComponents;
+		ComponentArray< RadarComponent > m_radarComponents;
 
 		d2d::ShapeFactory m_shapeFactory;
 	};
