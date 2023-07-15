@@ -92,12 +92,12 @@ namespace Space
 			float minDistanceToClosestEntity, unsigned maxAttempts, b2Vec2& relativePositionOut) const;
 		void AddPhysicsComponent(EntityID entityID, b2BodyType type,
 			const InstanceDef& def, bool fixedRotation = false, bool continuousCollisionDetection = false);
-		void AddCircleShape(EntityID entityID, const d2d::Material& material, const d2d::Filter& filter,
+		std::vector<b2Fixture*> AddCircleShape(EntityID entityID, const d2d::Material& material, const d2d::Filter& filter,
 			float sizeRelativeToWidth = 1.0f, const b2Vec2& position = b2Vec2_zero, bool isSensor = false);
-		void AddRectShape(EntityID entityID, const d2d::Material& material, const d2d::Filter& filter,
+		std::vector<b2Fixture*> AddRectShape(EntityID entityID, const d2d::Material& material, const d2d::Filter& filter,
 			const b2Vec2& relativeSize = { 1.0f, 1.0f }, bool isSensor = false,
 			const b2Vec2& position = b2Vec2_zero, float angle = 0.0f);
-		void AddShapes(EntityID entityID, const std::string& model,
+		std::vector<b2Fixture*> AddShapes(EntityID entityID, const std::string& model,
 			const d2d::Material& material, const d2d::Filter& filter, bool isSensor = false,
 			const b2Vec2& position = b2Vec2_zero, float angle = 0.0f);
 

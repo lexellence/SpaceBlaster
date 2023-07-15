@@ -231,56 +231,74 @@ namespace Space
 		m_smoothedTransforms[entityID] = m_lastTransforms[entityID];
 		m_lastLinearVelocities[entityID] = m_physicsComponents[entityID].mainBody.b2BodyPtr->GetLinearVelocity();
 	}
-	void World::AddCircleShape(EntityID entityID, const d2d::Material& material, const d2d::Filter& filter,
+	std::vector<b2Fixture*> World::AddCircleShape(EntityID entityID, const d2d::Material& material, const d2d::Filter& filter,
 		float sizeRelativeToWidth, const b2Vec2& position, bool isSensor)
 	{
 		d2Assert(entityID < WORLD_MAX_ENTITIES);
+		std::vector<b2Fixture*> fixturePtrList;
 		if(HasPhysics(entityID) && HasSize2D(entityID))
 		{
 			// Add to main body
 			float size{ sizeRelativeToWidth * m_sizeComponents[entityID].x };
-			m_shapeFactory.AddCircleShape(*m_physicsComponents[entityID].mainBody.b2BodyPtr, size,
-				material, filter, isSensor, position);
+			b2Fixture* fixturePtr = m_shapeFactory.AddCircleShape(*m_physicsComponents[entityID].mainBody.b2BodyPtr, 
+				size, material, filter, isSensor, position);
+			fixturePtrList.push_back(fixturePtr);
 
 			// Add to clones
 			for(unsigned i = 0; i < WORLD_NUM_CLONES; ++i)
-				m_shapeFactory.AddCircleShape(*m_physicsComponents[entityID].cloneBodyList[i].b2BodyPtr, size,
-					material, filter, isSensor, position);
+			{
+				fixturePtr = m_shapeFactory.AddCircleShape(*m_physicsComponents[entityID].cloneBodyList[i].b2BodyPtr, 
+					size, material, filter, isSensor, position);
+				fixturePtrList.push_back(fixturePtr);
+			}
 		}
+		return fixturePtrList;
 	}
-	void World::AddRectShape(EntityID entityID, const d2d::Material& material, const d2d::Filter& filter,
+	std::vector<b2Fixture*> World::AddRectShape(EntityID entityID, const d2d::Material& material, const d2d::Filter& filter,
 		const b2Vec2& relativeSize, bool isSensor, const b2Vec2& position, float angle)
 	{
 		d2Assert(entityID < WORLD_MAX_ENTITIES);
+		std::vector<b2Fixture*> fixturePtrList;
 		if(HasPhysics(entityID) && HasSize2D(entityID))
 		{
 			// Add to main body
 			b2Vec2 size{ m_sizeComponents[entityID].x * relativeSize.x, m_sizeComponents[entityID].y * relativeSize.y };
-			m_shapeFactory.AddRectShape(*m_physicsComponents[entityID].mainBody.b2BodyPtr, size,
-				material, filter, isSensor, position, angle);
+			b2Fixture* fixturePtr = m_shapeFactory.AddRectShape(*m_physicsComponents[entityID].mainBody.b2BodyPtr, 
+				size, material, filter, isSensor, position, angle);
+			fixturePtrList.push_back(fixturePtr);
 
 			// Add to clones
 			for(unsigned i = 0; i < WORLD_NUM_CLONES; ++i)
-				m_shapeFactory.AddRectShape(*m_physicsComponents[entityID].cloneBodyList[i].b2BodyPtr, size,
+			{
+				fixturePtr = m_shapeFactory.AddRectShape(*m_physicsComponents[entityID].cloneBodyList[i].b2BodyPtr, size,
 					material, filter, isSensor, position, angle);
+				fixturePtrList.push_back(fixturePtr);
+			}
 		}
+		return fixturePtrList;
 	}
-	void World::AddShapes(EntityID entityID, const std::string& model,
+	std::vector<b2Fixture*> World::AddShapes(EntityID entityID, const std::string& model,
 		const d2d::Material& material, const d2d::Filter& filter, bool isSensor,
 		const b2Vec2& position, float angle)
 	{
 		d2Assert(entityID < WORLD_MAX_ENTITIES);
+		std::vector<b2Fixture*> fixturePtrList;
 		if(HasPhysics(entityID) && HasSize2D(entityID))
 		{
 			// Add to main body
-			m_shapeFactory.AddShapes(*m_physicsComponents[entityID].mainBody.b2BodyPtr, m_sizeComponents[entityID], model,
+			fixturePtrList = m_shapeFactory.AddShapes(*m_physicsComponents[entityID].mainBody.b2BodyPtr, m_sizeComponents[entityID], model,
 				material, filter, isSensor, position, angle);
 
 			// Add to clones
 			for(unsigned i = 0; i < WORLD_NUM_CLONES; ++i)
+			{
+				std::vector<b2Fixture*> cloneFixturePtrList;
 				m_shapeFactory.AddShapes(*m_physicsComponents[entityID].cloneBodyList[i].b2BodyPtr, m_sizeComponents[entityID], model,
 					material, filter, isSensor, position, angle);
+				fixturePtrList.insert(std::end(fixturePtrList), std::begin(cloneFixturePtrList), std::end(cloneFixturePtrList));
+			}
 		}
+		return fixturePtrList;
 	}
 	//+------------------------\----------------------------------
 	//|	  Visual Components    |
@@ -564,8 +582,8 @@ namespace Space
 		d2Assert(entityID < WORLD_MAX_ENTITIES);
 		if(HasPhysics(entityID))
 		{
-		m_componentBits[entityID].set(COMPONENT_RADAR);
-		m_radarComponents[entityID].range = range;
+			m_componentBits[entityID].set(COMPONENT_RADAR);
+			m_radarComponents[entityID].range = range;
 			m_radarComponents[entityID].bodiesInRange.clear();
 			CreateRadarFixture(entityID);
 		}

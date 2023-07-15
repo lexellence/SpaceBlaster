@@ -740,10 +740,10 @@ namespace Space
 		{
 			EntityID id1 = GetUserBodyFromFixture(fixturePtr1)->entityID;
 			EntityID id2 = GetUserBodyFromFixture(fixturePtr2)->entityID;
-		if(HasFlag(id1, FLAG_EXIT))
+			if(HasFlag(id1, FLAG_EXIT))
 				if(!fixturePtr2->IsSensor())
-			Exit(id2);
-	}
+					Exit(id2);
+		}
 	}
 	void World::Exit(EntityID id)
 	{
