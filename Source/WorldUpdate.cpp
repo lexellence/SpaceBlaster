@@ -795,6 +795,14 @@ namespace Space
 		// Impulse damage
 		ApplyImpulseDamage(bodyPtr1, bodyPtr2, impulsePtr->normalImpulses, numManifoldPoints);
 	}
+	void World::SayGoodbye(b2Joint* joint)
+	{
+
+	}
+	void World::SayGoodbye(b2Fixture* fixture)
+	{
+
+	}
 	void World::ApplyImpulseDamage(Body* bodyPtr1, Body* bodyPtr2, const float* normalImpulses, unsigned numImpulses)
 	{
 		// Get impulse

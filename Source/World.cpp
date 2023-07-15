@@ -48,6 +48,7 @@ namespace Space
 		m_b2WorldPtr->SetAutoClearForces(false);
 		m_b2WorldPtr->SetContactListener(this);
 		m_b2WorldPtr->SetContactFilter(this);
+		m_b2WorldPtr->SetDestructionListener(this);
 
 		// World settings/attributes
 		m_worldRect = rect;

@@ -60,7 +60,7 @@ namespace Space
 	//+---------------------------------------------\
 	//|  World: b2World wrapper and entity manager  |
 	//\---------------------------------------------/
-	class World : public b2ContactListener, public b2ContactFilter
+	class World : public b2ContactListener, public b2ContactFilter, public b2DestructionListener
 	{
 	public:
 		//+---------------------------------------\
@@ -199,6 +199,8 @@ namespace Space
 		virtual void PostSolve(b2Contact* contactPtr, const b2ContactImpulse* impulsePtr) override;
 		virtual void EndContact(b2Contact* contactPtr) override;
 		void EndContactRadar(b2Fixture* fixturePtr1, b2Fixture* fixturePtr2);
+		virtual void SayGoodbye(b2Joint* joint) override;
+		virtual void SayGoodbye(b2Fixture* fixture) override;
 
 		// Health modifiers
 		void AdjustHealth(EntityID entityID, float healthChange);
