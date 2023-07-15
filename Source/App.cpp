@@ -26,7 +26,7 @@ namespace Space
 
 		d2d::Timer timer;
 		timer.Start();
-		while(m_nextState != AppStateID::QUIT)
+		while(m_currentStateID != AppStateID::QUIT)
 		{
 			timer.Update();
 			Step(timer.Getdt());
@@ -51,15 +51,19 @@ namespace Space
 			CameraSettings::INITIAL_ZOOM_OUT_PERCENT);
 		InitStarfield();
 
-		// AppStates
-		m_introStatePtr = std::make_shared<IntroState>(&m_camera, &m_starfield);
-		m_mainMenuStatePtr = std::make_shared<MainMenuState>(&m_camera, &m_starfield);
-		m_gameStatePtr = std::make_shared<GameState>(&m_camera, &m_starfield);
-
 		// Start first app state
-		m_currentState = FIRST_APP_STATE;
-		m_nextState = FIRST_APP_STATE;
-		InitCurrentState();
+		try
+		{
+			StartState(FIRST_APP_STATE);
+			d2d::Window::StartScene();
+			d2d::Window::EndScene();
+		}
+		catch(const GameException& e)
+		{
+			std::string message{ "AppState init error: "s + std::string{ e.what() } };
+			d2d::Window::ShowSimpleMessageBox(d2d::MessageBoxType::D2D_ERROR, "Error"s, message);
+			m_currentStateID = AppStateID::QUIT;
+		}
 	}
 	void App::InitStarfield()
 	{
@@ -77,54 +81,46 @@ namespace Space
 	{
 		d2d::ClampHigh(dt, MAX_APP_STEP);
 
-		UpdateCurrentState(dt);
+		AppStateID nextStateID = Update(dt);
 
-		if(m_nextState != AppStateID::QUIT)
-		{
-			if(m_nextState != m_currentState)
-			{
-				m_currentState = m_nextState;
-				InitCurrentState();
-			}
-			else
-				if(m_hasFocus)
-					Draw();
-		}
+		if(nextStateID != m_currentStateID)
+			StartState(nextStateID);
+		else if(m_currentStateID != AppStateID::QUIT)
+			if(m_hasFocus)
+				Draw();
 	}
 	App::~App()
 	{
 		// Just in case an exception brings us out of the main loop
 		Shutdown();
 	}
-	std::shared_ptr<AppState> App::GetStatePtr(AppStateID appState)
-	{
-		switch(appState)
-		{
-		case AppStateID::INTRO:		return m_introStatePtr;
-		case AppStateID::MAIN_MENU: return m_mainMenuStatePtr;
-		case AppStateID::GAME:	return m_gameStatePtr;
-		default: throw InvalidAppStateException{ "GetStatePtr(): No pointer exists for AppState (calling code must ensure argument is not QUIT)" };
-		}
-	}
-	void App::InitCurrentState()
+	void App::StartState(AppStateID newStateID)
 	{
 		try
 		{
-			GetStatePtr(m_currentState)->Init();
-			d2d::Window::StartScene();
-			d2d::Window::EndScene();
+			m_currentStateID = newStateID;
+			//AppState* lastStatePtr = m_currentStatePtr;
+			switch(m_currentStateID)
+			{
+			case AppStateID::INTRO:		
+				m_currentStatePtr = std::make_shared<IntroState>(&m_camera, &m_starfield); break;
+			case AppStateID::MAIN_MENU: 
+				m_currentStatePtr = std::make_shared<MainMenuState>(&m_camera, &m_starfield); break;
+			case AppStateID::GAME:	
+				m_currentStatePtr = std::make_shared<GameState>(&m_camera, &m_starfield); break;
+			default: return;
+			}
+			m_currentStatePtr->Init();
 		}
 		catch(const GameException& e)
 		{
 			std::string message{ "AppState init error: "s + std::string{ e.what() } };
 			d2d::Window::ShowSimpleMessageBox(d2d::MessageBoxType::D2D_ERROR, "Error"s, message);
-			m_currentState = AppStateID::QUIT;
+			m_currentStateID = AppStateID::QUIT;
 		}
 	}
-	void App::UpdateCurrentState(float dt)
+	AppStateID App::Update(float dt)
 	{
-		std::shared_ptr<AppState> currentStatePtr{ GetStatePtr(m_currentState) };
-
 		// Handle events
 		SDL_Event event;
 		while(SDL_PollEvent(&event) != 0)
@@ -132,8 +128,7 @@ namespace Space
 			switch(event.type)
 			{
 			case SDL_QUIT:
-				m_nextState = AppStateID::QUIT;
-				return;
+				return AppStateID::QUIT;
 			case SDL_WINDOWEVENT:
 				switch(event.window.event)
 				{
@@ -144,36 +139,34 @@ namespace Space
 					m_hasFocus = true;
 					break;
 				case SDL_WINDOWEVENT_CLOSE:
-					m_nextState = AppStateID::QUIT;
-					return;
+					return AppStateID::QUIT;
 				//case SDL_WINDOWEVENT_SIZE_CHANGED:
 				//	d2d::Window::Resize(event.window.data1, event.window.data2);
 				//	return;
 				}
 			}
-			currentStatePtr->ProcessEvent(event);
+			m_currentStatePtr->ProcessEvent(event);
 		}
 
 		if(m_hasFocus)
 		{
 			try
 			{
-				m_nextState = currentStatePtr->Update(dt);
+				return m_currentStatePtr->Update(dt);
 			}
 			catch(const GameException& e)
 			{
 				std::string message{ "Game update error: "s + std::string{ e.what() } };
 				d2d::Window::ShowSimpleMessageBox(d2d::MessageBoxType::D2D_ERROR, "Error"s, message);
-				m_nextState = AppStateID::QUIT;
+				return AppStateID::QUIT;
 			}
 		}
+		return m_currentStateID;
 	}
 	void App::Draw()
 	{
-		std::shared_ptr<AppState> currentStatePtr{ GetStatePtr(m_currentState) };
-
 		d2d::Window::StartScene();
-		currentStatePtr->Draw();
+		m_currentStatePtr->Draw();
 		d2d::Window::EndScene();
 	}
 	void App::Shutdown()

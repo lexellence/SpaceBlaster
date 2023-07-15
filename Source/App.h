@@ -29,18 +29,13 @@ namespace Space
 		void InitStarfield();
 		void Step(float dt);
 
-		std::shared_ptr<AppState> GetStatePtr(AppStateID appState);
-		void InitCurrentState();
-		void UpdateCurrentState(float dt);
+		void StartState(AppStateID newState);
+		AppStateID Update(float dt);
 		void Draw();
 		void Shutdown();
 
-		std::shared_ptr<IntroState> m_introStatePtr;
-		std::shared_ptr<MainMenuState> m_mainMenuStatePtr;
-		std::shared_ptr<GameState> m_gameStatePtr;
-
-		AppStateID m_currentState{ FIRST_APP_STATE };
-		AppStateID m_nextState{ FIRST_APP_STATE };
+		std::shared_ptr<AppState> m_currentStatePtr{ nullptr };
+		AppStateID m_currentStateID{ FIRST_APP_STATE };
 
 		bool m_hasFocus{ false };
 		Camera m_camera;
