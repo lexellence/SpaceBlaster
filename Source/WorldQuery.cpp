@@ -175,7 +175,23 @@ namespace Space
 		}
 		return entityList;
 	}
+	RadarComponent World::GetRadarComponent(EntityID entityID) const
+	{
+		if(HasComponent(entityID, COMPONENT_RADAR))
+			return m_radarComponents[entityID];
+		else
+			return {};
+	}
+	unsigned World::GetNumFixtures(EntityID entityID) const
+	{
+		if(!HasPhysics(entityID))
+			return 0;
 
+		unsigned numFixtures = 0;
+		for(auto fix = m_physicsComponents[entityID].mainBody.b2BodyPtr->GetFixtureList(); fix; fix = fix->GetNext())
+			numFixtures++;
+		return numFixtures;
+	}
 	int World::GetDrawLayer(EntityID entityID) const
 	{
 		if(EntityExists(entityID))

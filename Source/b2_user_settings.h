@@ -20,12 +20,7 @@ struct B2_API b2BodyUserData
 
 struct B2_API b2FixtureUserData
 {
-    b2FixtureUserData()
-    {
-        pointer = 0;
-    }
-
-    uintptr_t pointer;
+    bool isRadar{ false };
 };
 
 struct B2_API b2JointUserData

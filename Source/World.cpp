@@ -561,8 +561,35 @@ namespace Space
 	void World::AddRadarComponent(EntityID entityID, float range)
 	{
 		d2Assert(entityID < WORLD_MAX_ENTITIES);
+		if(HasPhysics(entityID))
+		{
 		m_componentBits[entityID].set(COMPONENT_RADAR);
 		m_radarComponents[entityID].range = range;
-		m_radarComponents[entityID].entitiesInRange.clear();
+			m_radarComponents[entityID].bodiesInRange.clear();
+			CreateRadarFixture(entityID);
+		}
+	}
+	void World::CreateRadarFixture(EntityID entityID)
+	{
+		// Add to main body
+		b2Fixture* b2FixturePtr = m_shapeFactory.AddCircleShape(
+			*m_physicsComponents[entityID].mainBody.b2BodyPtr,
+			m_radarComponents[entityID].range * 2.0f, {}, {}, true, b2Vec2_zero);
+		b2FixturePtr->GetUserData().isRadar = true;
+		m_radarComponents[entityID].b2FixturePtr = b2FixturePtr;
+	}
+	void World::MoveRadarToMainBody(EntityID entityID)
+	{
+		d2Assert(entityID < WORLD_MAX_ENTITIES);
+		if(HasPhysics(entityID) && HasComponent(entityID, COMPONENT_RADAR))
+		{
+			Body* bodyPtr = GetUserBodyFromFixture(m_radarComponents[entityID].b2FixturePtr);
+			if(bodyPtr->b2BodyPtr != m_physicsComponents[entityID].mainBody.b2BodyPtr)
+			{
+				bodyPtr->b2BodyPtr->DestroyFixture(m_radarComponents[entityID].b2FixturePtr);
+				m_radarComponents[entityID].b2FixturePtr = nullptr;
+				CreateRadarFixture(entityID);
+			}
+		}
 	}
 }

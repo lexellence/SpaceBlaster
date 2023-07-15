@@ -568,6 +568,9 @@ namespace Space
 					}
 		}
 		SyncClones();
+
+		for(EntityID id = 0; id < WORLD_MAX_ENTITIES; ++id)
+			MoveRadarToMainBody(id);
 	}
 	//+---------------------------------\-------------------------------------
 	//|  GetCloneSectionFromWrapData	| (private)
@@ -667,8 +670,8 @@ namespace Space
 		// Collisions with exit
 		EntityID id1{ bodyPtr1->entityID };
 		EntityID id2{ bodyPtr2->entityID };
-		PreSolveExit(id1, id2);
-		PreSolveExit(id2, id1);
+		PreSolveExit(fixturePtr1, fixturePtr2);
+		PreSolveExit(fixturePtr2, fixturePtr1);
 
 		// Ignore collisions with parents (if flag is set)
 		bool entity1IsParentOf2{ HasComponent(id2, COMPONENT_PARENT) && m_parentComponents[id2] == id1 };
@@ -688,7 +691,34 @@ namespace Space
 			(filter1.categoryBits & filter2.maskBits) != 0;
 	}
 	void World::BeginContact(b2Contact* contactPtr)
-	{}
+	{
+		d2Assert(contactPtr && "Box2D Bug");
+		BeginContactRadar(contactPtr->GetFixtureA(), contactPtr->GetFixtureB());
+		BeginContactRadar(contactPtr->GetFixtureB(), contactPtr->GetFixtureA());
+	}
+	void World::BeginContactRadar(b2Fixture* fixturePtr1, b2Fixture* fixturePtr2)
+	{
+		if(fixturePtr1 && fixturePtr2)
+		{
+			if(fixturePtr1->GetUserData().isRadar && !fixturePtr2->IsSensor())
+			{
+				std::cout << "BeginContactRadar hit" << std::endl;
+				Body* bodyPtr1 = GetUserBodyFromFixture(fixturePtr1);
+				Body* bodyPtr2 = GetUserBodyFromFixture(fixturePtr2);
+				if(bodyPtr1 && bodyPtr2)
+				{
+					EntityID id1 = bodyPtr1->entityID;
+					if(HasComponent(id1, COMPONENT_RADAR))
+					{
+						if(m_radarComponents[id1].bodiesInRange.count(bodyPtr2))
+							m_radarComponents[id1].bodiesInRange[bodyPtr2]++;
+						else
+							m_radarComponents[id1].bodiesInRange[bodyPtr2] = 1;				
+					}
+				}
+			}
+		}
+	}
 	void World::PreSolve(b2Contact* contactPtr, const b2Manifold* oldManifoldPtr)
 	{
 		d2Assert(contactPtr && oldManifoldPtr && "Box2D Bug");
@@ -704,10 +734,16 @@ namespace Space
 			PreSolveIconCollector(id2, id1, contactPtr);
 		}
 	}
-	void World::PreSolveExit(EntityID id1, EntityID id2)
+	void World::PreSolveExit(b2Fixture* fixturePtr1, b2Fixture* fixturePtr2)
 	{
+		if(fixturePtr1 && fixturePtr2)
+		{
+			EntityID id1 = GetUserBodyFromFixture(fixturePtr1)->entityID;
+			EntityID id2 = GetUserBodyFromFixture(fixturePtr2)->entityID;
 		if(HasFlag(id1, FLAG_EXIT))
+				if(!fixturePtr2->IsSensor())
 			Exit(id2);
+	}
 	}
 	void World::Exit(EntityID id)
 	{
@@ -860,6 +896,35 @@ namespace Space
 			SetFlag(id1, FLAG_IGNORE_PARENT_COLLISIONS_UNTIL_FIRST_CONTACT_END, false);
 		if(entity1IsParentOf2 && HasFlag(id2, FLAG_IGNORE_PARENT_COLLISIONS_UNTIL_FIRST_CONTACT_END))
 			SetFlag(id2, FLAG_IGNORE_PARENT_COLLISIONS_UNTIL_FIRST_CONTACT_END, false);
+
+		// Remove bodies from radar components
+		EndContactRadar(contactPtr->GetFixtureA(), contactPtr->GetFixtureB());
+		EndContactRadar(contactPtr->GetFixtureB(), contactPtr->GetFixtureA());
+	}
+	void World::EndContactRadar(b2Fixture* fixturePtr1, b2Fixture* fixturePtr2)
+	{
+		if(fixturePtr1 && fixturePtr2)
+		{
+			if(fixturePtr1->GetUserData().isRadar && !fixturePtr2->IsSensor())
+			{
+				Body* bodyPtr1 = GetUserBodyFromFixture(fixturePtr1);
+				Body* bodyPtr2 = GetUserBodyFromFixture(fixturePtr2);
+				if(bodyPtr1 && bodyPtr2)
+				{
+					EntityID id1 = bodyPtr1->entityID;
+					if(HasComponent(id1, COMPONENT_RADAR))
+					{
+						if(m_radarComponents[id1].bodiesInRange.count(bodyPtr2))
+						{
+							m_radarComponents[id1].bodiesInRange[bodyPtr2]--;
+							if(m_radarComponents[id1].bodiesInRange[bodyPtr2] < 1)
+								m_radarComponents[id1].bodiesInRange.erase(bodyPtr2);
+						}
+					}
+
+				}
+			}
+		}
 	}
 	void World::AdjustHealth(EntityID entityID, float healthChange)
 	{

@@ -65,16 +65,16 @@ namespace Space
 		{
 			m_factory.CreateExit(m_world, { .position{ 0.0f, -12.0f } });
 			CreatePlayer(m_world, { .position{ b2Vec2_zero }, .angle{ d2d::PI_OVER_TWO } });
-			auto id = m_factory.CreateUFOGray(m_world, { .position{ 12.0f, 12.0f } });
+			m_factory.CreateUFOGray(m_world, { .position{ 12.0f, 12.0f } });
 			m_factory.CreateUFOGray(m_world, { .position{ -12.0f, 12.0f } });
 
 			m_factory.CreateRandomIcons(m_world, 8);
 			{
 				float directionAngle = d2d::RandomFloat({ 0.0f, d2d::TWO_PI });
-				m_factory.CreateRandomXLargeAsteroids(m_world, 20, directionAngle);
-				m_factory.CreateRandomLargeAsteroids(m_world, 30, directionAngle);
-				m_factory.CreateRandomMediumAsteroids(m_world, 40, directionAngle);
-				m_factory.CreateRandomSmallAsteroids(m_world, 50, directionAngle);
+				m_factory.CreateRandomXLargeAsteroids(m_world, 10, directionAngle);
+				m_factory.CreateRandomLargeAsteroids(m_world, 15, directionAngle);
+				m_factory.CreateRandomMediumAsteroids(m_world, 20, directionAngle);
+				m_factory.CreateRandomSmallAsteroids(m_world, 25, directionAngle);
 			}
 		}
 		catch(CouldNotPlaceEntityException e)
@@ -204,6 +204,9 @@ namespace Space
 	{
 		EntityID blasterID = m_factory.CreateBlaster(world, def);
 		world.AddIconCollectorComponent(blasterID, &m_player.credits);
+		world.AddRadarComponent(blasterID, 20.0f);
+		world.AddDrawFixturesComponent(blasterID, { .color{ 1.0f, 0.0f, 0.0f, 1.0f } });
+
 		SetPlayer(blasterID);
 		ApplyPlayerUpgrades(world, blasterID, m_player.upgrades);
 		FollowEntity(blasterID);
@@ -396,5 +399,22 @@ namespace Space
 				m_hudFont, GUISettings::HUD::Text::Position::LEVEL_ALIGNMENT);
 		}
 		d2d::Window::PopMatrix();
+
+		// Draw num entities in radar
+		if(m_world.HasComponent(m_player.id, COMPONENT_ICON_COLLECTOR))
+		{
+			b2Vec2 position{ GUISettings::HUD::ViewSections::RIGHT.GetCenterX(), 0.5f };
+			d2d::AlignmentAnchor alignment{ d2d::AlignmentAnchorX::CENTER, d2d::AlignmentAnchorY::CENTER };
+
+			d2d::Window::SetColor(GUISettings::HUD::Text::Color::LEVEL);
+			d2d::Window::PushMatrix();
+			d2d::Window::Translate(position * screenSize);
+			{
+				std::string levelString = "Radar\n" + d2d::ToString(m_world.GetRadarComponent(m_player.id).bodiesInRange.size());
+				d2d::Window::DrawString(levelString, GUISettings::HUD::Text::Size::LEVEL * screenSize.y,
+					m_hudFont, alignment);
+			}
+			d2d::Window::PopMatrix();
+		}
 	}
 }

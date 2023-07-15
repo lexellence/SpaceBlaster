@@ -146,6 +146,8 @@ namespace Space
 		// AI
 		void AddAIComponent(EntityID entityID, AIType type);
 		void AddRadarComponent(EntityID entityID, float range);
+		void CreateRadarFixture(EntityID entityID);
+		void MoveRadarToMainBody(EntityID entityID);
 
 		// Query
 		bool IsActive(EntityID entityID) const;
@@ -170,6 +172,9 @@ namespace Space
 		// Get id of entities whose bounding circle intersects with given area
 		std::vector<EntityID> GetEntitiesInArea(const b2Vec2& position, float radius) const;
 
+		RadarComponent GetRadarComponent(EntityID entityID) const;
+
+		unsigned GetNumFixtures(EntityID entityID) const;
 		int GetDrawLayer(EntityID entityID) const;
 		float GetFuelLevel(EntityID entityID) const;
 		float GetMaxFuelLevel(EntityID entityID) const;
@@ -184,14 +189,16 @@ namespace Space
 		const b2Vec2& GetWorldCenter(EntityID entityID) const;
 
 		// Box2D callbacks
-		bool ShouldCollide(b2Fixture* fixturePtr1, b2Fixture* fixturePtr2) override;
-		void BeginContact(b2Contact* contactPtr) override;
-		void PreSolve(b2Contact* contactPtr, const b2Manifold* oldManifoldPtr) override;
-		void PreSolveExit(EntityID id1, EntityID id2);
+		virtual bool ShouldCollide(b2Fixture* fixturePtr1, b2Fixture* fixturePtr2) override;
+		virtual void BeginContact(b2Contact* contactPtr) override;
+		void BeginContactRadar(b2Fixture* fixturePtr1, b2Fixture* fixturePtr2);
+		virtual void PreSolve(b2Contact* contactPtr, const b2Manifold* oldManifoldPtr) override;
+		void PreSolveExit(b2Fixture* fixturePtr1, b2Fixture* fixturePtr2);
 		void Exit(EntityID id);
 		void PreSolveIconCollector(EntityID id1, EntityID id2, b2Contact* contactPtr);
-		void PostSolve(b2Contact* contactPtr, const b2ContactImpulse* impulsePtr) override;
-		void EndContact(b2Contact* contactPtr) override;
+		virtual void PostSolve(b2Contact* contactPtr, const b2ContactImpulse* impulsePtr) override;
+		virtual void EndContact(b2Contact* contactPtr) override;
+		void EndContactRadar(b2Fixture* fixturePtr1, b2Fixture* fixturePtr2);
 
 		// Health modifiers
 		void AdjustHealth(EntityID entityID, float healthChange);

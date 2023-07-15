@@ -140,8 +140,8 @@ namespace Space
 	struct Body
 	{
 		EntityID entityID;
-		bool isClone;
-		b2Body* b2BodyPtr;
+		bool isClone{};
+		b2Body* b2BodyPtr{};
 	};
 	struct CloneBody : public Body
 	{
@@ -161,6 +161,10 @@ namespace Space
 		bool crossedLowerBound;
 		bool crossedUpperBound;
 		bool requiresManualWrapping;
+	};
+	struct Fixture
+	{
+		bool isRadar{ false };
 	};
 	struct RotatorComponent
 	{
@@ -239,7 +243,8 @@ namespace Space
 	};
 	struct RadarComponent
 	{
-		float range;
-		std::vector<EntityID> entitiesInRange;
+		float range{};
+		std::map<Body*, unsigned> bodiesInRange;
+		b2Fixture* b2FixturePtr;
 	};
 }
