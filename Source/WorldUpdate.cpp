@@ -702,7 +702,6 @@ namespace Space
 		{
 			if(fixturePtr1->GetUserData().isRadar && !fixturePtr2->IsSensor())
 			{
-				std::cout << "BeginContactRadar hit" << std::endl;
 				Body* bodyPtr1 = GetUserBodyFromFixture(fixturePtr1);
 				Body* bodyPtr2 = GetUserBodyFromFixture(fixturePtr2);
 				if(bodyPtr1 && bodyPtr2)
